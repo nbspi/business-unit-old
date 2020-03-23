@@ -1,0 +1,23 @@
+{
+	"navigation": [{
+			"title": "Transactions",
+			"icon": "sap-icon://manager-insight",
+			"key": "butransfer"
+		},
+		{
+			"title": "Pending",
+			"icon": "sap-icon://manager-insight",
+			"key": "butransfer"
+		}
+
+	],
+	"fixedNavigation": [{
+		"title": "Reports and Analytics",
+		"icon": "sap-icon://manager-insight",
+		"key": "reportanalytics"
+	}, {
+		"title": "Bug Report",
+		"icon": "sap-icon://message-error",
+		"key": "bugreport"
+	}]
+}

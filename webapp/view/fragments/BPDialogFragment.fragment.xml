@@ -1,0 +1,18 @@
+<core:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:core="sap.ui.core">
+	<SelectDialog
+		noDataText="No BP Found"
+		title="Select Account"
+		search="handleSearchBP"
+		confirm="handleValueHelpCloseBatch"
+		cancel="handleValueHelpCloseBatch"
+		showClearButton="true"
+		items="{oMdlAllBP>/allbp}">
+		<StandardListItem
+			iconDensityAware="false"
+			iconInset="false"
+			title="{oMdlAllBP>CardCode}"
+			description="Name : {oMdlAllBP>CardName} - {oMdlAllBP>CardType}" />
+	</SelectDialog>
+</core:FragmentDefinition>

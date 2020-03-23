@@ -1,0 +1,119 @@
+{
+	"_version": "1.12.0",
+	"sap.app": {
+		"id": "com.apptech.bfi-businessunit",
+		"type": "application",
+		"i18n": "i18n/i18n.properties",
+		"applicationVersion": {
+			"version": "1.0.0"
+		},
+		"title": "{{appTitle}}",
+		"description": "{{appDescription}}"
+	},
+
+	"sap.ui": {
+		"technology": "UI5",
+		"icons": {
+			"icon": "",
+			"favIcon": "",
+			"phone": "",
+			"phone@2": "",
+			"tablet": "",
+			"tablet@2": ""
+		},
+		"deviceTypes": {
+			"desktop": true,
+			"tablet": true,
+			"phone": true
+		}
+	},
+
+	"sap.ui5": {
+		"rootView": {
+			"viewName": "com.apptech.bfi-businessunit.view.Login",
+			"type": "XML",
+			"async": true,
+			"id": "app"
+		},
+		"dependencies": {
+			"minUI5Version": "1.60.0",
+			"libs": {
+				"sap.ui.core": {},
+				"sap.m": {},
+				"sap.ui.layout": {}
+			}
+		},
+		"contentDensities": {
+			"compact": true,
+			"cozy": true
+		},
+		"models": {
+			"i18n": {
+				"type": "sap.ui.model.resource.ResourceModel",
+				"settings": {
+					"bundleName": "com.apptech.bfi-businessunit.i18n.i18n"
+				}
+			}
+		},
+		"resources": {
+			"css": [{
+				"uri": "css/style.css"
+			}]
+		},
+		"routing": {
+			"config": {
+				"routerClass": "sap.m.routing.Router",
+				"viewType": "XML",
+				"viewPath": "com.apptech.bfi-businessunit.view",
+				"controlId": "app",
+				"controlAggregation": "pages",
+				"async": true
+			},
+			"routes": [
+				{
+					"name": "Main",
+					"view": "Main",
+					"pattern": "Main",
+					"targetAggregation": "pages",
+					"controlId": "app"
+				},
+				{
+					"name": "Login",
+					"pattern": "Login",
+					"target": [
+						"Login"
+					]
+				},
+				{
+					"name": "BusinessUnit",
+					"pattern": "BusinessUnit",
+					"target": [
+						"BusinessUnit"
+					]
+				}
+			],
+			"targets": {
+				"Main": {
+					"viewType": "XML",
+					"viewName": "Main",
+					"viewLevel": 1
+				},
+				"BusinessUnit": {
+					"viewPath": "com.apptech.bfi-businessunit.view",
+					"viewType": "XML",
+					"viewName": "BusinessUnit",
+					"parent": "Main",
+					"controlId": "pageContainer",
+					"controlAggregation": "pages",
+					"transition": "flip",
+					"viewLevel": 3
+				},
+				"Login": {
+					"viewPath": "com.apptech.bfi-businessunit.view",
+					"viewType": "XML",
+					"viewName": "Login"
+				}
+			}
+		}
+	}
+}

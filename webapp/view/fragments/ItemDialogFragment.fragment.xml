@@ -1,0 +1,18 @@
+<core:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:core="sap.ui.core">
+	<SelectDialog
+		noDataText="No Item Found"
+		title="Select Item"
+		search="handleSearchItem"
+		confirm="handleValueHelpCloseItem"
+		cancel="handleValueHelpCloseItem"
+		showClearButton="true"
+		items="{/AllItems}">
+		<StandardListItem
+			iconDensityAware="false"
+			iconInset="false"
+			title="{ItemCode}"
+			description="Name : {ItemName}" />
+	</SelectDialog>
+</core:FragmentDefinition>
