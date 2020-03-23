@@ -206,7 +206,7 @@ sap.ui.define([
 	///TRIGGER TO GO TO ADD
 		onAddMode: function () {
 			///Changing the Name of Icon Bar
-			this.getView().byId("idIconTabBarInline	this.getView().byIdMode").getItems()[1].setText("RECORD [ADD]");
+			this.getView().byId("idIconTabBarInlineMode").getItems()[1].setText("RECORD [ADD]");
 			this.getView().byId("SaveDraft").setText("SAVE AS DRAFT");
 			var tab = this.getView().byId("idIconTabBarInlineMode");
 			tab.setSelectedKey("tab2");
