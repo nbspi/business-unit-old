@@ -296,6 +296,7 @@ sap.ui.define([
 		////DRAFT Function POSTING ON UDT
 		onAddDraftFunction: function () {
 			AppUI5.showBusyIndicator(4000);
+			
 			//GET TRANSACTION NUMBER
 			var sGeneratedTransNo = "";
 			var TransType = this.oModel.getData().EditRecord.TransType;
