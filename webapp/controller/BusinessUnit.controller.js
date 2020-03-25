@@ -236,41 +236,51 @@ sap.ui.define([
 			var issueBU = this.oModel.getData().EditRecord.IssueBU;
 			if (transtype === "") {
 				sap.m.MessageToast.show("Please Select Transaction Type.");
-			} else if (issueBU === "") {
-				sap.m.MessageToast.show("Please Select Issuing BU.");
-			} else if (transtype === "1") {
-				oitemdetails.CostProdEnable = false;
-				oitemdetails.MarkupPriceEnable = false;
-				oitemdetails.TransferPriceEnable = false;
-				oitemdetails.MarketPriceEnable = false;
-				this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
-				this.oModel.refresh();
-			} else if (transtype === "2") {
-				oitemdetails.CostProdEnable = false;
-				oitemdetails.MarkupPriceEnable = false;
-				oitemdetails.TransferPriceEnable = false;
-				oitemdetails.MarketPriceEnable = false;
-				this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
-				this.oModel.refresh();
-
-			} else if (transtype === "3") {
-				oitemdetails.CostProdEnable = false;
-				oitemdetails.MarkupPriceEnable = false;
-				oitemdetails.TransferPriceEnable = false;
-				oitemdetails.MarketPriceEnable = false;
-				this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
-				this.oModel.refresh();
-
-			} else if (transtype === "4") {
-				oitemdetails.CostProdEnable = false;
-				oitemdetails.MarkupPriceEnable = false;
-				oitemdetails.TransferPriceEnable = false;
-				oitemdetails.MarketPriceEnable = false;
-				this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
-				this.oModel.refresh();
-
-			}
-
+			} else {
+					if (transtype === "1") {
+						oitemdetails.CostProdEnable = false;
+						oitemdetails.MarkupPriceEnable = false;
+						oitemdetails.TransferPriceEnable = false;
+						oitemdetails.MarketPriceEnable = false;
+						this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
+						this.oModel.refresh();
+					} else if (transtype === "2") {
+						oitemdetails.CostProdEnable = false;
+						oitemdetails.MarkupPriceEnable = false;
+						oitemdetails.TransferPriceEnable = false;
+						oitemdetails.MarketPriceEnable = false;
+						this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
+						this.oModel.refresh();
+					} else if (transtype === "3") {
+						oitemdetails.CostProdEnable = false;
+						oitemdetails.MarkupPriceEnable = false;
+						oitemdetails.TransferPriceEnable = false;
+						oitemdetails.MarketPriceEnable = false;
+						this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
+						this.oModel.refresh();
+					} else if (transtype === "4") {
+						oitemdetails.CostProdEnable = false;
+						oitemdetails.MarkupPriceEnable = false;
+						oitemdetails.TransferPriceEnable = false;
+						oitemdetails.MarketPriceEnable = false;
+						this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
+						this.oModel.refresh();
+					} else if (transtype === "5") {
+						oitemdetails.CostProdEnable = false;
+						oitemdetails.MarkupPriceEnable = false;
+						oitemdetails.TransferPriceEnable = false;
+						oitemdetails.MarketPriceEnable = false;
+						this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
+						this.oModel.refresh();
+					} else if (transtype === "6") {
+						oitemdetails.CostProdEnable = false;
+						oitemdetails.MarkupPriceEnable = false;
+						oitemdetails.TransferPriceEnable = false;
+						oitemdetails.MarketPriceEnable = false;
+						this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
+						this.oModel.refresh();
+					}
+			} 
 		},
 		////REMOVE ROW ON TABLE
 		onRemoveRow: function (oEvent) {
@@ -442,11 +452,23 @@ sap.ui.define([
 				this.getView().byId("inputbpcode").setEnabled(false);
 				this.getView().byId("inputaccountname").setEnabled(false);
 				this.getView().byId("inputwhsreceive").setEnabled(false);
+			}else if (transtype === "5") {
+				this.getView().byId("inputbpcode").setValue("");
+				this.getView().byId("inputaccountname").setValue("");
+				this.getView().byId("inputbpcode").setEnabled(true);
+				this.getView().byId("inputaccountname").setEnabled(true);
+				this.getView().byId("inputwhsreceive").setEnabled(false);
+			}else if (transtype === "6") {
+				this.getView().byId("inputbpcode").setValue("");
+				this.getView().byId("inputaccountname").setValue("");
+				this.getView().byId("inputbpcode").setEnabled(true);
+				this.getView().byId("inputaccountname").setEnabled(true);
+				this.getView().byId("inputwhsissue").setEnabled(false);
+				this.getView().byId("inputwhsreceive").setEnabled(true);
 			} else {
 				this.getView().byId("inputbpcode").setEnabled(true);
 				this.getView().byId("inputaccountname").setEnabled(true);
 				this.getView().byId("inputwhsreceive").setEnabled(true);
-
 			}
 
 		},
@@ -528,10 +550,17 @@ sap.ui.define([
 		//GETTING ALL BP
 		_configValueHelpDialogs: function () {
 			var sInputValue = this.byId("inputbpcode").getValue();
+			var TransType = this.oModel.getData().EditRecord.TransType;
+			var customertype ="";
+			if (TransType ==="6"){
+				customertype = "S";
+			}else{
+				customertype = "C";
+			}
 			if (this.oMdlAllBP.getData().allbp.length <= 0) {
 				//GET ALL BP
 				$.ajax({
-					url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=SBODEMOAU_SL&procName=spAppBusinessUnit&queryTag=getallbp&value1&value2&value3&value4",
+					url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=SBODEMOAU_SL&procName=spAppBusinessUnit&queryTag=getallbp&value1="+ customertype +"&value2&value3&value4",
 					type: "GET",
 					datatype:"json",
 				beforeSend: function(xhr){
@@ -1220,45 +1249,210 @@ sap.ui.define([
 			});
 		},
 
+		////POSTING ON BU TO INTER ORG ISSUE
+		onBuToInterOrgIssue: function () {
+			AppUI5.showBusyIndicator(4000);
+			//Initialize Variables
+			var oInvoice = {};
+			var oGoodsIssue = {};
+			var oInvoiceHeader = {};
+			var oGoodsIssueHeader = {};
+			oInvoice.CardCode = this.oModel.getData().EditRecord.BPCode;
+			oInvoice.Comments = this.oModel.getData().EditRecord.Remarks;
+			oInvoice.DocumentLines = [];
+			oGoodsIssue.Comments = this.oModel.getData().EditRecord.Remarks;
+			oGoodsIssue.DocumentLines = [];
+			///LOOP FOR THE DETAILS
+			var d;
+			for (d = 0; d < this.oModel.getData().EditRecord.DocumentLines.length; d++) {
+				///Goods Receipt Details
+				oInvoiceHeader.WarehouseCode = this.oModel.getData().EditRecord.IssueBU;
+				oInvoiceHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
+				oInvoiceHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
+				oInvoiceHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice; //adjustment
+				///Goods Issue Details
+				// oGoodsIssueHeader.WarehouseCode = this.oModel.getData().EditRecord.IssueBU;
+				oGoodsIssueHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
+				oGoodsIssueHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
+				oGoodsIssueHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
+
+				oInvoice.DocumentLines.push(JSON.parse(JSON.stringify(oInvoiceHeader)));
+				oGoodsIssue.DocumentLines.push(JSON.parse(JSON.stringify(oGoodsIssueHeader)));
+			}
+
+			var batchArray = [
+				//directly insert data if data is single row per table 
+				{
+					"tableName": "Invoices",
+					"data": oInvoice
+				}
+			];
+
+			batchArray.push(JSON.parse(JSON.stringify(({
+				"tableName": "InventoryGenExits",
+				"data": oGoodsIssue
+			}))));
+
+			var sBodyRequest = this.prepareBatchRequestBody(batchArray);
+			//ajax call to SL
+			$.ajax({
+
+				url: "https://18.136.35.41:50000/b1s/v1/$batch",
+				type: "POST",
+				contentType: "multipart/mixed;boundary=a",
+				data: sBodyRequest, //If batch, body data should not be JSON.stringified
+				xhrFields: {
+					withCredentials: true
+				},
+				error: function (xhr, status, error) {
+					var Message = xhr.responseJSON["error"].message.value;
+					sap.m.MessageToast.show(Message);
+					AppUI5.hideBusyIndicator();
+				},
+				success: function (json) {
+					//this.oPage.setBusy(false);
+					sap.m.MessageToast.show("Added Successfully");
+					this.prepareTable(false,"");
+					this.onClearField();
+					this.oModel.refresh();
+					AppUI5.hideBusyIndicator();
+				},
+				context: this
+
+			}).done(function (results) {
+				if (results) {
+					//
+
+				}
+			});
+		},
+		///POSTING ON BU TO INTER ORG ISSUE
+		onBuToInterOrgReceipt: function () {
+			AppUI5.showBusyIndicator(4000);
+			//Initialize Variables
+			var oInvoice = {};
+			var oGoodsIssue = {};
+			var oInvoiceHeader = {};
+			var oGoodsIssueHeader = {};
+			oInvoice.CardCode = this.oModel.getData().EditRecord.BPCode;
+			oInvoice.Comments = this.oModel.getData().EditRecord.Remarks;
+			oInvoice.DocumentLines = [];
+			oGoodsIssue.Comments = this.oModel.getData().EditRecord.Remarks;
+			oGoodsIssue.DocumentLines = [];
+			///LOOP FOR THE DETAILS
+			var d;
+			for (d = 0; d < this.oModel.getData().EditRecord.DocumentLines.length; d++) {
+				///Goods Receipt Details
+				oInvoiceHeader.WarehouseCode = this.oModel.getData().EditRecord.ReceiveBU;
+				oInvoiceHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
+				oInvoiceHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
+				oInvoiceHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice; //adjustment
+				///Goods Issue Details
+				// oGoodsIssueHeader.WarehouseCode = this.oModel.getData().EditRecord.IssueBU;
+				oGoodsIssueHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
+				oGoodsIssueHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
+				oGoodsIssueHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
+
+				oInvoice.DocumentLines.push(JSON.parse(JSON.stringify(oInvoiceHeader)));
+				oGoodsIssue.DocumentLines.push(JSON.parse(JSON.stringify(oGoodsIssueHeader)));
+			}
+
+			var batchArray = [
+				//directly insert data if data is single row per table 
+				{
+					"tableName": "PurchaseInvoices",
+					"data": oInvoice
+				}
+			];
+
+			batchArray.push(JSON.parse(JSON.stringify(({
+				"tableName": "InventoryGenEntries",
+				"data": oGoodsIssue
+			}))));
+
+			var sBodyRequest = this.prepareBatchRequestBody(batchArray);
+			//ajax call to SL
+			$.ajax({
+
+				url: "https://18.136.35.41:50000/b1s/v1/$batch",
+				type: "POST",
+				contentType: "multipart/mixed;boundary=a",
+				data: sBodyRequest, //If batch, body data should not be JSON.stringified
+				xhrFields: {
+					withCredentials: true
+				},
+				error: function (xhr, status, error) {
+					var Message = xhr.responseJSON["error"].message.value;
+					sap.m.MessageToast.show(Message);
+					AppUI5.hideBusyIndicator();
+				},
+				success: function (json) {
+					//this.oPage.setBusy(false);
+					sap.m.MessageToast.show("Added Successfully");
+					this.prepareTable(false,"");
+					this.onClearField();
+					this.oModel.refresh();
+					AppUI5.hideBusyIndicator();
+				},
+				context: this
+
+			}).done(function (results) {
+				if (results) {
+					//
+
+				}
+			});
+		},
 		/// Record Posting
 		onAddRecords: function (oEvent) {
 			var transtype = this.oModel.getData().EditRecord.TransType;
 			var transno = this.oModel.getData().EditRecord.TransNo;
 			if (transtype === "0") {
 				sap.m.MessageToast.show("Please Select Transaction Type.");
-			} else if (transtype === "1" & transno === "") {
-				/////Call BU to BU transaction Function
-				// sap.m.MessageToast.show("BU.");
+			}  else if (transtype === "1" & transno === "") {
+				/////Call BU to BU AND DRAFT transaction Function
 				this.onAddDraftFunction();
 				this.onBuToBu();
 			} else if (transtype === "1" & transno !== "") {
-				/////Call Draft and BU to BU transaction Function
+				/////Call BU to BU transaction Function
 				this.onBuToBu();
 			} else if (transtype === "2" & transno === "") {
-				/////Call Bu to Cash Sales Function
+				/////Call Bu to Cash Sales AND DRAFT Function
 				this.onAddDraftFunction();
 				this.onBuToCashSales();
 			} else if (transtype === "2" & transno !== "") {
 				/////Call Bu to Cash Sales Function
 				this.onBuToCashSales();
 			} else if (transtype === "3" & transno === "") {
-				/////Call Bu to Cash Sales Function
+				/////Call Bu to Vale and Draft
 				this.onAddDraftFunction();
 				this.onBuToVale();
 			} else if (transtype === "3" & transno !== "") {
-				/////Call Bu to Cash Sales Function
+				/////Call Bu to Vale Function
 				this.onBuToVale();
 			} else if (transtype === "4" & transno === "") {
-				/////Call Bu to Cash Sales Function
+				/////Call Bu to Charge to Expense and Draft
 				this.onAddDraftFunction();
 				this.onBUtoChargetoExpense();
 			} else if (transtype === "4" & transno !== "") {
-				/////Call Bu to Cash Sales Function
+				/////Call Bu to Charge to Expense Function
 				this.onBUtoChargetoExpense();
+			} else if (transtype === "5" & transno === "") {
+				/////Call Bu to Charge to Expense and Draft
+				this.onAddDraftFunction();
+				this.onBuToInterOrgIssue();
+			} else if (transtype === "5" & transno !== "") {
+				/////Call Bu to Charge to Expense Function
+				this.onBuToInterOrgIssue();
+			} else if (transtype === "6" & transno === "") {
+				/////Call Bu to Charge to Expense and Draft
+				this.onAddDraftFunction();
+				this.onBuToInterOrgReceipt();
+			} else if (transtype === "6" & transno !== "") {
+				/////Call Bu to Inter Org Receipt Function
+				this.onBuToInterOrgReceipt();
 			}
-
 		},
-
 		//Batch Request for Updating Draft
 		prepareUpdateBatchRequestBody: function (oHeader, oRequest, getcode) {
 			var batchRequest = "";
@@ -1288,7 +1482,7 @@ sap.ui.define([
 			return batchRequest;
 
 		},
-		////UPDATE TESTING 
+		////UPDATE  
 		onUpdateDraft: function () {
 			AppUI5.showBusyIndicator(4000);
 			//GET MARKET PRICE
