@@ -1,11 +1,12 @@
 sap.ui.define([
-  "sap/ui/core/mvc/Controller",
+    "sap/ui/core/BusyIndicator",
+    "sap/ui/core/mvc/Controller",
 	"sap/ui/model/json/JSONModel",
 	"sap/ui/core/Fragment",
 	"sap/ui/model/Filter",
 	"com/apptech/bfi-businessunit/controller/AppUI5",
 	"sap/ui/model/FilterOperator"
-], function(Controller, JSONModel, Fragment, Filter, AppUI5, FilterOperator) {
+], function(BusyIndicator,Controller, JSONModel, Fragment, Filter, AppUI5, FilterOperator) {
   "use strict";
 
   return Controller.extend("com.apptech.bfi-businessunit.controller.BusinessUnit", {
@@ -19,8 +20,6 @@ sap.ui.define([
 		},
 
 		onInit: function () {
-
-		
 
 			//TO STORED SELECTED ROW
 			this.iSelectedRow = 0;
@@ -109,7 +108,7 @@ sap.ui.define([
 			}else{
 				var transtypefilter = this.getView().byId("transfilter").getSelectedKey();
 			}
-			 
+
 
 			if (transtypefilter === ""){
 				var aResults = this.getAllTransaction(transtypefilter);
@@ -438,7 +437,7 @@ sap.ui.define([
 				this.getView().byId("inputaccountname").setValue("");
 				this.getView().byId("inputbpcode").setEnabled(false);
 				this.getView().byId("inputaccountname").setEnabled(false);
-				this.getView().byId("inputwhsreceive").setEnabled(true);
+				this.getView().byId("inputwhsreceive").setEnabled(false);
 			} else {
 				this.getView().byId("inputbpcode").setEnabled(true);
 				this.getView().byId("inputaccountname").setEnabled(true);
@@ -916,6 +915,8 @@ sap.ui.define([
 		////POSTING BU TO BU BUSINESS TYPE
 		onBuToBu: function () {
 			//Initialize Variables
+
+			AppUI5.showBusyIndicator(4000);
 			var oGoodsIssue = {};
 			var oGoodsIssueHeader = {};
 			oGoodsIssue.Comments = this.oModel.getData().EditRecord.Remarks;
@@ -939,7 +940,9 @@ sap.ui.define([
 					withCredentials: true
 				},
 				error: function (xhr, status, error) {
-					sap.m.MessageToast.show(error);
+					var Message = xhr.responseJSON["error"].message.value;
+					sap.m.MessageToast.show(Message);
+					
 				},
 				success: function (json) {
 					//this.oPage.setBusy(false);
@@ -947,6 +950,8 @@ sap.ui.define([
 					this.prepareTable(false,"");
 					this.onClearField();
 					this.oModel.refresh();
+					AppUI5.hideBusyIndicator();
+					
 				},
 				context: this
 
@@ -963,6 +968,7 @@ sap.ui.define([
 
 
 		onBuToCashSales: function () {
+			AppUI5.showBusyIndicator(4000);
 			//Initialize Variables
 			var oInvoice = {};
 			var oGoodsIssue = {};
@@ -1016,19 +1022,17 @@ sap.ui.define([
 					withCredentials: true
 				},
 				error: function (xhr, status, error) {
-					//this.oPage.setBusy(false);
-					// if (xhr.status === 400) {
-					// 	sap.m.MessageToast.show("Session End. Redirecting to Login Page..");
-					// 	sap.ui.core.UIComponent.getRouterFor(this).navTo("Login");
-					// }else{
-					// 	sap.m.MessageToast.show(error);
-					// }
-					sap.m.MessageToast.show(error);
+					var Message = xhr.responseJSON["error"].message.value;
+					sap.m.MessageToast.show(Message);
+					AppUI5.hideBusyIndicator();
 				},
 				success: function (json) {
 					//this.oPage.setBusy(false);
 					sap.m.MessageToast.show("Added Successfully");
-
+					this.prepareTable(false,"");
+					this.onClearField();
+					this.oModel.refresh();
+					AppUI5.hideBusyIndicator();
 				},
 				context: this
 
@@ -1088,6 +1092,7 @@ sap.ui.define([
 		},
 		////POSTING ON BU TO VALE
 		onBuToVale: function () {
+			AppUI5.showBusyIndicator(4000);
 			//Initialize Variables
 			var oInvoice = {};
 			var oGoodsIssue = {};
@@ -1141,14 +1146,9 @@ sap.ui.define([
 					withCredentials: true
 				},
 				error: function (xhr, status, error) {
-					//this.oPage.setBusy(false);
-					// if (xhr.status === 400) {
-					// 	sap.m.MessageToast.show("Session End. Redirecting to Login Page..");
-					// 	sap.ui.core.UIComponent.getRouterFor(this).navTo("Login");
-					// }else{
-					// 	sap.m.MessageToast.show(error);
-					// }
-					sap.m.MessageToast.show(error);
+					var Message = xhr.responseJSON["error"].message.value;
+					sap.m.MessageToast.show(Message);
+					AppUI5.hideBusyIndicator();
 				},
 				success: function (json) {
 					//this.oPage.setBusy(false);
@@ -1156,6 +1156,7 @@ sap.ui.define([
 					this.prepareTable(false,"");
 					this.onClearField();
 					this.oModel.refresh();
+					AppUI5.hideBusyIndicator();
 				},
 				context: this
 
@@ -1168,6 +1169,7 @@ sap.ui.define([
 		},
 		////POSTING ON BU TO CHARGE TO EXPENSE
 		onBUtoChargetoExpense: function () {
+			AppUI5.showBusyIndicator(4000);
 			//Initialize Variables
 			var oGoodsIssue = {};
 			var oGoodsIssueHeader = {};
@@ -1192,7 +1194,9 @@ sap.ui.define([
 					withCredentials: true
 				},
 				error: function (xhr, status, error) {
-					sap.m.MessageToast.show(error);
+					var Message = xhr.responseJSON["error"].message.value;
+					sap.m.MessageToast.show(Message);
+					AppUI5.hideBusyIndicator();
 				},
 				success: function (json) {
 					//this.oPage.setBusy(false);
@@ -1200,6 +1204,7 @@ sap.ui.define([
 					this.prepareTable(false,"");
 					this.onClearField();
 					this.oModel.refresh();
+					AppUI5.hideBusyIndicator();
 				},
 				context: this
 
@@ -1281,6 +1286,7 @@ sap.ui.define([
 		},
 		////UPDATE TESTING 
 		onUpdateDraft: function () {
+			AppUI5.showBusyIndicator(4000);
 			//GET MARKET PRICE
 			var TransNo = this.oModel.getData().EditRecord.TransNo;
 			var TransType = this.oModel.getData().EditRecord.TransType;
@@ -1295,7 +1301,9 @@ sap.ui.define([
 					xhr.setRequestHeader("Authorization","Basic " + btoa("SYSTEM:P@ssw0rd805~"));
 				},
 				error: function (xhr, status, error) {
-					sap.m.MessageToast.show(error);
+					var Message = xhr.responseJSON["error"].message.value;
+					sap.m.MessageToast.show(Message);
+					AppUI5.hideBusyIndicator();
 				},
 				success: function (json) {},
 				context: this
@@ -1366,8 +1374,8 @@ sap.ui.define([
 					withCredentials: true
 				},
 				error: function (xhr, status, error) {
-					//this.oPage.setBusy(false);
-					sap.m.MessageToast.show(xhr.responseText);
+					var Message = xhr.responseJSON["error"].message.value;
+					sap.m.MessageToast.show(Message);
 				},
 				success: function (json) {
 					sap.m.MessageToast.show("Draft Transaction Number '" + this.oModel.getData().EditRecord.TransNo + "' Has Been Updated!");

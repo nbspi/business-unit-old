@@ -1,6 +1,7 @@
 sap.ui.define([
+	"sap/ui/core/BusyIndicator",
 	"sap/m/MessageBox"
-], function (MessageBox) {
+], function (BusyIndicator,MessageBox) {
 	"use strict";
 	return ("com.apptech.bfi-businessunit.controller.AppUI5",{
 
@@ -404,6 +405,27 @@ sap.ui.define([
 		
 		addKey: function(obj, add_key, add_value){
 			obj[add_key] = add_value;
+		},
+
+
+		///BUSY INDICATOR
+		hideBusyIndicator : function() {
+			BusyIndicator.hide();
+		},
+
+		showBusyIndicator : function (iDuration, iDelay) {
+			BusyIndicator.show(iDelay);
+
+			if (iDuration && iDuration > 0) {
+				if (this._sTimeoutId) {
+					clearTimeout(this._sTimeoutId);
+					this._sTimeoutId = null;
+				}
+
+				this._sTimeoutId = setTimeout(function() {
+					this.hideBusyIndicator();
+				}.bind(this), iDuration);
+			}
 		}
 
 	});
