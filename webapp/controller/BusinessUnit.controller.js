@@ -295,6 +295,7 @@ sap.ui.define([
 
 		////DRAFT Function POSTING ON UDT
 		onAddDraftFunction: function () {
+			AppUI5.showBusyIndicator(4000);
 			//GET TRANSACTION NUMBER
 			var sGeneratedTransNo = "";
 			var TransType = this.oModel.getData().EditRecord.TransType;
@@ -309,6 +310,7 @@ sap.ui.define([
 			  	},
 				error: function (xhr, status, error) {
 					sap.m.MessageToast.show(error);
+					AppUI5.hideBusyIndicator();
 				},
 				success: function (json) {},
 				context: this
@@ -391,6 +393,7 @@ sap.ui.define([
 					this.prepareTable(false,"");
 					this.onClearField();
 					this.oModel.refresh();
+					AppUI5.hideBusyIndicator();
 				}
 			});
 		},
