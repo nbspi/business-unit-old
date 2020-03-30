@@ -13,7 +13,7 @@ sap.ui.define([
             this.oMdlDatabase = new JSONModel("model/databases.json");
             this.oMdlLogin = new JSONModel("model/login.json");
             this.getView().setModel(this.oMdlLogin);
-            this.getAllRecords("getAllDB");
+            this.fgetAllRecords("getAllDB");
 
         },
 
@@ -93,7 +93,7 @@ sap.ui.define([
             this.oLogin.refresh;
             sap.ui.core.UIComponent.getRouterFor(this).navTo("Login");
         },
-        getAllRecords: function(queryTag){
+        fgetAllRecords: function(queryTag){
 			
 			// var aReturnResult = [];
 			$.ajax({
@@ -117,29 +117,7 @@ sap.ui.define([
 		
 		}
 
-        // getAllRecords: function (queryTag) {
-
-        //      var aReturnResult = [];
-        //     $.ajax({
-        //         url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=SBODEMOAU_SL&procName=spAppBusinessUnit&QUERYTAG="+ queryTag +"&VALUE1=&VALUE2=&VALUE3=&VALUE4=",
-        //         type: "GET",
-        //         beforeSend: function (xhr) {
-        //             xhr.setRequestHeader("Authorization", "Basic" + btoa("SYSTEM:P@ssw0rd805~"));
-        //         },
-        //         error: function (xhr, status, error) {
-        //             MessageToast.show(error);
-        //         },
-                
-        //         success: function (json) { },
-        //         context: this
-        //     }).done(function (results) {
-        //         if (results) {
-        //             this.oMdlDatabase.setJSON("{\"Database\" : " + JSON.stringify(results) + "}");
-		// 			this.getView().setModel(this.oMdlDatabase, "oMdlDatabase");
-        //         }
-                
-        //     });
-        //   }
+    
 
         });
 });
