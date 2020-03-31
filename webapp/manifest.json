@@ -90,6 +90,13 @@
 					"target": [
 						"BusinessUnit"
 					]
+				},
+				{
+					"name": "Pending",
+					"pattern": "Pending",
+					"target": [
+						"Pending"
+					]
 				}
 			],
 			"targets": {
@@ -112,6 +119,16 @@
 					"viewPath": "com.apptech.bfi-businessunit.view",
 					"viewType": "XML",
 					"viewName": "Login"
+				},
+				"Pending": {
+					"viewPath": "com.apptech.bfi-businessunit.view",
+					"viewType": "XML",
+					"viewName": "Pending",
+					"parent": "Main",
+					"controlId": "pageContainer",
+					"controlAggregation": "pages",
+					"transition": "flip",
+					"viewLevel": 3
 				}
 			}
 		}

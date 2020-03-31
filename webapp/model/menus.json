@@ -1,14 +1,21 @@
 {
-	"navigation": [{
+	"navigation": [
+		{
+			"title": "Request",
+			"icon": "sap-icon://manager-insight",
+			"key": "Request"
+		},
+		{
 			"title": "Transactions",
 			"icon": "sap-icon://manager-insight",
-			"key": "butransfer"
+			"key": "BusinessUnit"
 		},
 		{
 			"title": "Pending",
 			"icon": "sap-icon://manager-insight",
-			"key": "butransfer"
+			"key": "Pending"
 		}
+		
 
 	],
 	"fixedNavigation": [{

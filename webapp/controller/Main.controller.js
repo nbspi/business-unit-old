@@ -51,8 +51,11 @@ sap.ui.define([
 		onItemSelect: function (oEvent) {
 			var sSelectedMenu = oEvent.getSource().getProperty("selectedKey");
 			switch (sSelectedMenu) {
-			case "butransfer":
+			case "BusinessUnit":
 				this.router.navTo("BusinessUnit");
+				break;
+			case "Pending":
+				this.router.navTo("Pending");
 				break;
 			default:
 

@@ -8,7 +8,7 @@
 				<content>
 					<IconTabBar id="idIconTabBarInlineMode" headerMode="Inline" upperCase="true" expandable="false" class="sapUiResponsiveContentPadding">
 						<items>
-							<IconTabFilter id="tab1" text="Transactions" count="0" key="tab1">
+							<IconTabFilter id="tab1" text="RECORDS" count="0" key="tab1">
 								<Label text="Transaction Type" width="100%">
 									<layoutData>
 										<l:GridData span="L3 M2 S12"/>
@@ -20,6 +20,18 @@
 										<l:GridData span="L3 M4 S12"/>
 									</layoutData>
 								</Select>
+
+							<SegmentedButton id="TranStatus" selectionChange="onSelectionChange">
+							<items>
+								<SegmentedButtonItem text="DRAFT" key="0"/>
+								<SegmentedButtonItem text="POSTED" key="1"/>
+							</items>
+						</SegmentedButton>
+							<Text id="selectedItemPreview"/>
+
+
+								
+								
 										
 								<t:Table id="tblDrafts" selectionMode="Single" visibleRowCount="8" ariaLabelledBy="title" enableCellFilter="true"
 									rowSelectionChange="onSelectionChange">
@@ -36,7 +48,7 @@
 								</t:Table>
 								
 							</IconTabFilter>
-							<IconTabFilter id="tab2" text="Add / Edit" key="tab2">
+							<IconTabFilter id="tab2" text="Transaction" key="tab2">
 								<!--<Button text="Post Outgoing Payment Draft" id="btnPostDraft" tooltip="Save" press="onPostDraftOP" icon="sap-icon://save"/>-->
 								<!--<Button text="Export File" tooltip="Export" press="handleExcelExport"/>-->
 									<Toolbar>

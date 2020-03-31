@@ -1,17 +1,15 @@
 sap.ui.define([
-    "sap/ui/core/BusyIndicator",
+	"sap/ui/core/BusyIndicator",
+	'sap/ui/core/Element',
     "sap/ui/core/mvc/Controller",
 	"sap/ui/model/json/JSONModel",
 	"sap/ui/core/Fragment",
 	"sap/ui/model/Filter",
 	"com/apptech/bfi-businessunit/controller/AppUI5",
 	"sap/ui/model/FilterOperator"
-], function(BusyIndicator,Controller, JSONModel, Fragment, Filter, AppUI5, FilterOperator) {
+], function(BusyIndicator,Element,Controller, JSONModel, Fragment, Filter, AppUI5, FilterOperator) {
   "use strict";
-
   return Controller.extend("com.apptech.bfi-businessunit.controller.BusinessUnit", {
-
-
     _data: {
 			"date": new Date()
 		},
@@ -90,6 +88,10 @@ sap.ui.define([
 			this.fprepareTable("",0);
 			this.oMdlAllRecord.refresh();
 		},
+		onSelectionChange: function (oEvent) {
+			var ostatus = this.getView().byId("TranStatus").getSelectedKey();
+			///sap.m.MessageToast.show(ostatus);
+		},
 		//RENAMING COLUMNS FOR THE TABLE
 		frenameColumns: function () {
 			this.oTable.getColumns()[0].setLabel("Transaction No");
@@ -103,6 +105,7 @@ sap.ui.define([
 		},
 		//Preparing table
 		fprepareTable: function (bIsInit,transType) {
+			var oTransTatus = this.getView().byId("TranStatus").getSelectedKey();
 			if (transType === ""){
 				var transtypefilter = "";
 			}else{
@@ -111,9 +114,9 @@ sap.ui.define([
 
 
 			if (transtypefilter === ""){
-				var aResults = this.fgetAllTransaction(transtypefilter);
+				var aResults = this.fgetAllTransaction(transtypefilter,oTransTatus);
 			}else{
-				var aResults = this.fgetAllTransaction(transtypefilter);
+				var aResults = this.fgetAllTransaction(transtypefilter,oTransTatus);
 			}
 		
 			if (aResults.length !== 0) {
@@ -153,15 +156,15 @@ sap.ui.define([
 		},
 
 		///GETTING ALL THE THE TRANSACTION DATA/S
-		fgetAllTransaction: function (transtypefilter) {
+		fgetAllTransaction: function (transtypefilter,oTransTatus) {
 			var value1 = transtypefilter;
+			var value2 = oTransTatus;
 			var aReturnResult = [];
 			var urltag = "";
 			if (value1 ===""){
 				urltag ="https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=SBODEMOAU_SL&procName=spAppBusinessUnit&QUERYTAG=getTransactions&VALUE1=&VALUE2=&VALUE3=&VALUE4=";
 			}else{
-				urltag ="https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=SBODEMOAU_SL&procName=spAppBusinessUnit&QUERYTAG=getFilteredTransactions&VALUE1="+ value1 +"&VALUE2=&VALUE3=&VALUE4=";
-			
+				urltag ="https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=SBODEMOAU_SL&procName=spAppBusinessUnit&QUERYTAG=getFilteredTransactions&VALUE1="+ value1 +"&VALUE2="+ value2 +"&VALUE3=&VALUE4=";
 			}
 			$.ajax({
 				url: urltag,
@@ -208,9 +211,9 @@ sap.ui.define([
 
 		},
 	///TRIGGER TO GO TO ADD
-		onAddMode: function () {
+		onAddMode: function (oEvent) {
 			///Changing the Name of Icon Bar
-			this.getView().byId("idIconTabBarInlineMode").getItems()[1].setText("RECORD [ADD]");
+			this.getView().byId("idIconTabBarInlineMode").getItems()[1].setText("TRANSACTION [ADD]");
 			this.getView().byId("SaveDraft").setText("SAVE AS DRAFT");
 			var tab = this.getView().byId("idIconTabBarInlineMode");
 			tab.setSelectedKey("tab2");
@@ -304,7 +307,10 @@ sap.ui.define([
 		},
 
 		////DRAFT Function POSTING ON UDT
-		fAddDraftFunction: function () {
+		fAddDraftFunction: function (ostatus) {
+			if (ostatus===""){
+				var ostatus ="0";
+			}
 			AppUI5.showBusyIndicator(4000);
 			//GET TRANSACTION NUMBER
 			var sGeneratedTransNo = "";
@@ -346,7 +352,7 @@ sap.ui.define([
 			oBusiness_Unit.U_APP_IssueBU = this.oModel.getData().EditRecord.IssueBU;
 			oBusiness_Unit.U_APP_ReceivingBU = this.oModel.getData().EditRecord.ReceiveBU;
 			oBusiness_Unit.U_APP_Remarks = this.oModel.getData().EditRecord.Remarks;
-			oBusiness_Unit.U_APP_Status = "0";
+			oBusiness_Unit.U_APP_Status = ostatus;
 			///HEADER BATCH Array
 			var batchArray = [
 				//directly insert data if data is single row per table 
@@ -408,11 +414,12 @@ sap.ui.define([
 		},
 		onAddDraft: function (oEvent) {
 			var transtype = this.getView().byId("TransID").getSelectedKey();
+			var ostatus= "0";
 			if (this.triggercondition === "SAVE AS DRAFT") {
 				if (transtype === "") {
 					sap.m.MessageToast.show("Please Select Transaction Type.");
 				} else {
-					this.fAddDraftFunction();
+					this.fAddDraftFunction(ostatus);
 				}
 			} else {
 			this.fonUpdateDraft();
@@ -548,14 +555,14 @@ sap.ui.define([
 		//GETTING ALL BP
 		f_configValueHelpDialogs: function () {
 			var sInputValue = this.byId("inputbpcode").getValue();
-			var TransType = this.oModel.getData().EditRecord.TransType;
-			var customertype ="";
-			if (TransType ==="6"){
-				customertype = "S";
-			}else{
-				customertype = "C";
-			}
 			if (this.oMdlAllBP.getData().allbp.length <= 0) {
+			var TransType = this.oModel.getData().EditRecord.TransType;
+					var customertype ="";
+					if (TransType ==="6"){
+						customertype = "S";
+					}else{
+						customertype = "C";
+					}
 				//GET ALL BP
 				$.ajax({
 					url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=SBODEMOAU_SL&procName=spAppBusinessUnit&queryTag=getallbp&value1="+ customertype +"&value2&value3&value4",
@@ -1418,50 +1425,67 @@ sap.ui.define([
 		onAddRecords: function (oEvent) {
 			var transtype = this.oModel.getData().EditRecord.TransType;
 			var transno = this.oModel.getData().EditRecord.TransNo;
-			if (transtype === "0") {
+			var ostatus= "1";
+			if (transtype === "") {
 				sap.m.MessageToast.show("Please Select Transaction Type.");
 			}  else if (transtype === "1" & transno === "") {
 				/////Call BU to BU AND DRAFT transaction Function
-				this.fAddDraftFunction();
+				this.fAddDraftFunction(ostatus);
 				this.fBuToBu();
+				this.onAddMode();
 			} else if (transtype === "1" & transno !== "") {
 				/////Call BU to BU transaction Function
+				this.fUpdatePending(ostatus)
 				this.fBuToBu();
+				this.onAddMode();
 			} else if (transtype === "2" & transno === "") {
 				/////Call Bu to Cash Sales AND DRAFT Function
-				this.fAddDraftFunction();
+				this.fAddDraftFunction(ostatus);
 				this.fBuToCashSales();
+				this.onAddMode();
 			} else if (transtype === "2" & transno !== "") {
 				/////Call Bu to Cash Sales Function
+				this.fUpdatePending(ostatus)
 				this.fBuToCashSales();
+				this.onAddMode();
 			} else if (transtype === "3" & transno === "") {
 				/////Call Bu to Vale and Draft
-				this.fAddDraftFunction();
+				this.fAddDraftFunction(ostatus);
 				this.fBuToVale();
+				this.onAddMode();
 			} else if (transtype === "3" & transno !== "") {
 				/////Call Bu to Vale Function
+				this.fUpdatePending(ostatus)
 				this.fBuToVale();
+				this.onAddMode();
 			} else if (transtype === "4" & transno === "") {
 				/////Call Bu to Charge to Expense and Draft
-				this.fAddDraftFunction();
+				this.fAddDraftFunction(ostatus);
 				this.fBUtoChargetoExpense();
+				this.onAddMode();
 			} else if (transtype === "4" & transno !== "") {
 				/////Call Bu to Charge to Expense Function
+				this.fUpdatePending(ostatus)
 				this.fBUtoChargetoExpense();
+				this.onAddMode();
 			} else if (transtype === "5" & transno === "") {
-				/////Call Bu to Charge to Expense and Draft
-				this.fAddDraftFunction();
+				/////Call Bu to Inter Org - ISSUE and Draft
+				this.fAddDraftFunction(ostatus);
 				this.fBuToInterOrgIssue();
 			} else if (transtype === "5" & transno !== "") {
-				/////Call Bu to Charge to Expense Function
+				/////Call Bu to Inter Org - ISSUEFunction
+				this.fUpdatePending(ostatus)
 				this.fBuToInterOrgIssue();
+				this.onAddMode();
 			} else if (transtype === "6" & transno === "") {
-				/////Call Bu to Charge to Expense and Draft
-				this.fAddDraftFunction();
+				/////Call Bu to Inter Org - Receipt and Draft
+				this.fAddDraftFunction(ostatus);
 				this.fBuToInterOrgReceipt();
+				this.onAddMode();
 			} else if (transtype === "6" & transno !== "") {
 				/////Call Bu to Inter Org Receipt Function
 				this.fBuToInterOrgReceipt();
+				this.onAddMode();
 			}
 		},
 		//Batch Request for Updating Draft
@@ -1540,7 +1564,6 @@ sap.ui.define([
 			oBusiness_Unit.U_APP_IssueBU = this.oModel.getData().EditRecord.IssueBU;
 			oBusiness_Unit.U_APP_ReceivingBU = this.oModel.getData().EditRecord.ReceiveBU;
 			oBusiness_Unit.U_APP_Remarks = this.oModel.getData().EditRecord.Remarks;
-
 			///HEADER BATCH
 			var BatchHeader =
 				//directly insert data if data is single row per table 
@@ -1597,10 +1620,83 @@ sap.ui.define([
 					this.oModel.refresh();
 				}
 			});
+		},
+
+		//Batch Request for Updating Draft
+		fprepareUpdatePostedRequestBody: function (oHeader, getcode) {
+			var batchRequest = "";
+			var beginBatch = "--a\nContent-Type: multipart/mixed;boundary=b\n\n";
+			var endBatch = "--b--\n--a--";
+
+			batchRequest = batchRequest + beginBatch;
+
+			var objectUDTHeader = "";
+			objectUDTHeader = oHeader;
+			batchRequest = batchRequest + "--b\nContent-Type:application/http\nContent-Transfer-Encoding:binary\n\n";
+			batchRequest = batchRequest + "PATCH /b1s/v1/" + objectUDTHeader.tableName + "('" + getcode + "')";
+			batchRequest = batchRequest + "\nContent-Type: application/json\n\n";
+			batchRequest = batchRequest + JSON.stringify(objectUDTHeader.data) + "\n\n";
+
+			batchRequest = batchRequest + endBatch;
+
+			return batchRequest;
+
+		},
+		////UPDATE  POSTED
+		fUpdatePending: function (ostatus) {
+			AppUI5.showBusyIndicator(4000);
+		
+			var TransNo = this.oModel.getData().EditRecord.TransNo;
+			var TransType = this.oModel.getData().EditRecord.TransType;
+			//INITIALIZE FOR UPDATE
+			var getcode = this.code;
+			var oBusiness_Unit = {};
+			oBusiness_Unit.Code = getcode;
+			oBusiness_Unit.Name = getcode;
+			oBusiness_Unit.U_APP_TransType = TransType;
+			oBusiness_Unit.U_APP_TransNo = TransNo;
+			oBusiness_Unit.U_APP_TransDate = this.getTodaysDate();
+			oBusiness_Unit.U_APP_CardCode = this.oModel.getData().EditRecord.BPCode;
+			oBusiness_Unit.U_APP_CustomerName = this.oModel.getData().EditRecord.BPName;
+			oBusiness_Unit.U_APP_PostingDate = this.oModel.getData().EditRecord.PostingDate;
+			oBusiness_Unit.U_APP_MarkupType = this.oModel.getData().EditRecord.MarkupType;
+			oBusiness_Unit.U_APP_IssueBU = this.oModel.getData().EditRecord.IssueBU;
+			oBusiness_Unit.U_APP_ReceivingBU = this.oModel.getData().EditRecord.ReceiveBU;
+			oBusiness_Unit.U_APP_Remarks = this.oModel.getData().EditRecord.Remarks;
+			oBusiness_Unit.U_APP_Status = ostatus;
+			///HEADER BATCH
+			var BatchHeader =
+				//directly insert data if data is single row per table 
+				{
+					"tableName": "U_APP_OINT",
+					"data": oBusiness_Unit
+				};
+			var sBodyRequest = this.fprepareUpdatePostedRequestBody(BatchHeader, getcode);
+			$.ajax({
+				url: "https://18.136.35.41:50000/b1s/v1/$batch",
+				type: "POST",
+				contentType: "multipart/mixed;boundary=a",
+				data: sBodyRequest,
+				xhrFields: {
+					withCredentials: true
+				},
+				error: function (xhr, status, error) {
+					var Message = xhr.responseJSON["error"].message.value;
+					sap.m.MessageToast.show(Message);
+				},
+				success: function (json) {
+					sap.m.MessageToast.show("Transaction Number '" + this.oModel.getData().EditRecord.TransNo + "' Has Been Posted!");
+				},
+				context: this
+			}).done(function (results) {
+				if (results) {
+					this.fprepareTable(false,"");
+					this.oModel.refresh();
+				}
+			});
 		}
 
-
-
+		
 
 
   });
