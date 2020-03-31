@@ -28,7 +28,8 @@
 			"CostProdEnable": true,
 			"MarkupPriceEnable": true,
 			"TransferPriceEnable": true,
-			"MarketPriceEnable": false
+			"MarketPriceEnable": false,
+			"DescriptionEnable": false
 		}]
 	},
 	"AllItems": [{

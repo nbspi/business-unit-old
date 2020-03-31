@@ -27,12 +27,7 @@
 								<SegmentedButtonItem text="POSTED" key="1"/>
 							</items>
 						</SegmentedButton>
-							<Text id="selectedItemPreview"/>
-
-
-								
-								
-										
+						
 								<t:Table id="tblDrafts" selectionMode="Single" visibleRowCount="8" ariaLabelledBy="title" enableCellFilter="true"
 									rowSelectionChange="onSelectionChange">
 									<t:extension>
@@ -87,7 +82,7 @@
 											</Input>
 											
 											<!--Account Code -->
-											<Label text="Account Code" width="100%">
+											<Label text="Customer/Vendor" width="100%">
 												<layoutData>
 													<l:GridData span="L3 M2 S12"/>
 												</layoutData>
@@ -112,7 +107,7 @@
 											</DatePicker>
 											
 											<!--Account Name -->
-											<Label text="Customer/Vendor" width="100%">
+											<!-- <Label text="Customer/Vendor" width="100%">
 												<layoutData>
 													<l:GridData span="L3 M2 S12"/>
 												</layoutData>
@@ -121,7 +116,7 @@
 												<layoutData>
 													<l:GridData span="L3 M4 S12"/>
 												</layoutData>
-											</Input>
+											</Input> -->
 											
 											<!--Issueing Bu-->
 											<Label text="Issuing BU" width="100%">
@@ -233,7 +228,7 @@
 												<t:Column width="15rem">
 													<Label text="Item Description"/>
 													<t:template>
-														<Input value="{Description}"  textAlign="End" fieldWidth="80%" width="100%" enabled="true"/>
+														<Input value="{Description}"  textAlign="End" fieldWidth="80%" width="100%" enabled="{DescriptionEnable}"/>
 														<!--<Text text="{oMdlAP>DocNum}"/>-->
 													</t:template>
 												</t:Column>

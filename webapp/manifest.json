@@ -112,7 +112,7 @@
 					"parent": "Main",
 					"controlId": "pageContainer",
 					"controlAggregation": "pages",
-					"transition": "flip",
+					"transition": "slide",
 					"viewLevel": 3
 				},
 				"Login": {
@@ -127,7 +127,7 @@
 					"parent": "Main",
 					"controlId": "pageContainer",
 					"controlAggregation": "pages",
-					"transition": "flip",
+					"transition": "slide",
 					"viewLevel": 3
 				}
 			}

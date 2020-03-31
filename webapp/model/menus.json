@@ -11,7 +11,7 @@
 			"key": "BusinessUnit"
 		},
 		{
-			"title": "Pending",
+			"title": "Receipts",
 			"icon": "sap-icon://manager-insight",
 			"key": "Pending"
 		}

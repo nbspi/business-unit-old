@@ -234,7 +234,6 @@ sap.ui.define([
 			//Clear All Fields 
 			this.fClearField();
 			this.getView().byId("inputbpcode").setEnabled(true);
-			this.getView().byId("inputaccountname").setEnabled(true);
 
 		},
 
@@ -254,6 +253,7 @@ sap.ui.define([
 				sap.m.MessageToast.show("Please Select Transaction Type.");
 			} else {
 					if (transtype === "1") {
+						oitemdetails.DescriptionEnable = false;
 						oitemdetails.CostProdEnable = false;
 						oitemdetails.MarkupPriceEnable = false;
 						oitemdetails.TransferPriceEnable = false;
@@ -261,36 +261,41 @@ sap.ui.define([
 						this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
 						this.oModel.refresh();
 					} else if (transtype === "2") {
+						oitemdetails.DescriptionEnable = false;
 						oitemdetails.CostProdEnable = false;
-						oitemdetails.MarkupPriceEnable = false;
+						oitemdetails.MarkupPriceEnable = true;
 						oitemdetails.TransferPriceEnable = false;
 						oitemdetails.MarketPriceEnable = false;
 						this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
 						this.oModel.refresh();
 					} else if (transtype === "3") {
+						oitemdetails.DescriptionEnable = false;
 						oitemdetails.CostProdEnable = false;
-						oitemdetails.MarkupPriceEnable = false;
+						oitemdetails.MarkupPriceEnable = true;
 						oitemdetails.TransferPriceEnable = false;
 						oitemdetails.MarketPriceEnable = false;
 						this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
 						this.oModel.refresh();
 					} else if (transtype === "4") {
+						oitemdetails.DescriptionEnable = false;
 						oitemdetails.CostProdEnable = false;
-						oitemdetails.MarkupPriceEnable = false;
+						oitemdetails.MarkupPriceEnable = true;
 						oitemdetails.TransferPriceEnable = false;
 						oitemdetails.MarketPriceEnable = false;
 						this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
 						this.oModel.refresh();
 					} else if (transtype === "5") {
+						oitemdetails.DescriptionEnable = false;
 						oitemdetails.CostProdEnable = false;
-						oitemdetails.MarkupPriceEnable = false;
+						oitemdetails.MarkupPriceEnable = true;
 						oitemdetails.TransferPriceEnable = false;
 						oitemdetails.MarketPriceEnable = false;
 						this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
 						this.oModel.refresh();
 					} else if (transtype === "6") {
+						oitemdetails.DescriptionEnable = false;
 						oitemdetails.CostProdEnable = false;
-						oitemdetails.MarkupPriceEnable = false;
+						oitemdetails.MarkupPriceEnable = true;
 						oitemdetails.TransferPriceEnable = false;
 						oitemdetails.MarketPriceEnable = false;
 						this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
@@ -359,7 +364,6 @@ sap.ui.define([
 			oBusiness_Unit.U_APP_TransNo = sGeneratedTransNo;
 			oBusiness_Unit.U_APP_TransDate = this.getTodaysDate();
 			oBusiness_Unit.U_APP_CardCode = this.oModel.getData().EditRecord.BPCode;
-			oBusiness_Unit.U_APP_CustomerName = this.oModel.getData().EditRecord.BPName;
 			oBusiness_Unit.U_APP_PostingDate = this.oModel.getData().EditRecord.PostingDate;
 			oBusiness_Unit.U_APP_MarkupType = this.oModel.getData().EditRecord.MarkupType;
 			oBusiness_Unit.U_APP_IssueBU = this.oModel.getData().EditRecord.IssueBU;
@@ -451,41 +455,30 @@ sap.ui.define([
 			var transtype = this.getView().byId("TransID").getSelectedKey();
 			if (transtype === "1") {
 				this.getView().byId("inputbpcode").setValue("");
-				this.getView().byId("inputaccountname").setValue("");
 				this.getView().byId("inputbpcode").setEnabled(false);
-				this.getView().byId("inputaccountname").setEnabled(false);
 				this.getView().byId("inputwhsreceive").setEnabled(true);
 
 			} else if (transtype === "2") {
 				this.getView().byId("inputbpcode").setEnabled(true);
-				this.getView().byId("inputaccountname").setEnabled(true);
 				this.getView().byId("inputwhsreceive").setEnabled(false);
 			} else if (transtype === "3") {
 				this.getView().byId("inputbpcode").setEnabled(true);
-				this.getView().byId("inputaccountname").setEnabled(true);
 				this.getView().byId("inputwhsreceive").setEnabled(false);
 			} else if (transtype === "4") {
 				this.getView().byId("inputbpcode").setValue("");
-				this.getView().byId("inputaccountname").setValue("");
 				this.getView().byId("inputbpcode").setEnabled(false);
-				this.getView().byId("inputaccountname").setEnabled(false);
 				this.getView().byId("inputwhsreceive").setEnabled(false);
 			}else if (transtype === "5") {
 				this.getView().byId("inputbpcode").setValue("");
-				this.getView().byId("inputaccountname").setValue("");
 				this.getView().byId("inputbpcode").setEnabled(true);
-				this.getView().byId("inputaccountname").setEnabled(true);
 				this.getView().byId("inputwhsreceive").setEnabled(false);
 			}else if (transtype === "6") {
 				this.getView().byId("inputbpcode").setValue("");
-				this.getView().byId("inputaccountname").setValue("");
 				this.getView().byId("inputbpcode").setEnabled(true);
-				this.getView().byId("inputaccountname").setEnabled(true);
 				this.getView().byId("inputwhsissue").setEnabled(false);
 				this.getView().byId("inputwhsreceive").setEnabled(true);
 			} else {
 				this.getView().byId("inputbpcode").setEnabled(true);
-				this.getView().byId("inputaccountname").setEnabled(true);
 				this.getView().byId("inputwhsreceive").setEnabled(true);
 			}
 
@@ -697,7 +690,6 @@ sap.ui.define([
 			}
 			oEvent.getSource().getBinding("items").filter([]);
 			this.getView().byId("inputbpcode").setValue(CardDetails[0].CardCode);
-			this.getView().byId("inputaccountname").setValue(CardDetails[0].CardName);
 			this.oModel.refresh();
 		},
 
@@ -738,6 +730,7 @@ sap.ui.define([
 		},
 		//Closing selection on Item
 		handleValueHelpCloseItem: function (oEvent) {
+			var transtype = this.oModel.getData().EditRecord.TransType;
 			var aContexts = oEvent.getParameter("selectedContexts");
 			var ItemDetails = {};
 			if (aContexts && aContexts.length) {
@@ -754,7 +747,28 @@ sap.ui.define([
 			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].Description = ItemDetails[0].ItemName;
 			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].CostProd = this.f_getAveragePrice(ItemDetails[0].ItemCode);
 			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].MarketPrice = this.f_getMarketPrice(ItemDetails[0].ItemCode);
-			// this.getView().byId("inputitemnum").setValue(ItemDetails[0].ItemCode);
+			var oCostToProduce =this.f_getAveragePrice(ItemDetails[0].ItemCode);
+			var oMarketPrice = this.f_getMarketPrice(ItemDetails[0].ItemCode);
+			
+			if (transtype === "1") {
+				if(oCostToProduce <= oMarketPrice){
+					this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice = oCostToProduce;
+				}else{
+					this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice=oMarketPrice;
+				}
+			}else if (transtype === "2") {
+				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice = oCostToProduce;
+			} else if (transtype === "3") {
+				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice = oCostToProduce;
+			} else if (transtype === "4") {
+				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice = oCostToProduce;
+			}else if (transtype === "5") {
+				///for revise
+				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice = oCostToProduce;
+			}else if (transtype === "6") {
+				///for revise
+				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice = oCostToProduce;
+			}
 			this.oModel.refresh();
 		},
 		///GET Market Type
@@ -871,7 +885,6 @@ sap.ui.define([
 					this.oModel.getData().EditRecord.TransNo = results[0].TransNo;
 					this.oModel.getData().EditRecord.TransactionDate = results[0].TransactionDate;
 					this.oModel.getData().EditRecord.BPCode = results[0].CardCode;
-					this.oModel.getData().EditRecord.BPName = results[0].CustomerName;
 					this.oModel.getData().EditRecord.PostingDate = results[0].PostingDate;
 					this.oModel.getData().EditRecord.TransType = results[0].TransType;
 					this.oModel.getData().EditRecord.MarkupType = results[0].MarkupType;
@@ -885,21 +898,17 @@ sap.ui.define([
 					if (transtype === "1") {
 						this.getView().byId("inputwhsreceive").setEnabled(true);
 						this.getView().byId("inputbpcode").setEnabled(false);
-						this.getView().byId("inputaccountname").setEnabled(false);
 
 					} else if (transtype === "2") {
 						this.getView().byId("inputbpcode").setEnabled(true);
-						this.getView().byId("inputaccountname").setEnabled(true);
 						this.getView().byId("inputwhsreceive").setEnabled(false);
 
 					} else if (transtype === "3") {
 						this.getView().byId("inputbpcode").setEnabled(true);
-						this.getView().byId("inputaccountname").setEnabled(true);
 						this.getView().byId("inputwhsreceive").setEnabled(false);
 					} else if (transtype === "4") {
 						this.getView().byId("inputwhsreceive").setEnabled(true);
 						this.getView().byId("inputbpcode").setEnabled(false);
-						this.getView().byId("inputaccountname").setEnabled(false);
 					}
 					this.oModel.refresh();
 				}
