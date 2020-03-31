@@ -152,6 +152,17 @@ sap.ui.define([
 					this.oTable.setSelectionBehavior("Row");
 					this.frenameColumns();
 				}
+			}else{
+				// var table = this.getView().byId(this.tableId)
+				// table.removeColumn();
+				// table.setNoData(new sap.ui.commons.TextView({text: "Sorry, no data available!"}));
+				var table = this.getView().byId(this.tableId);
+				var oModel1 = new sap.ui.model.json.JSONModel();
+				var data =[];
+				this.oMdlAllRecord.setData(data);
+				// var aData = oModel1.getProperty("/d/results");
+				// oModel1.setData({ modelData : aData });
+				table.setModel(this.oMdlAllRecord, "odata");
 			}
 		},
 
@@ -183,6 +194,8 @@ sap.ui.define([
 			}).done(function (results) {
 				if (results.length <= 0) {
 					aReturnResult = [];
+					// this.oMdlAllRecord.setJSON("{\"allRecords\" : " + JSON.stringify(results) + "}");
+					// this.getView().setModel(this.oMdlAllRecord, "oMdlAllRecord");
 				} else {
 					aReturnResult = results;
 				}
