@@ -9,7 +9,10 @@ sap.ui.define([
   "use strict";
 
   return Controller.extend("com.apptech.bfi-businessunit.controller.Pending", {
-    
+    _data: {
+		"date": new Date()
+	},
+
     onInit: function () {
 		//TO STORED SELECTED ROW
 		this.iSelectedRow = 0;
@@ -35,7 +38,26 @@ sap.ui.define([
 			this.tableId = "tblRecords";
 			this.fprepareTable(true,"");
 
-    },
+	},
+		///On Clear Fields Function
+		fClearField: function () {
+			try {
+	
+				this.oModel.getData().EditRecord.TransType = "";
+				this.oModel.getData().EditRecord.TransNo = "";
+				this.oModel.getData().EditRecord.BPCode = "";
+				this.oModel.getData().EditRecord.BPName = "";
+				this.oModel.getData().EditRecord.PostingDate = "";
+				this.oModel.getData().EditRecord.IssueBU = "";
+				this.oModel.getData().EditRecord.ReceiveBU = "";
+				this.oModel.getData().EditRecord.Remarks = "";
+				this.oModel.getData().EditRecord.DocumentLines.length = 0;
+				this.oModel.refresh();
+			} catch (err) {
+				//console.log(err.message);
+			}
+	
+		},
     
     onTransTypeFilter : function(oEvent){
 			this.fprepareTable("",0);
@@ -54,7 +76,7 @@ sap.ui.define([
     //Preparing table
 		fprepareTable: function (bIsInit,transType) {
 			if (transType === ""){
-				var transtypefilter = "";
+				var transtypefilter = "1";
 			}else{
 				var transtypefilter = this.getView().byId("transfilter").getSelectedKey();
 			}
@@ -292,7 +314,7 @@ sap.ui.define([
 		///GETTING ALL ITEMS CONFIGURATION FROM UDT
 		f_configValueHelpDialogsItems: function () {
 			// var sInputValue = this.byId("inputitemnum").getValue();
-			if (this.oModel.getData().AllItems.length <= 1) {
+			if (this.oModel.getData().allitems.length <= 1) {
 				//GET ALL ITEMS
 				$.ajax({
 					url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=SBODEMOAU_SL&procName=spAppBusinessUnit&queryTag=getallitems&value1&value2&value3&value4",
@@ -308,8 +330,8 @@ sap.ui.define([
 					context: this
 				}).done(function (results) {
 					if (results) {
-						this.oModel.getData().AllItems.length = 0;
-						this.oModel.getData().AllItems = JSON.parse(JSON.stringify(results));
+						this.oModel.getData().allitems.length = 0;
+						this.oModel.getData().allitems = JSON.parse(JSON.stringify(results));
 						this.oModel.refresh();
 
 						// this.oMdlAllItems.getData().allitems = results;
@@ -427,10 +449,37 @@ sap.ui.define([
 	
 			onAddReceipt: function (oEvent) {
 				this.fAddReceipt();
+				this.fUpdatePending();
 			},
+//GETTING DATE NOW
+		fgetTodaysDate: function () {
+			var today = new Date();
+			var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+			return date;
+		},
+		//Batch Request for Updating Draft
+		fprepareUpdatePostedRequestBody: function (oHeader, getcode) {
+			var batchRequest = "";
+			var beginBatch = "--a\nContent-Type: multipart/mixed;boundary=b\n\n";
+			var endBatch = "--b--\n--a--";
 
+			batchRequest = batchRequest + beginBatch;
+
+			var objectUDTHeader = "";
+			objectUDTHeader = oHeader;
+			batchRequest = batchRequest + "--b\nContent-Type:application/http\nContent-Transfer-Encoding:binary\n\n";
+			batchRequest = batchRequest + "PATCH /b1s/v1/" + objectUDTHeader.tableName + "('" + getcode + "')";
+			batchRequest = batchRequest + "\nContent-Type: application/json\n\n";
+			batchRequest = batchRequest + JSON.stringify(objectUDTHeader.data) + "\n\n";
+
+			batchRequest = batchRequest + endBatch;
+
+			return batchRequest;
+
+		},
 			////UPDATE  POSTED
-		fUpdatePending: function (ostatus) {
+		fUpdatePending: function () {
+			var ostatus ="2";
 			AppUI5.showBusyIndicator(4000);
 			var TransNo = this.oModel.getData().EditRecord.TransNo;
 			var TransType = this.oModel.getData().EditRecord.TransType;
@@ -441,7 +490,7 @@ sap.ui.define([
 			oBusiness_Unit.Name = getcode;
 			oBusiness_Unit.U_APP_TransType = TransType;
 			oBusiness_Unit.U_APP_TransNo = TransNo;
-			oBusiness_Unit.U_APP_TransDate = this.getTodaysDate();
+			oBusiness_Unit.U_APP_TransDate = this.fgetTodaysDate();
 			oBusiness_Unit.U_APP_CardCode = this.oModel.getData().EditRecord.BPCode;
 			oBusiness_Unit.U_APP_CustomerName = this.oModel.getData().EditRecord.BPName;
 			oBusiness_Unit.U_APP_PostingDate = this.oModel.getData().EditRecord.PostingDate;
@@ -471,7 +520,7 @@ sap.ui.define([
 					sap.m.MessageToast.show(Message);
 				},
 				success: function (json) {
-					sap.m.MessageToast.show("Transaction Number '" + this.oModel.getData().EditRecord.TransNo + "' Has Been Posted!");
+					sap.m.MessageToast.show("Transaction Number '" + TransNo +"' Has Been Posted!");
 				},
 				context: this
 			}).done(function (results) {

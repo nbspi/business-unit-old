@@ -3,7 +3,7 @@
 	xmlns:html="http://www.w3.org/1999/xhtml" xmlns:t="sap.ui.table">
 	<App id="idAppControl">
 		<pages>
-			<Page title="Business Unit Transfer" id="pageTerm">
+			<Page title="RECEIPTS" id="pageTerm">
 				<content>
 					<IconTabBar id="idIconTabBarInlineMode" headerMode="Inline" upperCase="true" expandable="false" class="sapUiResponsiveContentPadding">
 						<items>

@@ -1462,40 +1462,48 @@ sap.ui.define([
 				this.onAddMode();
 			} else if (transtype === "2" & transno === "") {
 				/////Call Bu to Cash Sales AND DRAFT Function
+				ostatus="2";
 				this.fAddDraftFunction(ostatus);
 				this.fBuToCashSales();
 				this.onAddMode();
 			} else if (transtype === "2" & transno !== "") {
 				/////Call Bu to Cash Sales Function
+				ostatus="2";
 				this.fUpdatePending(ostatus)
 				this.fBuToCashSales();
 				this.onAddMode();
 			} else if (transtype === "3" & transno === "") {
 				/////Call Bu to Vale and Draft
+				ostatus="2";
 				this.fAddDraftFunction(ostatus);
 				this.fBuToVale();
 				this.onAddMode();
 			} else if (transtype === "3" & transno !== "") {
 				/////Call Bu to Vale Function
+				ostatus="2";
 				this.fUpdatePending(ostatus)
 				this.fBuToVale();
 				this.onAddMode();
 			} else if (transtype === "4" & transno === "") {
 				/////Call Bu to Charge to Expense and Draft
+				ostatus="2";
 				this.fAddDraftFunction(ostatus);
 				this.fBUtoChargetoExpense();
 				this.onAddMode();
 			} else if (transtype === "4" & transno !== "") {
 				/////Call Bu to Charge to Expense Function
+				ostatus="2";
 				this.fUpdatePending(ostatus)
 				this.fBUtoChargetoExpense();
 				this.onAddMode();
 			} else if (transtype === "5" & transno === "") {
 				/////Call Bu to Inter Org - ISSUE and Draft
+				ostatus="2";
 				this.fAddDraftFunction(ostatus);
 				this.fBuToInterOrgIssue();
 			} else if (transtype === "5" & transno !== "") {
 				/////Call Bu to Inter Org - ISSUEFunction
+				ostatus="2";
 				this.fUpdatePending(ostatus)
 				this.fBuToInterOrgIssue();
 				this.onAddMode();
@@ -1506,6 +1514,7 @@ sap.ui.define([
 				this.onAddMode();
 			} else if (transtype === "6" & transno !== "") {
 				/////Call Bu to Inter Org Receipt Function
+				this.fAddDraftFunction(ostatus);
 				this.fBuToInterOrgReceipt();
 				this.onAddMode();
 			}

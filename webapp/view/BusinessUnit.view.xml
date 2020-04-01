@@ -24,7 +24,7 @@
 							<SegmentedButton id="TranStatus" selectionChange="onSelectionChange">
 							<items>
 								<SegmentedButtonItem text="DRAFT" key="0"/>
-								<SegmentedButtonItem text="POSTED" key="1"/>
+								<SegmentedButtonItem text="POSTED" key="2"/>
 							</items>
 						</SegmentedButton>
 						
