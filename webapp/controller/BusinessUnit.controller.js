@@ -107,7 +107,7 @@ sap.ui.define([
 		fprepareTable: function (bIsInit,transType) {
 			var oTransTatus = this.getView().byId("TranStatus").getSelectedKey();
 			if (transType === ""){
-				var transtypefilter = "1";
+				var transtypefilter = "";
 			}else{
 				var transtypefilter = this.getView().byId("transfilter").getSelectedKey();
 			}
