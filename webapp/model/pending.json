@@ -25,9 +25,9 @@
             "TransferPrice": 0,
             "MarketPrice": 0,
             "TransNo": "",
-            "CostProdEnable": true,
-            "MarkupPriceEnable": true,
-            "TransferPriceEnable": true,
+            "CostProdEnable": false,
+            "MarkupPriceEnable": false,
+            "TransferPriceEnable": false,
             "MarketPriceEnable": false,
             "DescriptionEnable": false
         }]
@@ -54,6 +54,13 @@
 ],
 "SelectedTransType": {
     "TransactionType": "1"
-}
+},
+"AllMarkupTypes": [{
+    "key": "1",
+    "value": "Percent"
+}, {
+    "key": "2",
+    "value": "Amount"
+}]
 
 }

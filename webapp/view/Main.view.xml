@@ -5,7 +5,7 @@ xmlns:f="sap.f" xmlns:l="sap.ui.layout" xmlns:tnt="sap.tnt"
 	<tnt:ToolPage id="toolPage">
 		<tnt:header>
 			<!--homeIcon="./css/apptechlogo.PNG"-->
-			<f:ShellBar title="BFI BANKINTEGRATION" class="myShellBar" secondTitle="" showMenuButton="true" homeIconPressed="onIconPress"  showCopilot="false"
+			<f:ShellBar title="BU TO BU ADD-ON" class="myShellBar" secondTitle="" showMenuButton="true" homeIconPressed="onIconPress"  showCopilot="false"
 				showNotifications="true" menuButtonPressed="onMenuButtonPress" showProductSwitcher="false" notificationsNumber="2">
 				<f:additionalContent>
 					<Button text="Admin" icon="sap-icon://customer"  type="Transparent" press="handleOpen">

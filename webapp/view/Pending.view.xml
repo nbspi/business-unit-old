@@ -26,7 +26,7 @@
 									<t:extension>
 										<Toolbar>
 											<content>
-												<Button text="SAVE" tooltip="SAVE" press="onSave" icon="sap-icon://add"/>
+												<Button text="VIEW" tooltip="VIEW" press="onView" icon="sap-icon://edit"/>
 												<ToolbarSpacer/>
 											</content>
 										</Toolbar>
@@ -39,8 +39,8 @@
 								<!--<Button text="Export File" tooltip="Export" press="handleExcelExport"/>-->
 									<Toolbar>
 											<content>
-												<Button text="ADD DRAFT" id="SaveDraft" tooltip="ADD DRAFT" press="onAddDraft" icon="sap-icon://add"/>
-												<Button text="ADD" tooltip="ADD" press="onAddRecords" icon="sap-icon://save"/>
+												<!-- <Button text="ADD DRAFT" id="SaveDraft" tooltip="ADD DRAFT" press="onAddDraft" icon="sap-icon://add"/> -->
+												<Button text="ADD" tooltip="ADD" press="onAddReceipt" icon="sap-icon://save"/>
 												<ToolbarSpacer/>
 											</content>
 										</Toolbar>
@@ -53,7 +53,7 @@
 													<l:GridData span="L3 M2 S12"/>
 												</layoutData>
 											</Label>
-											<Select id="TransID" forceSelection="false" selectedKey="{/EditRecord/TransType}" items="{/AllTransactionTypes}" change="onChangeTrans">
+											<Select id="TransID" forceSelection="false" selectedKey="{/EditRecord/TransType}" items="{/AllTransactionTypes}" change="onChangeTrans" editable="false">
 												<core:Item key="{key}" text="{value}"/>
 												<layoutData>
 													<l:GridData span="L3 M4 S12"/>
@@ -79,7 +79,7 @@
 												</layoutData>
 											</Label>
 											<Input width="100%" id="inputbpcode" value="{/EditRecord/BPCode}" showValueHelp="true" valueHelpOnly="true"
-												valueHelpRequest="handleValueHelpBPCode">
+												valueHelpRequest="handleValueHelpBPCode" editable="false">
 												<layoutData>
 													<l:GridData span="L3 M4 S12"/>
 												</layoutData>
@@ -116,7 +116,7 @@
 												</layoutData>
 											</Label>
 											<Input width="100%" id="inputwhsissue" value="{/EditRecord/IssueBU}" showValueHelp="true" valueHelpOnly="true"
-												valueHelpRequest="handleValueHelpWhsCode">
+												valueHelpRequest="handleValueHelpWhsCode" editable="false">
 												<layoutData>
 													<l:GridData span="L3 M4 S12"/>
 												</layoutData>
@@ -135,7 +135,7 @@
 													<l:GridData span="L3 M2 S12"/>
 												</layoutData>
 											</Label>
-											<DatePicker id="dpickerpostingdate" value="{/EditRecord/PostingDate}" valueFormat="yyyy-MM-dd" displayFormat="yyyy-MM-dd" change="handleChange">
+											<DatePicker id="dpickerpostingdate" value="{/EditRecord/PostingDate}" valueFormat="yyyy-MM-dd" displayFormat="yyyy-MM-dd" change="handleChange" editable="false">
 												<layoutData>
 													<l:GridData span="L3 M4 S12"/>
 												</layoutData>
@@ -149,7 +149,7 @@
 												</layoutData>
 											</Label>
 											<Input width="100%" id="inputwhsreceive" value="{/EditRecord/ReceiveBU}" showValueHelp="true" valueHelpOnly="true"
-												valueHelpRequest="handleValueHelpWhsCodeReceive">
+												valueHelpRequest="handleValueHelpWhsCodeReceive" editable="false">
 												<layoutData>
 													<l:GridData span="L3 M4 S12"/>
 												</layoutData>
@@ -161,7 +161,7 @@
 													<l:GridData span="L3 M2 S12"/>
 												</layoutData>
 											</Label>
-											<Select forceSelection="false" selectedKey="{/EditRecord/MarkupType}" items="{/AllMarkupTypes}">
+											<Select forceSelection="false" selectedKey="{/EditRecord/MarkupType}" items="{/AllMarkupTypes}" editable="false">
 												<core:Item key="{key}" text="{value}"/>
 												<layoutData>
 													<l:GridData span="L3 M4 S12"/>

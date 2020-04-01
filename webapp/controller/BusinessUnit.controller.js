@@ -986,7 +986,7 @@ sap.ui.define([
 			///LOOP FOR THE DETAILS
 			var d;
 			for (d = 0; d < this.oModel.getData().EditRecord.DocumentLines.length; d++) {
-				// oGoodsIssueHeader.WarehouseCode = this.oModel.getData().EditRecord.IssueBU;
+				oGoodsIssueHeader.WarehouseCode = this.oModel.getData().EditRecord.IssueBU;
 				oGoodsIssueHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
 				oGoodsIssueHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
 				oGoodsIssueHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
@@ -1035,7 +1035,7 @@ sap.ui.define([
 			///LOOP FOR THE DETAILS
 			var d;
 			for (d = 0; d < this.oModel.getData().EditRecord.DocumentLines.length; d++) {
-				// oGoodsIssueHeader.WarehouseCode = this.oModel.getData().EditRecord.IssueBU;
+				oGoodsIssueHeader.WarehouseCode = this.oModel.getData().EditRecord.IssueBU;
 				oGoodsIssueHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
 				oGoodsIssueHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
 				oGoodsIssueHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
@@ -1156,7 +1156,7 @@ sap.ui.define([
 			///LOOP FOR THE DETAILS
 			var d;
 			for (d = 0; d < this.oModel.getData().EditRecord.DocumentLines.length; d++) {
-				// oGoodsIssueHeader.WarehouseCode = this.oModel.getData().EditRecord.IssueBU;
+				 oGoodsIssueHeader.WarehouseCode = this.oModel.getData().EditRecord.IssueBU;
 				oGoodsIssueHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
 				oGoodsIssueHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
 				oGoodsIssueHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
@@ -1239,7 +1239,7 @@ sap.ui.define([
 			///LOOP FOR THE DETAILS
 			var d;
 			for (d = 0; d < this.oModel.getData().EditRecord.DocumentLines.length; d++) {
-				// oGoodsIssueHeader.WarehouseCode = this.oModel.getData().EditRecord.IssueBU;
+				 oGoodsIssueHeader.WarehouseCode = this.oModel.getData().EditRecord.IssueBU;
 				oGoodsIssueHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
 				oGoodsIssueHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
 				oGoodsIssueHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
@@ -1667,7 +1667,6 @@ sap.ui.define([
 		////UPDATE  POSTED
 		fUpdatePending: function (ostatus) {
 			AppUI5.showBusyIndicator(4000);
-		
 			var TransNo = this.oModel.getData().EditRecord.TransNo;
 			var TransType = this.oModel.getData().EditRecord.TransType;
 			//INITIALIZE FOR UPDATE
