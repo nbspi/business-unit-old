@@ -334,8 +334,7 @@ sap.ui.define([
 			var sGeneratedTransNo = "";
 			var TransType = this.oModel.getData().EditRecord.TransType;
 			$.ajax({
-				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=SBODEMOAU_SL&procName=spAppBusinessUnit&queryTag=getTransactionNumber&value1=" +
-					TransType + "&value2&value3&value4",
+				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=SBODEMOAU_SL&procName=spAppBusinessUnit&queryTag=getTransactionNumber&value1&value2&value3&value4",
 				type: "GET",
 				async: false,
 				datatype:"json",
@@ -457,17 +456,20 @@ sap.ui.define([
 				this.getView().byId("inputbpcode").setValue("");
 				this.getView().byId("inputbpcode").setEnabled(false);
 				this.getView().byId("inputwhsreceive").setEnabled(true);
-
+				this.getView().byId("inputmarkuptype").setEnabled(false);
 			} else if (transtype === "2") {
 				this.getView().byId("inputbpcode").setEnabled(true);
 				this.getView().byId("inputwhsreceive").setEnabled(false);
+				this.getView().byId("inputmarkuptype").setEnabled(false);
 			} else if (transtype === "3") {
 				this.getView().byId("inputbpcode").setEnabled(true);
 				this.getView().byId("inputwhsreceive").setEnabled(false);
+				this.getView().byId("inputmarkuptype").setEnabled(false);
 			} else if (transtype === "4") {
 				this.getView().byId("inputbpcode").setValue("");
 				this.getView().byId("inputbpcode").setEnabled(false);
 				this.getView().byId("inputwhsreceive").setEnabled(false);
+				this.getView().byId("inputmarkuptype").setEnabled(false);
 			}else if (transtype === "5") {
 				this.getView().byId("inputbpcode").setValue("");
 				this.getView().byId("inputbpcode").setEnabled(true);
@@ -1030,6 +1032,7 @@ sap.ui.define([
 			var oGoodsIssue = {};
 			var oGoodsIssueHeader = {};
 			var ocardcode = this.oModel.getData().EditRecord.BPCode;
+			var oDescription = this.oModel.getData().EditRecord.Remarks;
 			oGoodsIssue.Comments = this.oModel.getData().EditRecord.Remarks;
 			oGoodsIssue.DocumentLines = [];
 			///LOOP FOR THE DETAILS
@@ -1069,8 +1072,9 @@ sap.ui.define([
 					oInvoice.DocType ="dDocument_Service";
 					oInvoice.DocumentLines = [];
 					///HARD CODED ACCOUNT CODE FOR TESTING
-					oInvoiceHeader.ItemDescription ="Testing";
+					oInvoiceHeader.ItemDescription = oDescription;
 					oInvoiceHeader.AccountCode ="102020";
+					oInvoiceHeader.TaxCode = "GST-EO";
 					oInvoiceHeader.LineTotal =results.DocTotal;
 					oInvoice.DocumentLines.push(JSON.parse(JSON.stringify(oInvoiceHeader)));
 
@@ -1447,10 +1451,14 @@ sap.ui.define([
 		onAddRecords: function (oEvent) {
 			var transtype = this.oModel.getData().EditRecord.TransType;
 			var transno = this.oModel.getData().EditRecord.TransNo;
+			var oIssueBU = this.oModel.getData().EditRecord.IssueBU;
+			var oReceiveBU = this.oModel.getData().EditRecord.ReceiveBU;
 			var ostatus= "1";
 			if (transtype === "") {
 				sap.m.MessageToast.show("Please Select Transaction Type.");
-			}  else if (transtype === "1" & transno === "") {
+			}else if (transtype === "1" & transno === "" & oIssueBU === "" & oReceiveBU === "") {
+				sap.m.MessageToast.show("Please Select Issuing/Receiving BU");
+			}else if (transtype === "1" & transno === "" & oIssueBU !== "" & oReceiveBU !== "") {
 				/////Call BU to BU AND DRAFT transaction Function
 				this.fAddDraftFunction(ostatus);
 				this.fBuToBu();
