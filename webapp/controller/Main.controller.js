@@ -60,6 +60,9 @@ sap.ui.define([
 			case "Pending":
 				this.router.navTo("Pending");
 				break;
+			case "Reconciliation":
+			this.router.navTo("Reconciliation");
+			break;
 			default:
 
 			}

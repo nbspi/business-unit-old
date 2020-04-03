@@ -104,6 +104,13 @@
 					"target": [
 						"Request"
 					]
+				},
+				{
+					"name": "Reconciliation",
+					"pattern": "Reconciliation",
+					"target": [
+						"Reconciliation"
+					]
 				}
 			],
 			"targets": {
@@ -146,6 +153,16 @@
 					"controlAggregation": "pages",
 					"transition": "slide",
 					"viewLevel": 4
+				},
+				"Reconciliation": {
+					"viewPath": "com.apptech.bfi-businessunit.view",
+					"viewType": "XML",
+					"viewName": "Reconciliation",
+					"parent": "Main",
+					"controlId": "pageContainer",
+					"controlAggregation": "pages",
+					"transition": "slide",
+					"viewLevel": 5
 				}
 			}
 		}
