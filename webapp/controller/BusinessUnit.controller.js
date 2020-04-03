@@ -399,7 +399,6 @@ sap.ui.define([
 					"data": oBusiness_Unit_Details //this.generateUDTCode();
 				}))));
 			}
-			
 			//BATCH FORMATING
 			var sBodyRequest = AppUI5.prepareBatchRequestBody(batchArray);
 		////BATCH POSTING FOR DRAFT

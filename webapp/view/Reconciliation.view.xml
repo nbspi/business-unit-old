@@ -3,7 +3,7 @@
 	xmlns:html="http://www.w3.org/1999/xhtml" xmlns:t="sap.ui.table">
 	<App id="idAppControl">
 		<pages>
-			<Page title="REQUEST" id="pageTerm">
+			<Page title="For Reconciliation" id="pageTerm">
 				<content>
 					<IconTabBar id="idIconTabBarInlineMode" headerMode="Inline" upperCase="true" expandable="false" class="sapUiResponsiveContentPadding">
 						<items>
