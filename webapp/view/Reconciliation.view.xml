@@ -40,7 +40,7 @@
 									<Toolbar>
 											<content>
 												<!-- <Button text="ADD DRAFT" id="SaveDraft" tooltip="ADD DRAFT" press="onAddDraft" icon="sap-icon://add"/> -->
-												<Button text="RUN" tooltip="RUN" press="onAddReceipt" icon="sap-icon://save"/>
+												<Button text="RUN" tooltip="RUN" press="onAddReceipt"/>
 												<ToolbarSpacer/>
 											</content>
 										</Toolbar>
@@ -90,14 +90,14 @@
 														<!--<Text text=""/>-->
 													</t:template>
 												</t:Column>
-												<t:Column width="18rem">
+												<t:Column width="10rem">
 													<Label text="Good Issue Quantity"/>
 													<t:template>
 														<Input value="{Description}"  textAlign="End" fieldWidth="80%" width="100%" enabled="{DescriptionEnable}"/>
 														<!--<Text text="{oMdlAP>DocNum}"/>-->
 													</t:template>
 												</t:Column>
-												<t:Column width="18rem">
+												<t:Column width="10rem">
 													<Label text="Goods Issue Quantity"/>
 													<t:template>
 														<Input value="{Quantity}" type="Number" placeholder="0" textAlign="End" fieldWidth="80%" width="100%" enabled="true"/>
@@ -110,6 +110,18 @@
 													<t:template>
 														<Input value="{Quantity}" type="Number" placeholder="0" textAlign="End" fieldWidth="80%" width="100%" enabled="true"/>
 														<!--<Text text="{oMdlAP>DocDate}"/>-->
+													</t:template>
+												</t:Column>
+												<t:Column width="20rem">
+													<Label text=""/>
+													<t:template>
+														<Toolbar>
+															<content>
+																<Button text="Issue to Receiver" tooltip="Issue to receiver" press="onAddReceipt"/>
+															<Button text="Return to Warehouse" tooltip="Return to Warehouse" press="onAddReceipt"/>
+															</content>
+														</Toolbar>
+														
 													</t:template>
 												</t:Column>
 											</t:columns>
