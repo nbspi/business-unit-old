@@ -1,0 +1,288 @@
+ <mvc:View controllerName="com.apptech.bfi-businessunit.controller.Request" xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:uxap="sap.uxap" xmlns:f="sap.ui.layout.form"
+	 xmlns:l="sap.ui.layout" xmlns:tnt="sap.tnt"
+	xmlns:html="http://www.w3.org/1999/xhtml" xmlns:t="sap.ui.table">
+	<App id="idAppControl">
+		<pages>
+			<Page title="REQUEST" id="pageTerm">
+				<content>
+					<IconTabBar id="idIconTabBarInlineMode" headerMode="Inline" upperCase="true" expandable="false" class="sapUiResponsiveContentPadding">
+						<items>
+							<!-- <IconTabFilter id="tab1" text="Records" count="0" key="tab1">
+								<Label text="Transaction Type" width="100%">
+									<layoutData>
+										<l:GridData span="L3 M2 S12"/>
+									</layoutData>
+								</Label>
+
+								<Select id="transfilter" forceSelection="false" selectedKey="{/SelectedTransType/TransactionType}" items="{/AllTransactionTypes}" change="onTransTypeFilter">
+									<core:Item key="{key}" text="{value}"/>
+									<layoutData>
+										<l:GridData span="L3 M4 S12"/>
+									</layoutData>
+								</Select>
+										
+								<t:Table id="tblRecords" selectionMode="Multi" visibleRowCount="8" ariaLabelledBy="title" enableCellFilter="true"
+									rowSelectionChange="onSelectionChange">
+									<t:extension>
+										<Toolbar>
+											<content>
+												<Button text="VIEW" tooltip="VIEW" press="onView" icon="sap-icon://edit"/>
+												<ToolbarSpacer/>
+											</content>
+										</Toolbar>
+									</t:extension>
+								</t:Table>
+							</IconTabFilter> -->
+
+							<IconTabFilter id="tab2" text="Request" key="tab2">
+								<!--<Button text="Post Outgoing Payment Draft" id="btnPostDraft" tooltip="Save" press="onPostDraftOP" icon="sap-icon://save"/>-->
+								<!--<Button text="Export File" tooltip="Export" press="handleExcelExport"/>-->
+									<Toolbar>
+											<content>
+												<Button text="ADD DRAFT" id="SaveDraft" tooltip="ADD DRAFT" press="onAddDraft" icon="sap-icon://add"/>
+												<Button text="ADD" tooltip="ADD" press="onAddReceipt" icon="sap-icon://save"/>
+												<ToolbarSpacer/>
+											</content>
+										</Toolbar>
+								<VBox class="sapUiTinyMargin">
+									<f:SimpleForm editable="true" layout="ResponsiveGridLayout" id="form0" width="100%">
+										<f:content>
+											<!--transaction type-->
+											<Label text="Transaction Type" width="100%">
+												<layoutData>
+													<l:GridData span="L3 M2 S12"/>
+												</layoutData>
+											</Label>
+											<Select id="TransID" forceSelection="false" selectedKey="{/EditRecord/TransType}" items="{/AllTransactionTypes}" change="onChangeTrans">
+												<core:Item key="{key}" text="{value}"/>
+												<layoutData>
+													<l:GridData span="L3 M4 S12"/>
+												</layoutData>
+											</Select>
+											
+											<!--Transaction No-->
+											<Label text="Transaction No" width="100%">
+												<layoutData>
+													<l:GridData span="L3 M2 S12"/>
+												</layoutData>
+											</Label>
+											<Input  width="100%" value="{/EditRecord/TransNo}" enabled="true" >
+												<layoutData>
+													<l:GridData span="L3 M4 S12"/>
+												</layoutData>
+											</Input>
+											
+											<!-- Account Code
+											<Label text="Customer/Vendor" width="100%">
+												<layoutData>
+													<l:GridData span="L3 M2 S12"/>
+												</layoutData>
+											</Label>
+											<Input width="100%" id="inputbpcode" value="{/EditRecord/BPCode}" showValueHelp="true" valueHelpOnly="true"
+												valueHelpRequest="handleValueHelpBPCode" editable="false">
+												<layoutData>
+													<l:GridData span="L3 M4 S12"/>
+												</layoutData>
+											</Input> -->
+											
+											<!--Transaction Date-->
+											<Label text="Transaction Date" width="100%">
+												<layoutData>
+													<l:GridData span="L3 M2 S12"/>
+												</layoutData>
+											</Label>
+											<DatePicker id="transactiondate" valueFormat="" displayFormat="yyyy-MM-dd" change="handleChange" >
+												<layoutData>
+													<l:GridData span="L3 M4 S12"/>
+												</layoutData>
+											</DatePicker>
+											
+											<!--Account Name -->
+											<!-- <Label text="Customer/Vendor" width="100%">
+												<layoutData>
+													<l:GridData span="L3 M2 S12"/>
+												</layoutData>
+											</Label>
+											<Input width="100%" id="inputaccountname" value="{/EditRecord/BPName}">
+												<layoutData>
+													<l:GridData span="L3 M4 S12"/>
+												</layoutData>
+											</Input> -->
+											
+											<!--Issueing Bu-->
+											<Label text="Issuing BU" width="100%">
+												<layoutData>
+													<l:GridData span="L3 M2 S12"/>
+												</layoutData>
+											</Label>
+											<Input width="100%" id="inputwhsissue" value="{/EditRecord/IssueBU}" showValueHelp="true" valueHelpOnly="true"
+												valueHelpRequest="handleValueHelpWhsCode" >
+												<layoutData>
+													<l:GridData span="L3 M4 S12"/>
+												</layoutData>
+											</Input>
+											<!--<Select forceSelection="false" selectedKey="{/EditRecord/IssueBU}" items="{/AllMarkupTypes}">-->
+											<!--	<core:Item key="{key}" text="{value}"/>-->
+											<!--	<layoutData>-->
+											<!--		<l:GridData span="L3 M4 S12"/>-->
+											<!--	</layoutData>-->
+											<!--</Select> -->
+											
+											
+											<!--Posting Date-->
+											<Label text="Posting Date" width="100%">
+												<layoutData>
+													<l:GridData span="L3 M2 S12"/>
+												</layoutData>
+											</Label>
+											<DatePicker id="dpickerpostingdate" valueFormat="" displayFormat="yyyy-MM-dd" change="handleChange" >
+												<layoutData>
+													<l:GridData span="L3 M4 S12"/>
+												</layoutData>
+											</DatePicker>
+											<!-- <DatePicker id="dpickerpostingdate" value="{/EditRecord/PostingDate}" valueFormat="yyyy-MM-dd" displayFormat="yyyy-MM-dd" change="handleChange">
+												<layoutData>
+													<l:GridData span="L3 M4 S12"/>
+												</layoutData>
+											</DatePicker> -->
+											
+											
+											<!--Receiving BU -->
+											<Label text="Receiving BU" width="100%">
+												<layoutData>
+													<l:GridData span="L3 M2 S12"/>
+												</layoutData>
+											</Label>
+											<Input width="100%" id="inputwhsreceive" value="{/EditRecord/ReceiveBU}" showValueHelp="true" valueHelpOnly="true"
+												valueHelpRequest="handleValueHelpWhsCodeReceive" >
+												<layoutData>
+													<l:GridData span="L3 M4 S12"/>
+												</layoutData>
+											</Input>
+											
+											<!-- Markup Type
+											<Label text="Markup Type" width="100%">
+												<layoutData>
+													<l:GridData span="L3 M2 S12"/>
+												</layoutData>
+											</Label>
+											<Select forceSelection="false" selectedKey="{/EditRecord/MarkupType}" items="{/AllMarkupTypes}" editable="false">
+												<core:Item key="{key}" text="{value}"/>
+												<layoutData>
+													<l:GridData span="L3 M4 S12"/>
+												</layoutData>
+											</Select> -->
+											<!--<Select id="selectDatabase"  items="{oMdlDocStat>/Status}" selectedKey="{oMdlEditRecord>/EditRecord/Status}"  showSecondaryValues="true">-->
+											<!--	<core:ListItem key="{oMdlDocStat>text}" text="{oMdlDocStat>key}"/>-->
+											<!--	<layoutData>-->
+											<!--		<l:GridData span="L3 M4 S12"/>-->
+											<!--	</layoutData>-->
+											<!--</Select>-->
+											
+											
+											<!--REMARKS-->
+											<!-- <Label text="Remarks" width="100%">
+												<layoutData>
+													<l:GridData span="L3 M2 S12"/>
+												</layoutData>
+											</Label>
+											<Input width="100%" id="inputremarks" value="{/EditRecord/Remarks}" >
+												<layoutData>
+													<l:GridData span="L3 M4 S12"/>
+												</layoutData>
+											</Input> -->
+											
+											<!--<Panel-->
+											<!--	id="dataBindingDatePanel"-->
+											<!--	headerText="DatePicker using data binding">-->
+											<!--	<Label text="DatePicker using DataBinding" labelFor="DP4"/>-->
+											<!--	<DatePicker-->
+											<!--		id="DP4"-->
+											<!--		value="{path:'/dateValue', type:'sap.ui.model.type.Date', formatOptions: { style: 'medium', strictParsing: true}}"-->
+											<!--		class="sapUiSmallMarginBottom"/>-->
+											<!--	<Text text="{path:'/dateValue', type:'sap.ui.model.type.Date', formatOptions: { style: 'long'}}" class="sapUiSmallMargin"/>-->
+											<!--</Panel>-->
+										</f:content>
+									</f:SimpleForm>
+									<f:SimpleForm editable="true" layout="ResponsiveGridLayout" id="form01" width="100%">
+										<t:Table id="tblDetails" rows="{/EditRecord/DocumentLines}" selectionMode="Multi" visibleRowCount="10" ariaLabelledBy="title">
+											<t:extension>
+												<Toolbar>
+													<content>
+														<Button icon="sap-icon://add" text="Add" tooltip="Add" press="onAddRow" enabled="true"/>
+														<Button icon="sap-icon://delete" type="Reject" text="Remove" press="onRemoveRow" tooltip="Remove Row" enabled="true" />
+													</content>
+												</Toolbar>
+											</t:extension>
+											<t:columns>
+												<t:Column width="18rem">
+													<Label text="ITEM #"/>
+													<t:template>
+														<Input value="{ItemNum}"  showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueitemdetails"/>
+														<!--<Text text=""/>-->
+													</t:template>
+												</t:Column>
+												<t:Column width="30rem">
+													<Label text="Item Description"/>
+													<t:template>
+														<Input value="{Description}"  textAlign="End" fieldWidth="80%" width="100%" enabled="{DescriptionEnable}"/>
+														<!--<Text text="{oMdlAP>DocNum}"/>-->
+													</t:template>
+												</t:Column>
+												<t:Column width="7rem">
+													<Label text="Quantity"/>
+													<t:template>
+														<Input value="{Quantity}" type="Number" placeholder="0" textAlign="End" fieldWidth="80%" width="100%" enabled="true"/>
+														<!--<Text text="{oMdlAP>DocDate}"/>-->
+													</t:template>
+												</t:Column>
+												<!-- <t:Column width="9rem">
+													<Label text="Cost to Produce"/>
+													<t:template>
+														<Input value="{CostProd}" type="Number" placeholder="0.00" textAlign="End" fieldWidth="80%" width="100%" enabled="{CostProdEnable}"/>
+														<Text text="{oMdlAP>DocDueDate}"/>
+													</t:template>
+												</t:Column>
+												<t:Column width="6rem">
+													<Label text="Mark Up"/>
+													<t:template>
+														<Input value="{MarkupPrice}" type="Number" id="markupprice" placeholder="0.00" textAlign="End" fieldWidth="80%" width="100%" enabled="{MarkupPriceEnable}"/>
+														<Text text="{oMdlAP>NumAtCard}"/>
+													</t:template>
+												</t:Column>
+												<t:Column width="9rem">
+													<Label text="Transfer Price"/>
+													<t:template>
+														<Input value="{TransferPrice}" type="Number" placeholder="0.00" textAlign="End" fieldWidth="80%" width="100%" enabled="{TransferPriceEnable}"/>
+														<Text text="{oMdlAP>Comments}"/>
+													</t:template>
+												</t:Column>
+												<t:Column width="9rem"> 
+													<Label text="Market Price"/>
+													<t:template>
+														<Input value="{MarketPrice}" type="Number" placeholder="0.00" textAlign="End" fieldWidth="80%" width="100%" enabled="{MarketPriceEnable}"/>
+														<Text text="{oMdlAP>DocType}"/>
+													</t:template>
+												</t:Column> -->
+											</t:columns>
+										</t:Table>
+									</f:SimpleForm>
+									<!--<f:SimpleForm>-->
+									<!--	<Label text="Remarks" width="100%">-->
+									<!--		<layoutData>-->
+									<!--			<l:GridData span="L3 M2 S12"/>-->
+									<!--		</layoutData>-->
+									<!--	</Label>-->
+									<!--	<TextArea id="Remarks" value="{/EditRecord>Remarks}" maxLength="254" width="100%" placeholder="Remarks"/>-->
+									<!--</f:SimpleForm>-->
+									<!--</content>-->
+								</VBox>
+							</IconTabFilter>
+						
+						</items>
+					</IconTabBar>
+				</content>
+			</Page>
+		</pages>
+	</App>
+</mvc:View> 

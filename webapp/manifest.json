@@ -97,6 +97,13 @@
 					"target": [
 						"Pending"
 					]
+				},
+				{
+					"name": "Request",
+					"pattern": "Request",
+					"target": [
+						"Request"
+					]
 				}
 			],
 			"targets": {
@@ -113,7 +120,7 @@
 					"controlId": "pageContainer",
 					"controlAggregation": "pages",
 					"transition": "slide",
-					"viewLevel": 3
+					"viewLevel": 2
 				},
 				"Login": {
 					"viewPath": "com.apptech.bfi-businessunit.view",
@@ -129,6 +136,16 @@
 					"controlAggregation": "pages",
 					"transition": "slide",
 					"viewLevel": 3
+				},
+				"Request": {
+					"viewPath": "com.apptech.bfi-businessunit.view",
+					"viewType": "XML",
+					"viewName": "Request",
+					"parent": "Main",
+					"controlId": "pageContainer",
+					"controlAggregation": "pages",
+					"transition": "slide",
+					"viewLevel": 4
 				}
 			}
 		}

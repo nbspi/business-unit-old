@@ -18,7 +18,7 @@ sap.ui.define([
 			this.getView().setModel(this.oMdlMenu);
 
 			this.router = this.getOwnerComponent().getRouter();
-			this.router.navTo("BusinessUnit");
+			this.router.navTo("Request");
 		},
 		
 		
@@ -29,7 +29,7 @@ sap.ui.define([
 		},
 
 		onAfterShow: function (router) {
-			router.navTo("BusinessUnit");
+			router.navTo("Request");
 		},
 
 		onSelect: function (event) {
@@ -51,6 +51,9 @@ sap.ui.define([
 		onItemSelect: function (oEvent) {
 			var sSelectedMenu = oEvent.getSource().getProperty("selectedKey");
 			switch (sSelectedMenu) {
+			case "Request":
+			this.router.navTo("Request");
+			break;
 			case "BusinessUnit":
 				this.router.navTo("BusinessUnit");
 				break;
