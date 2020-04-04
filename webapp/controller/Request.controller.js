@@ -11,6 +11,7 @@ sap.ui.define([
   return Controller.extend("com.apptech.bfi-businessunit.controller.Request", {
 
     onInit: function () {
+      
       //TO STORED SELECTED ROW
       this.iSelectedRow = 0;
     //BLANK JSONMODEL FOR ALL ITEMS FOR TEMPLATE

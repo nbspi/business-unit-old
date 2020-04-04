@@ -14,17 +14,21 @@ sap.ui.define([
 	},
 
     onInit: function () {
-		//TO STORED SELECTED ROW
-		this.iSelectedRow = 0;
-	//BLANK JSONMODEL FOR ALL ITEMS FOR TEMPLATE
-	this.oMdlAllItems = new JSONModel();
-	this.oMdlAllItems.getData().allitems = [];
-		// Get DateToday
-	  this.getView().byId("transactiondate").setDateValue(new Date());
+				//USER DATA
+				this.sDataBase = jQuery.sap.storage.Storage.get("dataBase");
+				this.sUserCode = jQuery.sap.storage.Storage.get("userCode");
 
-      ///Initialize model
-      this.oModel = new JSONModel("model/pending.json");
-      this.getView().setModel(this.oModel);
+			//TO STORED SELECTED ROW
+			this.iSelectedRow = 0;
+			//BLANK JSONMODEL FOR ALL ITEMS FOR TEMPLATE
+			this.oMdlAllItems = new JSONModel();
+			this.oMdlAllItems.getData().allitems = [];
+				// Get DateToday
+			this.getView().byId("transactiondate").setDateValue(new Date());
+
+			///Initialize model
+			this.oModel = new JSONModel("model/pending.json");
+			this.getView().setModel(this.oModel);
 			//// INITIALIZE Variables FOR TABLE
 			this.isClickedIssue = true;
 			this.aCols = [];
@@ -140,9 +144,9 @@ sap.ui.define([
 			var aReturnResult = [];
 			var urltag = "";
 			if (value1 ===""){
-				urltag ="https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=SBODEMOAU_SL&procName=spAppBusinessUnit&QUERYTAG=getTransactions&VALUE1=&VALUE2=&VALUE3=&VALUE4=";
+				urltag ="https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&QUERYTAG=getTransactions&VALUE1=&VALUE2=&VALUE3=&VALUE4=";
 			}else{
-				urltag ="https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=SBODEMOAU_SL&procName=spAppBusinessUnit&QUERYTAG=getAllPendingTransaction&VALUE1="+ value1 +"&VALUE2=1&VALUE3=&VALUE4=";
+				urltag ="https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&QUERYTAG=getAllPendingTransaction&VALUE1="+ value1 +"&VALUE2=1&VALUE3=&VALUE4=";
 			
 			}
 			$.ajax({
@@ -185,7 +189,7 @@ sap.ui.define([
 				value2 = "",
 				value3 = "",
 				value4 = "",
-				dbName = "SBODEMOAU_SL";
+				dbName = this.sDataBase;
 			value1 = TransNo;
 			value2 = TransType;
 			this.fgetHeader(dbName, "spAppBusinessUnit", "getDraftHeader", value1, value2, value3, value4);
@@ -231,7 +235,7 @@ sap.ui.define([
 					this.oModel.getData().EditRecord.IssueBU = results[0].IssueBU;
 					this.oModel.getData().EditRecord.ReceiveBU = results[0].ReceiveBU;
 					this.oModel.getData().EditRecord.Remarks = results[0].Remarks;
-
+					this.oModel.getData().EditRecord.ReceivedBy = this.sUserCode;
 					// this.oModel.setJSON("{\"EditRecord\" : " + oResult + "}");
 
 					var transtype = this.oModel.getData().EditRecord.TransType = results[0].TransType;
@@ -317,7 +321,7 @@ sap.ui.define([
 			if (this.oModel.getData().allitems.length <= 1) {
 				//GET ALL ITEMS
 				$.ajax({
-					url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=SBODEMOAU_SL&procName=spAppBusinessUnit&queryTag=getallitems&value1&value2&value3&value4",
+					url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getallitems&value1&value2&value3&value4",
 					type: "GET",
 					datatype:"json",
 				beforeSend: function(xhr){
@@ -499,6 +503,7 @@ sap.ui.define([
 			oBusiness_Unit.U_APP_ReceivingBU = this.oModel.getData().EditRecord.ReceiveBU;
 			oBusiness_Unit.U_APP_Remarks = this.oModel.getData().EditRecord.Remarks;
 			oBusiness_Unit.U_APP_Status = ostatus;
+			oBusiness_Unit.U_APP_Status = this.sUserCode;
 			///HEADER BATCH
 			var BatchHeader =
 				//directly insert data if data is single row per table 
@@ -530,9 +535,5 @@ sap.ui.define([
 				}
 			});
 		}
-
-		
-
-
   });
 });

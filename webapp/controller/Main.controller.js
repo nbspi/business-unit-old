@@ -14,11 +14,20 @@ sap.ui.define([
   return Controller.extend("com.apptech.bfi-businessunit.controller.Main", {
     
     onInit: function () {
+			//USER DATA
+			this.sDataBase = jQuery.sap.storage.Storage.get("dataBase");
+			this.sUserCode = jQuery.sap.storage.Storage.get("userCode");
+			var oManger =this.sUserCode;
+			this.getView().byId("userbutton").setText("");
+			this.getView().byId("userbutton").setText(oManger);
+
+
 			this.oMdlMenu = new JSONModel("model/menus.json");
 			this.getView().setModel(this.oMdlMenu);
 
 			this.router = this.getOwnerComponent().getRouter();
 			this.router.navTo("Request");
+
 		},
 		
 		
@@ -68,9 +77,37 @@ sap.ui.define([
 			}
 		},
 
-		
-		onLogout: function (oEvent) {
-			sap.ui.core.UIComponent.getRouterFor(this).navTo("Login");
+		handleOpen: function (oEvent) {
+			var oButton = oEvent.getSource();
+
+			// create action sheet only once
+			if (!this._actionSheet) {
+				this._actionSheet = sap.ui.xmlfragment(
+					"com.apptech.bfi-businessunit.view.fragments.UserActionFragment",
+					this
+				);
+
+				this.getView().addDependent(this._actionSheet);
+			}
+
+			this._actionSheet.openBy(oButton);
+		},
+		onLogout: function (){ 
+			$.ajax({
+				url: "https://18.136.35.41:50000/b1s/v1/Logout",
+				type: "POST",
+				error: function (xhr, status, error) {
+				  var Message = xhr.responseJSON["error"].message.value;			
+				  sap.m.MessageToast.show(Message);
+				},
+				context:this,
+				success: function (json) {
+					sap.m.MessageToast.show("Session End"); 
+					jQuery.sap.storage.Storage.clear();	
+					sap.ui.core.UIComponent.getRouterFor(this).navTo("Login", null, true);
+							 
+				}
+			});
 		}
 
 

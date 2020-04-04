@@ -186,16 +186,20 @@
 													<l:GridData span="L3 M4 S12"/>
 												</layoutData>
 											</Input>
-											<!--<Panel-->
-											<!--	id="dataBindingDatePanel"-->
-											<!--	headerText="DatePicker using data binding">-->
-											<!--	<Label text="DatePicker using DataBinding" labelFor="DP4"/>-->
-											<!--	<DatePicker-->
-											<!--		id="DP4"-->
-											<!--		value="{path:'/dateValue', type:'sap.ui.model.type.Date', formatOptions: { style: 'medium', strictParsing: true}}"-->
-											<!--		class="sapUiSmallMarginBottom"/>-->
-											<!--	<Text text="{path:'/dateValue', type:'sap.ui.model.type.Date', formatOptions: { style: 'long'}}" class="sapUiSmallMargin"/>-->
-											<!--</Panel>-->
+
+
+
+											<!--REMARKS-->
+											<Label text="Received By" width="100%">
+												<layoutData>
+													<l:GridData span="L3 M2 S12"/>
+												</layoutData>
+											</Label>
+											<Input width="100%" id="inputreceivedby" value="{/EditRecord/ReceivedBy}" editable="false">
+												<layoutData>
+													<l:GridData span="L3 M4 S12"/>
+												</layoutData>
+											</Input>
 										</f:content>
 									</f:SimpleForm>
 									<f:SimpleForm editable="true" layout="ResponsiveGridLayout" id="form01" width="100%">
@@ -261,15 +265,6 @@
 											</t:columns>
 										</t:Table>
 									</f:SimpleForm>
-									<!--<f:SimpleForm>-->
-									<!--	<Label text="Remarks" width="100%">-->
-									<!--		<layoutData>-->
-									<!--			<l:GridData span="L3 M2 S12"/>-->
-									<!--		</layoutData>-->
-									<!--	</Label>-->
-									<!--	<TextArea id="Remarks" value="{/EditRecord>Remarks}" maxLength="254" width="100%" placeholder="Remarks"/>-->
-									<!--</f:SimpleForm>-->
-									<!--</content>-->
 								</VBox>
 							</IconTabFilter>
 						

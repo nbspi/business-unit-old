@@ -78,7 +78,8 @@ sap.ui.define([
                 if (results) {
                     sap.m.MessageToast.show("Welcome: " + username);
                     sap.ui.core.UIComponent.getRouterFor(this).navTo("Request");
-                    jQuery.sap.storage.put("Usename", this.oLogin.getData().Login.User);
+                    jQuery.sap.storage.Storage.put("dataBase",sDBCompany);
+					jQuery.sap.storage.Storage.put("userCode",username);
                     jQuery.sap.intervalCall(1800000,this,"hidePanelAgain",[this]);
                     AppUI5.hideBusyIndicator();
                 }

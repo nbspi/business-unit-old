@@ -12,6 +12,7 @@
         "IssueBU": "",
         "ReceiveBU": "",
         "Remarks": "",
+        "ReceivedBy": "",
         "Status": "",
         "BPCodeDisabled": true,
         "BPNameDisabled": true,

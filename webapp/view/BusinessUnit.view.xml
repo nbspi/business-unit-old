@@ -249,14 +249,14 @@
 												<t:Column width="6rem">
 													<Label text="Mark Up"/>
 													<t:template>
-														<Input value="{MarkupPrice}" type="Number" id="markupprice" placeholder="0.00" textAlign="End" fieldWidth="80%" width="100%" enabled="{MarkupPriceEnable}"/>
+														<Input value="{MarkupPrice}" type="Number" id="markprice" placeholder="0.00" textAlign="End" fieldWidth="80%" width="100%" enabled="{MarkupPriceEnable}" liveChange="fgetmarkup"/>
 														<!--<Text text="{oMdlAP>NumAtCard}"/>-->
 													</t:template>
 												</t:Column>
 												<t:Column width="9rem">
 													<Label text="Transfer Price"/>
 													<t:template>
-														<Input value="{TransferPrice}" type="Number" placeholder="0.00" textAlign="End" fieldWidth="80%" width="100%" enabled="{TransferPriceEnable}"/>
+														<Input value="{TransferPrice}" type="Number" id="transferprice" placeholder="0.00" textAlign="End" fieldWidth="80%" width="100%" enabled="{TransferPriceEnable}"/>
 														<!--<Text text="{oMdlAP>Comments}"/>-->
 													</t:template>
 												</t:Column>

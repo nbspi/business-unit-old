@@ -18,7 +18,9 @@ sap.ui.define([
 		},
 
 		onInit: function () {
-
+			//USER DATA
+			this.sDataBase = jQuery.sap.storage.Storage.get("dataBase");
+			this.sUserCode = jQuery.sap.storage.Storage.get("userCode");
 			//TO STORED SELECTED ROW
 			this.iSelectedRow = 0;
 
@@ -51,7 +53,7 @@ sap.ui.define([
 
 			//GET ALL WAREHOUSE
 			$.ajax({
-				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=SBODEMOAU_SL&procName=spAppBusinessUnit&queryTag=getallwarehouses&value1&value2&value3&value4",
+				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getallwarehouses&value1&value2&value3&value4",
 				type: "GET",
 				datatype:"json",
 				beforeSend: function (xhr) {
@@ -89,8 +91,9 @@ sap.ui.define([
 			this.oMdlAllRecord.refresh();
 		},
 		onSelectionChange: function (oEvent) {
-			var ostatus = this.getView().byId("TranStatus").getSelectedKey();
-			///sap.m.MessageToast.show(ostatus);
+			var oTranstypefilter = this.getView().byId("transfilter").getSelectedKey();
+			var oStatus = this.getView().byId("TranStatus").getSelectedKey();
+			
 		},
 		//RENAMING COLUMNS FOR THE TABLE
 		frenameColumns: function () {
@@ -104,7 +107,7 @@ sap.ui.define([
 			this.oTable.getColumns()[3].setFilterProperty("U_APP_Remarks");
 		},
 		//Preparing table
-		fprepareTable: function (bIsInit,transType) {
+		fprepareTable: function (bIsInit,transType,oTransTatus) {
 			var oTransTatus = this.getView().byId("TranStatus").getSelectedKey();
 			if (transType === ""){
 				var transtypefilter = "";
@@ -173,9 +176,9 @@ sap.ui.define([
 			var aReturnResult = [];
 			var urltag = "";
 			if (value1 ===""){
-				urltag ="https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=SBODEMOAU_SL&procName=spAppBusinessUnit&QUERYTAG=getTransactions&VALUE1=&VALUE2=&VALUE3=&VALUE4=";
+				urltag ="https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&QUERYTAG=getTransactions&VALUE1=&VALUE2=&VALUE3=&VALUE4=";
 			}else{
-				urltag ="https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=SBODEMOAU_SL&procName=spAppBusinessUnit&QUERYTAG=getFilteredTransactions&VALUE1="+ value1 +"&VALUE2="+ value2 +"&VALUE3=&VALUE4=";
+				urltag ="https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&QUERYTAG=getFilteredTransactions&VALUE1="+ value1 +"&VALUE2="+ value2 +"&VALUE3=&VALUE4=";
 			}
 			$.ajax({
 				url: urltag,
@@ -334,7 +337,7 @@ sap.ui.define([
 			var sGeneratedTransNo = "";
 			var TransType = this.oModel.getData().EditRecord.TransType;
 			$.ajax({
-				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=SBODEMOAU_SL&procName=spAppBusinessUnit&queryTag=getTransactionNumber&value1&value2&value3&value4",
+				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getTransactionNumber&value1&value2&value3&value4",
 				type: "GET",
 				async: false,
 				datatype:"json",
@@ -474,11 +477,13 @@ sap.ui.define([
 				this.getView().byId("inputbpcode").setValue("");
 				this.getView().byId("inputbpcode").setEnabled(true);
 				this.getView().byId("inputwhsreceive").setEnabled(false);
+				this.getView().byId("inputmarkuptype").setEnabled(true);
 			}else if (transtype === "6") {
 				this.getView().byId("inputbpcode").setValue("");
 				this.getView().byId("inputbpcode").setEnabled(true);
 				this.getView().byId("inputwhsissue").setEnabled(false);
 				this.getView().byId("inputwhsreceive").setEnabled(true);
+				this.getView().byId("inputmarkuptype").setEnabled(true);
 			} else {
 				this.getView().byId("inputbpcode").setEnabled(true);
 				this.getView().byId("inputwhsreceive").setEnabled(true);
@@ -545,6 +550,13 @@ sap.ui.define([
 		},
 		///BP LIST FROM FRAGMENT
 		handleValueHelpBPCode: function () {
+			var TransType = this.getView().byId("TransID").getSelectedKey();
+			var customertype ="";
+					if (TransType ==="6"){
+						customertype = "S";
+					}else{
+						customertype = "C";
+					}
 			if (!this._oValueHelpDialogs) {
 				Fragment.load({
 					name: "com.apptech.bfi-businessunit.view.fragments.BPDialogFragment",
@@ -552,28 +564,22 @@ sap.ui.define([
 				}).then(function (oValueHelpDialogs) {
 					this._oValueHelpDialogs = oValueHelpDialogs;
 					this.getView().addDependent(this._oValueHelpDialogs);
-					this.f_configValueHelpDialogs();
+					this.f_configValueHelpDialogs(TransType,customertype);
 					this._oValueHelpDialogs.open();
 				}.bind(this));
 			} else {
-				this.f_configValueHelpDialogs();
+				this.f_configValueHelpDialogs(TransType,customertype);
 				this._oValueHelpDialogs.open();
 			}
 		},
 		//GETTING ALL BP
-		f_configValueHelpDialogs: function () {
+		f_configValueHelpDialogs: function (TransType,customertype) {
 			var sInputValue = this.byId("inputbpcode").getValue();
 			if (this.oMdlAllBP.getData().allbp.length <= 0) {
-			var TransType = this.oModel.getData().EditRecord.TransType;
-					var customertype ="";
-					if (TransType ==="6"){
-						customertype = "S";
-					}else{
-						customertype = "C";
-					}
+					
 				//GET ALL BP
 				$.ajax({
-					url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=SBODEMOAU_SL&procName=spAppBusinessUnit&queryTag=getallbp&value1="+ customertype +"&value2&value3&value4",
+					url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getallbp&value1="+ customertype +"&value2&value3&value4",
 					type: "GET",
 					datatype:"json",
 				beforeSend: function(xhr){
@@ -621,7 +627,7 @@ sap.ui.define([
 			if (this.oModel.getData().AllItems.length <= 1) {
 				//GET ALL ITEMS
 				$.ajax({
-					url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=SBODEMOAU_SL&procName=spAppBusinessUnit&queryTag=getallitems&value1&value2&value3&value4",
+					url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getallitems&value1&value2&value3&value4",
 					type: "GET",
 					datatype:"json",
 				beforeSend: function(xhr){
@@ -652,7 +658,7 @@ sap.ui.define([
 		///Search on BP
 		handleSearchBP: function (oEvent) {
 			var sValue = oEvent.getParameter("value");
-			var oFilter = new Filter("CardCode", FilterOperator.Contains, sValue);
+			var oFilter = new Filter("CardName", FilterOperator.Contains, sValue);
 			var oBinding = oEvent.getSource().getBinding("items");
 			oBinding.filter([oFilter]);
 		},
@@ -673,7 +679,7 @@ sap.ui.define([
 		///Search on Item
 		handleSearchItem: function (oEvent) {
 			var sValue = oEvent.getParameter("value");
-			var oFilter = new Filter("ItemCode", FilterOperator.Contains, sValue);
+			var oFilter = new Filter("ItemName", FilterOperator.Contains, sValue);
 			var oBinding = oEvent.getSource().getBinding("items");
 			oBinding.filter([oFilter]);
 		},
@@ -778,7 +784,7 @@ sap.ui.define([
 			//GET MARKET PRICE
 			var iReturnMarketPrice = 0;
 			$.ajax({
-				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=SBODEMOAU_SL&procName=spAppBusinessUnit&queryTag=getMarketPrice&value1=" + ItemCode +
+				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getMarketPrice&value1=" + ItemCode +
 					"&value2=7&value3&value4",
 				type: "GET",
 				async: false,
@@ -806,7 +812,7 @@ sap.ui.define([
 			var issuebu = this.oModel.getData().EditRecord.IssueBU;
 			var iReturnAveragePrice = 0;
 			$.ajax({
-				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=SBODEMOAU_SL&procName=spAppBusinessUnit&queryTag=getAveragePrice&value1=" + ItemCode +
+				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getAveragePrice&value1=" + ItemCode +
 					"&value2=" + issuebu + "&value3&value4",
 				type: "GET",
 				async: false,
@@ -847,7 +853,7 @@ sap.ui.define([
 				value2 = "",
 				value3 = "",
 				value4 = "",
-				dbName = "SBODEMOAU_SL";
+				dbName = this.sDataBase;
 			value1 = TransNo;
 			value2 = TransType;
 			this.fgetHeader(dbName, "spAppBusinessUnit", "getDraftHeader", value1, value2, value3, value4);
@@ -996,7 +1002,6 @@ sap.ui.define([
 			}
 
 			$.ajax({
-
 				url: "https://18.136.35.41:50000/b1s/v1/InventoryGenExits",
 				type: "POST",
 				data: JSON.stringify(oGoodsIssue),
@@ -1732,6 +1737,20 @@ sap.ui.define([
 					this.oModel.refresh();
 				}
 			});
+		},
+		fgetmarkup: function (oEvent) {
+
+			var oMarkupType = this.getView().byId("inputmarkuptype").getSelectedKey();
+			var oMarkPrice = oEvent.mParameters.value;
+			var oCostToProduce = this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].CostProd;
+			if(oMarkupType==="1"){
+				var oTransferPrice = Number([oMarkPrice] * 0.1) * Number([oCostToProduce]);
+			}else if(oMarkupType==="2"){
+				var oTransferPrice = Number([oMarkPrice]) + Number([oCostToProduce]);
+			}
+			this.getView().byId("transferprice").setValue(oTransferPrice);
+			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice=oTransferPrice;
+			this.oModel.refresh();
 		}
   });
 });

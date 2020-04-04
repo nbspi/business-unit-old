@@ -8,7 +8,7 @@ xmlns:f="sap.f" xmlns:l="sap.ui.layout" xmlns:tnt="sap.tnt"
 			<f:ShellBar title="BU TO BU ADD-ON" class="myShellBar" secondTitle="" showMenuButton="true" homeIconPressed="onIconPress"  showCopilot="false"
 				showNotifications="true" menuButtonPressed="onMenuButtonPress" showProductSwitcher="false" notificationsNumber="2">
 				<f:additionalContent>
-					<Button text="Admin" icon="sap-icon://customer"  type="Transparent" press="handleOpen">
+					<Button text="Admin" id="userbutton" icon="sap-icon://customer"  type="Transparent" press="handleOpen">
 						<layoutData>
 							<OverflowToolbarLayoutData priority="NeverOverflow" />
 						</layoutData>
@@ -26,7 +26,7 @@ xmlns:f="sap.f" xmlns:l="sap.ui.layout" xmlns:tnt="sap.tnt"
 						<tnt:NavigationListItem text="{title}" key="{key}" enabled="true"></tnt:NavigationListItem>
 					</tnt:NavigationListItem>
 				</tnt:NavigationList>
-				<tnt:fixedItem>
+				<tnt:fixedItem>	
 					<tnt:NavigationList items="{path: '/fixedNavigation'}">
 						<tnt:NavigationListItem text="{title}" icon="{icon}"></tnt:NavigationListItem>
 					</tnt:NavigationList>
