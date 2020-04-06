@@ -76,6 +76,8 @@ sap.ui.define([
 			this.oTable.getColumns()[2].setFilterProperty("U_APP_PostingDate");
 			this.oTable.getColumns()[3].setLabel("Remarks");
 			this.oTable.getColumns()[3].setFilterProperty("U_APP_Remarks");
+			this.oTable.getColumns()[4].setLabel("Doc Type");
+			this.oTable.getColumns()[4].setFilterProperty("U_APP_Doctype");
     },
     //Preparing table
 		fprepareTable: function (bIsInit,transType) {
@@ -357,7 +359,6 @@ sap.ui.define([
 			var oBinding = oEvent.getSource().getBinding("items");
 			oBinding.filter([oFilter]);
 		},
-
 			//Closing selection on Item
 			handleValueHelpCloseItem: function (oEvent) {
 				var transtype = this.oModel.getData().EditRecord.TransType;
@@ -503,7 +504,7 @@ sap.ui.define([
 			oBusiness_Unit.U_APP_ReceivingBU = this.oModel.getData().EditRecord.ReceiveBU;
 			oBusiness_Unit.U_APP_Remarks = this.oModel.getData().EditRecord.Remarks;
 			oBusiness_Unit.U_APP_Status = ostatus;
-			oBusiness_Unit.U_APP_Status = this.sUserCode;
+			oBusiness_Unit.U_APP_ReceivedBy = this.sUserCode;
 			///HEADER BATCH
 			var BatchHeader =
 				//directly insert data if data is single row per table 
