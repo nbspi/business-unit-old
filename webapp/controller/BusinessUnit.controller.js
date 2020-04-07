@@ -83,6 +83,7 @@ sap.ui.define([
 			this.oMdlAllRecord = new JSONModel();
 			this.tableId = "tblDrafts";
 			this.fprepareTable(true,"");
+			
 
 		},
 
@@ -335,6 +336,8 @@ sap.ui.define([
 		fAddDraftFunction: function (ostatus,oDocType) {
 			if (ostatus===""){
 				var ostatus ="0";
+			}else if(oDocType===""){
+				var oDocType="Draft";
 			}
 			AppUI5.showBusyIndicator(4000);
 			//GET TRANSACTION NUMBER
@@ -352,7 +355,9 @@ sap.ui.define([
 					sap.m.MessageToast.show(error);
 					AppUI5.hideBusyIndicator();
 				},
-				success: function (json) {},
+				success: function (json) {
+			
+				},
 				context: this
 			}).done(function (results) {
 				if (results) {
@@ -364,8 +369,8 @@ sap.ui.define([
 			var oBusiness_Unit = {};
 			var oBusiness_Unit_Details = {};
 			///INITIALIZE VARIABLES FOR DRAFT POSTING
-			oBusiness_Unit.Code = CodeH;
-			oBusiness_Unit.Name = CodeH;
+			oBusiness_Unit.Code = CodeH; //"200407095347.79702";
+			oBusiness_Unit.Name = CodeH; //"200407095347.79702";
 			oBusiness_Unit.U_APP_TransType = TransType;
 			oBusiness_Unit.U_APP_TransNo = sGeneratedTransNo;
 			oBusiness_Unit.U_APP_TransDate = this.getTodaysDate();
@@ -419,20 +424,29 @@ sap.ui.define([
 					withCredentials: true
 				},
 				error: function (xhr, status, error) {
-					//this.oPage.setBusy(false);
+					var Message = xhr.responseJSON["error"].message.value;
+					sap.m.MessageToast.show(error);
 					sap.m.MessageToast.show(xhr.responseText);
 				},
 				success: function (json) {
-					sap.m.MessageToast.show("Transaction Type "+ TransType +" Draft Has Been Created!");
-
+				
 				},
 				context: this
 			}).done(function (results) {
-				if (results) {
-					this.fprepareTable(false,"");
-					this.fClearField();
-					this.oModel.refresh();
-					AppUI5.hideBusyIndicator();
+				if(JSON.stringify(results).search("400 Bad") !== -1) {
+					var oStartIndex = results.search("value") + 10;
+					var oEndIndex = results.indexOf("}") - 8;
+					var oMessage = results.substring(oStartIndex,oEndIndex);
+					AppUI5.fErrorLogs("U_APP_OINT","Add Draft","1","1",oMessage,"Insert",this.sUserCode,"1");
+					sap.m.MessageToast.show(oMessage);
+				}else{
+					if (results) {
+						sap.m.MessageToast.show("Transaction Type "+ TransType +" Draft Has Been Created!");
+						this.fprepareTable(false,"");
+						this.fClearField();
+						this.oModel.refresh();
+						AppUI5.hideBusyIndicator();
+					}
 				}
 			});
 		},
@@ -1012,6 +1026,7 @@ sap.ui.define([
 				},
 				error: function (xhr, status, error) {
 					var Message = xhr.responseJSON["error"].message.value;
+					AppUI5.fErrorLogs("OIGE","Insert","1","1",Message,"Bu to Bu",this.sUserCode,"1");
 					sap.m.MessageToast.show(Message);
 					AppUI5.hideBusyIndicator();
 				},
@@ -1061,6 +1076,7 @@ sap.ui.define([
 				},
 				error: function (xhr, status, error) {
 					var Message = xhr.responseJSON["error"].message.value;
+					AppUI5.fErrorLogs("OIGE","Insert","1","1",Message,"Bu to Cash Sale",this.sUserCode,"1");
 					sap.m.MessageToast.show(Message);
 				},
 				success: function (json) {
@@ -1095,6 +1111,7 @@ sap.ui.define([
 						},
 						error: function (xhr, status, error) {
 							var Message = xhr.responseJSON["error"].message.value;
+							AppUI5.fErrorLogs("OINV","Insert","1","1",Message,"Bu to Cash Sale",this.sUserCode,"1");
 							sap.m.MessageToast.show(Message);
 							
 						},
@@ -1135,6 +1152,7 @@ sap.ui.define([
 									},
 									error: function (xhr, status, error) {
 										var Message = xhr.responseJSON["error"].message.value;
+										AppUI5.fErrorLogs("ORCT","Insert","1","1",Message,"Bu to Cash Sale",this.sUserCode,"1");
 										sap.m.MessageToast.show(Message);
 									},
 									success: function (json) {
@@ -1183,6 +1201,7 @@ sap.ui.define([
 				},
 				error: function (xhr, status, error) {
 					var Message = xhr.responseJSON["error"].message.value;
+					AppUI5.fErrorLogs("OIGE","Insert","1","1",Message,"Bu to Vale",this.sUserCode,"1");
 					sap.m.MessageToast.show(Message);
 					
 				},
@@ -1218,6 +1237,7 @@ sap.ui.define([
 						},
 						error: function (xhr, status, error) {
 							var Message = xhr.responseJSON["error"].message.value;
+							AppUI5.fErrorLogs("OINV","Insert","1","1",Message,"Bu to Vale",this.sUserCode,"1");
 							sap.m.MessageToast.show(Message);
 							
 						},
@@ -1267,6 +1287,7 @@ sap.ui.define([
 				},
 				error: function (xhr, status, error) {
 					var Message = xhr.responseJSON["error"].message.value;
+					AppUI5.fErrorLogs("OIGE","Insert","1","1",Message,"Bu to Vale",this.sUserCode,"1");
 					sap.m.MessageToast.show(Message);
 					AppUI5.hideBusyIndicator();
 				},
@@ -1316,6 +1337,7 @@ sap.ui.define([
 				},
 				error: function (xhr, status, error) {
 					var Message = xhr.responseJSON["error"].message.value;
+					AppUI5.fErrorLogs("OIGE","Insert","1","1",Message,"Bu to Vale",this.sUserCode,"1");
 					sap.m.MessageToast.show(Message);
 					
 				},
@@ -1356,6 +1378,7 @@ sap.ui.define([
 						},
 						error: function (xhr, status, error) {
 							var Message = xhr.responseJSON["error"].message.value;
+							AppUI5.fErrorLogs("OINV","Insert","1","1",Message,"Bu to Vale",this.sUserCode,"1");
 							sap.m.MessageToast.show(Message);
 							
 						},
@@ -1424,7 +1447,6 @@ sap.ui.define([
 			var sBodyRequest = this.fprepareBatchRequestBody(batchArray);
 			//ajax call to SL
 			$.ajax({
-
 				url: "https://18.136.35.41:50000/b1s/v1/$batch",
 				type: "POST",
 				contentType: "multipart/mixed;boundary=a",
@@ -1748,6 +1770,8 @@ sap.ui.define([
 				},
 				context: this
 			}).done(function (results) {
+
+
 				if (results) {
 					this.fprepareTable(false,"");
 					this.oModel.refresh();
@@ -1767,45 +1791,7 @@ sap.ui.define([
 			this.getView().byId("transferprice").setValue(oTransferPrice);
 			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice=oTransferPrice;
 			this.oModel.refresh();
-		},
-
-		fActivityLog: function (sTableAffected,sOperation,sProcess,sProcessBy,sStatus) {
-			//var returnValue = 0;
-			//var sCode = this.generateUDTCode("GetLogCode");
-			var sBodyRequest = {};
-			sBodyRequest.Code = 2,
-			sBodyRequest.Name = 2,
-			sBodyRequest.U_App_TableAffected = sTableAffected,
-			sBodyRequest.U_App_Operation = sOperation,
-			sBodyRequest.U_App_Process = sProcess,
-			sBodyRequest.U_App_ProcessBy = sProcessBy,
-			sBodyRequest.U_App_ProcessDate = this.getTodaysDate,
-			sBodyRequest.U_App_Status = sStatus
-
-			$.ajax({
-				url: "https://18.136.35.41:50000/b1s/v1/U_APP_ERROR_LOGS",
-				type: "POST",
-				contentType: "multipart/mixed;boundary=a",
-				data: JSON.stringify(sBodyRequest),
-				xhrFields: {
-					withCredentials: true
-				},
-				error: function (xhr, status, error) {
-					// var Message = xhr.responseJSON["error"].message.value;			
-					// sap.m.MessageToast.show(Message);
-					// AppUI5.fHideBusyIndicator();
-				},
-				success: function (json) {
-					//sap.m.MessageToast.show("Success saving Batch: " + BatchCode );
-				},
-				context: this
-
-			}).done(function (results) {
-				if (results) {
-					returnValue = 0;
-				}
-			});
-			//return returnValue;
 		}
+
   });
 });

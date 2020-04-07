@@ -39,8 +39,8 @@
 								<!--<Button text="Export File" tooltip="Export" press="handleExcelExport"/>-->
 									<Toolbar>
 											<content>
-												<Button text="ADD DRAFT" id="SaveDraft" tooltip="ADD DRAFT" press="onAddDraft" icon="sap-icon://add"/>
-												<Button text="ADD" tooltip="ADD" press="onAddReceipt" icon="sap-icon://save"/>
+												<Button text="ADD DRAFT" id="btnSaveDraft" tooltip="ADD DRAFT" press="onAddDraft" icon="sap-icon://add"/>
+												<Button text="ADD" id="btnAddRecords" tooltip="ADD" press="onAddRecords" icon="sap-icon://save"/>
 												<ToolbarSpacer/>
 											</content>
 										</Toolbar>
@@ -66,24 +66,24 @@
 													<l:GridData span="L3 M2 S12"/>
 												</layoutData>
 											</Label>
-											<Input  width="100%" value="{/EditRecord/TransNo}" enabled="true" >
+											<Input  width="100%" value="{/EditRecord/TransNo}" enabled="true" editable="false">
 												<layoutData>
 													<l:GridData span="L3 M4 S12"/>
 												</layoutData>
 											</Input>
 											
-											<!-- Account Code
+											<!--Account Code -->
 											<Label text="Customer/Vendor" width="100%">
 												<layoutData>
 													<l:GridData span="L3 M2 S12"/>
 												</layoutData>
 											</Label>
 											<Input width="100%" id="inputbpcode" value="{/EditRecord/BPCode}" showValueHelp="true" valueHelpOnly="true"
-												valueHelpRequest="handleValueHelpBPCode" editable="false">
+												valueHelpRequest="handleValueHelpBPCode">
 												<layoutData>
 													<l:GridData span="L3 M4 S12"/>
 												</layoutData>
-											</Input> -->
+											</Input>
 											
 											<!--Transaction Date-->
 											<Label text="Transaction Date" width="100%">
@@ -91,7 +91,7 @@
 													<l:GridData span="L3 M2 S12"/>
 												</layoutData>
 											</Label>
-											<DatePicker id="transactiondate" valueFormat="" displayFormat="yyyy-MM-dd" change="handleChange" >
+											<DatePicker id="transactiondate" valueFormat="" displayFormat="yyyy-MM-dd" change="handleChange" editable="false">
 												<layoutData>
 													<l:GridData span="L3 M4 S12"/>
 												</layoutData>
@@ -116,7 +116,7 @@
 												</layoutData>
 											</Label>
 											<Input width="100%" id="inputwhsissue" value="{/EditRecord/IssueBU}" showValueHelp="true" valueHelpOnly="true"
-												valueHelpRequest="handleValueHelpWhsCode" >
+												valueHelpRequest="handleValueHelpWhsCode">
 												<layoutData>
 													<l:GridData span="L3 M4 S12"/>
 												</layoutData>
@@ -135,16 +135,11 @@
 													<l:GridData span="L3 M2 S12"/>
 												</layoutData>
 											</Label>
-											<DatePicker id="dpickerpostingdate" valueFormat="" displayFormat="yyyy-MM-dd" change="handleChange" >
+											<DatePicker id="dpickerpostingdate" value="{/EditRecord/PostingDate}" valueFormat="yyyy-MM-dd" displayFormat="yyyy-MM-dd" change="handleChange">
 												<layoutData>
 													<l:GridData span="L3 M4 S12"/>
 												</layoutData>
 											</DatePicker>
-											<!-- <DatePicker id="dpickerpostingdate" value="{/EditRecord/PostingDate}" valueFormat="yyyy-MM-dd" displayFormat="yyyy-MM-dd" change="handleChange">
-												<layoutData>
-													<l:GridData span="L3 M4 S12"/>
-												</layoutData>
-											</DatePicker> -->
 											
 											
 											<!--Receiving BU -->
@@ -154,24 +149,24 @@
 												</layoutData>
 											</Label>
 											<Input width="100%" id="inputwhsreceive" value="{/EditRecord/ReceiveBU}" showValueHelp="true" valueHelpOnly="true"
-												valueHelpRequest="handleValueHelpWhsCodeReceive" >
+												valueHelpRequest="handleValueHelpWhsCodeReceive">
 												<layoutData>
 													<l:GridData span="L3 M4 S12"/>
 												</layoutData>
 											</Input>
 											
-											<!-- Markup Type
+											<!--Markup Type-->
 											<Label text="Markup Type" width="100%">
 												<layoutData>
 													<l:GridData span="L3 M2 S12"/>
 												</layoutData>
 											</Label>
-											<Select forceSelection="false" selectedKey="{/EditRecord/MarkupType}" items="{/AllMarkupTypes}" editable="false">
+											<Select id="inputmarkuptype" forceSelection="false" selectedKey="{/EditRecord/MarkupType}" items="{/AllMarkupTypes}">
 												<core:Item key="{key}" text="{value}"/>
 												<layoutData>
 													<l:GridData span="L3 M4 S12"/>
 												</layoutData>
-											</Select> -->
+											</Select>
 											<!--<Select id="selectDatabase"  items="{oMdlDocStat>/Status}" selectedKey="{oMdlEditRecord>/EditRecord/Status}"  showSecondaryValues="true">-->
 											<!--	<core:ListItem key="{oMdlDocStat>text}" text="{oMdlDocStat>key}"/>-->
 											<!--	<layoutData>-->
@@ -181,7 +176,7 @@
 											
 											
 											<!--REMARKS-->
-											<!-- <Label text="Remarks" width="100%">
+											<Label text="Remarks" width="100%">
 												<layoutData>
 													<l:GridData span="L3 M2 S12"/>
 												</layoutData>
@@ -190,8 +185,7 @@
 												<layoutData>
 													<l:GridData span="L3 M4 S12"/>
 												</layoutData>
-											</Input> -->
-											
+											</Input>
 											<!--<Panel-->
 											<!--	id="dataBindingDatePanel"-->
 											<!--	headerText="DatePicker using data binding">-->
@@ -215,14 +209,14 @@
 												</Toolbar>
 											</t:extension>
 											<t:columns>
-												<t:Column width="18rem">
+												<t:Column width="10rem">
 													<Label text="ITEM #"/>
 													<t:template>
 														<Input value="{ItemNum}"  showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueitemdetails"/>
 														<!--<Text text=""/>-->
 													</t:template>
 												</t:Column>
-												<t:Column width="30rem">
+												<t:Column width="15rem">
 													<Label text="Item Description"/>
 													<t:template>
 														<Input value="{Description}"  textAlign="End" fieldWidth="80%" width="100%" enabled="{DescriptionEnable}"/>
@@ -236,34 +230,34 @@
 														<!--<Text text="{oMdlAP>DocDate}"/>-->
 													</t:template>
 												</t:Column>
-												<!-- <t:Column width="9rem">
+												<t:Column width="9rem">
 													<Label text="Cost to Produce"/>
 													<t:template>
 														<Input value="{CostProd}" type="Number" placeholder="0.00" textAlign="End" fieldWidth="80%" width="100%" enabled="{CostProdEnable}"/>
-														<Text text="{oMdlAP>DocDueDate}"/>
+														<!--<Text text="{oMdlAP>DocDueDate}"/>-->
 													</t:template>
 												</t:Column>
 												<t:Column width="6rem">
 													<Label text="Mark Up"/>
 													<t:template>
-														<Input value="{MarkupPrice}" type="Number" id="markupprice" placeholder="0.00" textAlign="End" fieldWidth="80%" width="100%" enabled="{MarkupPriceEnable}"/>
-														<Text text="{oMdlAP>NumAtCard}"/>
+														<Input value="{MarkupPrice}" type="Number" id="markprice" placeholder="0.00" textAlign="End" fieldWidth="80%" width="100%" enabled="{MarkupPriceEnable}" liveChange="fgetmarkup"/>
+														<!--<Text text="{oMdlAP>NumAtCard}"/>-->
 													</t:template>
 												</t:Column>
 												<t:Column width="9rem">
 													<Label text="Transfer Price"/>
 													<t:template>
-														<Input value="{TransferPrice}" type="Number" placeholder="0.00" textAlign="End" fieldWidth="80%" width="100%" enabled="{TransferPriceEnable}"/>
-														<Text text="{oMdlAP>Comments}"/>
+														<Input value="{TransferPrice}" type="Number" id="transferprice" placeholder="0.00" textAlign="End" fieldWidth="80%" width="100%" enabled="{TransferPriceEnable}"/>
+														<!--<Text text="{oMdlAP>Comments}"/>-->
 													</t:template>
 												</t:Column>
 												<t:Column width="9rem"> 
 													<Label text="Market Price"/>
 													<t:template>
 														<Input value="{MarketPrice}" type="Number" placeholder="0.00" textAlign="End" fieldWidth="80%" width="100%" enabled="{MarketPriceEnable}"/>
-														<Text text="{oMdlAP>DocType}"/>
+														<!--<Text text="{oMdlAP>DocType}"/>-->
 													</t:template>
-												</t:Column> -->
+												</t:Column>
 											</t:columns>
 										</t:Table>
 									</f:SimpleForm>

@@ -12,14 +12,13 @@ sap.ui.define([
 
     onInit: function () {
       
-      //TO STORED SELECTED ROW
-      this.iSelectedRow = 0;
-    //BLANK JSONMODEL FOR ALL ITEMS FOR TEMPLATE
-    this.oMdlAllItems = new JSONModel();
-    this.oMdlAllItems.getData().allitems = [];
-      // Get DateToday
+        //TO STORED SELECTED ROW
+        this.iSelectedRow = 0;
+        //BLANK JSONMODEL FOR ALL ITEMS FOR TEMPLATE
+        this.oMdlAllItems = new JSONModel();
+        this.oMdlAllItems.getData().allitems = [];
+       // Get DateToday
         this.getView().byId("transactiondate").setDateValue(new Date());
-
         ///Initialize model
         this.oModel = new JSONModel("model/request.json");
         this.getView().setModel(this.oModel);
