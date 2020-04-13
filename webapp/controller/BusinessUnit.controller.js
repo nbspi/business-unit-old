@@ -529,7 +529,6 @@ sap.ui.define([
 		},
 
 		//Warehouse List For Receiving BU from Fragment
-
 		handleValueHelpWhsCodeReceive: function () {
 			if (!this._oValueHelpDialogscodereceive) {
 				Fragment.load({

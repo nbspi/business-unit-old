@@ -14,9 +14,9 @@ sap.ui.define([
 	},
 
     onInit: function () {
-				//USER DATA
-				this.sDataBase = jQuery.sap.storage.Storage.get("dataBase");
-				this.sUserCode = jQuery.sap.storage.Storage.get("userCode");
+			//USER DATA
+			this.sDataBase = jQuery.sap.storage.Storage.get("dataBase");
+			this.sUserCode = jQuery.sap.storage.Storage.get("userCode");
 
 			//TO STORED SELECTED ROW
 			this.iSelectedRow = 0;

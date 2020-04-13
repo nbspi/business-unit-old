@@ -1,7 +1,7 @@
 {
 	"EditRecord": {
 		"Code": "",
-		"TransType": "0",
+		"TransType": "1",
 		"TransNo": "",
 		"DraftNo": "",
 		"TransactionDate": "",
@@ -12,6 +12,7 @@
 		"IssueBU": "",
 		"ReceiveBU": "",
 		"Remarks": "",
+		"Requestor": "",
 		"Status": "",
 		"BPCodeDisabled": true,
 		"BPNameDisabled": true,
@@ -25,9 +26,9 @@
 			"TransferPrice": 0,
 			"MarketPrice": 0,
 			"TransNo": "",
-			"CostProdEnable": true,
-			"MarkupPriceEnable": true,
-			"TransferPriceEnable": true,
+			"CostProdEnable": false,
+			"MarkupPriceEnable": false,
+			"TransferPriceEnable": false,
 			"MarketPriceEnable": false,
 			"DescriptionEnable": false
 		}]

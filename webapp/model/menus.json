@@ -2,8 +2,15 @@
 	"navigation": [
 		{
 			"title": "Request",
-			"icon": "sap-icon://manager-insight",
-			"key": "Request"
+			"icon": "sap-icon://add-activity-2",
+			"key": "Request",
+			"items":[{
+				"title":"Create Request",
+				"key":"Request"
+			} , {
+				"title":"Request Records",
+				"key":"Requestrecord"
+			}]  
 		},
 		{
 			"title": "Transactions",
@@ -12,7 +19,7 @@
 		},
 		{
 			"title": "Receipts",
-			"icon": "sap-icon://manager-insight",
+			"icon": "sap-icon://documents",
 			"key": "Pending"
 		}
 		

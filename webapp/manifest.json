@@ -106,10 +106,10 @@
 					]
 				},
 				{
-					"name": "Reconciliation",
-					"pattern": "Reconciliation",
+					"name": "Requestrecord",
+					"pattern": "Requestrecord",
 					"target": [
-						"Reconciliation"
+						"Requestrecord"
 					]
 				}
 			],
@@ -154,10 +154,10 @@
 					"transition": "slide",
 					"viewLevel": 4
 				},
-				"Reconciliation": {
+				"Requestrecord": {
 					"viewPath": "com.apptech.bfi-businessunit.view",
 					"viewType": "XML",
-					"viewName": "Reconciliation",
+					"viewName": "Requestrecord",
 					"parent": "Main",
 					"controlId": "pageContainer",
 					"controlAggregation": "pages",
