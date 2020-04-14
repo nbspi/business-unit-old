@@ -148,7 +148,7 @@
 													<l:GridData span="L3 M2 S12"/>
 												</layoutData>
 											</Label>
-											<Select id="inputmarkuptype" forceSelection="false" selectedKey="{/EditRecord/MarkupType}" items="{/AllMarkupTypes}">
+											<Select id="inputmarkuptype" forceSelection="false" selectedKey="{/EditRecord/MarkupType}" items="{/AllMarkupTypes}" editable="false">
 												<core:Item key="{key}" text="{value}"/>
 												<layoutData>
 													<l:GridData span="L3 M4 S12"/>

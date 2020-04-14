@@ -1,0 +1,80 @@
+{
+	"EditRecord": {
+		"Code": "",
+		"TransType": "0",
+		"TransNo": "",
+		"DraftNo": "",
+		"TransactionDate": "",
+		"BPCode": "",
+		"BPName": "",
+		"PostingDate": "",
+		"MarkupType": "0",
+		"IssueBU": "",
+		"ReceiveBU": "",
+		"Remarks": "",
+		"Status": "",
+		"BPCodeDisabled": true,
+		"BPNameDisabled": true,
+		"ReceiveBUDisabled": true,
+		"DocumentLines": [{
+			"ItemNum": "",
+			"Description": "",
+			"Quantity": 0,
+			"CostProd": 0,
+			"MarkupPrice": 0,
+			"TransferPrice": 0,
+			"MarketPrice": 0,
+			"TransNo": "",
+			"CostProdEnable": true,
+			"MarkupPriceEnable": true,
+			"TransferPriceEnable": true,
+			"MarketPriceEnable": false,
+			"DescriptionEnable": false
+		}]
+	},
+	"AllItems": [{
+		"ItemCode": "",
+		"ItemDescription": ""
+	}],
+	"Pricing": [{
+		"PriceList": "",
+		"MarketPrice": ""
+	}],
+
+	"AllWarehouses": [{
+		"WhsCode": "",
+		"WhsName": ""
+	}],
+
+	"AllMarkupTypes": [{
+		"key": "1",
+		"value": "Percent"
+	}, {
+		"key": "2",
+		"value": "Amount"
+	}],
+
+	"AllTransactionTypes": [{
+			"key": "1",
+			"value": "1 - BU to BU"
+		}, {
+			"key": "2",
+			"value": "2 - BU to Employee - Cash Sales"
+		}, {
+			"key": "3",
+			"value": "3 - BU to Employee - VALE"
+		}, {
+			"key": "4",
+			"value": "4 - BU to Employee - Charge to Expense"
+		}, {
+			"key": "5",
+			"value": "5 - Inter Org - Issue"
+		}, {
+			"key": "6",
+			"value": "6 - Inter Org - Receipt"
+		}
+	],
+	"SelectedTransType": {
+		"TransactionType": "1"
+	}
+}

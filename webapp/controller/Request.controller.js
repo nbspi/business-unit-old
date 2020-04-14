@@ -44,9 +44,6 @@ sap.ui.define([
 			///Table ID
 			this.oTableDetails = this.getView().byId("tblDetails");
 
-
-     
-
 			//GET ALL WAREHOUSE
 			$.ajax({
 				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getallwarehouses&value1&value2&value3&value4",
@@ -269,6 +266,7 @@ sap.ui.define([
 			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].ItemNum = ItemDetails[0].ItemCode;
 			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].Description = ItemDetails[0].ItemName;
 			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].CostProd = this.f_getAveragePrice(ItemDetails[0].ItemCode);
+			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice = this.f_getAveragePrice(ItemDetails[0].ItemCode);
 			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].MarketPrice = this.f_getMarketPrice(ItemDetails[0].ItemCode);
 			var oCostToProduce =this.f_getAveragePrice(ItemDetails[0].ItemCode);
 			var oMarketPrice = this.f_getMarketPrice(ItemDetails[0].ItemCode);
@@ -536,11 +534,11 @@ sap.ui.define([
 					var oStartIndex = results.search("value") + 10;
 					var oEndIndex = results.indexOf("}") - 8;
 					var oMessage = results.substring(oStartIndex,oEndIndex);
-					AppUI5.fErrorLogs("U_APP_OINT","Add Draft","1","1",oMessage,"Insert",this.sUserCode,"1");
+					AppUI5.fErrorLogs("U_APP_OINT/U_APP_INT1","Add Draft","1","1",oMessage,"Insert",this.sUserCode,"1");
 					sap.m.MessageToast.show(oMessage);
 				}else{
 					if (results) {
-						sap.m.MessageToast.show("Transaction Type "+ TransType +" Draft Has Been Created!");
+						sap.m.MessageToast.show("Request Has Been Sent");
 						this.fprepareTable(false,"");
 						this.fClearField();
 						this.oModel.refresh();

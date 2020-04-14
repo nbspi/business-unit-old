@@ -428,7 +428,7 @@ sap.ui.define([
 			}
 		},
 		
-		fErrorLogs: function (sTableAffected,sOperation,sKey1,sKey2,sErrorDesc,sProcess,sProcessBy,sKey3) {
+		fErrorLogs: function (sTableAffected,sOperation,sKey1,sKey2,sErrorDesc,sProcess,sProcessBy,sKey3,sInputbody) {
 			//var returnValue = 0;
 			var oDate = this.getTodaysDate();
 			var sCode = this.generateUDTCode("GetLogCode");
@@ -444,6 +444,7 @@ sap.ui.define([
 			sBodyRequest.U_ProcessBy = sProcessBy,
 			sBodyRequest.U_ProcessDate = oDate,
 			sBodyRequest.U_Key3 = sKey3
+			sBodyRequest.U_INPUTBODY = sInputbody
 
 			$.ajax({
 				url: "https://18.136.35.41:50000/b1s/v1/U_APP_ERRORLOGS",

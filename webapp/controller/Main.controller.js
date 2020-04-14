@@ -17,17 +17,15 @@ sap.ui.define([
 			//USER DATA
 			this.sDataBase = jQuery.sap.storage.Storage.get("dataBase");
 			this.sUserCode = jQuery.sap.storage.Storage.get("userCode");
-			var oManger =this.sUserCode;
-			this.getView().byId("userbutton").setText("");
-			this.getView().byId("userbutton").setText(oManger);
 
+			var oManger =this.sUserCode;
+			this.getView().byId("userbutton").setText(oManger);
 
 			this.oMdlMenu = new JSONModel("model/menus.json");
 			this.getView().setModel(this.oMdlMenu);
 
 			this.router = this.getOwnerComponent().getRouter();
 			this.router.navTo("Request");
-
 		},
 		
 		
@@ -71,6 +69,12 @@ sap.ui.define([
 				break;
 			case "Requestrecord":
 			this.router.navTo("Requestrecord");
+			break;
+			case "Transactionrecord":
+			this.router.navTo("Transactionrecord");
+			break;
+			case "Pendingrequest":
+			this.router.navTo("Pendingrequest");
 			break;
 			default:
 

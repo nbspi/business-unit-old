@@ -8,7 +8,7 @@
 				<content>
 					<IconTabBar id="idIconTabBarInlineMode" headerMode="Inline" upperCase="true" expandable="false" class="sapUiResponsiveContentPadding">
 						<items>
-							<IconTabFilter id="tab1" text="RECORDS" count="0" key="tab1">
+							<!-- <IconTabFilter id="tab1" text="RECORDS" count="0" key="tab1">
 								<Label text="Transaction Type" width="100%">
 									<layoutData>
 										<l:GridData span="L3 M2 S12"/>
@@ -42,7 +42,7 @@
 									</t:extension>
 								</t:Table>
 								
-							</IconTabFilter>
+							</IconTabFilter> -->
 							<IconTabFilter id="tab2" text="Transaction" key="tab2">
 								<!--<Button text="Post Outgoing Payment Draft" id="btnPostDraft" tooltip="Save" press="onPostDraftOP" icon="sap-icon://save"/>-->
 								<!--<Button text="Export File" tooltip="Export" press="handleExcelExport"/>-->

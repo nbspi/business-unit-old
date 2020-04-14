@@ -111,6 +111,20 @@
 					"target": [
 						"Requestrecord"
 					]
+				},
+				{
+					"name": "Transactionrecord",
+					"pattern": "Transactionrecord",
+					"target": [
+						"Transactionrecord"
+					]
+				},
+				{
+					"name": "Pendingrequest",
+					"pattern": "Pendingrequest",
+					"target": [
+						"Pendingrequest"
+					]
 				}
 			],
 			"targets": {
@@ -163,6 +177,26 @@
 					"controlAggregation": "pages",
 					"transition": "slide",
 					"viewLevel": 5
+				},
+				"Transactionrecord": {
+					"viewPath": "com.apptech.bfi-businessunit.view",
+					"viewType": "XML",
+					"viewName": "Transactionrecord",
+					"parent": "Main",
+					"controlId": "pageContainer",
+					"controlAggregation": "pages",
+					"transition": "slide",
+					"viewLevel": 5
+				},
+				"Pendingrequest": {
+					"viewPath": "com.apptech.bfi-businessunit.view",
+					"viewType": "XML",
+					"viewName": "Pendingrequest",
+					"parent": "Main",
+					"controlId": "pageContainer",
+					"controlAggregation": "pages",
+					"transition": "slide",
+					"viewLevel": 6
 				}
 			}
 		}

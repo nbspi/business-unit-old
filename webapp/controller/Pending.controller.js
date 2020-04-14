@@ -431,6 +431,7 @@ sap.ui.define([
 					},
 					error: function (xhr, status, error) {
 						var Message = xhr.responseJSON["error"].message.value;
+						AppUI5.fErrorLogs("OPDN","Insert","null","null",Message,"Receipt",this.sUserCode,"null",JSON.stringify(oGoodsReceipt));
 						sap.m.MessageToast.show(Message);
 						AppUI5.hideBusyIndicator();
 					},
@@ -526,14 +527,26 @@ sap.ui.define([
 					sap.m.MessageToast.show(Message);
 				},
 				success: function (json) {
-					sap.m.MessageToast.show("Transaction Number '" + TransNo +"' Has Been Posted!");
+				
 				},
 				context: this
 			}).done(function (results) {
-				if (results) {
-					this.fprepareTable(false,"");
-					this.oModel.refresh();
+				if(JSON.stringify(results).search("400 Bad") !== -1) {
+					var oStartIndex = results.search("value") + 10;
+					var oEndIndex = results.indexOf("}") - 8;
+					var oMessage = results.substring(oStartIndex,oEndIndex);
+					AppUI5.fErrorLogs("U_APP_OINT/U_APP_INT1","Update",TransNo,"null",oMessage,"Update",this.sUserCode,"null",sBodyRequest);
+					sap.m.MessageToast.show(oMessage);
+				}else{
+					if (results) {
+						sap.m.MessageToast.show("Transaction Type "+ TransType +" Draft Has Been Created!");
+						this.fprepareTable(false,"");
+						this.fClearField();
+						this.oModel.refresh();
+						AppUI5.hideBusyIndicator();
+					}
 				}
+				
 			});
 		}
   });

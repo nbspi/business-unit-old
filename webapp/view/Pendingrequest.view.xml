@@ -1,9 +1,9 @@
- <mvc:View controllerName="com.apptech.bfi-businessunit.controller.Requestrecord" xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:uxap="sap.uxap" xmlns:f="sap.ui.layout.form"
+ <mvc:View controllerName="com.apptech.bfi-businessunit.controller.Pendingrequest" xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:uxap="sap.uxap" xmlns:f="sap.ui.layout.form"
 	 xmlns:l="sap.ui.layout" xmlns:tnt="sap.tnt"
 	xmlns:html="http://www.w3.org/1999/xhtml" xmlns:t="sap.ui.table">
 	<App id="idAppControl">
-	<pages>
-			<Page title="REQUEST RECORDS" id="pageTerm">
+			<pages>
+			<Page title="PENDING REQUEST" id="pageTerm">
 				<content>
 					<IconTabBar id="idIconTabBarInlineMode" headerMode="Inline" upperCase="true" expandable="false" class="sapUiResponsiveContentPadding">
 						<items>
@@ -40,7 +40,7 @@
 									<Toolbar>
 											<content>
 												<!-- <Button text="ADD DRAFT" id="SaveDraft" tooltip="ADD DRAFT" press="onAddDraft" icon="sap-icon://add"/> -->
-												<!-- <Button text="ADD" id="btnAddReceipt" tooltip="ADD" press="onAddReceipt" icon="sap-icon://save"/> -->
+												<Button text="ADD" id="btnAddReceipt" tooltip="ADD" press="onAddReceipt" icon="sap-icon://save"/>
 												<ToolbarSpacer/>
 											</content>
 										</Toolbar>
@@ -181,7 +181,7 @@
 													<l:GridData span="L3 M2 S12"/>
 												</layoutData>
 											</Label>
-											<Input width="100%" id="inputremarks" value="{/EditRecord/Remarks}" editable="false">
+											<Input width="100%" id="inputremarks" value="{/EditRecord/Remarks}" >
 												<layoutData>
 													<l:GridData span="L3 M4 S12"/>
 												</layoutData>
@@ -230,7 +230,7 @@
 												<t:Column width="7rem">
 													<Label text="Quantity"/>
 													<t:template>
-														<Input value="{Quantity}" type="Number" placeholder="0" textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
+														<Input value="{Quantity}" type="Number" placeholder="0" textAlign="End" fieldWidth="80%" width="100%" enabled="true"/>
 														<!--<Text text="{oMdlAP>DocDate}"/>-->
 													</t:template>
 												</t:Column>
