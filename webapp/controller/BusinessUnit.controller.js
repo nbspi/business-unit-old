@@ -41,6 +41,10 @@ sap.ui.define([
 			//BIND TO MAIN MODEL
 			this.oModel = new JSONModel("model/businessunit.json");
 			this.getView().setModel(this.oModel);
+
+			//BIND TO MAIN MODEL
+			this.oButtonModel = new JSONModel("model/buttons.json");
+			this.getView().setModel(this.oButtonModel,'oButtonModel');
 			///INITIALIZE FOR MARKETPRICE
 			this.MarketPrice = "";
 			////Initialize code when onview is clicked
@@ -49,7 +53,6 @@ sap.ui.define([
 			this.triggercondition = "SAVE AS DRAFT";
 			///Table ID
 			this.oTableDetails = this.getView().byId("tblDetails");
-
 			//GET ALL WAREHOUSE
 			$.ajax({
 				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getallwarehouses&value1&value2&value3&value4",

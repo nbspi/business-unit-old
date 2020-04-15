@@ -495,7 +495,32 @@ sap.ui.define([
 				}
 			});
 			return aReturnResult;
-		}
+		},
+		fGetButtons: function(sDatabase,sUserCode,sModule){
+			var aReturnResult = [];
+			$.ajax({
+				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ sDatabase +"&procName=spAppBankIntegration&QUERYTAG=getButtons" +
+				"&VALUE1="+ sUserCode +"&VALUE2="+ sModule +"&VALUE3=&VALUE4=",
+				type: "GET",
+				async: false,
+				dataType: "json",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
+				},
+				error: function (xhr, status, error) {
+					var Message = xhr.responseJSON["error"].message.value;			
+					sap.m.MessageToast.show(Message);
+				},
+				success: function (json) {},
+				context: this
+			}).done(function (results) {
+				if (results) {
+					aReturnResult = results;
+				}
+			});
+			return aReturnResult;
+		},
+	
 
 	});
 

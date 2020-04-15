@@ -21,14 +21,38 @@ sap.ui.define([
 			var oManger =this.sUserCode;
 			this.getView().byId("userbutton").setText(oManger);
 
-			this.oMdlMenu = new JSONModel("model/menus.json");
-			this.getView().setModel(this.oMdlMenu);
+			this.oMdlMenu = new JSONModel();
+			this.fGetAllMenu(this.sDataBase);
+			// this.oMdlMenu = new JSONModel("model/menus.json");
+			// this.getView().setModel(this.oMdlMenu);
 
 			this.router = this.getOwnerComponent().getRouter();
 			this.router.navTo("Request");
 		},
 		
-		
+		fGetAllMenu: function(sDataBase){
+			$.ajax({
+				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ sDataBase +"&procName=spAppBusinessUnit&QUERYTAG=getAllMenu" +
+				"&VALUE1="+ this.sUserCode +"&VALUE2=&VALUE3=&VALUE4=",
+				type: "GET",
+				async: false,
+				dataType: "json",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
+				},
+				error: function (xhr, status, error) {
+					///var Message = xhr.responseJSON["error"].message.value;			
+					sap.m.MessageToast.show(xhr);
+				},
+				success: function (json) {},
+				context: this
+			}).done(function (results) {
+				if (results) {
+					this.oMdlMenu.setJSON("{\"navigation\" : " + JSON.stringify(results) + "}");
+					this.getView().setModel(this.oMdlMenu);
+				}
+			});
+		},
 		//-------------------------------------------
 		onRoutePatternMatched: function (event) {
 			var key = event.getParameter("name");
