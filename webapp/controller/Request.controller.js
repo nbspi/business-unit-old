@@ -10,6 +10,7 @@ sap.ui.define([
 
   return Controller.extend("com.apptech.bfi-businessunit.controller.Request", {
 
+	
     onInit: function () {
        //USER DATA
 			this.sDataBase = jQuery.sap.storage.Storage.get("dataBase");
@@ -35,6 +36,8 @@ sap.ui.define([
 			//BIND TO MAIN MODEL
 			this.oModel = new JSONModel("model/request.json");
 			this.getView().setModel(this.oModel);
+
+			//this.oModel.getData().EditRecord.DocumentLines.length = 0;
 			///INITIALIZE FOR MARKETPRICE
 			this.MarketPrice = "";
 			////Initialize code when onview is clicked
@@ -78,13 +81,35 @@ sap.ui.define([
 
      /// REQUESTOR DATA
      var oRequestor =this.sUserCode;
-     this.getView().byId("inputrequestor").setValue(oRequestor);
+	 this.getView().byId("inputrequestor").setValue(oRequestor);
+	 
+	 
+	// this.oModel.getData().EditRecord.DocumentLines.length = 0;
 	},
 		//GETTING DATE NOW
 		getTodaysDate: function () {
 			var today = new Date();
 			var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
 			return date;
+		},
+
+		///On Clear Fields Function
+		fClearField: function () {
+			try {
+				this.oModel.getData().EditRecord.TransType = "";
+				this.oModel.getData().EditRecord.TransNo = "";
+				this.oModel.getData().EditRecord.BPCode = "";
+				this.oModel.getData().EditRecord.BPName = "";
+				this.oModel.getData().EditRecord.PostingDate = "";
+				this.oModel.getData().EditRecord.IssueBU = "";
+				this.oModel.getData().EditRecord.ReceiveBU = "";
+				this.oModel.getData().EditRecord.Remarks = "";
+				this.oModel.getData().EditRecord.DocumentLines.length = 0;
+				this.oModel.refresh();
+			} catch (err) {
+				//console.log(err.message);
+			}
+
 		},
 
     	//ALL ITEM LIST FROM FRAGMENT
@@ -250,7 +275,7 @@ sap.ui.define([
     },
     //Closing selection on Item
 		handleValueHelpCloseItem: function (oEvent) {
-			// var transtype = this.oModel.getData().EditRecord.TransType;
+			var transtype = this.oModel.getData().EditRecord.TransType;
 			var aContexts = oEvent.getParameter("selectedContexts");
 			var ItemDetails = {};
 			if (aContexts && aContexts.length) {
@@ -270,14 +295,13 @@ sap.ui.define([
 			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].MarketPrice = this.f_getMarketPrice(ItemDetails[0].ItemCode);
 			var oCostToProduce =this.f_getAveragePrice(ItemDetails[0].ItemCode);
 			var oMarketPrice = this.f_getMarketPrice(ItemDetails[0].ItemCode);
-
-			// if (transtype === "1") {
-			// 	if(oCostToProduce <= oMarketPrice){
-			// 		this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice = oCostToProduce;
-			// 	}else{
-			// 		this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice=oMarketPrice;
-			// 	}
-			// }
+			if (transtype === "1") {
+				if(oCostToProduce <= oMarketPrice){
+					this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice = oCostToProduce;
+				}else{
+					this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice=oMarketPrice;
+				}
+			}
 			this.oModel.refresh();
 	},
 		///GET Market Type
@@ -346,9 +370,11 @@ sap.ui.define([
 			oitemdetails.TransferPrice = "";
 			oitemdetails.MarketPrice = "";
 			var transtype = this.getView().byId("TransID").getSelectedKey();
-			var issueBU = this.oModel.getData().EditRecord.IssueBU;
-			if (transtype === "") {
+			var oIssueBU = this.oModel.getData().EditRecord.IssueBU;
+			if (transtype === "" ) {
 				sap.m.MessageToast.show("Please Select Transaction Type.");
+			}else if(oIssueBU===""){
+				sap.m.MessageToast.show("Please Select Issuing BU Type.");
 			} else {
 					if (transtype === "1") {
 						oitemdetails.DescriptionEnable = false;
@@ -471,7 +497,7 @@ sap.ui.define([
 			oBusiness_Unit.U_APP_TransType = TransType;
 			oBusiness_Unit.U_APP_TransNo = sGeneratedTransNo;
 			oBusiness_Unit.U_APP_TransDate = this.getTodaysDate();
-			oBusiness_Unit.U_APP_CardCode = this.oModel.getData().EditRecord.BPCode;
+			//oBusiness_Unit.U_APP_CardCode = this.oModel.getData().EditRecord.BPCode;
 			oBusiness_Unit.U_APP_PostingDate = this.oModel.getData().EditRecord.PostingDate;
 			oBusiness_Unit.U_APP_MarkupType = this.oModel.getData().EditRecord.MarkupType;
 			oBusiness_Unit.U_APP_IssueBU = this.oModel.getData().EditRecord.IssueBU;
@@ -539,7 +565,7 @@ sap.ui.define([
 				}else{
 					if (results) {
 						sap.m.MessageToast.show("Request Has Been Sent");
-						this.fprepareTable(false,"");
+						//this.fprepareTable(false,"");
 						this.fClearField();
 						this.oModel.refresh();
 						AppUI5.hideBusyIndicator();

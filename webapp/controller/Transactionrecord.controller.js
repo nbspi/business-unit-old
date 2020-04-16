@@ -11,7 +11,15 @@ sap.ui.define([
   "use strict";
 
   return Controller.extend("com.apptech.bfi-businessunit.controller.Transactionrecord", {
+	onRoutePatternMatched: function(event){
+		this.fClearField();
+		this.fprepareTable(false,"");
+		this.oModel.refresh();
+		},
     onInit: function () {
+			///ON LOAD
+			var route = this.getOwnerComponent().getRouter().getRoute("Transactionrecord");
+			route.attachPatternMatched(this.onRoutePatternMatched,this);
 			//USER DATA
 			this.sDataBase = jQuery.sap.storage.Storage.get("dataBase");
 			this.sUserCode = jQuery.sap.storage.Storage.get("userCode");

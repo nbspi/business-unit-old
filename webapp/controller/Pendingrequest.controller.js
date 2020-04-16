@@ -8,7 +8,19 @@ sap.ui.define([
 ], function(Controller, JSONModel, Fragment, Filter, AppUI5, FilterOperator) {
   "use strict";
   return Controller.extend("com.apptech.bfi-businessunit.controller.Pendingrequest", {
- onInit: function () {
+
+    onRoutePatternMatched: function(event){
+      this.fClearField();
+      this.fprepareTable(false,"");
+      this.oModel.refresh();
+      },
+
+      onInit: function () {
+      ///ON LOAD
+      var route = this.getOwnerComponent().getRouter().getRoute("Pendingrequest");
+      route.attachPatternMatched(this.onRoutePatternMatched,this);
+
+  
 			//USER DATA
 			this.sDataBase = jQuery.sap.storage.Storage.get("dataBase");
 			this.sUserCode = jQuery.sap.storage.Storage.get("userCode");
@@ -22,7 +34,7 @@ sap.ui.define([
 			this.getView().byId("transactiondate").setDateValue(new Date());
 
 			///Initialize model
-			this.oModel = new JSONModel("model/pending.json");
+			this.oModel = new JSONModel("model/pendingrequest.json");
 			this.getView().setModel(this.oModel);
 			//// INITIALIZE Variables FOR TABLE
 			this.isClickedIssue = true;
@@ -38,6 +50,7 @@ sap.ui.define([
 			this.fprepareTable(true,"");
 
   },
+ 
   //GETTING DATE NOW
   fgetTodaysDate: function () {
     var today = new Date();
@@ -192,7 +205,7 @@ sap.ui.define([
     this.fgetHeader(dbName, "spAppBusinessUnit", "getDraftHeader", value1, value2, value3, value4);
     this.fgetDetails(dbName, "spAppBusinessUnit", "getDraftDetails", value1, value2, value3, value4);
 
-    this.getView().byId("idIconTabBarInlineMode").getItems()[1].setText("Transaction No: " + TransNo + " [EDIT]");
+   // this.getView().byId("idIconTabBarInlineMode").getItems()[1].setText("Transaction No: " + TransNo + " [EDIT]");
     var tab = this.getView().byId("idIconTabBarInlineMode");
     tab.setSelectedKey("tab2");
   },
@@ -295,7 +308,7 @@ sap.ui.define([
   },
   onAddReceipt: function () {
     this.fBuToBu();
-    this.fUpdatePending();
+    
   },
   ////POSTING BU TO BU BUSINESS TYPE
   fBuToBu: function () {
@@ -331,6 +344,7 @@ sap.ui.define([
       success: function (json) {
         //this.oPage.setBusy(false);
         sap.m.MessageToast.show("Added Successfully");
+        this.fUpdatePending();
         this.fprepareTable(false,"");
         this.fClearField();
         this.oModel.refresh();

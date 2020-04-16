@@ -30,7 +30,7 @@
 											<l:GridData span="L2 M4 S12"/>
 										</layoutData>
 									</Label>
-									<Input width="100%" id="Username" required="true" value="{/Login/username}" >
+									<Input width="100%" id="Username" required="true" value="{/Login/username}" submit="onLogin">
 										<layoutData>
 											<l:GridData span="L10 M8 S12"/>
 										</layoutData>
@@ -40,7 +40,7 @@
 											<l:GridData span="L2 M4 S12"/>
 										</layoutData>
 									</Label>
-									<Input width="100%" id="Password" type="Password" required="true" value="{/Login/password}" >
+									<Input width="100%" id="Password" type="Password" required="true" value="{/Login/password}" submit="onLogin">
 										<layoutData>
 											<l:GridData span="L10 M8 S12"/>
 										</layoutData>

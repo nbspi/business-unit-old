@@ -40,7 +40,7 @@
 									<Toolbar>
 											<content>
 												<!-- <Button text="ADD DRAFT" id="SaveDraft" tooltip="ADD DRAFT" press="onAddDraft" icon="sap-icon://add"/> -->
-												<!-- <Button text="ADD" id="btnAddReceipt" tooltip="ADD" press="onAddReceipt" icon="sap-icon://save"/> -->
+												<Button text="CANCEL" id="btnCancel" tooltip="CANCEL" press="onCancel" icon="sap-icon://sys-cancel-2"/>
 												<ToolbarSpacer/>
 											</content>
 										</Toolbar>

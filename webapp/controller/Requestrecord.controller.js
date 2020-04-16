@@ -9,8 +9,15 @@ sap.ui.define([
   "use strict";
 
   return Controller.extend("com.apptech.bfi-businessunit.controller.Requestrecord", {
-
+    onRoutePatternMatched: function(event){
+      this.fClearField();
+      this.fprepareTable(false,"");
+      this.oModel.refresh();
+      },
     onInit: function () {
+      ///ON LOAD
+		  var route = this.getOwnerComponent().getRouter().getRoute("Requestrecord");
+		  route.attachPatternMatched(this.onRoutePatternMatched,this);
 			//USER DATA
 			this.sDataBase = jQuery.sap.storage.Storage.get("dataBase");
 			this.sUserCode = jQuery.sap.storage.Storage.get("userCode");
@@ -194,7 +201,7 @@ sap.ui.define([
     this.fgetHeader(dbName, "spAppBusinessUnit", "getDraftHeader", value1, value2, value3, value4);
     this.fgetDetails(dbName, "spAppBusinessUnit", "getDraftDetails", value1, value2, value3, value4);
 
-    this.getView().byId("idIconTabBarInlineMode").getItems()[1].setText("Transaction No: " + TransNo + " [EDIT]");
+   /// this.getView().byId("idIconTabBarInlineMode").getItems()[1].setText("Transaction No: " + TransNo + " [EDIT]");
     var tab = this.getView().byId("idIconTabBarInlineMode");
     tab.setSelectedKey("tab2");
   },
@@ -282,7 +289,94 @@ sap.ui.define([
 
       }
     });
-  }
+  },
+  //Batch Request for Updating Draft
+  fprepareUpdatePostedRequestBody: function (oHeader, getcode) {
+    var batchRequest = "";
+    var beginBatch = "--a\nContent-Type: multipart/mixed;boundary=b\n\n";
+    var endBatch = "--b--\n--a--";
+
+    batchRequest = batchRequest + beginBatch;
+
+    var objectUDTHeader = "";
+    objectUDTHeader = oHeader;
+    batchRequest = batchRequest + "--b\nContent-Type:application/http\nContent-Transfer-Encoding:binary\n\n";
+    batchRequest = batchRequest + "PATCH /b1s/v1/" + objectUDTHeader.tableName + "('" + getcode + "')";
+    batchRequest = batchRequest + "\nContent-Type: application/json\n\n";
+    batchRequest = batchRequest + JSON.stringify(objectUDTHeader.data) + "\n\n";
+
+    batchRequest = batchRequest + endBatch;
+
+    return batchRequest;
+
+  },
+  	////UPDATE  POSTED
+		onCancel: function () {
+      var ostatus ="4";
+      var oDocType ="Cancelled";
+			var TransNo = this.oModel.getData().EditRecord.TransNo;
+			var TransType = this.oModel.getData().EditRecord.TransType;
+			//INITIALIZE FOR UPDATE
+			var getcode = this.code;
+			var oBusiness_Unit = {};
+			oBusiness_Unit.Code = getcode;
+			oBusiness_Unit.Name = getcode;
+			oBusiness_Unit.U_APP_TransType = TransType;
+			oBusiness_Unit.U_APP_TransNo = TransNo;
+			oBusiness_Unit.U_APP_TransDate = this.fgetTodaysDate();
+			oBusiness_Unit.U_APP_CardCode = this.oModel.getData().EditRecord.BPCode;
+			oBusiness_Unit.U_APP_CustomerName = this.oModel.getData().EditRecord.BPName;
+			oBusiness_Unit.U_APP_PostingDate = this.oModel.getData().EditRecord.PostingDate;
+			oBusiness_Unit.U_APP_MarkupType = this.oModel.getData().EditRecord.MarkupType;
+			oBusiness_Unit.U_APP_IssueBU = this.oModel.getData().EditRecord.IssueBU;
+			oBusiness_Unit.U_APP_ReceivingBU = this.oModel.getData().EditRecord.ReceiveBU;
+			oBusiness_Unit.U_APP_Remarks = this.oModel.getData().EditRecord.Remarks;
+      oBusiness_Unit.U_APP_Status = ostatus;
+      oBusiness_Unit.U_APP_DocType = oDocType;
+			oBusiness_Unit.U_APP_ReceivedBy = this.sUserCode;
+			///HEADER BATCH
+			var BatchHeader =
+				//directly insert data if data is single row per table 
+				{
+					"tableName": "U_APP_OINT",
+					"data": oBusiness_Unit
+				};
+			var sBodyRequest = this.fprepareUpdatePostedRequestBody(BatchHeader, getcode);
+			$.ajax({
+				url: "https://18.136.35.41:50000/b1s/v1/$batch",
+				type: "POST",
+				contentType: "multipart/mixed;boundary=a",
+				data: sBodyRequest,
+				xhrFields: {
+					withCredentials: true
+				},
+				error: function (xhr, status, error) {
+					var Message = xhr.responseJSON["error"].message.value;
+					sap.m.MessageToast.show(Message);
+				},
+				success: function (json) {
+				
+				},
+				context: this
+			}).done(function (results) {
+				if(JSON.stringify(results).search("400 Bad") !== -1) {
+					var oStartIndex = results.search("value") + 10;
+					var oEndIndex = results.indexOf("}") - 8;
+					var oMessage = results.substring(oStartIndex,oEndIndex);
+					AppUI5.fErrorLogs("U_APP_OINT/U_APP_INT1","Update",TransNo,"null",oMessage,"Update",this.sUserCode,"null",sBodyRequest);
+					sap.m.MessageToast.show(oMessage);
+				}else{
+					if (results) {
+						sap.m.MessageToast.show("Request Has Been Cancelled!");
+						this.fprepareTable(false,"");
+						this.fClearField();
+						this.oModel.refresh();
+					
+					}
+				}
+				
+			});
+		}
   
   
   });

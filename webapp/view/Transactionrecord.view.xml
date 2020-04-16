@@ -33,7 +33,7 @@
 										<Toolbar>
 											<content>
 												<!-- <Button text="ADD" id="btnOnAdd" tooltip="ADD" press="onAddMode" icon="sap-icon://add"/> -->
-												<Button text="VIEW" id="btnOnView" tooltip="VIEW" press="onView" icon="sap-icon://edit"/>
+												<Button text="PROCESS" id="btnOnView" tooltip="PROCESS" press="onView" icon="sap-icon://edit"/>
 												<ToolbarSpacer/>
 											</content>
 										</Toolbar>
@@ -47,7 +47,7 @@
 								<!--<Button text="Export File" tooltip="Export" press="handleExcelExport"/>-->
 									<Toolbar>
 											<content>
-												<Button text="ADD DRAFT" id="btnSaveDraft" tooltip="ADD DRAFT" press="onAddDraft" icon="sap-icon://add"/>
+												<!-- <Button text="ADD DRAFT" id="btnSaveDraft" tooltip="ADD DRAFT" press="onAddDraft" icon="sap-icon://add"/> -->
 												<Button text="ADD" id="btnAddRecords" tooltip="ADD" press="onAddRecords" icon="sap-icon://save"/>
 												<ToolbarSpacer/>
 											</content>

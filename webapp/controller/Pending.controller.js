@@ -12,8 +12,15 @@ sap.ui.define([
     _data: {
 		"date": new Date()
 	},
+	onRoutePatternMatched: function(event){
+		this.fprepareTable(false,"");
+		this.oModel.refresh();
+		},
 
     onInit: function () {
+		  ///ON LOAD
+		  var route = this.getOwnerComponent().getRouter().getRoute("Pending");
+		  route.attachPatternMatched(this.onRoutePatternMatched,this);
 			//USER DATA
 			this.sDataBase = jQuery.sap.storage.Storage.get("dataBase");
 			this.sUserCode = jQuery.sap.storage.Storage.get("userCode");
@@ -438,6 +445,7 @@ sap.ui.define([
 					success: function (json) {
 						//this.oPage.setBusy(false);
 						sap.m.MessageToast.show("Added Successfully");
+						this.fUpdatePending();
 						this.fprepareTable(false,"");
 						this.fClearField();
 						this.oModel.refresh();
@@ -455,7 +463,6 @@ sap.ui.define([
 	
 			onAddReceipt: function (oEvent) {
 				this.fAddReceipt();
-				this.fUpdatePending();
 			},
 //GETTING DATE NOW
 		fgetTodaysDate: function () {
@@ -539,7 +546,7 @@ sap.ui.define([
 					sap.m.MessageToast.show(oMessage);
 				}else{
 					if (results) {
-						sap.m.MessageToast.show("Transaction Type "+ TransType +" Draft Has Been Created!");
+					//	sap.m.MessageToast.show("Transaction Type "+ TransType +" Draft Has Been Created!");
 						this.fprepareTable(false,"");
 						this.fClearField();
 						this.oModel.refresh();
