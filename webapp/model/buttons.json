@@ -1,6 +1,6 @@
 {
     "buttons": {
-        "btnSaveDraft": false,
-        "btnAddRecords": false  
+        "btnSaveDraft": true,
+        "btnAddRecords": true  
     }
 }

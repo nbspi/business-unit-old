@@ -56,7 +56,9 @@ sap.ui.define([
 					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
 			  	},
 				error: function (xhr, status, error) {
-					sap.m.MessageToast.show(error);
+					var Message = xhr.responseJSON["error"].message.value;
+					console.error(JSON.stringify(Message));
+					sap.m.MessageToast.show(Message);
 				},
 				success: function (json) {},
 				context: this
@@ -197,7 +199,9 @@ sap.ui.define([
 					xhr.setRequestHeader("Authorization","Basic " + btoa("SYSTEM:P@ssw0rd805~"));
 				},
 					error: function (xhr, status, error) {
-						sap.m.MessageToast.show(error);
+						var Message = xhr.responseJSON["error"].message.value;
+						console.error(JSON.stringify(Message));
+						sap.m.MessageToast.show(Message);
 					},
 					success: function (json) {},
 					context: this
@@ -318,7 +322,9 @@ sap.ui.define([
 					xhr.setRequestHeader("Authorization","Basic " + btoa("SYSTEM:P@ssw0rd805~"));
 				},
 				error: function (xhr, status, error) {
-					sap.m.MessageToast.show(error);
+					var Message = xhr.responseJSON["error"].message.value;
+					console.error(JSON.stringify(Message));
+					sap.m.MessageToast.show(Message);
 				},
 				success: function (json) {},
 				context: this
@@ -346,7 +352,9 @@ sap.ui.define([
 					xhr.setRequestHeader("Authorization","Basic " + btoa("SYSTEM:P@ssw0rd805~"));
 				},
 				error: function (xhr, status, error) {
-					sap.m.MessageToast.show(error);
+					var Message = xhr.responseJSON["error"].message.value;
+					console.error(JSON.stringify(Message));
+					sap.m.MessageToast.show(Message);
 				},
 				success: function (json) {},
 				context: this
@@ -475,6 +483,8 @@ sap.ui.define([
 					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
 			  	},
 				error: function (xhr, status, error) {
+					var Message = xhr.responseJSON["error"].message.value;
+					console.error(JSON.stringify(Message));
 					sap.m.MessageToast.show(error);
 					AppUI5.hideBusyIndicator();
 				},
@@ -548,6 +558,7 @@ sap.ui.define([
 				},
 				error: function (xhr, status, error) {
 					var Message = xhr.responseJSON["error"].message.value;
+					console.error(JSON.stringify(Message));
 					sap.m.MessageToast.show(error);
 					sap.m.MessageToast.show(xhr.responseText);
 				},

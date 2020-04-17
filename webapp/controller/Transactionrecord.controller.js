@@ -62,6 +62,8 @@ sap.ui.define([
 					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
 			  	},
 				error: function (xhr, status, error) {
+					var Message = xhr.responseJSON["error"].message.value;
+					console.error(JSON.stringify(Message));
 					sap.m.MessageToast.show(error);
 				},
 				success: function (json) {},
@@ -201,6 +203,8 @@ sap.ui.define([
 			  	},
 				error: function (xhr, status, error) {
 					aReturnResult = [];
+					var Message = xhr.responseJSON["error"].message.value;
+					console.error(JSON.stringify(Message));
 					sap.m.MessageToast.show(error);
 				},
 				success: function (json) {},
@@ -350,6 +354,8 @@ sap.ui.define([
 					xhr.setRequestHeader("Authorization","Basic " + btoa("SYSTEM:P@ssw0rd805~"));
 				},
 					error: function (xhr, status, error) {
+						var Message = xhr.responseJSON["error"].message.value;
+						console.error(JSON.stringify(Message));
 						sap.m.MessageToast.show(error);
 					},
 					success: function (json) {},
@@ -398,6 +404,8 @@ sap.ui.define([
 					xhr.setRequestHeader("Authorization","Basic " + btoa("SYSTEM:P@ssw0rd805~"));
 				},
 					error: function (xhr, status, error) {
+						var Message = xhr.responseJSON["error"].message.value;
+						console.error(JSON.stringify(Message));
 						sap.m.MessageToast.show(error);
 					},
 					success: function (json) {},
@@ -557,6 +565,8 @@ sap.ui.define([
 					xhr.setRequestHeader("Authorization","Basic " + btoa("SYSTEM:P@ssw0rd805~"));
 				},
 				error: function (xhr, status, error) {
+					var Message = xhr.responseJSON["error"].message.value;
+					console.error(JSON.stringify(Message));
 					sap.m.MessageToast.show(error);
 				},
 				success: function (json) {},
@@ -585,6 +595,8 @@ sap.ui.define([
 					xhr.setRequestHeader("Authorization","Basic " + btoa("SYSTEM:P@ssw0rd805~"));
 				},
 				error: function (xhr, status, error) {
+					var Message = xhr.responseJSON["error"].message.value;
+					console.error(JSON.stringify(Message));
 					sap.m.MessageToast.show(error);
 				},
 				success: function (json) {},
@@ -638,12 +650,8 @@ sap.ui.define([
 					xhr.setRequestHeader("Authorization","Basic " + btoa("SYSTEM:P@ssw0rd805~"));
 				},
 				error: function (xhr, status, error) {
-					// if (xhr.status === 400) {
-					// 	sap.m.MessageToast.show("Session End. Redirecting to Login Page..");
-					// 	sap.ui.core.UIComponent.getRouterFor(this).navTo("Login");
-					// }else{
-					// 	sap.m.MessageToast.show(error);
-					// }
+					var Message = xhr.responseJSON["error"].message.value;
+					console.error(JSON.stringify(Message));
 					sap.m.MessageToast.show(error);
 				},
 				success: function (json) {},
@@ -697,6 +705,8 @@ sap.ui.define([
 					xhr.setRequestHeader("Authorization","Basic " + btoa("SYSTEM:P@ssw0rd805~"));
 				},
 				error: function (xhr, status, error) {
+					var Message = xhr.responseJSON["error"].message.value;
+					console.error(JSON.stringify(Message));
 					sap.m.MessageToast.show(error);
 				},
 				success: function (json) {},
@@ -852,6 +862,7 @@ sap.ui.define([
 				error: function (xhr, status, error) {
 					var Message = xhr.responseJSON["error"].message.value;
 					AppUI5.fErrorLogs("OIGE","Insert","null","null",Message,"Bu to Bu",this.sUserCode,"null",JSON.stringify(oGoodsIssue));
+					console.error(JSON.stringify(Message));
 					sap.m.MessageToast.show(Message);
 					AppUI5.hideBusyIndicator();
 				},
@@ -902,6 +913,8 @@ sap.ui.define([
 				error: function (xhr, status, error) {
 					var Message = xhr.responseJSON["error"].message.value;
 					AppUI5.fErrorLogs("OIGE","Insert","null","null",Message,"Bu to Cash Sale",this.sUserCode,"null",JSON.stringify(oGoodsIssue));
+					var Message = xhr.responseJSON["error"].message.value;
+					console.error(JSON.stringify(Message));
 					sap.m.MessageToast.show(Message);
 				},
 				success: function (json) {
@@ -937,6 +950,7 @@ sap.ui.define([
 						error: function (xhr, status, error) {
 							var Message = xhr.responseJSON["error"].message.value;
 							AppUI5.fErrorLogs("OINV","Insert","null","null",Message,"Bu to Cash Sale",this.sUserCode,"null",JSON.stringify(oInvoice));
+							console.error(JSON.stringify(Message));
 							sap.m.MessageToast.show(Message);
 							
 						},
@@ -978,6 +992,7 @@ sap.ui.define([
 									error: function (xhr, status, error) {
 										var Message = xhr.responseJSON["error"].message.value;
 										AppUI5.fErrorLogs("ORCT","Insert","null","null",Message,"Bu to Cash Sale",this.sUserCode,"null",JSON.stringify(oIncomingPayment));
+										console.error(JSON.stringify(Message));
 										sap.m.MessageToast.show(Message);
 									},
 									success: function (json) {
@@ -1027,6 +1042,7 @@ sap.ui.define([
 				error: function (xhr, status, error) {
 					var Message = xhr.responseJSON["error"].message.value;
 					AppUI5.fErrorLogs("OIGE","Insert","null","null",Message,"Bu to Vale",this.sUserCode,"null",JSON.stringify(oGoodsIssue));
+					console.error(JSON.stringify(Message));
 					sap.m.MessageToast.show(Message);
 					
 				},
@@ -1063,6 +1079,7 @@ sap.ui.define([
 						error: function (xhr, status, error) {
 							var Message = xhr.responseJSON["error"].message.value;
 							AppUI5.fErrorLogs("OINV","Insert","null","null",Message,"Bu to Vale",this.sUserCode,"null",JSON.stringify(oInvoice));
+							console.error(JSON.stringify(Message));
 							sap.m.MessageToast.show(Message);
 							
 						},
@@ -1113,6 +1130,7 @@ sap.ui.define([
 				error: function (xhr, status, error) {
 					var Message = xhr.responseJSON["error"].message.value;
 					AppUI5.fErrorLogs("OIGE","Insert","null","null",Message,"Charge to Expense",this.sUserCode,"null",JSON.stringify(oGoodsIssue));
+					console.error(JSON.stringify(Message));
 					sap.m.MessageToast.show(Message);
 					AppUI5.hideBusyIndicator();
 				},
@@ -1163,6 +1181,7 @@ sap.ui.define([
 				error: function (xhr, status, error) {
 					var Message = xhr.responseJSON["error"].message.value;
 					AppUI5.fErrorLogs("OIGE","Insert","null","null",Message,"Inter Org Issue",this.sUserCode,"null",JSON.stringify(oGoodsIssue));
+					console.error(JSON.stringify(Message));
 					sap.m.MessageToast.show(Message);
 					
 				},
@@ -1204,6 +1223,7 @@ sap.ui.define([
 						error: function (xhr, status, error) {
 							var Message = xhr.responseJSON["error"].message.value;
 							AppUI5.fErrorLogs("OINV","Insert","null","null",Message,"Inter Org Issue",this.sUserCode,"null",JSON.stringify(oInvoice));
+							console.error(JSON.stringify(Message));
 							sap.m.MessageToast.show(Message);
 							
 						},
@@ -1281,6 +1301,7 @@ sap.ui.define([
 				},
 				error: function (xhr, status, error) {
 					var Message = xhr.responseJSON["error"].message.value;
+					console.error(JSON.stringify(Message));
 					sap.m.MessageToast.show(Message);
 					AppUI5.hideBusyIndicator();
 				},
@@ -1467,6 +1488,7 @@ sap.ui.define([
 				},
 				error: function (xhr, status, error) {
 					var Message = xhr.responseJSON["error"].message.value;
+					console.error(JSON.stringify(Message));
 					sap.m.MessageToast.show(Message);
 					AppUI5.hideBusyIndicator();
 				},
@@ -1539,6 +1561,7 @@ sap.ui.define([
 				},
 				error: function (xhr, status, error) {
 					var Message = xhr.responseJSON["error"].message.value;
+					console.error(JSON.stringify(Message));
 					sap.m.MessageToast.show(Message);
 				},
 				success: function (json) {
@@ -1614,6 +1637,7 @@ sap.ui.define([
 				},
 				error: function (xhr, status, error) {
 					var Message = xhr.responseJSON["error"].message.value;
+					console.error(JSON.stringify(Message));
 					sap.m.MessageToast.show(Message);
 				},
 				success: function (json) {

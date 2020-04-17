@@ -166,6 +166,7 @@ sap.ui.define([
         },
       error: function (xhr, status, error) {
         aReturnResult = [];
+        console.error(JSON.stringify(xhr));
         sap.m.MessageToast.show(error);
       },
       success: function (json) {},
@@ -217,12 +218,7 @@ sap.ui.define([
         xhr.setRequestHeader("Authorization","Basic " + btoa("SYSTEM:P@ssw0rd805~"));
       },
       error: function (xhr, status, error) {
-        // if (xhr.status === 400) {
-        // 	sap.m.MessageToast.show("Session End. Redirecting to Login Page..");
-        // 	sap.ui.core.UIComponent.getRouterFor(this).navTo("Login");
-        // }else{
-        // 	sap.m.MessageToast.show(error);
-        // }
+        console.error(JSON.stringify(xhr));
         sap.m.MessageToast.show(error);
       },
       success: function (json) {},
@@ -276,7 +272,9 @@ sap.ui.define([
         xhr.setRequestHeader("Authorization","Basic " + btoa("SYSTEM:P@ssw0rd805~"));
       },
       error: function (xhr, status, error) {
-        sap.m.MessageToast.show(error);
+        var Message = xhr.responseJSON["error"].message.value;
+					console.error(JSON.stringify(Message));
+        sap.m.MessageToast.show(Message);
       },
       success: function (json) {},
       context: this
@@ -351,7 +349,8 @@ sap.ui.define([
 					withCredentials: true
 				},
 				error: function (xhr, status, error) {
-					var Message = xhr.responseJSON["error"].message.value;
+          var Message = xhr.responseJSON["error"].message.value;
+          console.error(JSON.stringify(Message));
 					sap.m.MessageToast.show(Message);
 				},
 				success: function (json) {
