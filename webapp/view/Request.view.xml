@@ -40,7 +40,7 @@
 									<Toolbar>
 											<content>
 												<!-- <Button text="ADD DRAFT" id="btnSaveDraft" tooltip="ADD DRAFT" press="onAddDraft" icon="sap-icon://add"/> -->
-												<Button text="SEND REQUEST" id="btnAddRequest" tooltip="SEND REQUEST" press="onAddRequest" icon="sap-icon://save"/>
+												<Button text="SEND REQUEST" id="btnAddRequest" tooltip="SEND REQUEST" visible="{buttons>/buttons/btnAddRequest}" press="onAddRequest" icon="sap-icon://save"/>
 												<ToolbarSpacer/>
 											</content>
 										</Toolbar>

@@ -15,6 +15,20 @@ sap.ui.define([
        //USER DATA
 			this.sDataBase = jQuery.sap.storage.Storage.get("dataBase");
 			this.sUserCode = jQuery.sap.storage.Storage.get("userCode");
+
+			//getButtons
+			this.oMdlButtons = new JSONModel();
+			this.oResults = AppUI5.fGetButtons(this.sDataBase,this.sUserCode,"Request");
+			var newresult = [];
+				this.oResults.forEach((e)=> {
+					var d = {};
+					d[e.U_ActionDesc] = JSON.parse(e.visible);
+					newresult.push(JSON.parse(JSON.stringify(d)));
+				});
+			var modelresult = JSON.parse("{" + JSON.stringify(newresult).replace(/{/g,"").replace(/}/g,"").replace("[","").replace("]","") + "}");
+			this.oMdlButtons.setJSON("{\"buttons\" : " + JSON.stringify(modelresult) + "}");
+			this.getView().setModel(this.oMdlButtons, "buttons");
+
 			//TO STORED SELECTED ROW
 			this.iSelectedRow = 0;
 
@@ -485,7 +499,7 @@ sap.ui.define([
 				error: function (xhr, status, error) {
 					var Message = xhr.responseJSON["error"].message.value;
 					console.error(JSON.stringify(Message));
-					sap.m.MessageToast.show(error);
+					sap.m.MessageToast.show(Message);
 					AppUI5.hideBusyIndicator();
 				},
 				success: function (json) {
@@ -559,7 +573,7 @@ sap.ui.define([
 				error: function (xhr, status, error) {
 					var Message = xhr.responseJSON["error"].message.value;
 					console.error(JSON.stringify(Message));
-					sap.m.MessageToast.show(error);
+					sap.m.MessageToast.show(Message);
 					sap.m.MessageToast.show(xhr.responseText);
 				},
 				success: function (json) {

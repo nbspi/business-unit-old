@@ -20,6 +20,19 @@ sap.ui.define([
 			//USER DATA
 			this.sDataBase = jQuery.sap.storage.Storage.get("dataBase");
 			this.sUserCode = jQuery.sap.storage.Storage.get("userCode");
+			//getButtons
+			this.oMdlButtons = new JSONModel();
+			this.oResults = AppUI5.fGetButtons(this.sDataBase,this.sUserCode,"BusinessUnit");
+			var newresult = [];
+				this.oResults.forEach((e)=> {
+					var d = {};
+					d[e.U_ActionDesc] = JSON.parse(e.visible);
+					newresult.push(JSON.parse(JSON.stringify(d)));
+				});
+			var modelresult = JSON.parse("{" + JSON.stringify(newresult).replace(/{/g,"").replace(/}/g,"").replace("[","").replace("]","") + "}");
+			this.oMdlButtons.setJSON("{\"buttons\" : " + JSON.stringify(modelresult) + "}");
+			this.getView().setModel(this.oMdlButtons, "buttons");
+
 			//TO STORED SELECTED ROW
 			this.iSelectedRow = 0;
 
@@ -42,9 +55,11 @@ sap.ui.define([
 			this.oModel = new JSONModel("model/businessunit.json");
 			this.getView().setModel(this.oModel);
 
-			//BIND TO MAIN MODEL
-			this.oButtonModel = new JSONModel("model/buttons.json");
-			this.getView().setModel(this.oButtonModel,'oButtonModel');
+			// //BIND TO MAIN MODEL
+			// this.oButtonModel = new JSONModel("model/buttons.json");
+			// this.getView().setModel(this.oButtonModel,'oButtonModel');
+
+			
 			///INITIALIZE FOR MARKETPRICE
 			this.MarketPrice = "";
 			////Initialize code when onview is clicked
@@ -62,8 +77,11 @@ sap.ui.define([
 					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
 			  	},
 				error: function (xhr, status, error) {
-					sap.m.MessageToast.show(error);
-					console.error(JSON.stringify(xhr));
+					var Message = xhr.responseJSON["error"].message.value;
+					console.error(JSON.stringify(Message));
+					sap.m.MessageToast.show(Message);
+					
+				
 				},
 				success: function (json) {},
 				context: this
@@ -355,8 +373,9 @@ sap.ui.define([
 					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
 			  	},
 				error: function (xhr, status, error) {
-					sap.m.MessageToast.show(error);
-					console.error(JSON.stringify(xhr));
+					var Message = xhr.responseJSON["error"].message.value;
+					console.error(JSON.stringify(Message));
+					sap.m.MessageToast.show(Message);
 					AppUI5.hideBusyIndicator();
 				},
 				success: function (json) {
@@ -428,9 +447,9 @@ sap.ui.define([
 					withCredentials: true
 				},
 				error: function (xhr, status, error) {
-					sap.m.MessageToast.show(error);
-					sap.m.MessageToast.show(xhr.responseText);
-					console.error(JSON.stringify(xhr));
+					var Message = xhr.responseJSON["error"].message.value;
+					console.error(JSON.stringify(Message));
+					sap.m.MessageToast.show(Message);
 				},
 				success: function (json) {
 				
@@ -441,7 +460,7 @@ sap.ui.define([
 					var oStartIndex = results.search("value") + 10;
 					var oEndIndex = results.indexOf("}") - 8;
 					var oMessage = results.substring(oStartIndex,oEndIndex);
-					AppUI5.fErrorLogs("U_APP_OINT/U_APP_INT1","Add Draft","null","null",oMessage,"Insert",this.sUserCode,"null",sBodyRequest);
+					AppUI5.fErrorLogs("U_APP_OINT/U_APP_INT1","Insert","null","null",oMessage,"Add Draft",this.sUserCode,"null",sBodyRequest);
 					sap.m.MessageToast.show(oMessage);
 				}else{
 					if (results) {
@@ -598,7 +617,7 @@ sap.ui.define([
 		//GETTING ALL BP
 		f_configValueHelpDialogs: function (TransType,customertype) {
 			var sInputValue = this.byId("inputbpcode").getValue();
-			if (this.oMdlAllBP.getData().allbp.length <= 0) {
+		
 					
 				//GET ALL BP
 				$.ajax({
@@ -609,18 +628,20 @@ sap.ui.define([
 					xhr.setRequestHeader("Authorization","Basic " + btoa("SYSTEM:P@ssw0rd805~"));
 				},
 					error: function (xhr, status, error) {
-						sap.m.MessageToast.show(error);
-						console.error(JSON.stringify(xhr));
+					var Message = xhr.responseJSON["error"].message.value;
+					console.error(JSON.stringify(Message));
+					sap.m.MessageToast.show(Message);
 					},
 					success: function (json) {},
 					context: this
 				}).done(function (results) {
 					if (results) {
 						this.oMdlAllBP.getData().allbp = results;
+						this.oMdlAllBP.refresh();
 						this.getView().setModel(this.oMdlAllBP, "oMdlAllBP");
 					}
 				});
-			}
+	
 
 			var aList = this.oMdlAllBP.getProperty("/allbp");
 
@@ -658,8 +679,9 @@ sap.ui.define([
 					xhr.setRequestHeader("Authorization","Basic " + btoa("SYSTEM:P@ssw0rd805~"));
 				},
 					error: function (xhr, status, error) {
-						sap.m.MessageToast.show(error);
-						console.error(JSON.stringify(xhr));
+					var Message = xhr.responseJSON["error"].message.value;
+					console.error(JSON.stringify(Message));
+					sap.m.MessageToast.show(Message);
 					},
 					success: function (json) {},
 					context: this
@@ -820,7 +842,7 @@ sap.ui.define([
 				error: function (xhr, status, error) {
 					var Message = xhr.responseJSON["error"].message.value;
 					console.error(JSON.stringify(Message));
-					sap.m.MessageToast.show(error);
+					sap.m.MessageToast.show(Message);
 					
 				},
 				success: function (json) {},
@@ -851,7 +873,7 @@ sap.ui.define([
 				error: function (xhr, status, error) {
 					var Message = xhr.responseJSON["error"].message.value;
 					console.error(JSON.stringify(Message));
-					sap.m.MessageToast.show(error);
+					sap.m.MessageToast.show(Message);
 				},
 				success: function (json) {},
 				context: this
@@ -1040,7 +1062,6 @@ sap.ui.define([
 					AppUI5.fErrorLogs("OIGE","Insert","null","null",Message,"Bu to Bu",this.sUserCode,"null",JSON.stringify(oGoodsIssue));
 					console.error(JSON.stringify(Message));
 					sap.m.MessageToast.show(Message);
-					
 					AppUI5.hideBusyIndicator();
 				},
 				success: function (json) {

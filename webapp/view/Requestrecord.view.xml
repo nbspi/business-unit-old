@@ -26,7 +26,7 @@
 									<t:extension>
 										<Toolbar>
 											<content>
-												<Button text="VIEW" id="btnView" tooltip="VIEW" press="onView" icon="sap-icon://edit"/>
+												<Button text="VIEW" id="btnView" tooltip="VIEW" visible="{buttons>/buttons/btnView}" press="onView" icon="sap-icon://edit"/>
 												<ToolbarSpacer/>
 											</content>
 										</Toolbar>
@@ -40,7 +40,7 @@
 									<Toolbar>
 											<content>
 												<!-- <Button text="ADD DRAFT" id="SaveDraft" tooltip="ADD DRAFT" press="onAddDraft" icon="sap-icon://add"/> -->
-												<Button text="CANCEL" id="btnCancel" tooltip="CANCEL" press="onCancel" icon="sap-icon://sys-cancel-2"/>
+												<Button text="CANCEL" id="btnCancel" tooltip="CANCEL" visible="{buttons>/buttons/btnCancel}" press="onCancel" icon="sap-icon://sys-cancel-2"/>
 												<ToolbarSpacer/>
 											</content>
 										</Toolbar>

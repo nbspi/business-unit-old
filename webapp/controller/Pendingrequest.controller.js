@@ -20,10 +20,22 @@ sap.ui.define([
       var route = this.getOwnerComponent().getRouter().getRoute("Pendingrequest");
       route.attachPatternMatched(this.onRoutePatternMatched,this);
 
-  
 			//USER DATA
 			this.sDataBase = jQuery.sap.storage.Storage.get("dataBase");
-			this.sUserCode = jQuery.sap.storage.Storage.get("userCode");
+      this.sUserCode = jQuery.sap.storage.Storage.get("userCode");
+
+      //getButtons
+			this.oMdlButtons = new JSONModel();
+			this.oResults = AppUI5.fGetButtons(this.sDataBase,this.sUserCode,"Pendingrequest");
+			var newresult = [];
+				this.oResults.forEach((e)=> {
+					var d = {};
+					d[e.U_ActionDesc] = JSON.parse(e.visible);
+					newresult.push(JSON.parse(JSON.stringify(d)));
+				});
+			var modelresult = JSON.parse("{" + JSON.stringify(newresult).replace(/{/g,"").replace(/}/g,"").replace("[","").replace("]","") + "}");
+			this.oMdlButtons.setJSON("{\"buttons\" : " + JSON.stringify(modelresult) + "}");
+			this.getView().setModel(this.oMdlButtons, "buttons");
 
 			//TO STORED SELECTED ROW
 			this.iSelectedRow = 0;
@@ -383,6 +395,7 @@ sap.ui.define([
   		////UPDATE  POSTED
       fUpdatePending: function () {
         var ostatus ="1";
+        var oDocType ="Goods Issue";
         var TransNo = this.oModel.getData().EditRecord.TransNo;
         var TransType = this.oModel.getData().EditRecord.TransType;
         //INITIALIZE FOR UPDATE
@@ -401,6 +414,7 @@ sap.ui.define([
         oBusiness_Unit.U_APP_ReceivingBU = this.oModel.getData().EditRecord.ReceiveBU;
         oBusiness_Unit.U_APP_Remarks = this.oModel.getData().EditRecord.Remarks;
         oBusiness_Unit.U_APP_Status = ostatus;
+        oBusiness_Unit.U_APP_DocType = oDocType;
         ///HEADER BATCH
         var BatchHeader =
           //directly insert data if data is single row per table 

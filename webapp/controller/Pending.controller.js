@@ -25,6 +25,19 @@ sap.ui.define([
 			this.sDataBase = jQuery.sap.storage.Storage.get("dataBase");
 			this.sUserCode = jQuery.sap.storage.Storage.get("userCode");
 
+			//getButtons
+			this.oMdlButtons = new JSONModel();
+			this.oResults = AppUI5.fGetButtons(this.sDataBase,this.sUserCode,"Pending");
+			var newresult = [];
+				this.oResults.forEach((e)=> {
+					var d = {};
+					d[e.U_ActionDesc] = JSON.parse(e.visible);
+					newresult.push(JSON.parse(JSON.stringify(d)));
+				});
+			var modelresult = JSON.parse("{" + JSON.stringify(newresult).replace(/{/g,"").replace(/}/g,"").replace("[","").replace("]","") + "}");
+			this.oMdlButtons.setJSON("{\"buttons\" : " + JSON.stringify(modelresult) + "}");
+			this.getView().setModel(this.oMdlButtons, "buttons");
+
 			//TO STORED SELECTED ROW
 			this.iSelectedRow = 0;
 			//BLANK JSONMODEL FOR ALL ITEMS FOR TEMPLATE
@@ -450,6 +463,7 @@ sap.ui.define([
 						//this.oPage.setBusy(false);
 						sap.m.MessageToast.show("Added Successfully");
 						this.fUpdatePending();
+						this.fAddNewReceipt();
 						this.fprepareTable(false,"");
 						this.fClearField();
 						this.oModel.refresh();
@@ -552,6 +566,7 @@ sap.ui.define([
 				}else{
 					if (results) {
 					//	sap.m.MessageToast.show("Transaction Type "+ TransType +" Draft Has Been Created!");
+						
 						this.fprepareTable(false,"");
 						this.fClearField();
 						this.oModel.refresh();
@@ -559,6 +574,122 @@ sap.ui.define([
 					}
 				}
 				
+			});
+		},
+		// Batch POSTING ON UDT
+		fAddNewReceipt: function () {
+				var ostatus ="2";
+				var oDocType="Goods Receipt";
+			AppUI5.showBusyIndicator(4000);
+			//GET TRANSACTION NUMBER
+			var sGeneratedTransNo = "";
+			var TransType = this.oModel.getData().EditRecord.TransType;
+			$.ajax({
+				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getTransactionNumber&value1&value2&value3&value4",
+				type: "GET",
+				async: false,
+				datatype:"json",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
+			  	},
+				error: function (xhr, status, error) {
+					var Message = xhr.responseJSON["error"].message.value;
+					console.error(JSON.stringify(Message));
+					sap.m.MessageToast.show(Message);
+					AppUI5.hideBusyIndicator();
+				},
+				success: function (json) {
+			
+				},
+				context: this
+			}).done(function (results) {
+				if (results) {
+					sGeneratedTransNo = results[0][""];
+				}
+			});
+			///GET GENERATED CODE FROM SP
+			var CodeH = AppUI5.generateUDTCode("GetCode");
+			var oBusiness_Unit = {};
+			var oBusiness_Unit_Details = {};
+			///INITIALIZE VARIABLES FOR DRAFT POSTING
+			oBusiness_Unit.Code = CodeH; //"200407095347.79702";
+			oBusiness_Unit.Name = CodeH; //"200407095347.79702";
+			oBusiness_Unit.U_APP_TransType = TransType;
+			oBusiness_Unit.U_APP_TransNo = sGeneratedTransNo;
+			oBusiness_Unit.U_APP_TransDate = this.fgetTodaysDate();
+			oBusiness_Unit.U_APP_CardCode = this.oModel.getData().EditRecord.BPCode;
+			oBusiness_Unit.U_APP_PostingDate = this.oModel.getData().EditRecord.PostingDate;
+			oBusiness_Unit.U_APP_MarkupType = this.oModel.getData().EditRecord.MarkupType;
+			oBusiness_Unit.U_APP_IssueBU = this.oModel.getData().EditRecord.IssueBU;
+			oBusiness_Unit.U_APP_ReceivingBU = this.oModel.getData().EditRecord.ReceiveBU;
+			oBusiness_Unit.U_APP_Remarks = this.oModel.getData().EditRecord.Remarks;
+			oBusiness_Unit.U_APP_Status = ostatus;
+			oBusiness_Unit.U_APP_DocType = oDocType;
+			///HEADER BATCH Array
+			var batchArray = [
+				//directly insert data if data is single row per table 
+				{
+					"tableName": "U_APP_OINT",
+					"data": oBusiness_Unit
+				}
+			];
+			var d;
+			var code = "";
+			for (d = 0; d < this.oModel.getData().EditRecord.DocumentLines.length; d++) {
+				code = AppUI5.generateUDTCode("GetCode");
+				oBusiness_Unit_Details.Code = code;
+				oBusiness_Unit_Details.Name = code;
+				oBusiness_Unit_Details.U_APP_ItemNum = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
+				oBusiness_Unit_Details.U_APP_Description = this.oModel.getData().EditRecord.DocumentLines[d].Description;
+				oBusiness_Unit_Details.U_APP_Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
+				oBusiness_Unit_Details.U_APP_CostProd = this.oModel.getData().EditRecord.DocumentLines[d].CostProd;
+				oBusiness_Unit_Details.U_APP_MarkUp = this.oModel.getData().EditRecord.DocumentLines[d].MarkupPrice;
+				oBusiness_Unit_Details.U_APP_TransferPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
+				oBusiness_Unit_Details.U_APP_MarketPrice = this.oModel.getData().EditRecord.DocumentLines[d].MarketPrice;
+				oBusiness_Unit_Details.U_APP_TransNo = sGeneratedTransNo;
+				oBusiness_Unit_Details.U_APP_TransType = TransType;
+				//oBusiness_Unit_Details.APP_TransNo = this.getView().byId("TransNo").getValue();
+				batchArray.push(JSON.parse(JSON.stringify(({
+					"tableName": "U_APP_INT1",
+					"data": oBusiness_Unit_Details //this.generateUDTCode();
+				}))));
+			}
+			//BATCH FORMATING
+			var sBodyRequest = AppUI5.prepareBatchRequestBody(batchArray);
+		////BATCH POSTING FOR DRAFT
+			$.ajax({
+				url: "https://18.136.35.41:50000/b1s/v1/$batch",
+				type: "POST",
+				contentType: "multipart/mixed;boundary=a",
+				data: sBodyRequest,
+				xhrFields: {
+					withCredentials: true
+				},
+				error: function (xhr, status, error) {
+					var Message = xhr.responseJSON["error"].message.value;
+					console.error(JSON.stringify(Message));
+					sap.m.MessageToast.show(Message);
+				},
+				success: function (json) {
+				
+				},
+				context: this
+			}).done(function (results) {
+				if(JSON.stringify(results).search("400 Bad") !== -1) {
+					var oStartIndex = results.search("value") + 10;
+					var oEndIndex = results.indexOf("}") - 8;
+					var oMessage = results.substring(oStartIndex,oEndIndex);
+					AppUI5.fErrorLogs("U_APP_OINT/U_APP_INT1","Insert","null","null",oMessage,"Add Draft",this.sUserCode,"null",sBodyRequest);
+					sap.m.MessageToast.show(oMessage);
+				}else{
+					if (results) {
+						sap.m.MessageToast.show("Goods Receipt Has Been Posted!");
+						this.fprepareTable(false,"");
+						this.fClearField();
+						this.oModel.refresh();
+						AppUI5.hideBusyIndicator();
+					}
+				}
 			});
 		}
   });

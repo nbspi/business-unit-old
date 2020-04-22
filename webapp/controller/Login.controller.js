@@ -69,7 +69,9 @@ sap.ui.define([
 					withCredentials: true
 				},
                 error: function (xhr, status, error) {
-                    MessageToast.show("Invalid Credentials");
+                    var Message = xhr.responseJSON["error"].message.value;
+					console.error(JSON.stringify(Message));
+                    MessageToast.show(Message);
                  AppUI5.hideBusyIndicator();
                 },
                 context: this,
@@ -105,7 +107,9 @@ sap.ui.define([
 					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
 			  	},
 				error: function (xhr, status, error) {
-					MessageToast.show(error);
+                    var Message = xhr.responseJSON["error"].message.value;
+					console.error(JSON.stringify(Message));
+					sap.m.MessageToast.show(Message);
 				},
 				success: function (json) {},
 				context: this

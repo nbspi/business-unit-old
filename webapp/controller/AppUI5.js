@@ -455,9 +455,7 @@ sap.ui.define([
 					withCredentials: true
 				},
 				error: function (xhr, status, error) {
-					// var Message = xhr.responseJSON["error"].message.value;			
-					// sap.m.MessageToast.show(Message);
-					// AppUI5.fHideBusyIndicator();
+					console.error("Error on Error Logs");
 				},
 				success: function (json) {
 					//sap.m.MessageToast.show("Success saving Batch: " + BatchCode );
@@ -472,30 +470,6 @@ sap.ui.define([
 			//return returnValue;
 		},
 		//GET BUTTON
-		fGetButtons: function(sDatabase,sModule){
-			var aReturnResult = [];
-			$.ajax({
-				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ sDatabase +"&procName=spAppBankIntegration&QUERYTAG=getButtons" +
-				"&VALUE1="+ sModule +"&VALUE2=&VALUE3=&VALUE4=",
-				type: "GET",
-				async: false,
-				dataType: "json",
-				beforeSend: function (xhr) {
-					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
-				},
-				error: function (xhr, status, error) {
-					var Message = xhr.responseJSON["error"].message.value;			
-					sap.m.MessageToast.show(Message);
-				},
-				success: function (json) {},
-				context: this
-			}).done(function (results) {
-				if (results) {
-					aReturnResult = results;
-				}
-			});
-			return aReturnResult;
-		},
 		fGetButtons: function(sDatabase,sUserCode,sModule){
 			var aReturnResult = [];
 			$.ajax({
@@ -519,7 +493,7 @@ sap.ui.define([
 				}
 			});
 			return aReturnResult;
-		},
+		}
 	
 
 	});

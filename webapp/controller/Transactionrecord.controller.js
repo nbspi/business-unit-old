@@ -23,6 +23,20 @@ sap.ui.define([
 			//USER DATA
 			this.sDataBase = jQuery.sap.storage.Storage.get("dataBase");
 			this.sUserCode = jQuery.sap.storage.Storage.get("userCode");
+
+			//getButtons
+			this.oMdlButtons = new JSONModel();
+			this.oResults = AppUI5.fGetButtons(this.sDataBase,this.sUserCode,"Transactionrecord");
+			var newresult = [];
+				this.oResults.forEach((e)=> {
+					var d = {};
+					d[e.U_ActionDesc] = JSON.parse(e.visible);
+					newresult.push(JSON.parse(JSON.stringify(d)));
+				});
+			var modelresult = JSON.parse("{" + JSON.stringify(newresult).replace(/{/g,"").replace(/}/g,"").replace("[","").replace("]","") + "}");
+			this.oMdlButtons.setJSON("{\"buttons\" : " + JSON.stringify(modelresult) + "}");
+			this.getView().setModel(this.oMdlButtons, "buttons");
+
 			//TO STORED SELECTED ROW
 			this.iSelectedRow = 0;
 
@@ -611,9 +625,8 @@ sap.ui.define([
 
 		},
     ///ON VIEW SHOWING ALL DATA AND CHANGING NAME INTO EDIT
-		onView: function (oEvent) {
-			this.getView().byId("btnSaveDraft").setText("UPDATE DRAFT");
-			this.triggercondition = "UPDATE DRAFT";
+	onProcess: function (oEvent) {
+		
 			var iIndex = this.oTable.getSelectedIndex();
 			var TransNo = "";
 			var TransType = "";
