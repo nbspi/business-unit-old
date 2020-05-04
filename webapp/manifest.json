@@ -125,6 +125,13 @@
 					"target": [
 						"Pendingrequest"
 					]
+				},
+				{
+					"name": "Report",
+					"pattern": "Report",
+					"target": [
+						"Report"
+					]
 				}
 			],
 			"targets": {
@@ -192,6 +199,16 @@
 					"viewPath": "com.apptech.bfi-businessunit.view",
 					"viewType": "XML",
 					"viewName": "Pendingrequest",
+					"parent": "Main",
+					"controlId": "pageContainer",
+					"controlAggregation": "pages",
+					"transition": "slide",
+					"viewLevel": 6
+				},
+				"Report": {
+					"viewPath": "com.apptech.bfi-businessunit.view",
+					"viewType": "XML",
+					"viewName": "Report",
 					"parent": "Main",
 					"controlId": "pageContainer",
 					"controlAggregation": "pages",

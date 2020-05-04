@@ -469,20 +469,158 @@ sap.ui.define([
 			//	this.oModel.getData().EditRecord.DocumentLines.splice(this.oTableDetails.selectedIndeices(), 1);
 			// this.oModel.refresh();
 		},
+
+
+		onAddDraft: function (oEvent){
+			var oIssueBu = this.getView().byId("inputwhsissue").getValue();
+			var oRequestBu = this.getView().byId("inputwhsrequest").getValue();
+			var oRemarks = this.getView().byId("inputremarks").getValue();
+			if(oIssueBu===""){
+				sap.m.MessageToast.show("Please Select Issueing BU");
+			}else if(oRequestBu===""){
+				sap.m.MessageToast.show("Please Select Requesting BU");
+			}else if(oRemarks===""){
+				sap.m.MessageToast.show("Please Enter Remarks");
+			}else{
+				this.fAddRequestDraft();
+			}
+		},
 		onAddRequest: function (oEvent){
 			var oIssueBu = this.getView().byId("inputwhsissue").getValue();
 			var oRequestBu = this.getView().byId("inputwhsrequest").getValue();
 			var oRemarks = this.getView().byId("inputremarks").getValue();
-			if(oIssueBu==="" || oRequestBu==="" || oRemarks===""){
-				sap.m.MessageToast.show("Fill Up All Fields");
+			if(oIssueBu===""){
+				sap.m.MessageToast.show("Please Select Issueing BU");
+			}else if(oRequestBu===""){
+				sap.m.MessageToast.show("Please Select Requesting BU");
+			}else if(oRemarks===""){
+				sap.m.MessageToast.show("Please Enter Remarks");
 			}else{
 				this.fAddRequest();
 			}
 			
 		},
-		////DRAFT Function POSTING ON UDT
-		fAddRequest: function (oEvent) {
+		////ADD REQUEST Function POSTING ON UDT
+		fAddRequestDraft: function (oEvent) {
 			var ostatus ="3";
+			var oDocType = "Request Draft";
+			AppUI5.showBusyIndicator(4000);
+			//GET TRANSACTION NUMBER
+			var sGeneratedTransNo = "";
+			var TransType = this.oModel.getData().EditRecord.TransType;
+			$.ajax({
+				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getTransactionNumber&value1&value2&value3&value4",
+				type: "GET",
+				async: false,
+				datatype:"json",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
+			  	},
+				error: function (xhr, status, error) {
+					var Message = xhr.responseJSON["error"].message.value;
+					console.error(JSON.stringify(Message));
+					sap.m.MessageToast.show(Message);
+					AppUI5.hideBusyIndicator();
+				},
+				success: function (json) {
+			
+				},
+				context: this
+			}).done(function (results) {
+				if (results) {
+					sGeneratedTransNo = results[0][""];
+				}
+			});
+			///GET GENERATED CODE FROM SP
+			var CodeH = AppUI5.generateUDTCode("GetCode");
+			var oBusiness_Unit = {};
+			var oBusiness_Unit_Details = {};
+			///INITIALIZE VARIABLES FOR DRAFT POSTING
+			oBusiness_Unit.Code = CodeH; //"200407095347.79702";
+			oBusiness_Unit.Name = CodeH; //"200407095347.79702";
+			oBusiness_Unit.U_APP_TransType = TransType;
+			oBusiness_Unit.U_APP_TransNo = sGeneratedTransNo;
+			oBusiness_Unit.U_APP_TransDate = this.getTodaysDate();
+			//oBusiness_Unit.U_APP_CardCode = this.oModel.getData().EditRecord.BPCode;
+			oBusiness_Unit.U_APP_PostingDate = this.oModel.getData().EditRecord.PostingDate;
+			oBusiness_Unit.U_APP_MarkupType = this.oModel.getData().EditRecord.MarkupType;
+			oBusiness_Unit.U_APP_IssueBU = this.oModel.getData().EditRecord.IssueBU;
+			oBusiness_Unit.U_APP_ReceivingBU = this.oModel.getData().EditRecord.ReceiveBU;
+			oBusiness_Unit.U_APP_Remarks = this.oModel.getData().EditRecord.Remarks;
+			oBusiness_Unit.U_APP_Status = ostatus;
+			oBusiness_Unit.U_APP_DocType = oDocType;
+			///HEADER BATCH Array
+			var batchArray = [
+				//directly insert data if data is single row per table 
+				{
+					"tableName": "U_APP_OINT",
+					"data": oBusiness_Unit
+				}
+			];
+
+			var d;
+			var code = "";
+			for (d = 0; d < this.oModel.getData().EditRecord.DocumentLines.length; d++) {
+				code = AppUI5.generateUDTCode("GetCode");
+				oBusiness_Unit_Details.Code = code;
+				oBusiness_Unit_Details.Name = code;
+				oBusiness_Unit_Details.U_APP_ItemNum = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
+				oBusiness_Unit_Details.U_APP_Description = this.oModel.getData().EditRecord.DocumentLines[d].Description;
+				oBusiness_Unit_Details.U_APP_Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
+				oBusiness_Unit_Details.U_APP_CostProd = this.oModel.getData().EditRecord.DocumentLines[d].CostProd;
+				oBusiness_Unit_Details.U_APP_MarkUp = this.oModel.getData().EditRecord.DocumentLines[d].MarkupPrice;
+				oBusiness_Unit_Details.U_APP_TransferPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
+				oBusiness_Unit_Details.U_APP_MarketPrice = this.oModel.getData().EditRecord.DocumentLines[d].MarketPrice;
+				oBusiness_Unit_Details.U_APP_TransNo = sGeneratedTransNo;
+				oBusiness_Unit_Details.U_APP_TransType = TransType;
+				//oBusiness_Unit_Details.APP_TransNo = this.getView().byId("TransNo").getValue();
+				batchArray.push(JSON.parse(JSON.stringify(({
+					"tableName": "U_APP_INT1",
+					"data": oBusiness_Unit_Details //this.generateUDTCode();
+				}))));
+			}
+			//BATCH FORMATING
+			var sBodyRequest = AppUI5.prepareBatchRequestBody(batchArray);
+		////BATCH POSTING FOR DRAFT
+			$.ajax({
+				url: "https://18.136.35.41:50000/b1s/v1/$batch",
+				type: "POST",
+				contentType: "multipart/mixed;boundary=a",
+				data: sBodyRequest,
+				xhrFields: {
+					withCredentials: true
+				},
+				error: function (xhr, status, error) {
+					var Message = xhr.responseJSON["error"].message.value;
+					console.error(JSON.stringify(Message));
+					sap.m.MessageToast.show(Message);
+					sap.m.MessageToast.show(xhr.responseText);
+				},
+				success: function (json) {
+				
+				},
+				context: this
+			}).done(function (results) {
+				if(JSON.stringify(results).search("400 Bad") !== -1) {
+					var oStartIndex = results.search("value") + 10;
+					var oEndIndex = results.indexOf("}") - 8;
+					var oMessage = results.substring(oStartIndex,oEndIndex);
+					AppUI5.fErrorLogs("U_APP_OINT/U_APP_INT1","Add Draft","1","1",oMessage,"Insert",this.sUserCode,"1");
+					sap.m.MessageToast.show(oMessage);
+				}else{
+					if (results) {
+						sap.m.MessageToast.show("Request Draft Has Been Created");
+						//this.fprepareTable(false,"");
+						this.fClearField();
+						this.oModel.refresh();
+						AppUI5.hideBusyIndicator();
+					}
+				}
+			});
+		},
+		////ADD REQUEST Function POSTING ON UDT
+		fAddRequest: function (oEvent) {
+			var ostatus ="4";
 			var oDocType = "Request";
 			AppUI5.showBusyIndicator(4000);
 			//GET TRANSACTION NUMBER

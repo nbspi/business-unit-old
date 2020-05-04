@@ -34,7 +34,7 @@
 										<Toolbar>
 											<content>
 												<!-- <Button text="ADD" id="btnOnAdd" tooltip="ADD" press="onAddMode" icon="sap-icon://add"/> -->
-												<Button text="PROCESS" id="btnOnView" tooltip="PROCESS" visible="{buttons>/buttons/btnOnView}" press="onProcess" icon="sap-icon://edit"/>
+												<Button text="VIEW" id="btnOnView" tooltip="PROCESS" visible="{buttons>/buttons/btnOnView}" press="onProcess" icon="sap-icon://edit"/>
 												<ToolbarSpacer/>
 											</content>
 										</Toolbar>

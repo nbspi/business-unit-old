@@ -50,6 +50,13 @@
 }, {
     "key": "2",
     "value": "Amount"
-}]
+}],
+    "TableData" : {
+        "U_APP_TransNo" : "",
+        "U_APP_TransType" : "",
+        "U_APP_PostingDate" : "",
+        "U_APP_Remarks" : "",
+        "U_APP_DocType" : ""
+    }
 
 }

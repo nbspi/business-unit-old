@@ -26,7 +26,7 @@
 									<t:extension>
 										<Toolbar>
 											<content>
-												<Button text="PROCESS" id="btnView" tooltip="PROCESS" visible="{buttons>/buttons/btnView}" press="onView" icon="sap-icon://edit"/>
+												<Button text="VIEW" id="btnView" tooltip="PROCESS" visible="{buttons>/buttons/btnView}" press="onView" icon="sap-icon://edit"/>
 												<ToolbarSpacer/>
 											</content>
 										</Toolbar>

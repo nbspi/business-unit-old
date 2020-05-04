@@ -100,6 +100,9 @@ sap.ui.define([
 			case "Pendingrequest":
 			this.router.navTo("Pendingrequest");
 			break;
+			case "Report":
+			this.router.navTo("Report");
+			break;
 			default:
 
 			}

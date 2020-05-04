@@ -69,6 +69,10 @@ sap.ui.define([
     var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
     return date;
   },
+  onTransTypeFilter : function(oEvent){
+    this.fprepareTable("",0);
+    this.oMdlAllRecord.refresh();
+  },
   ///On Clear Fields Function
   fClearField: function () {
     try {

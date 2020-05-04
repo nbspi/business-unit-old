@@ -20,6 +20,13 @@
 										<l:GridData span="L3 M4 S12"/>
 									</layoutData>
 								</Select>
+								<SegmentedButton id="TranStatus" selectionChange="onSelectionChange">
+									<items>
+										<SegmentedButtonItem text="DRAFT" key="3"/>
+										<SegmentedButtonItem text="POSTED" key="4"/>
+										<SegmentedButtonItem text="CANCELLED" key="5"/>
+									</items>
+								</SegmentedButton>
 										
 								<t:Table id="tblRecords" selectionMode="Multi" visibleRowCount="8" ariaLabelledBy="title" enableCellFilter="true"
 									rowSelectionChange="onSelectionChange">

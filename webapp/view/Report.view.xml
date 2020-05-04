@@ -1,0 +1,16 @@
+ <mvc:View controllerName="com.apptech.bfi-businessunit.controller.Report" xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:uxap="sap.uxap" xmlns:f="sap.ui.layout.form"
+	 xmlns:l="sap.ui.layout" xmlns:tnt="sap.tnt"
+	xmlns:html="http://www.w3.org/1999/xhtml" xmlns:t="sap.ui.table">
+	<App id="idAppControl">
+		<pages>
+			<Page title="REPORT">
+				<content>
+				<t:Table id="my-table" selectionMode="Single" visibleRowCount="8" ariaLabelledBy="title" enableCellFilter="true"
+					rowSelectionChange="onSelectionChange">
+					
+				</t:Table>
+				</content>
+			</Page>
+		</pages>
+	</App>
+</mvc:View> 

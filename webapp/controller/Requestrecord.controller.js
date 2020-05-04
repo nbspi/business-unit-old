@@ -11,8 +11,8 @@ sap.ui.define([
   return Controller.extend("com.apptech.bfi-businessunit.controller.Requestrecord", {
     onRoutePatternMatched: function(event){
       this.fClearField();
-      this.fprepareTable(false,"");
-      this.oModel.refresh();
+      this.fprepareTable(true,"");
+      this.oMdlAllRecord.refresh();
       },
     onInit: function () {
       ///ON LOAD
@@ -65,6 +65,20 @@ sap.ui.define([
     var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
     return date;
   },
+  onTransTypeFilter : function(oEvent){
+    this.fprepareTable("",0);
+    this.oMdlAllRecord.refresh();
+  },
+  onSelectionChange: function (oEvent) {
+    // var oTranstypefilter = this.getView().byId("transfilter").getSelectedKey();
+    // var oStatus = this.getView().byId("TranStatus").getSelectedKey();
+    if(this.oMdlAllRecord.oData.columns.length ===0){
+      this.fprepareTable(true,0);
+    }else{this.fprepareTable(false,0);}
+    //this.fprepareTable(false,0);
+    this.oMdlAllRecord.refresh();
+    
+  },
   ///On Clear Fields Function
   fClearField: function () {
     try {
@@ -96,8 +110,8 @@ sap.ui.define([
     this.oTable.getColumns()[4].setLabel("Doc Type");
     this.oTable.getColumns()[4].setFilterProperty("U_APP_Doctype");
   },
-  //Preparing table
   fprepareTable: function (bIsInit,transType) {
+    var oTransTatus = this.getView().byId("TranStatus").getSelectedKey();
     if (transType === ""){
       var transtypefilter = "1";
     }else{
@@ -106,9 +120,9 @@ sap.ui.define([
 
 
     if (transtypefilter === ""){
-      var aResults = this.fgetAllTransaction(transtypefilter);
+      var aResults = this.fgetAllTransaction(transtypefilter,oTransTatus);
     }else{
-      var aResults = this.fgetAllTransaction(transtypefilter);
+      var aResults = this.fgetAllTransaction(transtypefilter,oTransTatus);
     }
   
     if (aResults.length !== 0) {
@@ -142,7 +156,10 @@ sap.ui.define([
         this.oTable.bindRows("/rows");
         this.oTable.setSelectionMode("Single");
         this.oTable.setSelectionBehavior("Row");
-        this.frenameColumns();
+        if(this.oMdlAllRecord.oData.columns.length !== 0){
+          this.frenameColumns();
+        }
+        
       }
     }else{
       // var table = this.getView().byId(this.tableId)
@@ -158,8 +175,9 @@ sap.ui.define([
     }
   },
     ///GETTING ALL THE THE TRANSACTION DATA/S
-  fgetAllTransaction: function (transtypefilter) {
+  fgetAllTransaction: function (transtypefilter,oTransTatus) {
     var value1 = transtypefilter;
+    var value2 = oTransTatus;
     var aReturnResult = [];
     // var urltag = "";
     // if (value1 ===""){
@@ -169,7 +187,7 @@ sap.ui.define([
     
     // }
     $.ajax({
-      url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&QUERYTAG=getAllPendingRequest&VALUE1="+ value1 +"&VALUE2=1&VALUE3=&VALUE4=",
+      url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&QUERYTAG=getAllFilteredRequest&VALUE1="+ value1 +"&VALUE2="+ value2 +"&VALUE3=&VALUE4=",
       type: "GET",
       async: false,
       datatype:"json",
@@ -178,7 +196,8 @@ sap.ui.define([
         },
       error: function (xhr, status, error) {
         aReturnResult = [];
-        console.error(JSON.stringify(xhr));
+        var Message = xhr.responseJSON["error"].message.value;
+					console.error(JSON.stringify(Message));
         sap.m.MessageToast.show(error);
       },
       success: function (json) {},
@@ -322,7 +341,7 @@ sap.ui.define([
   },
   	////UPDATE  POSTED
 		onCancel: function () {
-      var ostatus ="4";
+      var ostatus ="5";
       var oDocType ="Cancelled";
 			var TransNo = this.oModel.getData().EditRecord.TransNo;
 			var TransType = this.oModel.getData().EditRecord.TransType;
