@@ -143,10 +143,30 @@ sap.ui.define([
 			}else{
 				var transtypefilter = this.getView().byId("transfilter").getSelectedKey();
 			}
+			///FOR ENHANCEMENT
+			var aResults;
 			if (transtypefilter === ""){
 				var aResults = this.fgetAllTransaction(transtypefilter,oTransTatus);
+				if(aResults.length ===0){
+					aResults = [{
+					  "U_APP_TransNo" : "",
+					  "U_APP_TransType" : "",
+					  "U_APP_PostingDate" : "",
+					  "U_APP_Remarks" : "",
+					  "U_APP_DocType" : ""
+					}];
+				  }
 			}else{
 				var aResults = this.fgetAllTransaction(transtypefilter,oTransTatus);
+				if(aResults.length ===0){
+					aResults = [{
+					  "U_APP_TransNo" : "",
+					  "U_APP_TransType" : "",
+					  "U_APP_PostingDate" : "",
+					  "U_APP_Remarks" : "",
+					  "U_APP_DocType" : ""
+					}];
+				  }
 			}
 		
 			if (aResults.length !== 0) {

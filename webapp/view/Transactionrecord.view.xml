@@ -24,7 +24,7 @@
 							<items>
 								<SegmentedButtonItem text="DRAFT" key="0"/>
 								<SegmentedButtonItem text="POSTED" key="2"/>
-								<SegmentedButtonItem text="CANCELLED" key="4"/>
+								<SegmentedButtonItem text="CANCELLED" key="5"/>
 							</items>
 						</SegmentedButton>
 						

@@ -13,9 +13,9 @@ sap.ui.define([
     _data: {
 			"date": new Date()
 		},
-		onRoutePatternMatched: function (event) {
-			document.title = "BFI Business Unit Transfer";
-		},
+		// onRoutePatternMatched: function (event) {
+		// 	document.title = "BFI Business Unit Transfer";
+		// },
 		onInit: function () {
 			//USER DATA
 			this.sDataBase = jQuery.sap.storage.Storage.get("dataBase");
@@ -265,7 +265,6 @@ sap.ui.define([
 	// 		this.getView().byId("inputbpcode").setEnabled(true);
 
 	// 	},
-
 		// ADD ROWS ON TABLE
 		onAddRow: function (oEvent) {
 			var oitemdetails = {};
@@ -278,7 +277,7 @@ sap.ui.define([
 			oitemdetails.MarketPrice = "";
 			var transtype = this.getView().byId("TransID").getSelectedKey();
 			var issueBU = this.oModel.getData().EditRecord.IssueBU;
-			if (transtype === "") {
+			if (transtype === "0") {
 				sap.m.MessageToast.show("Please Select Transaction Type.");
 			} else {
 					if (transtype === "1") {
@@ -364,6 +363,10 @@ sap.ui.define([
 			//GET TRANSACTION NUMBER
 			var sGeneratedTransNo = "";
 			var TransType = this.oModel.getData().EditRecord.TransType;
+
+
+
+			
 			$.ajax({
 				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getTransactionNumber&value1&value2&value3&value4",
 				type: "GET",
@@ -1105,6 +1108,7 @@ sap.ui.define([
 				type: "POST",
 				data: JSON.stringify(oGoodsIssue),
 				crossDomain: true,
+				async: false,
                 xhrFields: {
 					withCredentials: true
 				},
@@ -1115,7 +1119,6 @@ sap.ui.define([
 					sap.m.MessageToast.show(Message);
 				},
 				success: function (json) {
-					this.fprepareTable(false,"");
 					this.fClearField();
 					this.oModel.refresh();
 					AppUI5.hideBusyIndicator();
@@ -1141,21 +1144,19 @@ sap.ui.define([
 						type: "POST",
 						data: JSON.stringify(oInvoice),
 						crossDomain: true,
+						async: false,
 						xhrFields: {
 							withCredentials: true
 						},
 						error: function (xhr, status, error) {
 							var Message = xhr.responseJSON["error"].message.value;
 							AppUI5.fErrorLogs("OINV","Insert","null","null",Message,"Bu to Cash Sale",this.sUserCode,"null",JSON.stringify(oInvoice));
-							
 							console.error(JSON.stringify(Message));
 							sap.m.MessageToast.show(Message);
 							
 						},
 						success: function (json) {
 							//this.oPage.setBusy(false);
-							
-							this.fprepareTable(false,"");
 							this.fClearField();
 							this.oModel.refresh();
 							AppUI5.hideBusyIndicator();
@@ -1184,6 +1185,7 @@ sap.ui.define([
 									url: "https://18.136.35.41:50000/b1s/v1/IncomingPayments",
 									type: "POST",
 									data: JSON.stringify(oIncomingPayment),
+									async: false,
 									xhrFields: {
 										withCredentials: true
 									},
@@ -1196,11 +1198,9 @@ sap.ui.define([
 									success: function (json) {
 										//this.oPage.setBusy(false);
 										sap.m.MessageToast.show("Successfully Added");
-										this.fprepareTable(false,"");
 										this.fClearField();
 										this.oModel.refresh();
 										AppUI5.hideBusyIndicator();
-			
 									},
 									context: this
 			
@@ -1245,9 +1245,6 @@ sap.ui.define([
 					
 				},
 				success: function (json) {
-					//this.oPage.setBusy(false);
-					///sap.m.MessageToast.show("Posting of Goods Issue is Successful");
-					this.fprepareTable(false,"");
 					this.fClearField();
 					this.oModel.refresh();
 					AppUI5.hideBusyIndicator();
@@ -1384,9 +1381,6 @@ sap.ui.define([
 					
 				},
 				success: function (json) {
-					//this.oPage.setBusy(false);
-					///sap.m.MessageToast.show("Posting of Goods Issue is Successful");
-					this.fprepareTable(false,"");
 					this.fClearField();
 					this.oModel.refresh();
 					AppUI5.hideBusyIndicator();
@@ -1400,10 +1394,6 @@ sap.ui.define([
 					oInvoice.CardCode = ocardcode;
 					oInvoice.DocType ="dDocument_Service";
 					oInvoice.DocumentLines = [];
-					
-					
-				
-					
 					///HARD CODED ACCOUNT CODE FOR TESTING
 					oInvoiceHeader.ItemDescription ="Testing";
 					oInvoiceHeader.AccountCode ="102020";
@@ -1706,7 +1696,6 @@ sap.ui.define([
 					"tableName": "U_APP_OINT",
 					"data": oBusiness_Unit
 				};
-
 			var d;
 			var code = "";
 			var batchArray = [];

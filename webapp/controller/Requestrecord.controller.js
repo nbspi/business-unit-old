@@ -11,7 +11,7 @@ sap.ui.define([
   return Controller.extend("com.apptech.bfi-businessunit.controller.Requestrecord", {
     onRoutePatternMatched: function(event){
       this.fClearField();
-      this.fprepareTable(true,"");
+      this.fprepareTable(false,0);
       this.oMdlAllRecord.refresh();
       },
     onInit: function () {
@@ -66,18 +66,14 @@ sap.ui.define([
     return date;
   },
   onTransTypeFilter : function(oEvent){
-    this.fprepareTable("",0);
+    this.fprepareTable(false,0);
     this.oMdlAllRecord.refresh();
   },
   onSelectionChange: function (oEvent) {
     // var oTranstypefilter = this.getView().byId("transfilter").getSelectedKey();
     // var oStatus = this.getView().byId("TranStatus").getSelectedKey();
-    if(this.oMdlAllRecord.oData.columns.length ===0){
-      this.fprepareTable(true,0);
-    }else{this.fprepareTable(false,0);}
-    //this.fprepareTable(false,0);
+    this.fprepareTable(false,0);
     this.oMdlAllRecord.refresh();
-    
   },
   ///On Clear Fields Function
   fClearField: function () {
@@ -117,14 +113,30 @@ sap.ui.define([
     }else{
       var transtypefilter = this.getView().byId("transfilter").getSelectedKey();
     }
-
-
+    var aResults;
     if (transtypefilter === ""){
-      var aResults = this.fgetAllTransaction(transtypefilter,oTransTatus);
+      aResults = this.fgetAllTransaction(transtypefilter,oTransTatus);
+      if(aResults.length ===0){
+        aResults = [{
+          "U_APP_TransNo" : "",
+          "U_APP_TransType" : "",
+          "U_APP_PostingDate" : "",
+          "U_APP_Remarks" : "",
+          "U_APP_DocType" : ""
+        }];
+      }
     }else{
-      var aResults = this.fgetAllTransaction(transtypefilter,oTransTatus);
+      aResults = this.fgetAllTransaction(transtypefilter,oTransTatus);
+      if(aResults.length ===0){
+        aResults = [{
+          "U_APP_TransNo" : "",
+          "U_APP_TransType" : "",
+          "U_APP_PostingDate" : "",
+          "U_APP_Remarks" : "",
+          "U_APP_DocType" : ""
+        }];
+      }
     }
-  
     if (aResults.length !== 0) {
       this.aCols = Object.keys(aResults[0]);
       var i;
@@ -156,11 +168,8 @@ sap.ui.define([
         this.oTable.bindRows("/rows");
         this.oTable.setSelectionMode("Single");
         this.oTable.setSelectionBehavior("Row");
-        if(this.oMdlAllRecord.oData.columns.length !== 0){
-          this.frenameColumns();
-        }
-        
-      }
+        this.frenameColumns();
+       }
     }else{
       // var table = this.getView().byId(this.tableId)
       // table.removeColumn();

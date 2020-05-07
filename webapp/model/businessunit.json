@@ -16,21 +16,7 @@
 		"BPCodeDisabled": true,
 		"BPNameDisabled": true,
 		"ReceiveBUDisabled": true,
-		"DocumentLines": [{
-			"ItemNum": "",
-			"Description": "",
-			"Quantity": 0,
-			"CostProd": 0,
-			"MarkupPrice": 0,
-			"TransferPrice": 0,
-			"MarketPrice": 0,
-			"TransNo": "",
-			"CostProdEnable": true,
-			"MarkupPriceEnable": true,
-			"TransferPriceEnable": true,
-			"MarketPriceEnable": false,
-			"DescriptionEnable": false
-		}]
+		"DocumentLines": []
 	},
 	"AllItems": [{
 		"ItemCode": "",
