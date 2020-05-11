@@ -503,33 +503,57 @@ sap.ui.define([
 			var transtype = this.getView().byId("TransID").getSelectedKey();
 			if (transtype === "1") {
 				this.getView().byId("inputbpcode").setValue("");
+				this.getView().byId("inputwhsreceive").setValue("");
 				this.getView().byId("inputbpcode").setEnabled(false);
+				this.getView().byId("inputwhsissue").setEnabled(true);
 				this.getView().byId("inputwhsreceive").setEnabled(true);
 				this.getView().byId("inputmarkuptype").setEnabled(false);
+				this.oModel.getData().EditRecord.DocumentLines.length = 0;
+				this.oModel.refresh();
 			} else if (transtype === "2") {
+				this.getView().byId("inputwhsreceive").setValue("");
 				this.getView().byId("inputbpcode").setEnabled(true);
+				this.getView().byId("inputwhsissue").setEnabled(true);
 				this.getView().byId("inputwhsreceive").setEnabled(false);
 				this.getView().byId("inputmarkuptype").setEnabled(false);
+				this.oModel.getData().EditRecord.DocumentLines.length = 0;
+				this.oModel.refresh();
 			} else if (transtype === "3") {
+				this.getView().byId("inputwhsreceive").setValue("");
 				this.getView().byId("inputbpcode").setEnabled(true);
+				this.getView().byId("inputwhsissue").setEnabled(true);
 				this.getView().byId("inputwhsreceive").setEnabled(false);
 				this.getView().byId("inputmarkuptype").setEnabled(false);
+				this.oModel.getData().EditRecord.DocumentLines.length = 0;
+				this.oModel.refresh();
 			} else if (transtype === "4") {
 				this.getView().byId("inputbpcode").setValue("");
+				this.getView().byId("inputwhsreceive").setValue("");
 				this.getView().byId("inputbpcode").setEnabled(false);
+				this.getView().byId("inputwhsissue").setEnabled(true);
 				this.getView().byId("inputwhsreceive").setEnabled(false);
 				this.getView().byId("inputmarkuptype").setEnabled(false);
+				this.oModel.getData().EditRecord.DocumentLines.length = 0;
+				this.oModel.refresh();
 			}else if (transtype === "5") {
 				this.getView().byId("inputbpcode").setValue("");
+				this.getView().byId("inputwhsreceive").setValue("");
 				this.getView().byId("inputbpcode").setEnabled(true);
+				this.getView().byId("inputwhsissue").setEnabled(true);
 				this.getView().byId("inputwhsreceive").setEnabled(false);
 				this.getView().byId("inputmarkuptype").setEnabled(true);
+				this.oModel.getData().EditRecord.DocumentLines.length = 0;
+				this.oModel.refresh();
 			}else if (transtype === "6") {
 				this.getView().byId("inputbpcode").setValue("");
+				this.getView().byId("inputwhsissue").setValue("");
+				this.getView().byId("inputwhsreceive").setValue("");
 				this.getView().byId("inputbpcode").setEnabled(true);
 				this.getView().byId("inputwhsissue").setEnabled(false);
 				this.getView().byId("inputwhsreceive").setEnabled(true);
 				this.getView().byId("inputmarkuptype").setEnabled(true);
+				this.oModel.getData().EditRecord.DocumentLines.length = 0;
+				this.oModel.refresh();
 			} else {
 				this.getView().byId("inputbpcode").setEnabled(true);
 				this.getView().byId("inputwhsreceive").setEnabled(true);
@@ -789,6 +813,8 @@ sap.ui.define([
 		//Closing selection on Item
 		handleValueHelpCloseItem: function (oEvent) {
 			var transtype = this.oModel.getData().EditRecord.TransType;
+			var issuebu = this.oModel.getData().EditRecord.IssueBU;
+			var receivebu = this.oModel.getData().EditRecord.ReceiveBU;
 			var aContexts = oEvent.getParameter("selectedContexts");
 			var ItemDetails = {};
 			if (aContexts && aContexts.length) {
@@ -803,9 +829,14 @@ sap.ui.define([
 			oEvent.getSource().getBinding("items").filter([]);
 			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].ItemNum = ItemDetails[0].ItemCode;
 			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].Description = ItemDetails[0].ItemName;
-			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].CostProd = this.f_getAveragePrice(ItemDetails[0].ItemCode);
+			if(transtype === "6"){
+				var oCostToProduce =this.f_getAveragePrice(ItemDetails[0].ItemCode,receivebu);
+				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].CostProd = this.f_getAveragePrice(ItemDetails[0].ItemCode,receivebu);
+			}else{
+				var oCostToProduce =this.f_getAveragePrice(ItemDetails[0].ItemCode,issuebu);
+				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].CostProd = this.f_getAveragePrice(ItemDetails[0].ItemCode,issuebu);
+			}
 			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].MarketPrice = this.f_getMarketPrice(ItemDetails[0].ItemCode);
-			var oCostToProduce =this.f_getAveragePrice(ItemDetails[0].ItemCode);
 			var oMarketPrice = this.f_getMarketPrice(ItemDetails[0].ItemCode);
 			
 			if (transtype === "1") {
@@ -860,13 +891,12 @@ sap.ui.define([
 
 		},
 
-		f_getAveragePrice: function (ItemCode) {
+		f_getAveragePrice: function (ItemCode,WareHouse) {
 			//GET MARKET PRICE
-			var issuebu = this.oModel.getData().EditRecord.IssueBU;
 			var iReturnAveragePrice = 0;
 			$.ajax({
 				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getAveragePrice&value1=" + ItemCode +
-					"&value2=" + issuebu + "&value3&value4",
+					"&value2=" + WareHouse + "&value3&value4",
 				type: "GET",
 				async: false,
 				datatype:"json",

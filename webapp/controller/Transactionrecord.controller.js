@@ -702,9 +702,14 @@ sap.ui.define([
 					this.oModel.getData().EditRecord.MarkupType = results[0].MarkupType;
 					this.oModel.getData().EditRecord.IssueBU = results[0].IssueBU;
 					this.oModel.getData().EditRecord.ReceiveBU = results[0].ReceiveBU;
+					var oDocStatus=results[0].Status;
 					this.oModel.getData().EditRecord.Remarks = results[0].Remarks;
-
-					// this.oModel.setJSON("{\"EditRecord\" : " + oResult + "}");
+					// Disable Add Button if Status is Posted/
+					if(oDocStatus==="2" || oDocStatus==="5"){
+						this.getView().byId("btnAddRecords").setEnabled(false);
+					}else{
+						this.getView().byId("btnAddRecords").setEnabled(true);
+					}
 
 					var transtype = this.oModel.getData().EditRecord.TransType = results[0].TransType;
 					if (transtype === "1") {
