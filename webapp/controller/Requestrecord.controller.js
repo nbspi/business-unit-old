@@ -282,8 +282,13 @@ sap.ui.define([
         // Disable Add Button if Status is Posted/Cancelled
         if(oDocStatus==="4" || oDocStatus==="5"){
           this.getView().byId("btnCancel").setEnabled(false);
+          this.getView().byId("btnSendToRequest").setEnabled(false);
+        }else if(oDocStatus==="3"){
+          this.getView().byId("btnCancel").setEnabled(true);
+          this.getView().byId("btnSendToRequest").setEnabled(true);
         }else{
           this.getView().byId("btnCancel").setEnabled(true);
+          this.getView().byId("btnSendToRequest").setEnabled(true);
         }
 
         //disable textfield depends on transaction type
@@ -355,7 +360,7 @@ sap.ui.define([
     return batchRequest;
 
   },
-  	////UPDATE  POSTED
+  	////CANCELL  POSTED
 		onCancel: function () {
       var ostatus ="5";
       var oDocType ="Cancelled";
@@ -422,7 +427,75 @@ sap.ui.define([
 				}
 				
 			});
-		}
+    },
+    ////UPDATE  POSTED
+		onSendToRequest: function () {
+      var ostatus ="4";
+      var oDocType ="Request";
+			var TransNo = this.oModel.getData().EditRecord.TransNo;
+			var TransType = this.oModel.getData().EditRecord.TransType;
+			//INITIALIZE FOR UPDATE
+			var getcode = this.code;
+			var oBusiness_Unit = {};
+			oBusiness_Unit.Code = getcode;
+			oBusiness_Unit.Name = getcode;
+			oBusiness_Unit.U_APP_TransType = TransType;
+			oBusiness_Unit.U_APP_TransNo = TransNo;
+			oBusiness_Unit.U_APP_TransDate = this.fgetTodaysDate();
+			oBusiness_Unit.U_APP_CardCode = this.oModel.getData().EditRecord.BPCode;
+			oBusiness_Unit.U_APP_CustomerName = this.oModel.getData().EditRecord.BPName;
+			oBusiness_Unit.U_APP_PostingDate = this.oModel.getData().EditRecord.PostingDate;
+			oBusiness_Unit.U_APP_MarkupType = this.oModel.getData().EditRecord.MarkupType;
+			oBusiness_Unit.U_APP_IssueBU = this.oModel.getData().EditRecord.IssueBU;
+			oBusiness_Unit.U_APP_ReceivingBU = this.oModel.getData().EditRecord.ReceiveBU;
+			oBusiness_Unit.U_APP_Remarks = this.oModel.getData().EditRecord.Remarks;
+      oBusiness_Unit.U_APP_Status = ostatus;
+      oBusiness_Unit.U_APP_DocType = oDocType;
+			oBusiness_Unit.U_APP_ReceivedBy = this.sUserCode;
+			///HEADER BATCH
+			var BatchHeader =
+				//directly insert data if data is single row per table 
+				{
+					"tableName": "U_APP_OINT",
+					"data": oBusiness_Unit
+				};
+			var sBodyRequest = this.fprepareUpdatePostedRequestBody(BatchHeader, getcode);
+			$.ajax({
+				url: "https://18.136.35.41:50000/b1s/v1/$batch",
+				type: "POST",
+				contentType: "multipart/mixed;boundary=a",
+				data: sBodyRequest,
+				xhrFields: {
+					withCredentials: true
+				},
+				error: function (xhr, status, error) {
+          var Message = xhr.responseJSON["error"].message.value;
+          console.error(JSON.stringify(Message));
+					sap.m.MessageToast.show(Message);
+				},
+				success: function (json) {
+				
+				},
+				context: this
+			}).done(function (results) {
+				if(JSON.stringify(results).search("400 Bad") !== -1) {
+					var oStartIndex = results.search("value") + 10;
+					var oEndIndex = results.indexOf("}") - 8;
+					var oMessage = results.substring(oStartIndex,oEndIndex);
+					AppUI5.fErrorLogs("U_APP_OINT/U_APP_INT1","Update",TransNo,"null",oMessage,"Update",this.sUserCode,"null",sBodyRequest);
+					sap.m.MessageToast.show(oMessage);
+				}else{
+					if (results) {
+						sap.m.MessageToast.show("Request Has Been Sent!");
+						this.fprepareTable(false,"");
+						this.fClearField();
+						this.oModel.refresh();
+					
+					}
+				}
+				
+			});
+    }
   
   
   });

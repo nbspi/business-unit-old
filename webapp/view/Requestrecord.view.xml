@@ -46,7 +46,7 @@
 								<!--<Button text="Export File" tooltip="Export" press="handleExcelExport"/>-->
 									<Toolbar>
 											<content>
-												<!-- <Button text="ADD DRAFT" id="SaveDraft" tooltip="ADD DRAFT" press="onAddDraft" icon="sap-icon://add"/> -->
+												<Button text="Send Request" id="btnSendToRequest" tooltip="ADD DRAFT" press="onSendToRequest" icon="sap-icon://add"/>
 												<Button text="CANCEL" id="btnCancel" tooltip="CANCEL" visible="{buttons>/buttons/btnCancel}" press="onCancel" icon="sap-icon://sys-cancel-2"/>
 												<ToolbarSpacer/>
 											</content>
