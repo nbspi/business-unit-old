@@ -66,13 +66,13 @@ sap.ui.define([
     return date;
   },
   onTransTypeFilter : function(oEvent){
-    this.fprepareTable(false,0);
+    this.fprepareTable("",0);
     this.oMdlAllRecord.refresh();
   },
   onSelectionChange: function (oEvent) {
     // var oTranstypefilter = this.getView().byId("transfilter").getSelectedKey();
     // var oStatus = this.getView().byId("TranStatus").getSelectedKey();
-    this.fprepareTable(false,0);
+    this.fprepareTable("",0);
     this.oMdlAllRecord.refresh();
   },
   ///On Clear Fields Function
@@ -277,9 +277,16 @@ sap.ui.define([
         this.oModel.getData().EditRecord.IssueBU = results[0].IssueBU;
         this.oModel.getData().EditRecord.ReceiveBU = results[0].ReceiveBU;
         this.oModel.getData().EditRecord.Remarks = results[0].Remarks;
+        var oDocStatus=results[0].Status;
         this.oModel.getData().EditRecord.ReceivedBy = this.sUserCode;
-        // this.oModel.setJSON("{\"EditRecord\" : " + oResult + "}");
+        // Disable Add Button if Status is Posted/Cancelled
+        if(oDocStatus==="4" || oDocStatus==="5"){
+          this.getView().byId("btnCancel").setEnabled(false);
+        }else{
+          this.getView().byId("btnCancel").setEnabled(true);
+        }
 
+        //disable textfield depends on transaction type
         var transtype = this.oModel.getData().EditRecord.TransType = results[0].TransType;
         if (transtype === "1") {
           this.getView().byId("inputwhsreceive").setEnabled(true);

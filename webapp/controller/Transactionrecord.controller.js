@@ -704,7 +704,7 @@ sap.ui.define([
 					this.oModel.getData().EditRecord.ReceiveBU = results[0].ReceiveBU;
 					var oDocStatus=results[0].Status;
 					this.oModel.getData().EditRecord.Remarks = results[0].Remarks;
-					// Disable Add Button if Status is Posted/
+					// Disable Add Button if Status is Posted/Cancelled
 					if(oDocStatus==="2" || oDocStatus==="5"){
 						this.getView().byId("btnAddRecords").setEnabled(false);
 					}else{
