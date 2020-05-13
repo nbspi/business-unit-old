@@ -100,6 +100,8 @@ sap.ui.define([
 			this.oIconTab = this.getView().byId("tab1");
 			this.oMdlAllRecord = new JSONModel();
 			this.tableId = "tblDrafts";
+			this.oIssueBu = "";
+			this.oReceiveBu= "";
 			this.fprepareTable(true,"");
 			
 
@@ -522,7 +524,8 @@ sap.ui.define([
 				});
 			}
 			oEvent.getSource().getBinding("items").filter([]);
-			this.getView().byId("inputwhsissue").setValue(CardDetails[0].WhsCode);
+			this.getView().byId("inputwhsissue").setValue(CardDetails[0].WhsName);
+			this.oIssueBu=CardDetails[0].WhsCode;
 			this.oModel.refresh();
 		},
 		//Closing selection on Receiving Whs
@@ -539,16 +542,18 @@ sap.ui.define([
 				});
 			}
 			oEvent.getSource().getBinding("items").filter([]);
-			this.getView().byId("inputwhsreceive").setValue(CardDetails[0].WhsCode);
+			this.getView().byId("inputwhsreceive").setValue(CardDetails[0].WhsName);
+			this.oReceiveBu=CardDetails[0].WhsCode;
 			this.oModel.refresh();
 		},
 		//Closing selection on Item
 		handleValueHelpCloseItem: function (oEvent) {
 			var transtype = this.oModel.getData().EditRecord.TransType;
+			var issuebu = this.oIssueBu;
+			var receivebu = this.oReceiveBu;
 			var aContexts = oEvent.getParameter("selectedContexts");
 			var ItemDetails = {};
 			if (aContexts && aContexts.length) {
-
 				ItemDetails = aContexts.map(function (oContext) {
 					var oItem = {};
 					oItem.ItemCode = oContext.getObject().ItemCode;
@@ -559,9 +564,14 @@ sap.ui.define([
 			oEvent.getSource().getBinding("items").filter([]);
 			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].ItemNum = ItemDetails[0].ItemCode;
 			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].Description = ItemDetails[0].ItemName;
-			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].CostProd = this.f_getAveragePrice(ItemDetails[0].ItemCode);
+			if(transtype === "6"){
+				var oCostToProduce =this.f_getAveragePrice(ItemDetails[0].ItemCode,receivebu);
+				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].CostProd = this.f_getAveragePrice(ItemDetails[0].ItemCode,receivebu);
+			}else{
+				var oCostToProduce =this.f_getAveragePrice(ItemDetails[0].ItemCode,issuebu);
+				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].CostProd = this.f_getAveragePrice(ItemDetails[0].ItemCode,issuebu);
+			}
 			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].MarketPrice = this.f_getMarketPrice(ItemDetails[0].ItemCode);
-			var oCostToProduce =this.f_getAveragePrice(ItemDetails[0].ItemCode);
 			var oMarketPrice = this.f_getMarketPrice(ItemDetails[0].ItemCode);
 			
 			if (transtype === "1") {
@@ -646,7 +656,6 @@ sap.ui.define([
 		},
     ///ON VIEW SHOWING ALL DATA AND CHANGING NAME INTO EDIT
 	onProcess: function (oEvent) {
-		
 			var iIndex = this.oTable.getSelectedIndex();
 			var TransNo = "";
 			var TransType = "";
@@ -702,6 +711,8 @@ sap.ui.define([
 					this.oModel.getData().EditRecord.MarkupType = results[0].MarkupType;
 					this.oModel.getData().EditRecord.IssueBU = results[0].IssueBU;
 					this.oModel.getData().EditRecord.ReceiveBU = results[0].ReceiveBU;
+					this.oIssueBu=results[0].IssueBUCode;
+					this.oReceiveBu=results[0].ReceiveBUCode;
 					var oDocStatus=results[0].Status;
 					this.oModel.getData().EditRecord.Remarks = results[0].Remarks;
 					// Disable Add Button if Status is Posted/Cancelled
@@ -780,6 +791,8 @@ sap.ui.define([
 				this.oModel.getData().EditRecord.ReceiveBU = "";
 				this.oModel.getData().EditRecord.Remarks = "";
 				this.oModel.getData().EditRecord.DocumentLines.length = 0;
+				this.oIssueBu = "";
+				this.oReceiveBu= "";
 				this.oModel.refresh();
 			} catch (err) {
 				//console.log(err.message);

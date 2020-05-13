@@ -118,7 +118,7 @@ sap.ui.define([
 			var generatedCode = "";
 
 			$.ajax({
-				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=SBODEMOAU_SL&procName=SPAPP_GENERATENUMBER&DocType="+ docType,
+				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+jQuery.sap.storage.Storage.get("dataBase")+"&procName=SPAPP_GENERATENUMBER&DocType="+ docType,
 				type: "GET",
 				async: false,
 				beforeSend: function (xhr) {

@@ -103,6 +103,8 @@ sap.ui.define([
 			this.oIconTab = this.getView().byId("tab1");
 			this.oMdlAllRecord = new JSONModel();
 			this.tableId = "tblDrafts";
+			this.oIssueBu = "";
+			this.oReceiveBu= "";
 			//this.fprepareTable(true,"");
 			
 			
@@ -246,6 +248,8 @@ sap.ui.define([
 				this.oModel.getData().EditRecord.ReceiveBU = "";
 				this.oModel.getData().EditRecord.Remarks = "";
 				this.oModel.getData().EditRecord.DocumentLines.length = 0;
+				this.oIssueBu = "";
+				this.oReceiveBu= "";
 				this.oModel.refresh();
 			} catch (err) {
 				//console.log(err.message);
@@ -291,7 +295,7 @@ sap.ui.define([
 					} else if (transtype === "2") {
 						oitemdetails.DescriptionEnable = false;
 						oitemdetails.CostProdEnable = false;
-						oitemdetails.MarkupPriceEnable = true;
+						oitemdetails.MarkupPriceEnable = false;
 						oitemdetails.TransferPriceEnable = false;
 						oitemdetails.MarketPriceEnable = false;
 						this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
@@ -299,7 +303,7 @@ sap.ui.define([
 					} else if (transtype === "3") {
 						oitemdetails.DescriptionEnable = false;
 						oitemdetails.CostProdEnable = false;
-						oitemdetails.MarkupPriceEnable = true;
+						oitemdetails.MarkupPriceEnable = false;
 						oitemdetails.TransferPriceEnable = false;
 						oitemdetails.MarketPriceEnable = false;
 						this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
@@ -307,7 +311,7 @@ sap.ui.define([
 					} else if (transtype === "4") {
 						oitemdetails.DescriptionEnable = false;
 						oitemdetails.CostProdEnable = false;
-						oitemdetails.MarkupPriceEnable = true;
+						oitemdetails.MarkupPriceEnable = false;
 						oitemdetails.TransferPriceEnable = false;
 						oitemdetails.MarketPriceEnable = false;
 						this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
@@ -403,8 +407,8 @@ sap.ui.define([
 			oBusiness_Unit.U_APP_CardCode = this.oModel.getData().EditRecord.BPCode;
 			oBusiness_Unit.U_APP_PostingDate = this.oModel.getData().EditRecord.PostingDate;
 			oBusiness_Unit.U_APP_MarkupType = this.oModel.getData().EditRecord.MarkupType;
-			oBusiness_Unit.U_APP_IssueBU = this.oModel.getData().EditRecord.IssueBU;
-			oBusiness_Unit.U_APP_ReceivingBU = this.oModel.getData().EditRecord.ReceiveBU;
+			oBusiness_Unit.U_APP_IssueBU = this.oIssueBu;
+			oBusiness_Unit.U_APP_ReceivingBU = this.oReceiveBu;
 			oBusiness_Unit.U_APP_Remarks = this.oModel.getData().EditRecord.Remarks;
 			oBusiness_Unit.U_APP_Status = ostatus;
 			oBusiness_Unit.U_APP_DocType = oDocType;
@@ -777,7 +781,6 @@ sap.ui.define([
 
 		//Closing selection on Issuing Whs
 		handleValueHelpCloseWhs: function (oEvent) {
-
 			var aContexts = oEvent.getParameter("selectedContexts");
 			var CardDetails = {};
 			if (aContexts && aContexts.length) {
@@ -790,7 +793,8 @@ sap.ui.define([
 				});
 			}
 			oEvent.getSource().getBinding("items").filter([]);
-			this.getView().byId("inputwhsissue").setValue(CardDetails[0].WhsCode);
+			this.getView().byId("inputwhsissue").setValue(CardDetails[0].WhsName);
+			this.oIssueBu=CardDetails[0].WhsCode;
 			this.oModel.refresh();
 		},
 		//Closing selection on Receiving Whs
@@ -807,14 +811,15 @@ sap.ui.define([
 				});
 			}
 			oEvent.getSource().getBinding("items").filter([]);
-			this.getView().byId("inputwhsreceive").setValue(CardDetails[0].WhsCode);
+			this.getView().byId("inputwhsreceive").setValue(CardDetails[0].WhsName);
+			this.oReceiveBu=CardDetails[0].WhsCode;
 			this.oModel.refresh();
 		},
 		//Closing selection on Item
 		handleValueHelpCloseItem: function (oEvent) {
 			var transtype = this.oModel.getData().EditRecord.TransType;
-			var issuebu = this.oModel.getData().EditRecord.IssueBU;
-			var receivebu = this.oModel.getData().EditRecord.ReceiveBU;
+			var issuebu = this.oIssueBu;
+			var receivebu = this.oReceiveBu;
 			var aContexts = oEvent.getParameter("selectedContexts");
 			var ItemDetails = {};
 			if (aContexts && aContexts.length) {
@@ -1164,7 +1169,12 @@ sap.ui.define([
 					oInvoice.DocumentLines = [];
 					///HARD CODED ACCOUNT CODE FOR TESTING
 					oInvoiceHeader.ItemDescription = oDescription;
-					oInvoiceHeader.AccountCode ="102020";
+					oInvoiceHeader.AccountCode ="4110101101";
+					oInvoiceHeader.CostingCode = "01";
+					oInvoiceHeader.CostingCode2 = "G101";
+					oInvoiceHeader.CostingCode3 = "D001";
+					oInvoiceHeader.CostingCode4 = "0001";
+					oInvoiceHeader.CostingCode5 = "OS000";
 					oInvoiceHeader.TaxCode = "GST-EO";
 					oInvoiceHeader.LineTotal =results.DocTotal;
 					oInvoice.DocumentLines.push(JSON.parse(JSON.stringify(oInvoiceHeader)));
@@ -1290,7 +1300,12 @@ sap.ui.define([
 					oInvoice.DocumentLines = [];
 					///HARD CODED ACCOUNT CODE FOR TESTING
 					oInvoiceHeader.ItemDescription ="Testing";
-					oInvoiceHeader.AccountCode ="102020";
+					oInvoiceHeader.AccountCode ="4110101101";
+					oInvoiceHeader.CostingCode = "01";
+					oInvoiceHeader.CostingCode2 = "G101";
+					oInvoiceHeader.CostingCode3 = "D001";
+					oInvoiceHeader.CostingCode4 = "0001";
+					oInvoiceHeader.CostingCode5 = "OS000";
 					oInvoiceHeader.LineTotal =results.DocTotal;
 					oInvoice.DocumentLines.push(JSON.parse(JSON.stringify(oInvoiceHeader)));
 					$.ajax({
@@ -1426,7 +1441,12 @@ sap.ui.define([
 					oInvoice.DocumentLines = [];
 					///HARD CODED ACCOUNT CODE FOR TESTING
 					oInvoiceHeader.ItemDescription ="Testing";
-					oInvoiceHeader.AccountCode ="102020";
+					oInvoiceHeader.AccountCode ="4110101101";
+					oInvoiceHeader.CostingCode = "01";
+					oInvoiceHeader.CostingCode2 = "G101";
+					oInvoiceHeader.CostingCode3 = "D001";
+					oInvoiceHeader.CostingCode4 = "0001";
+					oInvoiceHeader.CostingCode5 = "OS000";
 					oInvoiceHeader.LineTotal =results.DocTotal;
 					oInvoice.DocumentLines.push(JSON.parse(JSON.stringify(oInvoiceHeader)));
 
@@ -1553,8 +1573,8 @@ sap.ui.define([
 		onAddRecords: function (oEvent) {
 			var transtype = this.oModel.getData().EditRecord.TransType;
 			var transno = this.oModel.getData().EditRecord.TransNo;
-			var oIssueBU = this.oModel.getData().EditRecord.IssueBU;
-			var oReceiveBU = this.oModel.getData().EditRecord.ReceiveBU;
+			var oIssueBU = this.oIssueBu;
+			var oReceiveBU = this.oReceiveBu;
 			var ostatus= "1";
 			var oDocType= "";
 			if (transtype === "") {
@@ -1876,12 +1896,11 @@ sap.ui.define([
 			});
 		},
 		fgetmarkup: function (oEvent) {
-
 			var oMarkupType = this.getView().byId("inputmarkuptype").getSelectedKey();
 			var oMarkPrice = oEvent.mParameters.value;
 			var oCostToProduce = this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].CostProd;
 			if(oMarkupType==="1"){
-				var oTransferPrice = Number([oMarkPrice] * 0.1) * Number([oCostToProduce]);
+				var oTransferPrice = ((Number([oMarkPrice] * 0.1) * Number([oCostToProduce])) + Number([oCostToProduce]));
 			}else if(oMarkupType==="2"){
 				var oTransferPrice = Number([oMarkPrice]) + Number([oCostToProduce]);
 			}

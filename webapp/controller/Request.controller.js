@@ -93,6 +93,8 @@ sap.ui.define([
 			this.oIconTab = this.getView().byId("tab1");
 			this.oMdlAllRecord = new JSONModel();
 			this.tableId = "tblDrafts";
+			this.oIssueBu = "";
+			this.oReceiveBu= "";
  	   //	this.fprepareTable(true,"");
 
      /// REQUESTOR DATA
@@ -121,6 +123,8 @@ sap.ui.define([
 				this.oModel.getData().EditRecord.ReceiveBU = "";
 				this.oModel.getData().EditRecord.Remarks = "";
 				this.oModel.getData().EditRecord.DocumentLines.length = 0;
+				this.oIssueBu = "";
+				this.oReceiveBu= "";
 				this.oModel.refresh();
 			} catch (err) {
 				//console.log(err.message);
@@ -271,7 +275,8 @@ sap.ui.define([
 				});
 			}
 			oEvent.getSource().getBinding("items").filter([]);
-			this.getView().byId("inputwhsissue").setValue(CardDetails[0].WhsCode);
+			this.getView().byId("inputwhsissue").setValue(CardDetails[0].WhsName);
+			this.oIssueBu=CardDetails[0].WhsCode;
 			this.oModel.refresh();
     },
     	//Closing selection on Requesting Whs
@@ -288,7 +293,8 @@ sap.ui.define([
 				});
 			}
 			oEvent.getSource().getBinding("items").filter([]);
-			this.getView().byId("inputwhsrequest").setValue(CardDetails[0].WhsCode);
+			this.getView().byId("inputwhsrequest").setValue(CardDetails[0].WhsName);
+			this.oReceiveBu=CardDetails[0].WhsCode;
 			this.oModel.refresh();
     },
     //Closing selection on Item
@@ -544,8 +550,8 @@ sap.ui.define([
 			//oBusiness_Unit.U_APP_CardCode = this.oModel.getData().EditRecord.BPCode;
 			oBusiness_Unit.U_APP_PostingDate = this.oModel.getData().EditRecord.PostingDate;
 			oBusiness_Unit.U_APP_MarkupType = this.oModel.getData().EditRecord.MarkupType;
-			oBusiness_Unit.U_APP_IssueBU = this.oModel.getData().EditRecord.IssueBU;
-			oBusiness_Unit.U_APP_ReceivingBU = this.oModel.getData().EditRecord.ReceiveBU;
+			oBusiness_Unit.U_APP_IssueBU = this.oIssueBu;
+			oBusiness_Unit.U_APP_ReceivingBU = this.oReceiveBu;
 			oBusiness_Unit.U_APP_Remarks = this.oModel.getData().EditRecord.Remarks;
 			oBusiness_Unit.U_APP_Status = ostatus;
 			oBusiness_Unit.U_APP_DocType = oDocType;
@@ -662,8 +668,8 @@ sap.ui.define([
 			//oBusiness_Unit.U_APP_CardCode = this.oModel.getData().EditRecord.BPCode;
 			oBusiness_Unit.U_APP_PostingDate = this.oModel.getData().EditRecord.PostingDate;
 			oBusiness_Unit.U_APP_MarkupType = this.oModel.getData().EditRecord.MarkupType;
-			oBusiness_Unit.U_APP_IssueBU = this.oModel.getData().EditRecord.IssueBU;
-			oBusiness_Unit.U_APP_ReceivingBU = this.oModel.getData().EditRecord.ReceiveBU;
+			oBusiness_Unit.U_APP_IssueBU = this.oIssueBu;
+			oBusiness_Unit.U_APP_ReceivingBU = this.oReceiveBu;
 			oBusiness_Unit.U_APP_Remarks = this.oModel.getData().EditRecord.Remarks;
 			oBusiness_Unit.U_APP_Status = ostatus;
 			oBusiness_Unit.U_APP_DocType = oDocType;

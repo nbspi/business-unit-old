@@ -12,7 +12,7 @@
 		<StandardListItem
 			iconDensityAware="false"
 			iconInset="false"
-			title="{WhsCode}"
-			description="Name : {WhsName}" />
+			title="{WhsName}"
+			description="Code : {WhsCode}" />
 	</SelectDialog>
 </core:FragmentDefinition>

@@ -18,8 +18,11 @@ sap.ui.define([
 			this.sDataBase = jQuery.sap.storage.Storage.get("dataBase");
 			this.sUserCode = jQuery.sap.storage.Storage.get("userCode");
 
-			var oManger =this.sUserCode;
-			this.getView().byId("userbutton").setText(oManger);
+			this._oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+    		this._oRouter.attachRouteMatched(this.handleRouteMatched, this);
+
+			// var oManger =this.sUserCode;
+			// this.getView().byId("userbutton").setText(oManger);
 
 			this.oMdlMenu = new JSONModel();
 			this.fGetAllMenu(this.sDataBase);
@@ -54,6 +57,15 @@ sap.ui.define([
 			});
 		},
 		//-------------------------------------------
+		handleRouteMatched : function (evt) {
+			this.sDataBase = jQuery.sap.storage.Storage.get("dataBase");
+			this.sUserCode = jQuery.sap.storage.Storage.get("userCode");
+			//set user name
+			this.getView().byId("userbutton").setText(this.sUserCode);
+			//load menu
+			this.fGetAllMenu(this.sDataBase);
+
+		},
 		onRoutePatternMatched: function (event) {
 			var key = event.getParameter("name");
 			this.byId("childViewSegmentedButton").setSelectedKey(key);
