@@ -343,7 +343,7 @@ sap.ui.define([
     ///LOOP FOR THE DETAILS
     var d;
     for (d = 0; d < this.oModel.getData().EditRecord.DocumentLines.length; d++) {
-      oGoodsIssueHeader.WarehouseCode = this.oModel.getData().EditRecord.IssueBU;
+      oGoodsIssueHeader.WarehouseCode = this.oIssueBu;
       oGoodsIssueHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
       oGoodsIssueHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
       oGoodsIssueHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
