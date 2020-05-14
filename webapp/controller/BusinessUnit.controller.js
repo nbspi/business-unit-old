@@ -1081,7 +1081,7 @@ sap.ui.define([
 			///LOOP FOR THE DETAILS
 			var d;
 			for (d = 0; d < this.oModel.getData().EditRecord.DocumentLines.length; d++) {
-				oGoodsIssueHeader.WarehouseCode = this.oModel.getData().EditRecord.IssueBU;
+				oGoodsIssueHeader.WarehouseCode = this.oIssueBu;
 				oGoodsIssueHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
 				oGoodsIssueHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
 				oGoodsIssueHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
@@ -1131,7 +1131,7 @@ sap.ui.define([
 			///LOOP FOR THE DETAILS
 			var d;
 			for (d = 0; d < this.oModel.getData().EditRecord.DocumentLines.length; d++) {
-				oGoodsIssueHeader.WarehouseCode = this.oModel.getData().EditRecord.IssueBU;
+				oGoodsIssueHeader.WarehouseCode = this.oIssueBu;
 				oGoodsIssueHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
 				oGoodsIssueHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
 				oGoodsIssueHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
@@ -1263,7 +1263,7 @@ sap.ui.define([
 			///LOOP FOR THE DETAILS
 			var d;
 			for (d = 0; d < this.oModel.getData().EditRecord.DocumentLines.length; d++) {
-				 oGoodsIssueHeader.WarehouseCode = this.oModel.getData().EditRecord.IssueBU;
+				 oGoodsIssueHeader.WarehouseCode = this.oIssueBu;
 				oGoodsIssueHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
 				oGoodsIssueHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
 				oGoodsIssueHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
@@ -1351,7 +1351,7 @@ sap.ui.define([
 			///LOOP FOR THE DETAILS
 			var d;
 			for (d = 0; d < this.oModel.getData().EditRecord.DocumentLines.length; d++) {
-				 oGoodsIssueHeader.WarehouseCode = this.oModel.getData().EditRecord.IssueBU;
+				 oGoodsIssueHeader.WarehouseCode = this.oIssueBu;
 				oGoodsIssueHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
 				oGoodsIssueHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
 				oGoodsIssueHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
@@ -1403,7 +1403,7 @@ sap.ui.define([
 			///LOOP FOR THE DETAILS
 			var d;
 			for (d = 0; d < this.oModel.getData().EditRecord.DocumentLines.length; d++) {
-				// oGoodsIssueHeader.WarehouseCode = this.oModel.getData().EditRecord.IssueBU;
+				oGoodsIssueHeader.WarehouseCode = this.oIssueBu;
 				oGoodsIssueHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
 				oGoodsIssueHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
 				oGoodsIssueHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
@@ -1498,10 +1498,16 @@ sap.ui.define([
 			var d;
 			for (d = 0; d < this.oModel.getData().EditRecord.DocumentLines.length; d++) {
 				///Goods Receipt Details
-				oInvoiceHeader.WarehouseCode = this.oModel.getData().EditRecord.ReceiveBU;
+				oInvoiceHeader.WarehouseCode = this.oReceiveBu;
 				oInvoiceHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
 				oInvoiceHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
 				oInvoiceHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice; //adjustment
+				oInvoiceHeader.CostingCode = "01";
+				oInvoiceHeader.CostingCode2 = "G101";
+				oInvoiceHeader.CostingCode3 = "D001";
+				oInvoiceHeader.CostingCode4 = "0001";
+				oInvoiceHeader.CostingCode5 = "OS000";
+				
 				///Goods Issue Details
 				// oGoodsIssueHeader.WarehouseCode = this.oModel.getData().EditRecord.IssueBU;
 				oGoodsReceiptHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
