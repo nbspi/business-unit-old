@@ -1258,6 +1258,7 @@ sap.ui.define([
 			var oGoodsIssue = {};
 			var oGoodsIssueHeader = {};
 			var ocardcode = this.oModel.getData().EditRecord.BPCode;
+			var oDescription = this.oModel.getData().EditRecord.Remarks;
 			oGoodsIssue.Comments = this.oModel.getData().EditRecord.Remarks;
 			oGoodsIssue.DocumentLines = [];
 			///LOOP FOR THE DETAILS
@@ -1299,7 +1300,7 @@ sap.ui.define([
 					oInvoice.DocType ="dDocument_Service";
 					oInvoice.DocumentLines = [];
 					///HARD CODED ACCOUNT CODE FOR TESTING
-					oInvoiceHeader.ItemDescription ="Testing";
+					oInvoiceHeader.ItemDescription = oDescription;
 					oInvoiceHeader.AccountCode ="4110101101";
 					oInvoiceHeader.CostingCode = "01";
 					oInvoiceHeader.CostingCode2 = "G101";
@@ -1399,6 +1400,7 @@ sap.ui.define([
 			var oGoodsIssue = {};
 			var oGoodsIssueHeader = {};
 			var ocardcode = this.oModel.getData().EditRecord.BPCode;
+			var oDescription = this.oModel.getData().EditRecord.Remarks;
 			oGoodsIssue.Comments = this.oModel.getData().EditRecord.Remarks;
 			oGoodsIssue.DocumentLines = [];
 			///LOOP FOR THE DETAILS
@@ -1440,7 +1442,7 @@ sap.ui.define([
 					oInvoice.DocType ="dDocument_Service";
 					oInvoice.DocumentLines = [];
 					///HARD CODED ACCOUNT CODE FOR TESTING
-					oInvoiceHeader.ItemDescription ="Testing";
+					oInvoiceHeader.ItemDescription = oDescription;
 					oInvoiceHeader.AccountCode ="4110101101";
 					oInvoiceHeader.CostingCode = "01";
 					oInvoiceHeader.CostingCode2 = "G101";
@@ -1586,55 +1588,47 @@ sap.ui.define([
 				oDocType ="Goods Issue";
 				this.fAddDraftFunction(ostatus,oDocType);
 				this.fBuToBu();
-				this.onAddMode();
 			} else if (transtype === "1" & transno !== "") {
 				/////Call BU to BU transaction Function
 				oDocType ="Goods Issue";
 				this.fUpdatePending(ostatus,oDocType)
 				this.fBuToBu();
-				this.onAddMode();
 			} else if (transtype === "2" & transno === "") {
 				/////Call Bu to Cash Sales AND DRAFT Function
 				ostatus="2";
 				oDocType ="Goods Issue/Invoice/Incoming Payments";
 				this.fAddDraftFunction(ostatus,oDocType);
 				this.fBuToCashSales();
-				this.onAddMode();
 			} else if (transtype === "2" & transno !== "") {
 				/////Call Bu to Cash Sales Function
 				ostatus="2";
 				oDocType ="Goods Issue/Invoice/Incoming Payments";
 				this.fUpdatePending(ostatus,oDocType)
 				this.fBuToCashSales();
-				this.onAddMode();
 			} else if (transtype === "3" & transno === "") {
 				/////Call Bu to Vale and Draft
 				ostatus="2";
 				oDocType ="Goods Issue/Invoices";
 				this.fAddDraftFunction(ostatus,oDocType);
 				this.fBuToVale();
-				this.onAddMode();
 			} else if (transtype === "3" & transno !== "") {
 				/////Call Bu to Vale Function
 				ostatus="2";
 				oDocType ="Goods Issue/Invoices";
 				this.fUpdatePending(ostatus,oDocType)
 				this.fBuToVale();
-				this.onAddMode();
 			} else if (transtype === "4" & transno === "") {
 				/////Call Bu to Charge to Expense and Draft
 				ostatus="2";
 				oDocType ="Goods Issue";
 				this.fAddDraftFunction(ostatus,oDocType);
 				this.fBUtoChargetoExpense();
-				this.onAddMode();
 			} else if (transtype === "4" & transno !== "") {
 				/////Call Bu to Charge to Expense Function
 				ostatus="2";
 				oDocType ="Goods Issue";
 				this.fUpdatePending(ostatus,oDocType)
 				this.fBUtoChargetoExpense();
-				this.onAddMode();
 			} else if (transtype === "5" & transno === "") {
 				/////Call Bu to Inter Org - ISSUE and Draft
 				ostatus="2";
@@ -1647,19 +1641,16 @@ sap.ui.define([
 				oDocType ="Goods Issue/Invoices";
 				this.fUpdatePending(ostatus,oDocType)
 				this.fBuToInterOrgIssue();
-				this.onAddMode();
 			} else if (transtype === "6" & transno === "") {
 				/////Call Bu to Inter Org - Receipt and Draft
 				oDocType ="Goods Receipt/Purchase Invoices";
 				this.fAddDraftFunction(ostatus,oDocType);
 				this.fBuToInterOrgReceipt();
-				this.onAddMode();
 			} else if (transtype === "6" & transno !== "") {
 				/////Call Bu to Inter Org Receipt Function
 				oDocType ="Goods Receipt/Purchase Invoices";
 				this.fAddDraftFunction(ostatus,oDocType);
 				this.fBuToInterOrgReceipt();
-				this.onAddMode();
 			}
 		},
 		//Batch Request for Updating Draft
