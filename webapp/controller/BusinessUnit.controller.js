@@ -472,7 +472,6 @@ sap.ui.define([
 				}else{
 					if (results) {
 						sap.m.MessageToast.show("Transaction Type "+ TransType +" Draft Has Been Created!");
-						this.fprepareTable(false,"");
 						this.fClearField();
 						this.oModel.refresh();
 						AppUI5.hideBusyIndicator();

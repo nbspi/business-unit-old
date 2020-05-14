@@ -1566,8 +1566,8 @@ sap.ui.define([
 			oBusiness_Unit.U_APP_CustomerName = this.oModel.getData().EditRecord.BPName;
 			oBusiness_Unit.U_APP_PostingDate = this.oModel.getData().EditRecord.PostingDate;
 			oBusiness_Unit.U_APP_MarkupType = this.oModel.getData().EditRecord.MarkupType;
-			oBusiness_Unit.U_APP_IssueBU = this.oModel.getData().EditRecord.IssueBU;
-			oBusiness_Unit.U_APP_ReceivingBU = this.oModel.getData().EditRecord.ReceiveBU;
+			oBusiness_Unit.U_APP_IssueBU = this.oIssueBu;
+			oBusiness_Unit.U_APP_ReceivingBU = this.oReceiveBu;
 			oBusiness_Unit.U_APP_Remarks = this.oModel.getData().EditRecord.Remarks;
 			///HEADER BATCH
 			var BatchHeader =
@@ -1665,8 +1665,8 @@ sap.ui.define([
 			oBusiness_Unit.U_APP_CustomerName = this.oModel.getData().EditRecord.BPName;
 			oBusiness_Unit.U_APP_PostingDate = this.oModel.getData().EditRecord.PostingDate;
 			oBusiness_Unit.U_APP_MarkupType = this.oModel.getData().EditRecord.MarkupType;
-			oBusiness_Unit.U_APP_IssueBU = this.oModel.getData().EditRecord.IssueBU;
-			oBusiness_Unit.U_APP_ReceivingBU = this.oModel.getData().EditRecord.ReceiveBU;
+			oBusiness_Unit.U_APP_IssueBU = this.oIssueBu;
+			oBusiness_Unit.U_APP_ReceivingBU = this.oReceiveBu;
 			oBusiness_Unit.U_APP_Remarks = this.oModel.getData().EditRecord.Remarks;
 			oBusiness_Unit.U_APP_Status = ostatus;
 			oBusiness_Unit.U_APP_DocType = oDocType;

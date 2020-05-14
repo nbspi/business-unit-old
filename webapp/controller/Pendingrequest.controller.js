@@ -343,7 +343,7 @@ sap.ui.define([
     ///LOOP FOR THE DETAILS
     var d;
     for (d = 0; d < this.oModel.getData().EditRecord.DocumentLines.length; d++) {
-      oGoodsIssueHeader.WarehouseCode = this.oIssueBu;
+      oGoodsIssueHeader.WarehouseCode = this.oModel.getData().EditRecord.IssueBU;
       oGoodsIssueHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
       oGoodsIssueHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
       oGoodsIssueHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
@@ -359,15 +359,14 @@ sap.ui.define([
       },
       error: function (xhr, status, error) {
         var Message = xhr.responseJSON["error"].message.value;
-        AppUI5.fErrorLogs("OIGE","Insert","null","null",Message,"Pending Request",this.sUserCode,"null",JSON.stringify(oGoodsIssue));
-        console.error(JSON.stringify(xhr));
+        AppUI5.fErrorLogs("OIGE","Insert","null","null",Message,"Bu to Bu",this.sUserCode,"null",JSON.stringify(oGoodsIssue));
+        console.error(JSON.stringify(Message));
         sap.m.MessageToast.show(Message);
         AppUI5.hideBusyIndicator();
       },
       success: function (json) {
         //this.oPage.setBusy(false);
         sap.m.MessageToast.show("Added Successfully");
-        this.fUpdatePending();
         this.fprepareTable(false,"");
         this.fClearField();
         this.oModel.refresh();
