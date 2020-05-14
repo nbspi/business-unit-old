@@ -344,6 +344,11 @@ sap.ui.define([
     var d;
     for (d = 0; d < this.oModel.getData().EditRecord.DocumentLines.length; d++) {
       oGoodsIssueHeader.WarehouseCode = this.oIssueBu;
+      oGoodsIssueHeader.CostingCode = "01";
+      oGoodsIssueHeader.CostingCode2 = "G101";
+      oGoodsIssueHeader.CostingCode3 = "D001";
+      oGoodsIssueHeader.CostingCode4 = "0001";
+      oGoodsIssueHeader.CostingCode5 = "OS000";
       oGoodsIssueHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
       oGoodsIssueHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
       oGoodsIssueHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
