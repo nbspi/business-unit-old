@@ -1501,12 +1501,6 @@ sap.ui.define([
 				oInvoiceHeader.WarehouseCode = this.oModel.getData().EditRecord.ReceiveBU;
 				oInvoiceHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
 				oInvoiceHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
-				oInvoiceHeader.AccountCode ="4110101101";
-				oInvoiceHeader.CostingCode = "01";
-				oInvoiceHeader.CostingCode2 = "G101";
-				oInvoiceHeader.CostingCode3 = "D001";
-				oInvoiceHeader.CostingCode4 = "0001";
-				oInvoiceHeader.CostingCode5 = "OS000";
 				oInvoiceHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice; //adjustment
 				///Goods Issue Details
 				// oGoodsIssueHeader.WarehouseCode = this.oModel.getData().EditRecord.IssueBU;
@@ -1590,6 +1584,7 @@ sap.ui.define([
 				this.fBuToBu();
 			} else if (transtype === "1" & transno !== "") {
 				/////Call BU to BU transaction Function
+				ostatus="2";
 				oDocType ="Goods Issue";
 				this.fUpdatePending(ostatus,oDocType)
 				this.fBuToBu();
@@ -1643,11 +1638,13 @@ sap.ui.define([
 				this.fBuToInterOrgIssue();
 			} else if (transtype === "6" & transno === "") {
 				/////Call Bu to Inter Org - Receipt and Draft
+				ostatus="2";
 				oDocType ="Goods Receipt/Purchase Invoices";
 				this.fAddDraftFunction(ostatus,oDocType);
 				this.fBuToInterOrgReceipt();
 			} else if (transtype === "6" & transno !== "") {
 				/////Call Bu to Inter Org Receipt Function
+				ostatus="2";
 				oDocType ="Goods Receipt/Purchase Invoices";
 				this.fAddDraftFunction(ostatus,oDocType);
 				this.fBuToInterOrgReceipt();
