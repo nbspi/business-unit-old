@@ -58,7 +58,9 @@ sap.ui.define([
 			this.iRecordCount = 0;
 			this.oIconTab = this.getView().byId("tab1");
 			this.oMdlAllRecord = new JSONModel();
-			this.tableId = "tblRecords";
+      this.tableId = "tblRecords";
+      this.oIssueBu = "";
+			this.oReceiveBu= "";
 			this.fprepareTable(true,"");
 
   },
@@ -86,6 +88,8 @@ sap.ui.define([
       this.oModel.getData().EditRecord.ReceiveBU = "";
       this.oModel.getData().EditRecord.Remarks = "";
       this.oModel.getData().EditRecord.DocumentLines.length = 0;
+      this.oIssueBu = "";
+			this.oReceiveBu= "";
       this.oModel.refresh();
     } catch (err) {
       //console.log(err.message);
@@ -258,6 +262,8 @@ sap.ui.define([
         this.oModel.getData().EditRecord.MarkupType = results[0].MarkupType;
         this.oModel.getData().EditRecord.IssueBU = results[0].IssueBU;
         this.oModel.getData().EditRecord.ReceiveBU = results[0].ReceiveBU;
+        this.oIssueBu=results[0].IssueBUCode;
+				this.oReceiveBu=results[0].ReceiveBUCode;
         this.oModel.getData().EditRecord.Remarks = results[0].Remarks;
         this.oModel.getData().EditRecord.ReceivedBy = this.sUserCode;
         // this.oModel.setJSON("{\"EditRecord\" : " + oResult + "}");
@@ -337,7 +343,7 @@ sap.ui.define([
     ///LOOP FOR THE DETAILS
     var d;
     for (d = 0; d < this.oModel.getData().EditRecord.DocumentLines.length; d++) {
-      oGoodsIssueHeader.WarehouseCode = this.oModel.getData().EditRecord.IssueBU;
+      oGoodsIssueHeader.WarehouseCode = this.oIssueBu;
       oGoodsIssueHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
       oGoodsIssueHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
       oGoodsIssueHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;

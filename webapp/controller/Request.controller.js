@@ -300,6 +300,8 @@ sap.ui.define([
     //Closing selection on Item
 		handleValueHelpCloseItem: function (oEvent) {
 			var transtype = this.oModel.getData().EditRecord.TransType;
+			var issuebu = this.oIssueBu;
+			var receivebu = this.oReceiveBu;
 			var aContexts = oEvent.getParameter("selectedContexts");
 			var ItemDetails = {};
 			if (aContexts && aContexts.length) {
@@ -314,17 +316,34 @@ sap.ui.define([
 			oEvent.getSource().getBinding("items").filter([]);
 			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].ItemNum = ItemDetails[0].ItemCode;
 			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].Description = ItemDetails[0].ItemName;
-			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].CostProd = this.f_getAveragePrice(ItemDetails[0].ItemCode);
-			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice = this.f_getAveragePrice(ItemDetails[0].ItemCode);
+			if(transtype === "6"){
+				var oCostToProduce =this.f_getAveragePrice(ItemDetails[0].ItemCode,receivebu);
+				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].CostProd = this.f_getAveragePrice(ItemDetails[0].ItemCode,receivebu);
+			}else{
+				var oCostToProduce =this.f_getAveragePrice(ItemDetails[0].ItemCode,issuebu);
+				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].CostProd = this.f_getAveragePrice(ItemDetails[0].ItemCode,issuebu);
+			}
 			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].MarketPrice = this.f_getMarketPrice(ItemDetails[0].ItemCode);
-			var oCostToProduce =this.f_getAveragePrice(ItemDetails[0].ItemCode);
 			var oMarketPrice = this.f_getMarketPrice(ItemDetails[0].ItemCode);
+			
 			if (transtype === "1") {
 				if(oCostToProduce <= oMarketPrice){
 					this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice = oCostToProduce;
 				}else{
 					this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice=oMarketPrice;
 				}
+			}else if (transtype === "2") {
+				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice = oCostToProduce;
+			} else if (transtype === "3") {
+				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice = oCostToProduce;
+			} else if (transtype === "4") {
+				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice = oCostToProduce;
+			}else if (transtype === "5") {
+				///for revise
+				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice = oCostToProduce;
+			}else if (transtype === "6") {
+				///for revise
+				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice = oCostToProduce;
 			}
 			this.oModel.refresh();
 	},
@@ -345,6 +364,7 @@ sap.ui.define([
 					var Message = xhr.responseJSON["error"].message.value;
 					console.error(JSON.stringify(Message));
 					sap.m.MessageToast.show(Message);
+					
 				},
 				success: function (json) {},
 				context: this
@@ -358,13 +378,12 @@ sap.ui.define([
 
 		},
 
-		f_getAveragePrice: function (ItemCode) {
+		f_getAveragePrice: function (ItemCode,WareHouse) {
 			//GET MARKET PRICE
-			var issuebu = this.oModel.getData().EditRecord.IssueBU;
 			var iReturnAveragePrice = 0;
 			$.ajax({
 				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getAveragePrice&value1=" + ItemCode +
-					"&value2=" + issuebu + "&value3&value4",
+					"&value2=" + WareHouse + "&value3&value4",
 				type: "GET",
 				async: false,
 				datatype:"json",
