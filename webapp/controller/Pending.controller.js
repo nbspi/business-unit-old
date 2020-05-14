@@ -60,6 +60,8 @@ sap.ui.define([
 			this.oIconTab = this.getView().byId("tab1");
 			this.oMdlAllRecord = new JSONModel();
 			this.tableId = "tblRecords";
+			this.oIssueBu = "";
+			this.oReceiveBu= "";
 			this.fprepareTable(true,"");
 
 	},
@@ -76,6 +78,8 @@ sap.ui.define([
 				this.oModel.getData().EditRecord.ReceiveBU = "";
 				this.oModel.getData().EditRecord.Remarks = "";
 				this.oModel.getData().EditRecord.DocumentLines.length = 0;
+				this.oIssueBu = "";
+				this.oReceiveBu= "";
 				this.oModel.refresh();
 			} catch (err) {
 				//console.log(err.message);
@@ -254,6 +258,8 @@ sap.ui.define([
 					this.oModel.getData().EditRecord.MarkupType = results[0].MarkupType;
 					this.oModel.getData().EditRecord.IssueBU = results[0].IssueBU;
 					this.oModel.getData().EditRecord.ReceiveBU = results[0].ReceiveBU;
+					this.oIssueBu=results[0].IssueBUCode;
+					this.oReceiveBu=results[0].ReceiveBUCode;
 					this.oModel.getData().EditRecord.Remarks = results[0].Remarks;
 					this.oModel.getData().EditRecord.ReceivedBy = this.sUserCode;
 					// this.oModel.setJSON("{\"EditRecord\" : " + oResult + "}");
@@ -437,7 +443,7 @@ sap.ui.define([
 				var d;
 				for (d = 0; d < this.oModel.getData().EditRecord.DocumentLines.length; d++) {
 					// oGoodsIssueHeader.WarehouseCode = this.oModel.getData().EditRecord.IssueBU;
-					oGoodsReceiptHeader.WarehouseCode = this.oModel.getData().EditRecord.IssueBU;
+					oGoodsReceiptHeader.WarehouseCode = this.oIssueBu;
 					oGoodsReceiptHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
 					oGoodsReceiptHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
 					oGoodsReceiptHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
@@ -526,8 +532,8 @@ sap.ui.define([
 			oBusiness_Unit.U_APP_CustomerName = this.oModel.getData().EditRecord.BPName;
 			oBusiness_Unit.U_APP_PostingDate = this.oModel.getData().EditRecord.PostingDate;
 			oBusiness_Unit.U_APP_MarkupType = this.oModel.getData().EditRecord.MarkupType;
-			oBusiness_Unit.U_APP_IssueBU = this.oModel.getData().EditRecord.IssueBU;
-			oBusiness_Unit.U_APP_ReceivingBU = this.oModel.getData().EditRecord.ReceiveBU;
+			oBusiness_Unit.U_APP_IssueBU = this.oIssueBu;
+			oBusiness_Unit.U_APP_ReceivingBU = this.oReceiveBu;
 			oBusiness_Unit.U_APP_Remarks = this.oModel.getData().EditRecord.Remarks;
 			oBusiness_Unit.U_APP_Status = ostatus;
 			oBusiness_Unit.U_APP_ReceivedBy = this.sUserCode;
@@ -620,8 +626,8 @@ sap.ui.define([
 			oBusiness_Unit.U_APP_CardCode = this.oModel.getData().EditRecord.BPCode;
 			oBusiness_Unit.U_APP_PostingDate = this.oModel.getData().EditRecord.PostingDate;
 			oBusiness_Unit.U_APP_MarkupType = this.oModel.getData().EditRecord.MarkupType;
-			oBusiness_Unit.U_APP_IssueBU = this.oModel.getData().EditRecord.IssueBU;
-			oBusiness_Unit.U_APP_ReceivingBU = this.oModel.getData().EditRecord.ReceiveBU;
+			oBusiness_Unit.U_APP_IssueBU = this.oIssueBu;
+			oBusiness_Unit.U_APP_ReceivingBU = this.oReceiveBu;
 			oBusiness_Unit.U_APP_Remarks = this.oModel.getData().EditRecord.Remarks;
 			oBusiness_Unit.U_APP_Status = ostatus;
 			oBusiness_Unit.U_APP_DocType = oDocType;
