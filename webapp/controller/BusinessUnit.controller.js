@@ -1105,7 +1105,6 @@ sap.ui.define([
 				success: function (json) {
 					//this.oPage.setBusy(false);
 					sap.m.MessageToast.show("Added Successfully");
-					this.fprepareTable(false,"");
 					this.fClearField();
 					this.oModel.refresh();
 					AppUI5.hideBusyIndicator();
@@ -1327,7 +1326,6 @@ sap.ui.define([
 						success: function (json) {
 							//this.oPage.setBusy(false);
 							sap.m.MessageToast.show("Posting of Goods Issue is Successful");
-							this.fprepareTable(false,"");
 							this.fClearField();
 							this.oModel.refresh();
 							AppUI5.hideBusyIndicator();
@@ -1378,7 +1376,6 @@ sap.ui.define([
 				success: function (json) {
 					//this.oPage.setBusy(false);
 					sap.m.MessageToast.show("Added Successfully");
-					this.fprepareTable(false,"");
 					this.fClearField();
 					this.oModel.refresh();
 					AppUI5.hideBusyIndicator();
@@ -1470,7 +1467,6 @@ sap.ui.define([
 						success: function (json) {
 							//this.oPage.setBusy(false);
 							sap.m.MessageToast.show("Posting of Goods Issue is Successful");
-							this.fprepareTable(false,"");
 							this.fClearField();
 							this.oModel.refresh();
 							AppUI5.hideBusyIndicator();
@@ -1505,6 +1501,12 @@ sap.ui.define([
 				oInvoiceHeader.WarehouseCode = this.oModel.getData().EditRecord.ReceiveBU;
 				oInvoiceHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
 				oInvoiceHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
+				oInvoiceHeader.AccountCode ="4110101101";
+				oInvoiceHeader.CostingCode = "01";
+				oInvoiceHeader.CostingCode2 = "G101";
+				oInvoiceHeader.CostingCode3 = "D001";
+				oInvoiceHeader.CostingCode4 = "0001";
+				oInvoiceHeader.CostingCode5 = "OS000";
 				oInvoiceHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice; //adjustment
 				///Goods Issue Details
 				// oGoodsIssueHeader.WarehouseCode = this.oModel.getData().EditRecord.IssueBU;
@@ -1546,7 +1548,6 @@ sap.ui.define([
 					AppUI5.hideBusyIndicator();
 				},
 				success: function (json) {
-					this.fprepareTable(false,"");
 					this.fClearField();
 					this.oModel.refresh();
 					AppUI5.hideBusyIndicator();
@@ -1563,7 +1564,6 @@ sap.ui.define([
 				}else{
 					if (results) {
 						sap.m.MessageToast.show("Transaction Type "+ TransType +" Draft Has Been Created!");
-						this.fprepareTable(false,"");
 						this.fClearField();
 						this.oModel.refresh();
 						AppUI5.hideBusyIndicator();
