@@ -367,10 +367,6 @@ sap.ui.define([
 			//GET TRANSACTION NUMBER
 			var sGeneratedTransNo = "";
 			var TransType = this.oModel.getData().EditRecord.TransType;
-
-
-
-			
 			$.ajax({
 				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getTransactionNumber&value1&value2&value3&value4",
 				type: "GET",
@@ -1059,7 +1055,7 @@ sap.ui.define([
 
 				objectUDT = oRequest[i];
 				batchRequest = batchRequest + "--b\nContent-Type:application/http\nContent-Transfer-Encoding:binary\n\n";
-				batchRequest = batchRequest + "POST /b1s/fv1/" + objectUDT.tableName;
+				batchRequest = batchRequest + "POST /b1s/v1/" + objectUDT.tableName;
 				batchRequest = batchRequest + "\nContent-Type: application/json\n\n";
 				batchRequest = batchRequest + JSON.stringify(objectUDT.data) + "\n\n";
 			}
@@ -1532,9 +1528,8 @@ sap.ui.define([
 				oInvoiceHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
 				oInvoiceHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice; //adjustment
 				
-				
 				///Goods Issue Details
-				// oGoodsIssueHeader.WarehouseCode = this.oModel.getData().EditRecord.IssueBU;
+				oGoodsReceiptHeader.WarehouseCode = this.oReceiveBu;
 				oGoodsReceiptHeader.CostingCode = "01";
 				oGoodsReceiptHeader.CostingCode2 = "G101";
 				oGoodsReceiptHeader.CostingCode3 = "D001";

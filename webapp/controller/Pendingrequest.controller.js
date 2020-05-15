@@ -413,9 +413,33 @@ sap.ui.define([
         var oDocType ="Goods Issue";
         var TransNo = this.oModel.getData().EditRecord.TransNo;
         var TransType = this.oModel.getData().EditRecord.TransType;
+        $.ajax({
+          url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=SBODEMOAU_SL&procName=spAppBusinessUnit&queryTag=deleteDraftDetails&value1=" +
+            TransNo + "&value2=" + TransType + "&value3&value4",
+          type: "POST",
+          contentType: "application/json",
+          async: false,
+          datatype:"json",
+          beforeSend: function(xhr){
+            xhr.setRequestHeader("Authorization","Basic " + btoa("SYSTEM:P@ssw0rd805~"));
+          },
+          error: function (xhr, status, error) {
+            var Message = xhr.responseJSON["error"].message.value;
+            console.error(JSON.stringify(Message));
+            sap.m.MessageToast.show(Message);
+            AppUI5.hideBusyIndicator();
+          },
+          success: function (json) {},
+          context: this
+        }).done(function (results) {
+          if (results) {
+            ///
+          }
+        });
         //INITIALIZE FOR UPDATE
         var getcode = this.code;
         var oBusiness_Unit = {};
+        var oBusiness_Unit_Details = {};
         oBusiness_Unit.Code = getcode;
         oBusiness_Unit.Name = getcode;
         oBusiness_Unit.U_APP_TransType = TransType;
@@ -437,6 +461,30 @@ sap.ui.define([
             "tableName": "U_APP_OINT",
             "data": oBusiness_Unit
           };
+
+        var d;
+        var code = "";
+        var batchArray = [];
+        for (d = 0; d < this.oModel.getData().EditRecord.DocumentLines.length; d++) {
+				code = AppUI5.generateUDTCode("GetCode");
+        oBusiness_Unit_Details.Code = code;
+				oBusiness_Unit_Details.Name = code;
+				oBusiness_Unit_Details.U_APP_ItemNum = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
+				oBusiness_Unit_Details.U_APP_Description = this.oModel.getData().EditRecord.DocumentLines[d].Description;
+				oBusiness_Unit_Details.U_APP_Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
+				oBusiness_Unit_Details.U_APP_CostProd = this.oModel.getData().EditRecord.DocumentLines[d].CostProd;
+				oBusiness_Unit_Details.U_APP_MarkUp = this.oModel.getData().EditRecord.DocumentLines[d].MarkupPrice;
+				oBusiness_Unit_Details.U_APP_TransferPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
+				oBusiness_Unit_Details.U_APP_MarketPrice = this.oModel.getData().EditRecord.DocumentLines[d].MarketPrice;
+				oBusiness_Unit_Details.U_APP_TransNo = TransNo;
+				oBusiness_Unit_Details.U_APP_TransType = TransType;
+				//	oBusiness_Unit_Details.APP_TransNo = this.getView().byId("TransNo").getValue();
+				batchArray.push(JSON.parse(JSON.stringify(({
+					"tableName": "U_APP_INT1",
+					"data": oBusiness_Unit_Details
+				}))));
+
+			}
         var sBodyRequest = this.fprepareUpdatePostedRequestBody(BatchHeader, getcode);
         $.ajax({
           url: "https://18.136.35.41:50000/b1s/v1/$batch",
