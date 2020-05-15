@@ -443,7 +443,7 @@ sap.ui.define([
 				var d;
 				for (d = 0; d < this.oModel.getData().EditRecord.DocumentLines.length; d++) {
 					// oGoodsIssueHeader.WarehouseCode = this.oModel.getData().EditRecord.IssueBU;
-					oGoodsReceiptHeader.WarehouseCode = this.oIssueBu;
+					oGoodsReceiptHeader.WarehouseCode = this.oReceiveBu;
 					oGoodsReceiptHeader.CostingCode = "01";
 					oGoodsReceiptHeader.CostingCode2 = "G101";
 					oGoodsReceiptHeader.CostingCode3 = "D001";
