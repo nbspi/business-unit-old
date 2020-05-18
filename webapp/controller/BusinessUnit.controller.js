@@ -1076,7 +1076,7 @@ sap.ui.define([
 		fBuToBu: function () {
 			AppUI5.showBusyIndicator(4000);
 			//Initialize Variables
-			var ostatus= "2";
+			var ostatus= "1";
 			var oDocType ="Goods Issue";
 			var oGoodsIssue = {};
 			var oGoodsIssueHeader = {};
