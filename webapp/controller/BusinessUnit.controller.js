@@ -13,10 +13,13 @@ sap.ui.define([
     _data: {
 			"date": new Date()
 		},
-		// onRoutePatternMatched: function (event) {
-		// 	document.title = "BFI Business Unit Transfer";
-		// },
+		onRoutePatternMatched: function(event){
+			this.fClearField();
+			},
 		onInit: function () {
+			///ON LOAD
+			var route = this.getOwnerComponent().getRouter().getRoute("BusinessUnit");
+			route.attachPatternMatched(this.onRoutePatternMatched,this);
 			//USER DATA
 			this.sDataBase = jQuery.sap.storage.Storage.get("dataBase");
 			this.sUserCode = jQuery.sap.storage.Storage.get("userCode");
@@ -477,12 +480,16 @@ sap.ui.define([
 		},
 		onAddDraft: function (oEvent) {
 			var transtype = this.getView().byId("TransID").getSelectedKey();
+			var oDetails = this.oModel.getData().EditRecord.DocumentLines.length;
 			var ostatus= "0";
+			var oDocType= "Draft";
 			if (this.triggercondition === "SAVE AS DRAFT") {
 				if (transtype === "") {
 					sap.m.MessageToast.show("Please Select Transaction Type.");
-				} else {
-					this.fAddDraftFunction(ostatus);
+				}else if(oDetails===0){
+					sap.m.MessageToast.show("Please Enter Item Details");
+				}else {
+					this.fAddDraftFunction(ostatus,oDocType);
 					this.fClearField();
 				}
 			} else {
@@ -1602,12 +1609,15 @@ sap.ui.define([
 			var transno = this.oModel.getData().EditRecord.TransNo;
 			var oIssueBU = this.oIssueBu;
 			var oReceiveBU = this.oReceiveBu;
+			var oDetails = this.oModel.getData().EditRecord.DocumentLines.length;
 			var ostatus= "1";
 			var oDocType= "";
 			if (transtype === "") {
 				sap.m.MessageToast.show("Please Select Transaction Type.");
 			}else if (transtype === "1" & transno === "" & oIssueBU === "" & oReceiveBU === "") {
 				sap.m.MessageToast.show("Please Select Issuing/Receiving BU");
+			}else if(oDetails===0){
+				sap.m.MessageToast.show("Please Enter Item Details");
 			}else if (transtype === "1" & transno === "" & oIssueBU !== "" & oReceiveBU !== "") {
 				/////Call BU to BU AND DRAFT transaction Function
 				oDocType ="Goods Issue";

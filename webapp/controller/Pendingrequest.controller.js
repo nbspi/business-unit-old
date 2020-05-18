@@ -388,7 +388,7 @@ sap.ui.define([
     });
   },
   //Batch Request for Updating Draft
-  fprepareUpdatePostedRequestBody: function (oHeader, getcode) {
+  fprepareUpdatePostedRequestBody: function (oHeader,oDetails,getcode) {
     var batchRequest = "";
     var beginBatch = "--a\nContent-Type: multipart/mixed;boundary=b\n\n";
     var endBatch = "--b--\n--a--";
@@ -402,6 +402,16 @@ sap.ui.define([
     batchRequest = batchRequest + "\nContent-Type: application/json\n\n";
     batchRequest = batchRequest + JSON.stringify(objectUDTHeader.data) + "\n\n";
 
+    var objectUDTDetails = "";
+
+    //objectUDTDetails = oDetails;
+    for (var i = 0; i < oDetails.length; i++) {
+      objectUDTDetails = oDetails[i];
+      batchRequest = batchRequest + "--b\nContent-Type:application/http\nContent-Transfer-Encoding:binary\n\n";
+      batchRequest = batchRequest + "POST /b1s/v1/" + objectUDTDetails.tableName;
+      batchRequest = batchRequest + "\nContent-Type: application/json\n\n";
+      batchRequest = batchRequest + JSON.stringify(objectUDTDetails.data) + "\n\n";
+    }
     batchRequest = batchRequest + endBatch;
 
     return batchRequest;
@@ -414,7 +424,7 @@ sap.ui.define([
         var TransNo = this.oModel.getData().EditRecord.TransNo;
         var TransType = this.oModel.getData().EditRecord.TransType;
         $.ajax({
-          url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=SBODEMOAU_SL&procName=spAppBusinessUnit&queryTag=deleteDraftDetails&value1=" +
+          url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=" + this.sDataBase + "&procName=spAppBusinessUnit&queryTag=deleteDraftDetails&value1=" +
             TransNo + "&value2=" + TransType + "&value3&value4",
           type: "POST",
           contentType: "application/json",
@@ -485,7 +495,7 @@ sap.ui.define([
 				}))));
 
 			}
-        var sBodyRequest = this.fprepareUpdatePostedRequestBody(BatchHeader, getcode);
+        var sBodyRequest = this.fprepareUpdatePostedRequestBody(BatchHeader,batchArray, getcode);
         $.ajax({
           url: "https://18.136.35.41:50000/b1s/v1/$batch",
           type: "POST",

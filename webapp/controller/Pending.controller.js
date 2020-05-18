@@ -14,6 +14,7 @@ sap.ui.define([
 	},
 	onRoutePatternMatched: function(event){
 		this.fprepareTable(false,"");
+		this.fClearField();
 		this.oModel.refresh();
 		},
 

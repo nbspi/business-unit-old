@@ -9,10 +9,14 @@ sap.ui.define([
   "use strict";
 
   return Controller.extend("com.apptech.bfi-businessunit.controller.Request", {
-
-	
+	onRoutePatternMatched: function(event){
+		this.fClearField();
+		},
     onInit: function () {
-       //USER DATA
+		//ON LOAD
+			var route = this.getOwnerComponent().getRouter().getRoute("Request");
+			route.attachPatternMatched(this.onRoutePatternMatched,this);
+      	 //USER DATA
 			this.sDataBase = jQuery.sap.storage.Storage.get("dataBase");
 			this.sUserCode = jQuery.sap.storage.Storage.get("userCode");
 
@@ -500,12 +504,15 @@ sap.ui.define([
 			var oIssueBu = this.getView().byId("inputwhsissue").getValue();
 			var oRequestBu = this.getView().byId("inputwhsrequest").getValue();
 			var oRemarks = this.getView().byId("inputremarks").getValue();
+			var oDetails = this.oModel.getData().EditRecord.DocumentLines.length;
 			if(oIssueBu===""){
 				sap.m.MessageToast.show("Please Select Issueing BU");
 			}else if(oRequestBu===""){
 				sap.m.MessageToast.show("Please Select Requesting BU");
 			}else if(oRemarks===""){
 				sap.m.MessageToast.show("Please Enter Remarks");
+			}else if(oDetails===0){
+				sap.m.MessageToast.show("Please Enter Item Details");
 			}else{
 				this.fAddRequestDraft();
 			}
@@ -514,12 +521,15 @@ sap.ui.define([
 			var oIssueBu = this.getView().byId("inputwhsissue").getValue();
 			var oRequestBu = this.getView().byId("inputwhsrequest").getValue();
 			var oRemarks = this.getView().byId("inputremarks").getValue();
+			var oDetails = this.oModel.getData().EditRecord.DocumentLines.length;
 			if(oIssueBu===""){
 				sap.m.MessageToast.show("Please Select Issueing BU");
 			}else if(oRequestBu===""){
 				sap.m.MessageToast.show("Please Select Requesting BU");
 			}else if(oRemarks===""){
 				sap.m.MessageToast.show("Please Enter Remarks");
+			}else if(oDetails===0){
+				sap.m.MessageToast.show("Please Enter Item Details");
 			}else{
 				this.fAddRequest();
 			}
@@ -527,6 +537,7 @@ sap.ui.define([
 		},
 		////ADD REQUEST Function POSTING ON UDT
 		fAddRequestDraft: function (oEvent) {
+
 			var ostatus ="3";
 			var oDocType = "Request Draft";
 			AppUI5.showBusyIndicator(4000);
