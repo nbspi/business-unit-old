@@ -1076,6 +1076,8 @@ sap.ui.define([
 		fBuToBu: function () {
 			AppUI5.showBusyIndicator(4000);
 			//Initialize Variables
+			var ostatus= "2";
+			var oDocType ="Goods Issue";
 			var oGoodsIssue = {};
 			var oGoodsIssueHeader = {};
 			oGoodsIssue.Comments = this.oModel.getData().EditRecord.Remarks;
@@ -1110,7 +1112,8 @@ sap.ui.define([
 					AppUI5.hideBusyIndicator();
 				},
 				success: function (json) {
-					//this.oPage.setBusy(false);
+					//ADD UDT RECORDS
+					this.fAddDraftFunction(ostatus,oDocType);
 					sap.m.MessageToast.show("Added Successfully");
 					this.fClearField();
 					this.oModel.refresh();
@@ -1620,8 +1623,6 @@ sap.ui.define([
 				sap.m.MessageToast.show("Please Enter Item Details");
 			}else if (transtype === "1" & transno === "" & oIssueBU !== "" & oReceiveBU !== "") {
 				/////Call BU to BU AND DRAFT transaction Function
-				oDocType ="Goods Issue";
-				this.fAddDraftFunction(ostatus,oDocType);
 				this.fBuToBu();
 			} else if (transtype === "1" & transno !== "") {
 				/////Call BU to BU transaction Function

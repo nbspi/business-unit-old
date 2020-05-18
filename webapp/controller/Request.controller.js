@@ -537,7 +537,6 @@ sap.ui.define([
 		},
 		////ADD REQUEST Function POSTING ON UDT
 		fAddRequestDraft: function (oEvent) {
-
 			var ostatus ="3";
 			var oDocType = "Request Draft";
 			AppUI5.showBusyIndicator(4000);
