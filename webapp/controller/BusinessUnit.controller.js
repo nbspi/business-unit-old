@@ -259,19 +259,6 @@ sap.ui.define([
 			}
 
 		},
-	// ///TRIGGER TO GO TO ADD
-	// 	onAddMode: function (oEvent) {
-	// 		///Changing the Name of Icon Bar
-	// 		this.getView().byId("idIconTabBarInlineMode").getItems()[1].setText("TRANSACTION [ADD]");
-	// 		this.getView().byId("btnSaveDraft").setText("SAVE AS DRAFT");
-	// 		var tab = this.getView().byId("idIconTabBarInlineMode");
-	// 		tab.setSelectedKey("tab2");
-
-	// 		//Clear All Fields 
-	// 		this.fClearField();
-	// 		this.getView().byId("inputbpcode").setEnabled(true);
-
-	// 	},
 		// ADD ROWS ON TABLE
 		onAddRow: function (oEvent) {
 			var oitemdetails = {};
@@ -1878,7 +1865,7 @@ sap.ui.define([
 			var oMarkPrice = oEvent.mParameters.value;
 			var oCostToProduce = this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].CostProd;
 			if(oMarkupType==="1"){
-				var oTransferPrice = ((Number([oMarkPrice] * 0.1) * Number([oCostToProduce])) + Number([oCostToProduce]));
+				var oTransferPrice = ((Number([oMarkPrice] * 0.01) * Number([oCostToProduce])) + Number([oCostToProduce]));
 			}else if(oMarkupType==="2"){
 				var oTransferPrice = Number([oMarkPrice]) + Number([oCostToProduce]);
 			}
