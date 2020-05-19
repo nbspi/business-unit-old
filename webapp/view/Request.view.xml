@@ -7,33 +7,6 @@
 				<content>
 					<IconTabBar id="idIconTabBarInlineMode" headerMode="Inline" upperCase="true" expandable="false" class="sapUiResponsiveContentPadding">
 						<items>
-							<!-- <IconTabFilter id="tab1" text="Records" count="0" key="tab1">
-								<Label text="Transaction Type" width="100%">
-									<layoutData>
-										<l:GridData span="L3 M2 S12"/>
-									</layoutData>
-								</Label>
-
-								<Select id="transfilter" forceSelection="false" selectedKey="{/SelectedTransType/TransactionType}" items="{/AllTransactionTypes}" change="onTransTypeFilter">
-									<core:Item key="{key}" text="{value}"/>
-									<layoutData>
-										<l:GridData span="L3 M4 S12"/>
-									</layoutData>
-								</Select>
-										
-								<t:Table id="tblRecords" selectionMode="Multi" visibleRowCount="8" ariaLabelledBy="title" enableCellFilter="true"
-									rowSelectionChange="onSelectionChange">
-									<t:extension>
-										<Toolbar>
-											<content>
-												<Button text="VIEW" tooltip="VIEW" press="onView" icon="sap-icon://edit"/>
-												<ToolbarSpacer/>
-											</content>
-										</Toolbar>
-									</t:extension>
-								</t:Table>
-							</IconTabFilter> -->
-
 							<IconTabFilter id="tab2" text="Request" key="tab2">
 								<!--<Button text="Post Outgoing Payment Draft" id="btnPostDraft" tooltip="Save" press="onPostDraftOP" icon="sap-icon://save"/>-->
 								<!--<Button text="Export File" tooltip="Export" press="handleExcelExport"/>-->
@@ -53,6 +26,7 @@
 													<l:GridData span="L3 M2 S12"/>
 												</layoutData>
 											</Label>
+
 											<Select id="TransID" forceSelection="false" selectedKey="{/EditRecord/TransType}" items="{/AllTransactionTypes}" change="onChangeTrans">
 												<core:Item key="{key}" text="{value}"/>
 												<layoutData>
@@ -67,6 +41,19 @@
 												</layoutData>
 											</Label>
 											<Input  width="100%" value="{/EditRecord/TransNo}" enabled="true" editable="false">
+												<layoutData>
+													<l:GridData span="L3 M4 S12"/>
+												</layoutData>
+											</Input>
+
+												<!--Account Code -->
+											<Label text="Customer/Vendor" width="100%">
+												<layoutData>
+													<l:GridData span="L3 M2 S12"/>
+												</layoutData>
+											</Label>
+											<Input width="100%" id="inputbpcode" value="{/EditRecord/BPCode}" showValueHelp="true" valueHelpOnly="true"
+												valueHelpRequest="handleValueHelpBPCode">
 												<layoutData>
 													<l:GridData span="L3 M4 S12"/>
 												</layoutData>
@@ -135,7 +122,7 @@
 													<l:GridData span="L3 M2 S12"/>
 												</layoutData>
 											</Label>
-											<Input width="100%" id="inputwhsrequest" value="{/EditRecord/ReceiveBU}" showValueHelp="true" valueHelpOnly="true"
+											<Input width="100%" id="inputwhsreceive" value="{/EditRecord/ReceiveBU}" showValueHelp="true" valueHelpOnly="true"
 												valueHelpRequest="handleValueHelpRequestingBu">
 												<layoutData>
 													<l:GridData span="L3 M4 S12"/>
@@ -148,7 +135,7 @@
 													<l:GridData span="L3 M2 S12"/>
 												</layoutData>
 											</Label>
-											<Select id="inputmarkuptype" forceSelection="false" selectedKey="{/EditRecord/MarkupType}" items="{/AllMarkupTypes}" editable="false">
+											<Select id="inputmarkuptype" forceSelection="false" selectedKey="{/EditRecord/MarkupType}" items="{/AllMarkupTypes}">
 												<core:Item key="{key}" text="{value}"/>
 												<layoutData>
 													<l:GridData span="L3 M4 S12"/>
@@ -231,7 +218,7 @@
 														<!--<Text text="{oMdlAP>DocDueDate}"/>-->
 													</t:template>
 												</t:Column>
-												<t:Column width="6rem">
+											<t:Column width="6rem">
 													<Label text="Mark Up"/>
 													<t:template>
 														<Input value="{MarkupPrice}" type="Number" id="markprice" placeholder="0.00" textAlign="End" fieldWidth="80%" width="100%" enabled="{MarkupPriceEnable}" liveChange="fgetmarkup"/>

@@ -156,6 +156,87 @@ sap.ui.define([
 				this._oValueHelpDialogsItem.open();
 			}
 		},
+		///BP LIST FROM FRAGMENT
+		handleValueHelpBPCode: function () {
+			var TransType = this.getView().byId("TransID").getSelectedKey();
+			var customertype ="";
+					if (TransType ==="6"){
+						customertype = "S";
+					}else{
+						customertype = "C";
+					}
+			if (!this._oValueHelpDialogs) {
+				Fragment.load({
+					name: "com.apptech.bfi-businessunit.view.fragments.BPDialogFragment",
+					controller: this
+				}).then(function (oValueHelpDialogs) {
+					this._oValueHelpDialogs = oValueHelpDialogs;
+					this.getView().addDependent(this._oValueHelpDialogs);
+					this.f_configValueHelpDialogs(TransType,customertype);
+					this._oValueHelpDialogs.open();
+				}.bind(this));
+			} else {
+				this.f_configValueHelpDialogs(TransType,customertype);
+				this._oValueHelpDialogs.open();
+			}
+		},
+		//GETTING ALL BP
+		f_configValueHelpDialogs: function (TransType,customertype) {
+			var sInputValue = this.byId("inputbpcode").getValue();
+				//GET ALL BP
+				$.ajax({
+					url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getallbp&value1="+ customertype +"&value2&value3&value4",
+					type: "GET",
+					datatype:"json",
+				beforeSend: function(xhr){
+					xhr.setRequestHeader("Authorization","Basic " + btoa("SYSTEM:P@ssw0rd805~"));
+				},
+					error: function (xhr, status, error) {
+					var Message = xhr.responseJSON["error"].message.value;
+					console.error(JSON.stringify(Message));
+					sap.m.MessageToast.show(Message);
+					},
+					success: function (json) {},
+					context: this
+				}).done(function (results) {
+					if (results) {
+						this.oMdlAllBP.getData().allbp = results;
+						this.oMdlAllBP.refresh();
+						this.getView().setModel(this.oMdlAllBP, "oMdlAllBP");
+					}
+				});
+	
+
+			var aList = this.oMdlAllBP.getProperty("/allbp");
+
+			aList.forEach(function (oRecord) {
+				oRecord.selected = (oRecord.CardCode === sInputValue);
+			});
+		},
+		///Search on BP
+		handleSearchBP: function (oEvent) {
+			var sValue = oEvent.getParameter("value");
+			var oFilter = new Filter("CardName", FilterOperator.Contains, sValue);
+			var oBinding = oEvent.getSource().getBinding("items");
+			oBinding.filter([oFilter]);
+		},
+		//Closing selection on Search BP
+		handleValueHelpCloseBatch: function (oEvent) {
+			var aContexts = oEvent.getParameter("selectedContexts");
+			var CardDetails = {};
+			if (aContexts && aContexts.length) {
+
+				CardDetails = aContexts.map(function (oContext) {
+					var oCard = {};
+					oCard.CardCode = oContext.getObject().CardCode;
+					oCard.CardName = oContext.getObject().CardName;
+					return oCard;
+				});
+			}
+			oEvent.getSource().getBinding("items").filter([]);
+			this.getView().byId("inputbpcode").setValue(CardDetails[0].CardCode);
+			this.oModel.refresh();
+		},
     ///GETTING WAREHOUSE LIST FROM FRAGMENTS
 		handleValueHelpIssueingBu: function (oEvent) {
 			if (!this._oValueHelpDialogscodeissue) {
@@ -202,7 +283,7 @@ sap.ui.define([
     },
     ///GETTING ALL REQUESTING WAREHOUSE
 		f_configValueHelpDialogsWhsReceive: function () {
-			var sInputValuereceive = this.byId("inputwhsrequest").getValue();
+			var sInputValuereceive = this.byId("inputwhsreceive").getValue();
 			var aList = this.oModel.getProperty("/AllWarehouses");
 			aList.forEach(function (oRecord) {
 				oRecord.selected = (oRecord.WhsCode === sInputValuereceive);
@@ -297,7 +378,7 @@ sap.ui.define([
 				});
 			}
 			oEvent.getSource().getBinding("items").filter([]);
-			this.getView().byId("inputwhsrequest").setValue(CardDetails[0].WhsName);
+			this.getView().byId("inputwhsreceive").setValue(CardDetails[0].WhsName);
 			this.oReceiveBu=CardDetails[0].WhsCode;
 			this.oModel.refresh();
     },
@@ -410,6 +491,72 @@ sap.ui.define([
 			return iReturnAveragePrice;
 
 		},
+		//DISABLING TEXTBOX
+		onChangeTrans: function (oEvent) {
+			var transtype = this.getView().byId("TransID").getSelectedKey();
+			if (transtype === "1") {
+				this.getView().byId("inputbpcode").setValue("");
+				this.getView().byId("inputwhsreceive").setValue("");
+				this.getView().byId("inputbpcode").setEnabled(false);
+				this.getView().byId("inputwhsissue").setEnabled(true);
+				this.getView().byId("inputwhsreceive").setEnabled(true);
+				this.getView().byId("inputmarkuptype").setEnabled(false);
+				this.getView().byId("inputmarkuptype").setValue("");
+				this.oModel.getData().EditRecord.DocumentLines.length = 0;
+				this.oModel.refresh();
+			} else if (transtype === "2") {
+				this.getView().byId("inputwhsreceive").setValue("");
+				this.getView().byId("inputbpcode").setEnabled(true);
+				this.getView().byId("inputwhsissue").setEnabled(true);
+				this.getView().byId("inputwhsreceive").setEnabled(false);
+				this.getView().byId("inputmarkuptype").setEnabled(false);
+				this.getView().byId("inputmarkuptype").setValue("");
+				this.oModel.getData().EditRecord.DocumentLines.length = 0;
+				this.oModel.refresh();
+			} else if (transtype === "3") {
+				this.getView().byId("inputwhsreceive").setValue("");
+				this.getView().byId("inputbpcode").setEnabled(true);
+				this.getView().byId("inputwhsissue").setEnabled(true);
+				this.getView().byId("inputwhsreceive").setEnabled(false);
+				this.getView().byId("inputmarkuptype").setEnabled(false);
+				this.getView().byId("inputmarkuptype").setValue("");
+				this.oModel.getData().EditRecord.DocumentLines.length = 0;
+				this.oModel.refresh();
+			} else if (transtype === "4") {
+				this.getView().byId("inputbpcode").setValue("");
+				this.getView().byId("inputwhsreceive").setValue("");
+				this.getView().byId("inputbpcode").setEnabled(false);
+				this.getView().byId("inputwhsissue").setEnabled(true);
+				this.getView().byId("inputwhsreceive").setEnabled(false);
+				this.getView().byId("inputmarkuptype").setEnabled(false);
+				this.getView().byId("inputmarkuptype").setValue("");
+				this.oModel.getData().EditRecord.DocumentLines.length = 0;
+				this.oModel.refresh();
+			}else if (transtype === "5") {
+				this.getView().byId("inputbpcode").setValue("");
+				this.getView().byId("inputwhsreceive").setValue("");
+				this.getView().byId("inputbpcode").setEnabled(true);
+				this.getView().byId("inputwhsissue").setEnabled(true);
+				this.getView().byId("inputwhsreceive").setEnabled(false);
+				this.getView().byId("inputmarkuptype").setEnabled(true);
+				this.oModel.getData().EditRecord.DocumentLines.length = 0;
+				this.oModel.refresh();
+			}else if (transtype === "6") {
+				this.getView().byId("inputbpcode").setValue("");
+				this.getView().byId("inputwhsissue").setValue("");
+				this.getView().byId("inputwhsreceive").setValue("");
+				this.getView().byId("inputbpcode").setEnabled(true);
+				this.getView().byId("inputwhsissue").setEnabled(false);
+				this.getView().byId("inputwhsreceive").setEnabled(true);
+				this.getView().byId("inputmarkuptype").setEnabled(true);
+				this.oModel.getData().EditRecord.DocumentLines.length = 0;
+				this.oModel.refresh();
+			} else {
+				this.getView().byId("inputbpcode").setEnabled(true);
+				this.getView().byId("inputwhsreceive").setEnabled(true);
+			}
+		},
+
     // ADD ROWS ON TABLE
 		onAddRow: function (oEvent) {
 			var oitemdetails = {};
@@ -424,8 +571,6 @@ sap.ui.define([
 			var oIssueBU = this.oModel.getData().EditRecord.IssueBU;
 			if (transtype === "" ) {
 				sap.m.MessageToast.show("Please Select Transaction Type.");
-			}else if(oIssueBU===""){
-				sap.m.MessageToast.show("Please Select Issuing BU Type.");
 			} else {
 					if (transtype === "1") {
 						oitemdetails.DescriptionEnable = false;
@@ -502,13 +647,16 @@ sap.ui.define([
 
 		onAddDraft: function (oEvent){
 			var oIssueBu = this.getView().byId("inputwhsissue").getValue();
-			var oRequestBu = this.getView().byId("inputwhsrequest").getValue();
+			var oRequestBu = this.getView().byId("inputwhsreceive").getValue();
+			var oPostingDate = this.getView().byId("dpickerpostingdate").getValue();
 			var oRemarks = this.getView().byId("inputremarks").getValue();
 			var oDetails = this.oModel.getData().EditRecord.DocumentLines.length;
 			if(oIssueBu===""){
 				sap.m.MessageToast.show("Please Select Issueing BU");
 			}else if(oRequestBu===""){
 				sap.m.MessageToast.show("Please Select Requesting BU");
+			}else if(oPostingDate===""){
+				sap.m.MessageToast.show("Please Select Posting Date");
 			}else if(oRemarks===""){
 				sap.m.MessageToast.show("Please Enter Remarks");
 			}else if(oDetails===0){
@@ -519,13 +667,12 @@ sap.ui.define([
 		},
 		onAddRequest: function (oEvent){
 			var oIssueBu = this.getView().byId("inputwhsissue").getValue();
-			var oRequestBu = this.getView().byId("inputwhsrequest").getValue();
+			var oRequestBu = this.getView().byId("inputwhsreceive").getValue();
+			var oPostingDate = this.getView().byId("dpickerpostingdate").getValue();
 			var oRemarks = this.getView().byId("inputremarks").getValue();
 			var oDetails = this.oModel.getData().EditRecord.DocumentLines.length;
-			if(oIssueBu===""){
-				sap.m.MessageToast.show("Please Select Issueing BU");
-			}else if(oRequestBu===""){
-				sap.m.MessageToast.show("Please Select Requesting BU");
+			if(oPostingDate===""){
+				sap.m.MessageToast.show("Please Select Posting Date");
 			}else if(oRemarks===""){
 				sap.m.MessageToast.show("Please Enter Remarks");
 			}else if(oDetails===0){
@@ -576,7 +723,7 @@ sap.ui.define([
 			oBusiness_Unit.U_APP_TransType = TransType;
 			oBusiness_Unit.U_APP_TransNo = sGeneratedTransNo;
 			oBusiness_Unit.U_APP_TransDate = this.getTodaysDate();
-			//oBusiness_Unit.U_APP_CardCode = this.oModel.getData().EditRecord.BPCode;
+			oBusiness_Unit.U_APP_CardCode = this.oModel.getData().EditRecord.BPCode;
 			oBusiness_Unit.U_APP_PostingDate = this.oModel.getData().EditRecord.PostingDate;
 			oBusiness_Unit.U_APP_MarkupType = this.oModel.getData().EditRecord.MarkupType;
 			oBusiness_Unit.U_APP_IssueBU = this.oIssueBu;
@@ -694,7 +841,7 @@ sap.ui.define([
 			oBusiness_Unit.U_APP_TransType = TransType;
 			oBusiness_Unit.U_APP_TransNo = sGeneratedTransNo;
 			oBusiness_Unit.U_APP_TransDate = this.getTodaysDate();
-			//oBusiness_Unit.U_APP_CardCode = this.oModel.getData().EditRecord.BPCode;
+			oBusiness_Unit.U_APP_CardCode = this.oModel.getData().EditRecord.BPCode;
 			oBusiness_Unit.U_APP_PostingDate = this.oModel.getData().EditRecord.PostingDate;
 			oBusiness_Unit.U_APP_MarkupType = this.oModel.getData().EditRecord.MarkupType;
 			oBusiness_Unit.U_APP_IssueBU = this.oIssueBu;
@@ -770,6 +917,20 @@ sap.ui.define([
 					}
 				}
 			});
+		},
+		//GET MARKUP FORMULA
+		fgetmarkup: function (oEvent) {
+			var oMarkupType = this.getView().byId("inputmarkuptype").getSelectedKey();
+			var oMarkPrice = oEvent.mParameters.value;
+			var oCostToProduce = this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].CostProd;
+			if(oMarkupType==="1"){
+				var oTransferPrice = ((Number([oMarkPrice] * 0.01) * Number([oCostToProduce])) + Number([oCostToProduce]));
+			}else if(oMarkupType==="2"){
+				var oTransferPrice = Number([oMarkPrice]) + Number([oCostToProduce]);
+			}
+			this.getView().byId("transferprice").setValue(oTransferPrice);
+			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice=oTransferPrice;
+			this.oModel.refresh();
 		}
   });
 });

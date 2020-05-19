@@ -632,8 +632,6 @@ sap.ui.define([
 		//GETTING ALL BP
 		f_configValueHelpDialogs: function (TransType,customertype) {
 			var sInputValue = this.byId("inputbpcode").getValue();
-		
-					
 				//GET ALL BP
 				$.ajax({
 					url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getallbp&value1="+ customertype +"&value2&value3&value4",
@@ -731,6 +729,7 @@ sap.ui.define([
 			var oBinding = oEvent.getSource().getBinding("items");
 			oBinding.filter([oFilter]);
 		},
+		
 		///Search on Receiving Whs
 		handleSearchWhsreceive: function (oEvent) {
 			var sValue = oEvent.getParameter("value");

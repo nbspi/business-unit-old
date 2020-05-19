@@ -1,7 +1,7 @@
 {
 	"EditRecord": {
 		"Code": "",
-		"TransType": "1",
+		"TransType": "0",
 		"TransNo": "",
 		"DraftNo": "",
 		"TransactionDate": "",
@@ -62,6 +62,6 @@
 		}
 	],
 	"SelectedTransType": {
-		"TransactionType": "1"
+		"TransactionType": "0"
 	}
 }

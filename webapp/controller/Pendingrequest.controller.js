@@ -329,13 +329,47 @@ sap.ui.define([
     });
   },
   onAddReceipt: function () {
-    this.fBuToBu();
-    
+    //INITIALIZE VARIABLES
+			var transtype = this.oModel.getData().EditRecord.TransType;
+			var transno = this.oModel.getData().EditRecord.TransNo;
+			var oCardCode = this.oModel.getData().EditRecord.BPCode;
+			var oPostingDate = this.oModel.getData().EditRecord.PostingDate;
+			var oMarkupType = this.oModel.getData().EditRecord.MarkupType;
+			var oIssueBU = this.oIssueBu;
+			var oReceiveBU = this.oReceiveBu;
+			var oRemarks = this.oModel.getData().EditRecord.Remarks;
+			var oDetails = this.oModel.getData().EditRecord.DocumentLines;
+      var oCountDetails = this.oModel.getData().EditRecord.DocumentLines.length;
+      if (transtype === "" || transno === "") {
+				sap.m.MessageToast.show("Please Select Transaction.");
+			}else if(oCountDetails===0){
+				sap.m.MessageToast.show("Please Select Transaction.");
+			}else if(transtype === "1"){
+        /////Call BU to BU AND DRAFT transaction Function
+				this.fBuToBu(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails);
+      }else if(transtype === "2"){
+        /////Call Bu to Cash Sales AND DRAFT Function
+				this.fBuToCashSales(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails);
+      }else if(transtype === "3"){
+        /////Call Bu to Vale and Draft
+				this.fBuToVale(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails);
+      }else if(transtype === "4"){
+        /////Call Bu to Charge to Expense and Draft
+				this.fBUtoChargetoExpense(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails);
+      }else if(transtype === "5"){
+        /////Call Bu to Inter Org - ISSUE and Draft
+				this.fBuToInterOrgIssue(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails);
+      }else if(transtype === "6"){
+        /////Call Bu to Inter Org - Receipt and Draft
+				this.fBuToInterOrgReceipt(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails);
+      }
   },
   ////POSTING BU TO BU BUSINESS TYPE
-  fBuToBu: function () {
+  fBuToBu: function (transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails) {
     AppUI5.showBusyIndicator(4000);
     //Initialize Variables
+    var ostatus= "1";
+    var oDocType ="Goods Issue";
     var oGoodsIssue = {};
     var oGoodsIssueHeader = {};
     oGoodsIssue.Comments = this.oModel.getData().EditRecord.Remarks;
@@ -370,10 +404,9 @@ sap.ui.define([
         AppUI5.hideBusyIndicator();
       },
       success: function (json) {
-        //this.oPage.setBusy(false);
-        this.fUpdatePending();
+        //ADD UDT RECORDS
+        this.fUpdatePending(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails);
         sap.m.MessageToast.show("Added Successfully");
-        this.fprepareTable(false,"");
         this.fClearField();
         this.oModel.refresh();
         AppUI5.hideBusyIndicator();
@@ -384,6 +417,512 @@ sap.ui.define([
       if (results) {
         //
 
+      }
+    });
+  },fBuToCashSales: function (transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails) {
+    //Initialize Variables
+    AppUI5.showBusyIndicator(4000);
+    var ostatus="2";
+    var oDocType ="Goods Issue/Invoice/Incoming Payments";
+    var oGoodsIssue = {};
+    var oGoodsIssueHeader = {};
+    var ocardcode = this.oModel.getData().EditRecord.BPCode;
+    var oDescription = this.oModel.getData().EditRecord.Remarks;
+    oGoodsIssue.Comments = this.oModel.getData().EditRecord.Remarks;
+    oGoodsIssue.DocumentLines = [];
+    ///LOOP FOR THE DETAILS
+    var d;
+    for (d = 0; d < this.oModel.getData().EditRecord.DocumentLines.length; d++) {
+      oGoodsIssueHeader.WarehouseCode = this.oIssueBu;
+      oGoodsIssueHeader.CostingCode = "01";
+      oGoodsIssueHeader.CostingCode2 = "G101";
+      oGoodsIssueHeader.CostingCode3 = "D001";
+      oGoodsIssueHeader.CostingCode4 = "0001";
+      oGoodsIssueHeader.CostingCode5 = "OS000";
+      oGoodsIssueHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
+      oGoodsIssueHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
+      oGoodsIssueHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
+      oGoodsIssue.DocumentLines.push(JSON.parse(JSON.stringify(oGoodsIssueHeader)));
+    }
+    $.ajax({
+      url: "https://18.136.35.41:50000/b1s/v1/InventoryGenExits",
+      type: "POST",
+      data: JSON.stringify(oGoodsIssue),
+      crossDomain: true,
+      async: false,
+              xhrFields: {
+        withCredentials: true
+      },
+      error: function (xhr, status, error) {
+        var Message = xhr.responseJSON["error"].message.value;
+        AppUI5.fErrorLogs("OIGE","Insert","null","null",Message,"Bu to Cash Sale",this.sUserCode,"null",JSON.stringify(oGoodsIssue));
+        console.error(JSON.stringify(Message));
+        sap.m.MessageToast.show(Message);
+      },
+      success: function (json) {
+        AppUI5.hideBusyIndicator();
+      },
+      context: this
+    }).done(function (results) {
+      if (results) {
+        //POSTING OF INVOICE
+        var oInvoice = {};
+        var oInvoiceHeader = {};
+        oInvoice.CardCode = ocardcode;
+        oInvoice.DocType ="dDocument_Service";
+        oInvoice.DocumentLines = [];
+        ///HARD CODED ACCOUNT CODE FOR TESTING
+        oInvoiceHeader.ItemDescription = oDescription;
+        oInvoiceHeader.AccountCode ="4110101101";
+        oInvoiceHeader.CostingCode = "01";
+        oInvoiceHeader.CostingCode2 = "G101";
+        oInvoiceHeader.CostingCode3 = "D001";
+        oInvoiceHeader.CostingCode4 = "0001";
+        oInvoiceHeader.CostingCode5 = "OS000";
+        oInvoiceHeader.TaxCode = "GST-EO";
+        oInvoiceHeader.LineTotal =results.DocTotal;
+        oInvoice.DocumentLines.push(JSON.parse(JSON.stringify(oInvoiceHeader)));
+
+        $.ajax({
+          url: "https://18.136.35.41:50000/b1s/v1/Invoices",
+          type: "POST",
+          data: JSON.stringify(oInvoice),
+          crossDomain: true,
+          async: false,
+          xhrFields: {
+            withCredentials: true
+          },
+          error: function (xhr, status, error) {
+            var Message = xhr.responseJSON["error"].message.value;
+            AppUI5.fErrorLogs("OINV","Insert","null","null",Message,"Bu to Cash Sale",this.sUserCode,"null",JSON.stringify(oInvoice));
+            console.error(JSON.stringify(Message));
+            sap.m.MessageToast.show(Message);
+            
+          },
+          success: function (json) {
+            //this.oPage.setBusy(false);
+            AppUI5.hideBusyIndicator();
+          },
+          context: this
+        }).done(function (results) {
+          if (results) {
+            ////////
+              var oDocEntry = results.DocEntry;
+              var oDocTotal = results.DocTotal;
+
+              var oIncomingPayment = {};
+              var oIncomingPaymentHeader = {};
+              oIncomingPayment.CardCode = ocardcode;
+              oIncomingPayment.CashSum = oDocTotal;
+              oIncomingPayment.PaymentInvoices = [];
+
+              oIncomingPaymentHeader.LineNum = 0;
+              oIncomingPaymentHeader.DiscountPercent = 0;
+              oIncomingPaymentHeader.DocEntry = oDocEntry;
+              oIncomingPaymentHeader.SumApplied = oDocTotal;
+              oIncomingPaymentHeader.InvoiceType = "it_Invoice";
+              oIncomingPayment.PaymentInvoices.push(JSON.parse(JSON.stringify(oIncomingPaymentHeader)));
+              //ajax call to SL
+              $.ajax({
+                url: "https://18.136.35.41:50000/b1s/v1/IncomingPayments",
+                type: "POST",
+                data: JSON.stringify(oIncomingPayment),
+                async: false,
+                xhrFields: {
+                  withCredentials: true
+                },
+                error: function (xhr, status, error) {
+                  var Message = xhr.responseJSON["error"].message.value;
+                  AppUI5.fErrorLogs("ORCT","Insert","null","null",Message,"Bu to Cash Sale",this.sUserCode,"null",JSON.stringify(oIncomingPayment));
+                  console.error(JSON.stringify(Message));
+                  sap.m.MessageToast.show(Message);
+                },
+                success: function (json) {
+                  //UPDATE RECORDS ON UDT
+                  this.fUpdatePending(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails);
+                  sap.m.MessageToast.show("Successfully Added");
+                  this.fClearField();
+                  this.oModel.refresh();
+                  AppUI5.hideBusyIndicator();
+                },
+                context: this
+    
+              });
+          }////END INCOMING PAYMENTS
+        });
+
+      }  /////POSTING A/R INVOICE END
+    }); ////GOODS ISSUE END
+  },
+  
+  ////POSTING ON BU TO VALE
+  fBuToVale: function (transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails) {
+    //Initialize Variables
+    AppUI5.showBusyIndicator(4000);
+    var ostatus="2";
+    var oDocType ="Goods Issue/Invoices";
+    var oGoodsIssue = {};
+    var oGoodsIssueHeader = {};
+    var ocardcode = this.oModel.getData().EditRecord.BPCode;
+    var oDescription = this.oModel.getData().EditRecord.Remarks;
+    oGoodsIssue.Comments = this.oModel.getData().EditRecord.Remarks;
+    oGoodsIssue.DocumentLines = [];
+    ///LOOP FOR THE DETAILS
+    var d;
+    for (d = 0; d < this.oModel.getData().EditRecord.DocumentLines.length; d++) {
+      oGoodsIssueHeader.WarehouseCode = this.oIssueBu;
+      oGoodsIssueHeader.CostingCode = "01";
+      oGoodsIssueHeader.CostingCode2 = "G101";
+      oGoodsIssueHeader.CostingCode3 = "D001";
+      oGoodsIssueHeader.CostingCode4 = "0001";
+      oGoodsIssueHeader.CostingCode5 = "OS000";
+      oGoodsIssueHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
+      oGoodsIssueHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
+      oGoodsIssueHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
+      oGoodsIssue.DocumentLines.push(JSON.parse(JSON.stringify(oGoodsIssueHeader)));
+    }
+    $.ajax({
+      url: "https://18.136.35.41:50000/b1s/v1/InventoryGenExits",
+      type: "POST",
+      data: JSON.stringify(oGoodsIssue),
+      crossDomain: true,
+              xhrFields: {
+        withCredentials: true
+      },
+      error: function (xhr, status, error) {
+        var Message = xhr.responseJSON["error"].message.value;
+        AppUI5.fErrorLogs("OIGE","Insert","null","null",Message,"Bu to Vale",this.sUserCode,"null",JSON.stringify(oGoodsIssue));
+        console.error(JSON.stringify(Message));
+        sap.m.MessageToast.show(Message);
+        
+      },
+      success: function (json) {
+        AppUI5.hideBusyIndicator();
+      },
+      context: this
+    }).done(function (results) {
+      if (results) {
+        //POSTING OF INVOICE
+        var oInvoice = {};
+        var oInvoiceHeader = {};
+        oInvoice.CardCode = ocardcode;
+        oInvoice.DocType ="dDocument_Service";
+        oInvoice.DocumentLines = [];
+        ///HARD CODED ACCOUNT CODE FOR TESTING
+        oInvoiceHeader.ItemDescription = oDescription;
+        oInvoiceHeader.AccountCode ="4110101101";
+        oInvoiceHeader.CostingCode = "01";
+        oInvoiceHeader.CostingCode2 = "G101";
+        oInvoiceHeader.CostingCode3 = "D001";
+        oInvoiceHeader.CostingCode4 = "0001";
+        oInvoiceHeader.CostingCode5 = "OS000";
+        oInvoiceHeader.LineTotal =results.DocTotal;
+        oInvoice.DocumentLines.push(JSON.parse(JSON.stringify(oInvoiceHeader)));
+        $.ajax({
+          url: "https://18.136.35.41:50000/b1s/v1/Invoices",
+          type: "POST",
+          data: JSON.stringify(oInvoice),
+          crossDomain: true,
+          xhrFields: {
+            withCredentials: true
+          },
+          error: function (xhr, status, error) {
+            var Message = xhr.responseJSON["error"].message.value;
+            AppUI5.fErrorLogs("OINV","Insert","null","null",Message,"Bu to Vale",this.sUserCode,"null",JSON.stringify(oInvoice));
+            console.error(JSON.stringify(Message));
+            sap.m.MessageToast.show(Message);
+            
+          },
+          success: function (json) {
+            //this.oPage.setBusy(false);
+            //UPDATE RECORDS ON UDT
+            this.fUpdatePending(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails);
+            sap.m.MessageToast.show("Posting of Goods Issue is Successful");
+            this.fClearField();
+            this.oModel.refresh();
+            AppUI5.hideBusyIndicator();
+          },
+          context: this
+        }).done(function (results) {
+          if (results) {
+            ////////
+          }
+        });
+
+      }  /////POSTING A/R INVOICE END
+    }); ////GOODS ISSUE END
+  },
+  ////POSTING ON BU TO CHARGE TO EXPENSE
+  fBUtoChargetoExpense: function (transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails) {
+    AppUI5.showBusyIndicator(4000);
+    //Initialize Variables
+    var ostatus="2";
+    var oDocType ="Goods Issue";
+    var oGoodsIssue = {};
+    var oGoodsIssueHeader = {};
+    oGoodsIssue.Comments = this.oModel.getData().EditRecord.Remarks;
+    oGoodsIssue.DocumentLines = [];
+    ///LOOP FOR THE DETAILS
+    var d;
+    for (d = 0; d < this.oModel.getData().EditRecord.DocumentLines.length; d++) {
+      oGoodsIssueHeader.WarehouseCode = this.oIssueBu;
+      oGoodsIssueHeader.CostingCode = "01";
+      oGoodsIssueHeader.CostingCode2 = "G101";
+      oGoodsIssueHeader.CostingCode3 = "D001";
+      oGoodsIssueHeader.CostingCode4 = "0001";
+      oGoodsIssueHeader.CostingCode5 = "OS000";
+      oGoodsIssueHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
+      oGoodsIssueHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
+      oGoodsIssueHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
+      oGoodsIssue.DocumentLines.push(JSON.parse(JSON.stringify(oGoodsIssueHeader)));
+    }
+
+    $.ajax({
+
+      url: "https://18.136.35.41:50000/b1s/v1/InventoryGenExits",
+      type: "POST",
+      data: JSON.stringify(oGoodsIssue),
+      xhrFields: {
+        withCredentials: true
+      },
+      error: function (xhr, status, error) {
+        var Message = xhr.responseJSON["error"].message.value;
+        AppUI5.fErrorLogs("OIGE","Insert","null","null",Message,"Charge to Expense",this.sUserCode,"null",JSON.stringify(oGoodsIssue));
+        console.error(JSON.stringify(Message));
+        sap.m.MessageToast.show(Message);
+        AppUI5.hideBusyIndicator();
+      },
+      success: function (json) {
+        //UPDATE RECORDS ON UDT
+        this.fUpdatePending(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails);
+        sap.m.MessageToast.show("Added Successfully");
+        this.fClearField();
+        this.oModel.refresh();
+        AppUI5.hideBusyIndicator();
+      },
+      context: this
+
+    }).done(function (results) {
+      if (results) {
+        //
+
+      }
+    });
+  },
+  ////POSTING ON BU TO INTER ORG ISSUE
+  fBuToInterOrgIssue: function (transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails) {
+    //Initialize Variables
+    AppUI5.showBusyIndicator(4000);
+    var ostatus="2";
+    var oDocType ="Goods Issue/Invoices";
+    var oGoodsIssue = {};
+    var oGoodsIssueHeader = {};
+    var ocardcode = this.oModel.getData().EditRecord.BPCode;
+    var oDescription = this.oModel.getData().EditRecord.Remarks;
+    oGoodsIssue.Comments = this.oModel.getData().EditRecord.Remarks;
+    oGoodsIssue.DocumentLines = [];
+    ///LOOP FOR THE DETAILS
+    var d;
+    for (d = 0; d < this.oModel.getData().EditRecord.DocumentLines.length; d++) {
+      oGoodsIssueHeader.WarehouseCode = this.oIssueBu;
+      oGoodsIssueHeader.CostingCode = "01";
+      oGoodsIssueHeader.CostingCode2 = "G101";
+      oGoodsIssueHeader.CostingCode3 = "D001";
+      oGoodsIssueHeader.CostingCode4 = "0001";
+      oGoodsIssueHeader.CostingCode5 = "OS000";
+      oGoodsIssueHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
+      oGoodsIssueHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
+      oGoodsIssueHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
+      oGoodsIssue.DocumentLines.push(JSON.parse(JSON.stringify(oGoodsIssueHeader)));
+    }
+    $.ajax({
+      url: "https://18.136.35.41:50000/b1s/v1/InventoryGenExits",
+      type: "POST",
+      data: JSON.stringify(oGoodsIssue),
+      crossDomain: true,
+              xhrFields: {
+        withCredentials: true
+      },
+      error: function (xhr, status, error) {
+        var Message = xhr.responseJSON["error"].message.value;
+        AppUI5.fErrorLogs("OIGE","Insert","null","null",Message,"Inter Org Issue",this.sUserCode,"null",JSON.stringify(oGoodsIssue));
+        console.error(JSON.stringify(Message));
+        sap.m.MessageToast.show(Message);
+        
+      },
+      success: function (json) {
+        AppUI5.hideBusyIndicator();
+      },
+      context: this
+    }).done(function (results) {
+      if (results) {
+        //POSTING OF INVOICE
+        var oInvoice = {};
+        var oInvoiceHeader = {};
+        oInvoice.CardCode = ocardcode;
+        oInvoice.DocType ="dDocument_Service";
+        oInvoice.DocumentLines = [];
+        ///HARD CODED ACCOUNT CODE FOR TESTING
+        oInvoiceHeader.ItemDescription = oDescription;
+        oInvoiceHeader.AccountCode ="4110101101";
+        oInvoiceHeader.CostingCode = "01";
+        oInvoiceHeader.CostingCode2 = "G101";
+        oInvoiceHeader.CostingCode3 = "D001";
+        oInvoiceHeader.CostingCode4 = "0001";
+        oInvoiceHeader.CostingCode5 = "OS000";
+        oInvoiceHeader.LineTotal =results.DocTotal;
+        oInvoice.DocumentLines.push(JSON.parse(JSON.stringify(oInvoiceHeader)));
+
+        $.ajax({
+          url: "https://18.136.35.41:50000/b1s/v1/Invoices",
+          type: "POST",
+          data: JSON.stringify(oInvoice),
+          crossDomain: true,
+          xhrFields: {
+            withCredentials: true
+          },
+          error: function (xhr, status, error) {
+            var Message = xhr.responseJSON["error"].message.value;
+            AppUI5.fErrorLogs("OINV","Insert","null","null",Message,"Inter Org Issue",this.sUserCode,"null",JSON.stringify(oInvoice));
+            console.error(JSON.stringify(Message));
+            sap.m.MessageToast.show(Message);
+            
+          },
+          success: function (json) {
+           //UPDATE RECORDS ON UDT
+           this.fUpdatePending(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails);
+            sap.m.MessageToast.show("Posting of Goods Issue is Successful");
+            this.fClearField();
+            this.oModel.refresh();
+            AppUI5.hideBusyIndicator();
+          },
+          context: this
+        }).done(function (results) {
+          if (results) {
+            ////////
+          }
+        });
+
+      }  /////POSTING A/R INVOICE END
+    }); ////GOODS ISSUE END
+  },
+  
+    ///PREPARING BATCH REQUEST
+    fprepareBatchRequestBody: function (oRequest) {
+      var batchRequest = "";
+      var beginBatch = "--a\nContent-Type: multipart/mixed;boundary=b\n\n";
+      var endBatch = "--b--\n--a--";
+
+      batchRequest = batchRequest + beginBatch;
+
+      var objectUDT = "";
+      for (var i = 0; i < oRequest.length; i++) {
+
+        objectUDT = oRequest[i];
+        batchRequest = batchRequest + "--b\nContent-Type:application/http\nContent-Transfer-Encoding:binary\n\n";
+        batchRequest = batchRequest + "POST /b1s/v1/" + objectUDT.tableName;
+        batchRequest = batchRequest + "\nContent-Type: application/json\n\n";
+        batchRequest = batchRequest + JSON.stringify(objectUDT.data) + "\n\n";
+      }
+
+      batchRequest = batchRequest + endBatch;
+
+      return batchRequest;
+
+    },
+  ///POSTING ON BU TO INTER ORG ISSUE
+  fBuToInterOrgReceipt: function (transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails) {
+    AppUI5.showBusyIndicator(4000);
+    //Initialize Variables
+    var ostatus="2";
+    var oDocType ="Goods Receipt/Purchase Invoices";
+    var oInvoice = {};
+    var oGoodsReceipt= {};
+    var oInvoiceHeader = {};
+    var oGoodsReceiptHeader = {};
+    oInvoice.CardCode = this.oModel.getData().EditRecord.BPCode;
+    oInvoice.Comments = this.oModel.getData().EditRecord.Remarks;
+    oInvoice.DocumentLines = [];
+    oGoodsReceipt.Comments = this.oModel.getData().EditRecord.Remarks;
+    oGoodsReceipt.DocumentLines = [];
+    ///LOOP FOR THE DETAILS
+    var d;
+    for (d = 0; d < this.oModel.getData().EditRecord.DocumentLines.length; d++) {
+      ///Goods Receipt Details
+      oInvoiceHeader.WarehouseCode = this.oReceiveBu;
+      oInvoiceHeader.CostingCode = "01";
+      oInvoiceHeader.CostingCode2 = "G101";
+      oInvoiceHeader.CostingCode3 = "D001";
+      oInvoiceHeader.CostingCode4 = "0001";
+      oInvoiceHeader.CostingCode5 = "OS000";
+      oInvoiceHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
+      oInvoiceHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
+      oInvoiceHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice; //adjustment
+      
+      ///Goods Issue Details
+      oGoodsReceiptHeader.WarehouseCode = this.oReceiveBu;
+      oGoodsReceiptHeader.CostingCode = "01";
+      oGoodsReceiptHeader.CostingCode2 = "G101";
+      oGoodsReceiptHeader.CostingCode3 = "D001";
+      oGoodsReceiptHeader.CostingCode4 = "0001";
+      oGoodsReceiptHeader.CostingCode5 = "OS000";
+      oGoodsReceiptHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
+      oGoodsReceiptHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
+      oGoodsReceiptHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
+
+      oInvoice.DocumentLines.push(JSON.parse(JSON.stringify(oInvoiceHeader)));
+      oGoodsReceipt.DocumentLines.push(JSON.parse(JSON.stringify(oGoodsReceiptHeader)));
+    }
+    var batchArray = [
+      //directly insert data if data is single row per table 
+      {
+        "tableName": "PurchaseInvoices",
+        "data": oInvoice
+      }
+    ];
+
+    batchArray.push(JSON.parse(JSON.stringify(({
+      "tableName": "InventoryGenEntries",
+      "data": oGoodsReceipt
+    }))));
+
+    var sBodyRequest = this.fprepareBatchRequestBody(batchArray);
+    //ajax call to SL
+    $.ajax({
+      url: "https://18.136.35.41:50000/b1s/v1/$batch",
+      type: "POST",
+      contentType: "multipart/mixed;boundary=a",
+      data: sBodyRequest, //If batch, body data should not be JSON.stringified
+      xhrFields: {
+        withCredentials: true
+      },
+      error: function (xhr, status, error) {
+        var Message = xhr.responseJSON["error"].message.value;
+        console.error(JSON.stringify(Message));
+        sap.m.MessageToast.show(Message);
+        AppUI5.hideBusyIndicator();
+      },
+      success: function (json) {
+        AppUI5.hideBusyIndicator();
+      },
+      context: this
+
+    }).done(function (results) {
+      if(JSON.stringify(results).search("400 Bad") !== -1) {
+        var oStartIndex = results.search("value") + 10;
+        var oEndIndex = results.indexOf("}") - 8;
+        var oMessage = results.substring(oStartIndex,oEndIndex);
+        AppUI5.fErrorLogs("OIGE/OPCH","Insert","null","null",oMessage,"Insert",this.sUserCode,"null",sBodyRequest);
+        sap.m.MessageToast.show(oMessage);
+      }else{
+        if (results) {
+         //UPDATE RECORDS ON UDT
+         this.fUpdatePending(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails);
+          sap.m.MessageToast.show("Transaction Type "+ TransType +" Draft Has Been Created!");
+          this.fClearField();
+          this.oModel.refresh();
+          AppUI5.hideBusyIndicator();
+        }
       }
     });
   },
@@ -418,11 +957,9 @@ sap.ui.define([
 
   },
   		////UPDATE  POSTED
-      fUpdatePending: function () {
-        var ostatus ="1";
-        var oDocType ="Goods Issue";
-        var TransNo = this.oModel.getData().EditRecord.TransNo;
-        var TransType = this.oModel.getData().EditRecord.TransType;
+      fUpdatePending: function (transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails) {
+        var TransNo = transno;
+        var TransType = transtype;
         $.ajax({
           url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=" + this.sDataBase + "&procName=spAppBusinessUnit&queryTag=deleteDraftDetails&value1=" +
             TransNo + "&value2=" + TransType + "&value3&value4",
@@ -455,13 +992,12 @@ sap.ui.define([
         oBusiness_Unit.U_APP_TransType = TransType;
         oBusiness_Unit.U_APP_TransNo = TransNo;
         oBusiness_Unit.U_APP_TransDate = this.fgetTodaysDate();
-        oBusiness_Unit.U_APP_CardCode = this.oModel.getData().EditRecord.BPCode;
-        oBusiness_Unit.U_APP_CustomerName = this.oModel.getData().EditRecord.BPName;
-        oBusiness_Unit.U_APP_PostingDate = this.oModel.getData().EditRecord.PostingDate;
-        oBusiness_Unit.U_APP_MarkupType = this.oModel.getData().EditRecord.MarkupType;
+        oBusiness_Unit.U_APP_CardCode = oCardCode;
+        oBusiness_Unit.U_APP_PostingDate = oPostingDate;
+        oBusiness_Unit.U_APP_MarkupType = oMarkupType;
         oBusiness_Unit.U_APP_IssueBU = this.oIssueBu;
         oBusiness_Unit.U_APP_ReceivingBU = this.oReceiveBu;
-        oBusiness_Unit.U_APP_Remarks = this.oModel.getData().EditRecord.Remarks;
+        oBusiness_Unit.U_APP_Remarks = oRemarks;
         oBusiness_Unit.U_APP_Status = ostatus;
         oBusiness_Unit.U_APP_DocType = oDocType;
         ///HEADER BATCH
