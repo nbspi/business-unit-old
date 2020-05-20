@@ -99,11 +99,15 @@ sap.ui.define([
 			this.tableId = "tblDrafts";
 			this.oIssueBu = "";
 			this.oReceiveBu= "";
- 	   //	this.fprepareTable(true,"");
+			//	this.fprepareTable(true,"");
+			//CPA
+			this.currentFile = {}; //File Object	
+			//For Attachment File Key
+			this.FileKey = null;
 
-     /// REQUESTOR DATA
-     var oRequestor =this.sUserCode;
-	 this.getView().byId("inputrequestor").setValue(oRequestor);
+			/// REQUESTOR DATA
+			var oRequestor =this.sUserCode;
+			this.getView().byId("inputrequestor").setValue(oRequestor);
 	 
 	 
 	// this.oModel.getData().EditRecord.DocumentLines.length = 0;
@@ -129,6 +133,9 @@ sap.ui.define([
 				this.oModel.getData().EditRecord.DocumentLines.length = 0;
 				this.oIssueBu = "";
 				this.oReceiveBu= "";
+				this.getView().byId("fileUploader").setValue("");
+				this.currentFile = {};
+				this.FileKey = null;
 				this.oModel.refresh();
 			} catch (err) {
 				//console.log(err.message);
@@ -731,6 +738,8 @@ sap.ui.define([
 			oBusiness_Unit.U_APP_Remarks = this.oModel.getData().EditRecord.Remarks;
 			oBusiness_Unit.U_APP_Status = ostatus;
 			oBusiness_Unit.U_APP_DocType = oDocType;
+			oBusiness_Unit.U_APP_Attachment = this.getView().byId("fileUploader").getValue();
+			oBusiness_Unit.U_APP_AttachmentKey = this.FileKey;
 			///HEADER BATCH Array
 			var batchArray = [
 				//directly insert data if data is single row per table 
@@ -849,6 +858,8 @@ sap.ui.define([
 			oBusiness_Unit.U_APP_Remarks = this.oModel.getData().EditRecord.Remarks;
 			oBusiness_Unit.U_APP_Status = ostatus;
 			oBusiness_Unit.U_APP_DocType = oDocType;
+			oBusiness_Unit.U_APP_Attachment = this.getView().byId("fileUploader").getValue();
+			oBusiness_Unit.U_APP_AttachmentKey = this.FileKey;
 			///HEADER BATCH Array
 			var batchArray = [
 				//directly insert data if data is single row per table 
@@ -931,6 +942,41 @@ sap.ui.define([
 			this.getView().byId("transferprice").setValue(oTransferPrice);
 			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice=oTransferPrice;
 			this.oModel.refresh();
+		},
+
+		handleValueChange: function (oEvt){
+			var aFiles = oEvt.getParameters().files;
+			this.currentFile = aFiles[0];
+			var FileName = this.getView().byId("fileUploader").getValue();
+	
+			var form = new FormData();
+			form.append("",this.currentFile,FileName);
+	
+			//Postinf Attachment in SAP
+			$.ajax({
+				url: "https://18.136.35.41:50000/b1s/v1/Attachments2",
+				data: form,
+				type: "POST",
+				processData:false,
+				mimeType: "multipart/form-data",
+				contentType: false,
+				xhrFields: {
+					withCredentials: true
+				},
+				error: function (xhr, status, error) {
+					var ErrorMassage = xhr.responseJSON["error"].message.value;
+					sap.m.MessageToast.show(ErrorMassage);
+					this.fHideBusyIndicator();
+					console.error(ErrorMassage);
+				},
+				context: this,
+				success: function (json) {}
+			}).done(function (results) {			
+				if (results) {
+					var oResult =JSON.parse(results);
+					this.FileKey = oResult.AbsoluteEntry;
+				}
+			}); 
 		}
   });
 });

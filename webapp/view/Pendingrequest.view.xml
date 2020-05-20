@@ -1,4 +1,5 @@
- <mvc:View controllerName="com.apptech.bfi-businessunit.controller.Pendingrequest" xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:uxap="sap.uxap" xmlns:f="sap.ui.layout.form"
+ <mvc:View controllerName="com.apptech.bfi-businessunit.controller.Pendingrequest" xmlns:core="sap.ui.core" 
+ xmlns:mvc="sap.ui.core.mvc" xmlns:u="sap.ui.unified" xmlns="sap.m" xmlns:uxap="sap.uxap" xmlns:f="sap.ui.layout.form"
 	 xmlns:l="sap.ui.layout" xmlns:tnt="sap.tnt"
 	xmlns:html="http://www.w3.org/1999/xhtml" xmlns:t="sap.ui.table">
 	<App id="idAppControl">
@@ -186,9 +187,6 @@
 													<l:GridData span="L3 M4 S12"/>
 												</layoutData>
 											</Input>
-
-
-
 											<!--REMARKS-->
 											<Label text="Received By" width="100%">
 												<layoutData>
@@ -200,6 +198,12 @@
 													<l:GridData span="L3 M4 S12"/>
 												</layoutData>
 											</Input>
+
+											<!-- ATTACHMENT UPLOADING
+											<u:FileUploader id="fileUploader" name="myFileUpload" tooltip="Upload your file to the local server"
+											uploadComplete="onHandleUploadComplete"
+											change="handleValueChange"
+											 width="100%" required="true"  placeholder="Attachment"/> -->
 										</f:content>
 									</f:SimpleForm>
 									<f:SimpleForm editable="true" layout="ResponsiveGridLayout" id="form01" width="100%">

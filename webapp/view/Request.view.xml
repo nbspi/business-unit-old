@@ -1,4 +1,5 @@
- <mvc:View controllerName="com.apptech.bfi-businessunit.controller.Request" xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:uxap="sap.uxap" xmlns:f="sap.ui.layout.form"
+ <mvc:View controllerName="com.apptech.bfi-businessunit.controller.Request" xmlns:core="sap.ui.core"
+  xmlns:mvc="sap.ui.core.mvc" xmlns:u="sap.ui.unified" xmlns="sap.m" xmlns:uxap="sap.uxap" xmlns:f="sap.ui.layout.form"
 	 xmlns:l="sap.ui.layout" xmlns:tnt="sap.tnt"
 	xmlns:html="http://www.w3.org/1999/xhtml" xmlns:t="sap.ui.table">
 	<App id="idAppControl">
@@ -164,19 +165,12 @@
 													<l:GridData span="L3 M4 S12"/>
 												</layoutData>
 											</Input>
+											<!--ATTACHMENT UPLOADING -->
+											<u:FileUploader id="fileUploader" name="myFileUpload" tooltip="Upload your file to the local server"
+											uploadComplete="onHandleUploadComplete"
+											change="handleValueChange"
+											 width="100%" required="true" placeholder="Attachment"/>
 
-
-											
-											<!--<Panel-->
-											<!--	id="dataBindingDatePanel"-->
-											<!--	headerText="DatePicker using data binding">-->
-											<!--	<Label text="DatePicker using DataBinding" labelFor="DP4"/>-->
-											<!--	<DatePicker-->
-											<!--		id="DP4"-->
-											<!--		value="{path:'/dateValue', type:'sap.ui.model.type.Date', formatOptions: { style: 'medium', strictParsing: true}}"-->
-											<!--		class="sapUiSmallMarginBottom"/>-->
-											<!--	<Text text="{path:'/dateValue', type:'sap.ui.model.type.Date', formatOptions: { style: 'long'}}" class="sapUiSmallMargin"/>-->
-											<!--</Panel>-->
 										</f:content>
 									</f:SimpleForm>
 									<f:SimpleForm editable="true" layout="ResponsiveGridLayout" id="form01" width="100%">

@@ -61,7 +61,14 @@ sap.ui.define([
       this.tableId = "tblRecords";
       this.oIssueBu = "";
 			this.oReceiveBu= "";
-			this.fprepareTable(true,"");
+      this.fprepareTable(true,"");
+
+      //CPA
+      this.currentFile = {}; //File Object	
+      	//For Attachment File Name
+      this.Attachment = "";
+			//For Attachment File Key
+			this.FileKey = null;
 
   },
  
@@ -266,6 +273,9 @@ sap.ui.define([
 				this.oReceiveBu=results[0].ReceiveBUCode;
         this.oModel.getData().EditRecord.Remarks = results[0].Remarks;
         this.oModel.getData().EditRecord.ReceivedBy = this.sUserCode;
+        // this.getView().byId("fileUploader").setValue(results[0].Attachment);
+        this.Attachment = results[0].Attachment;
+        this.FileKey = results[0].Attachmentkey;
         // this.oModel.setJSON("{\"EditRecord\" : " + oResult + "}");
 
         var transtype = this.oModel.getData().EditRecord.TransType = results[0].TransType;
@@ -340,32 +350,34 @@ sap.ui.define([
 			var oRemarks = this.oModel.getData().EditRecord.Remarks;
 			var oDetails = this.oModel.getData().EditRecord.DocumentLines;
       var oCountDetails = this.oModel.getData().EditRecord.DocumentLines.length;
+      var oAttachment = this.Attachment;
+			var oAttachmentKey = this.FileKey;
       if (transtype === "" || transno === "") {
 				sap.m.MessageToast.show("Please Select Transaction.");
 			}else if(oCountDetails===0){
 				sap.m.MessageToast.show("Please Select Transaction.");
 			}else if(transtype === "1"){
         /////Call BU to BU AND DRAFT transaction Function
-				this.fBuToBu(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails);
+				this.fBuToBu(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey);
       }else if(transtype === "2"){
         /////Call Bu to Cash Sales AND DRAFT Function
-				this.fBuToCashSales(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails);
+				this.fBuToCashSales(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey);
       }else if(transtype === "3"){
         /////Call Bu to Vale and Draft
-				this.fBuToVale(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails);
+				this.fBuToVale(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey);
       }else if(transtype === "4"){
         /////Call Bu to Charge to Expense and Draft
-				this.fBUtoChargetoExpense(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails);
+				this.fBUtoChargetoExpense(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey);
       }else if(transtype === "5"){
         /////Call Bu to Inter Org - ISSUE and Draft
-				this.fBuToInterOrgIssue(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails);
+				this.fBuToInterOrgIssue(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey);
       }else if(transtype === "6"){
         /////Call Bu to Inter Org - Receipt and Draft
-				this.fBuToInterOrgReceipt(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails);
+				this.fBuToInterOrgReceipt(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey);
       }
   },
   ////POSTING BU TO BU BUSINESS TYPE
-  fBuToBu: function (transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails) {
+  fBuToBu: function (transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey) {
     AppUI5.showBusyIndicator(4000);
     //Initialize Variables
     var ostatus= "1";
@@ -373,6 +385,7 @@ sap.ui.define([
     var oGoodsIssue = {};
     var oGoodsIssueHeader = {};
     oGoodsIssue.Comments = this.oModel.getData().EditRecord.Remarks;
+    oGoodsIssue.AttachmentEntry = oAttachmentKey;
     oGoodsIssue.DocumentLines = [];
     ///LOOP FOR THE DETAILS
     var d;
@@ -405,7 +418,7 @@ sap.ui.define([
       },
       success: function (json) {
         //ADD UDT RECORDS
-        this.fUpdatePending(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails);
+        this.fUpdatePending(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
         sap.m.MessageToast.show("Added Successfully");
         this.fClearField();
         this.oModel.refresh();
@@ -419,7 +432,9 @@ sap.ui.define([
 
       }
     });
-  },fBuToCashSales: function (transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails) {
+  },
+  ////POSTING BU TO CASH SALES
+  fBuToCashSales: function (transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey) {
     //Initialize Variables
     AppUI5.showBusyIndicator(4000);
     var ostatus="2";
@@ -429,6 +444,7 @@ sap.ui.define([
     var ocardcode = this.oModel.getData().EditRecord.BPCode;
     var oDescription = this.oModel.getData().EditRecord.Remarks;
     oGoodsIssue.Comments = this.oModel.getData().EditRecord.Remarks;
+    oGoodsIssue.AttachmentEntry = oAttachmentKey;
     oGoodsIssue.DocumentLines = [];
     ///LOOP FOR THE DETAILS
     var d;
@@ -470,6 +486,7 @@ sap.ui.define([
         var oInvoiceHeader = {};
         oInvoice.CardCode = ocardcode;
         oInvoice.DocType ="dDocument_Service";
+        oInvoice.AttachmentEntry = oAttachmentKey;
         oInvoice.DocumentLines = [];
         ///HARD CODED ACCOUNT CODE FOR TESTING
         oInvoiceHeader.ItemDescription = oDescription;
@@ -539,7 +556,7 @@ sap.ui.define([
                 },
                 success: function (json) {
                   //UPDATE RECORDS ON UDT
-                  this.fUpdatePending(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails);
+                  this.fUpdatePending(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
                   sap.m.MessageToast.show("Successfully Added");
                   this.fClearField();
                   this.oModel.refresh();
@@ -556,7 +573,7 @@ sap.ui.define([
   },
   
   ////POSTING ON BU TO VALE
-  fBuToVale: function (transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails) {
+  fBuToVale: function (transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey) {
     //Initialize Variables
     AppUI5.showBusyIndicator(4000);
     var ostatus="2";
@@ -566,6 +583,7 @@ sap.ui.define([
     var ocardcode = this.oModel.getData().EditRecord.BPCode;
     var oDescription = this.oModel.getData().EditRecord.Remarks;
     oGoodsIssue.Comments = this.oModel.getData().EditRecord.Remarks;
+    oGoodsIssue.AttachmentEntry = oAttachmentKey;
     oGoodsIssue.DocumentLines = [];
     ///LOOP FOR THE DETAILS
     var d;
@@ -607,6 +625,7 @@ sap.ui.define([
         var oInvoiceHeader = {};
         oInvoice.CardCode = ocardcode;
         oInvoice.DocType ="dDocument_Service";
+        oInvoice.AttachmentEntry = oAttachmentKey;
         oInvoice.DocumentLines = [];
         ///HARD CODED ACCOUNT CODE FOR TESTING
         oInvoiceHeader.ItemDescription = oDescription;
@@ -636,7 +655,7 @@ sap.ui.define([
           success: function (json) {
             //this.oPage.setBusy(false);
             //UPDATE RECORDS ON UDT
-            this.fUpdatePending(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails);
+            this.fUpdatePending(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
             sap.m.MessageToast.show("Posting of Goods Issue is Successful");
             this.fClearField();
             this.oModel.refresh();
@@ -653,7 +672,7 @@ sap.ui.define([
     }); ////GOODS ISSUE END
   },
   ////POSTING ON BU TO CHARGE TO EXPENSE
-  fBUtoChargetoExpense: function (transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails) {
+  fBUtoChargetoExpense: function (transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey) {
     AppUI5.showBusyIndicator(4000);
     //Initialize Variables
     var ostatus="2";
@@ -661,6 +680,7 @@ sap.ui.define([
     var oGoodsIssue = {};
     var oGoodsIssueHeader = {};
     oGoodsIssue.Comments = this.oModel.getData().EditRecord.Remarks;
+    oGoodsIssue.AttachmentEntry = oAttachmentKey;
     oGoodsIssue.DocumentLines = [];
     ///LOOP FOR THE DETAILS
     var d;
@@ -694,7 +714,7 @@ sap.ui.define([
       },
       success: function (json) {
         //UPDATE RECORDS ON UDT
-        this.fUpdatePending(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails);
+        this.fUpdatePending(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
         sap.m.MessageToast.show("Added Successfully");
         this.fClearField();
         this.oModel.refresh();
@@ -710,7 +730,7 @@ sap.ui.define([
     });
   },
   ////POSTING ON BU TO INTER ORG ISSUE
-  fBuToInterOrgIssue: function (transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails) {
+  fBuToInterOrgIssue: function (transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey) {
     //Initialize Variables
     AppUI5.showBusyIndicator(4000);
     var ostatus="2";
@@ -720,6 +740,7 @@ sap.ui.define([
     var ocardcode = this.oModel.getData().EditRecord.BPCode;
     var oDescription = this.oModel.getData().EditRecord.Remarks;
     oGoodsIssue.Comments = this.oModel.getData().EditRecord.Remarks;
+    oGoodsIssue.AttachmentEntry = oAttachmentKey;
     oGoodsIssue.DocumentLines = [];
     ///LOOP FOR THE DETAILS
     var d;
@@ -761,6 +782,7 @@ sap.ui.define([
         var oInvoiceHeader = {};
         oInvoice.CardCode = ocardcode;
         oInvoice.DocType ="dDocument_Service";
+        oInvoice.AttachmentEntry = oAttachmentKey;
         oInvoice.DocumentLines = [];
         ///HARD CODED ACCOUNT CODE FOR TESTING
         oInvoiceHeader.ItemDescription = oDescription;
@@ -790,7 +812,7 @@ sap.ui.define([
           },
           success: function (json) {
            //UPDATE RECORDS ON UDT
-           this.fUpdatePending(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails);
+           this.fUpdatePending(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
             sap.m.MessageToast.show("Posting of Goods Issue is Successful");
             this.fClearField();
             this.oModel.refresh();
@@ -831,7 +853,7 @@ sap.ui.define([
 
     },
   ///POSTING ON BU TO INTER ORG ISSUE
-  fBuToInterOrgReceipt: function (transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails) {
+  fBuToInterOrgReceipt: function (transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey) {
     AppUI5.showBusyIndicator(4000);
     //Initialize Variables
     var ostatus="2";
@@ -917,7 +939,7 @@ sap.ui.define([
       }else{
         if (results) {
          //UPDATE RECORDS ON UDT
-         this.fUpdatePending(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails);
+         this.fUpdatePending(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
           sap.m.MessageToast.show("Transaction Type "+ TransType +" Draft Has Been Created!");
           this.fClearField();
           this.oModel.refresh();
@@ -957,7 +979,7 @@ sap.ui.define([
 
   },
   		////UPDATE  POSTED
-      fUpdatePending: function (transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails) {
+      fUpdatePending: function (transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey) {
         var TransNo = transno;
         var TransType = transtype;
         $.ajax({
@@ -1000,6 +1022,8 @@ sap.ui.define([
         oBusiness_Unit.U_APP_Remarks = oRemarks;
         oBusiness_Unit.U_APP_Status = ostatus;
         oBusiness_Unit.U_APP_DocType = oDocType;
+        oBusiness_Unit.U_APP_Attachment = oAttachment;
+		  	oBusiness_Unit.U_APP_AttachmentKey = oAttachmentKey;
         ///HEADER BATCH
         var BatchHeader =
           //directly insert data if data is single row per table 
@@ -1011,7 +1035,7 @@ sap.ui.define([
         var d;
         var code = "";
         var batchArray = [];
-        for (d = 0; d < this.oModel.getData().EditRecord.DocumentLines.length; d++) {
+        for (d = 0; d < oDetails.length; d++) {
 				code = AppUI5.generateUDTCode("GetCode");
         oBusiness_Unit_Details.Code = code;
 				oBusiness_Unit_Details.Name = code;
