@@ -275,8 +275,15 @@ sap.ui.define([
         this.oModel.getData().EditRecord.ReceivedBy = this.sUserCode;
         // this.getView().byId("fileUploader").setValue(results[0].Attachment);
         this.Attachment = results[0].Attachment;
-        this.FileKey = results[0].Attachmentkey;
-        // this.oModel.setJSON("{\"EditRecord\" : " + oResult + "}");
+        var oFileKey = results[0].Attachmentkey;
+        if(oFileKey===""){
+          this.FileKey = null;
+        }else{
+          this.FileKey = results[0].Attachmentkey;
+        }
+        
+        
+
 
         var transtype = this.oModel.getData().EditRecord.TransType = results[0].TransType;
         if (transtype === "1") {
