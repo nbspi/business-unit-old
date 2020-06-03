@@ -4,13 +4,58 @@
 	<App id="idAppControl">
 		<pages>
 			<Page title="REPORT">
-				<content>
-				<t:Table id="my-table" selectionMode="Single" visibleRowCount="8" ariaLabelledBy="title" enableCellFilter="true"
-					rowSelectionChange="onSelectionChange">
-					
-				</t:Table>
-				</content>
+			<Toolbar>
+			<content>
+				<Button text="PRINT" id="btnPrint" visible="{buttons>/buttons/btnSaveDraft}" tooltip="PRINT" press="onPrint" icon="sap-icon://add"/>
+				<Button text="GENERATE" id="btnGenerate" visible="{buttons>/buttons/btnAddRecords}" tooltip="GENERATE" press="onGenerate" icon="sap-icon://save"/>
+				<ToolbarSpacer/>
+			</content>
+			</Toolbar>
+
+
+
+
+
+
+
+
+
+
+
+			<!-- <Table id="idPDFTable" items="{/Records}">
+                            <headerToolbar>
+                                <Toolbar>
+                                    <Title level="H2" text="PDF Table"/>
+                                     <ToolbarSpacer></ToolbarSpacer>
+                                     <Button    icon="sap-icon://download" press="onDataExportPDF" />
+                                </Toolbar>
+                            </headerToolbar>
+                            <columns>
+                                <Column width="12em">
+                                    <Text text="ID"/>
+                                </Column>
+                                <Column>
+                                    <Text text="Frist Name"/>
+                                </Column>
+                                <Column>
+                                    <Text text="Last Name"/>
+                                </Column>
+                                <Column>
+                                    <Text text="Phone No."/>
+                                </Column>
+                            </columns>
+                            <items>
+                                <ColumnListItem>
+                                    <cells>
+                                        <Text text="{Id}"/>
+                                        <Text text="{Fname}"/>
+                                        <Text text="{Lname}"/>
+                                        <Text text="{Phoneno}"/>
+                                    </cells>
+                                </ColumnListItem>
+                            </items>
+                        </Table> -->
 			</Page>
 		</pages>
 	</App>
-</mvc:View> 
+</mvc:View>

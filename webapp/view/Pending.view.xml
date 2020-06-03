@@ -20,7 +20,7 @@
 										<l:GridData span="L3 M4 S12"/>
 									</layoutData>
 								</Select>
-										
+
 								<t:Table id="tblRecords" selectionMode="Multi" visibleRowCount="8" ariaLabelledBy="title" enableCellFilter="true"
 									rowSelectionChange="onSelectionChange">
 									<t:extension>
@@ -59,7 +59,7 @@
 													<l:GridData span="L3 M4 S12"/>
 												</layoutData>
 											</Select>
-											
+
 											<!--Transaction No-->
 											<Label text="Transaction No" width="100%">
 												<layoutData>
@@ -71,7 +71,7 @@
 													<l:GridData span="L3 M4 S12"/>
 												</layoutData>
 											</Input>
-											
+
 											<!--Account Code -->
 											<Label text="Customer/Vendor" width="100%">
 												<layoutData>
@@ -84,7 +84,7 @@
 													<l:GridData span="L3 M4 S12"/>
 												</layoutData>
 											</Input>
-											
+
 											<!--Transaction Date-->
 											<Label text="Transaction Date" width="100%">
 												<layoutData>
@@ -96,7 +96,7 @@
 													<l:GridData span="L3 M4 S12"/>
 												</layoutData>
 											</DatePicker>
-											
+
 											<!--Account Name -->
 											<!-- <Label text="Customer/Vendor" width="100%">
 												<layoutData>
@@ -108,7 +108,7 @@
 													<l:GridData span="L3 M4 S12"/>
 												</layoutData>
 											</Input> -->
-											
+
 											<!--Issueing Bu-->
 											<Label text="Issuing BU" width="100%">
 												<layoutData>
@@ -127,8 +127,8 @@
 											<!--		<l:GridData span="L3 M4 S12"/>-->
 											<!--	</layoutData>-->
 											<!--</Select> -->
-											
-											
+
+
 											<!--Posting Date-->
 											<Label text="Posting Date" width="100%">
 												<layoutData>
@@ -140,8 +140,8 @@
 													<l:GridData span="L3 M4 S12"/>
 												</layoutData>
 											</DatePicker>
-											
-											
+
+
 											<!--Receiving BU -->
 											<Label text="Receiving BU" width="100%">
 												<layoutData>
@@ -154,7 +154,7 @@
 													<l:GridData span="L3 M4 S12"/>
 												</layoutData>
 											</Input>
-											
+
 											<!--Markup Type-->
 											<Label text="Markup Type" width="100%">
 												<layoutData>
@@ -173,8 +173,8 @@
 											<!--		<l:GridData span="L3 M4 S12"/>-->
 											<!--	</layoutData>-->
 											<!--</Select>-->
-											
-											
+
+
 											<!--REMARKS-->
 											<Label text="Remarks" width="100%">
 												<layoutData>
@@ -244,7 +244,7 @@
 												<t:Column width="6rem">
 													<Label text="Mark Up"/>
 													<t:template>
-														<Input value="{MarkupPrice}" type="Number" id="markupprice" placeholder="0.00" textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
+														<Input value="{MarkUp}" type="Number" id="markupprice" placeholder="0.00" textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
 														<!--<Text text="{oMdlAP>NumAtCard}"/>-->
 													</t:template>
 												</t:Column>
@@ -255,7 +255,7 @@
 														<!--<Text text="{oMdlAP>Comments}"/>-->
 													</t:template>
 												</t:Column>
-												<t:Column width="9rem"> 
+												<t:Column width="9rem">
 													<Label text="Market Price"/>
 													<t:template>
 														<Input value="{MarketPrice}" type="Number" placeholder="0.00" textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
@@ -267,11 +267,11 @@
 									</f:SimpleForm>
 								</VBox>
 							</IconTabFilter>
-						
+
 						</items>
 					</IconTabBar>
 				</content>
 			</Page>
 		</pages>
 	</App>
-</mvc:View> 
+</mvc:View>

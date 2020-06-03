@@ -1,4 +1,4 @@
-{ 
+{
     "EditRecord": {
         "Code": "",
         "TransType": "0",
@@ -22,7 +22,7 @@
             "Description": "",
             "Quantity": 0,
             "CostProd": 0,
-            "MarkupPrice": 0,
+            "MarkUp": 0,
             "TransferPrice": 0,
             "MarketPrice": 0,
             "TransNo": "",

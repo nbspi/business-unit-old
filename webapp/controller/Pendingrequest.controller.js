@@ -64,14 +64,14 @@ sap.ui.define([
       this.fprepareTable(true,"");
 
       //CPA
-      this.currentFile = {}; //File Object	
+      this.currentFile = {}; //File Object
       	//For Attachment File Name
       this.Attachment = "";
 			//For Attachment File Key
 			this.FileKey = null;
 
   },
- 
+
   //GETTING DATE NOW
   fgetTodaysDate: function () {
     var today = new Date();
@@ -129,7 +129,7 @@ sap.ui.define([
     }else{
       var aResults = this.fgetAllTransaction(transtypefilter);
     }
-  
+
     if (aResults.length !== 0) {
       this.aCols = Object.keys(aResults[0]);
       var i;
@@ -185,7 +185,7 @@ sap.ui.define([
     //   urltag ="https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&QUERYTAG=getTransactions&VALUE1=&VALUE2=&VALUE3=&VALUE4=";
     // }else{
     //   urltag ="https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&QUERYTAG=getAllPendingRequest&VALUE1="+ value1 +"&VALUE2=1&VALUE3=&VALUE4=";
-    
+
     // }
     $.ajax({
       url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&QUERYTAG=getAllPendingRequest&VALUE1="+ value1 +"&VALUE2=1&VALUE3=&VALUE4=",
@@ -281,8 +281,8 @@ sap.ui.define([
         }else{
           this.FileKey = results[0].Attachmentkey;
         }
-        
-        
+
+
 
 
         var transtype = this.oModel.getData().EditRecord.TransType = results[0].TransType;
@@ -340,7 +340,7 @@ sap.ui.define([
 
         //this.oModel.setJSON("{\"EditRecord/DocumentLines\" : " + JSON.stringify(results) + "}");
 
-        
+
 
       }
     });
@@ -521,7 +521,7 @@ sap.ui.define([
             AppUI5.fErrorLogs("OINV","Insert","null","null",Message,"Bu to Cash Sale",this.sUserCode,"null",JSON.stringify(oInvoice));
             console.error(JSON.stringify(Message));
             sap.m.MessageToast.show(Message);
-            
+
           },
           success: function (json) {
             //this.oPage.setBusy(false);
@@ -570,7 +570,7 @@ sap.ui.define([
                   AppUI5.hideBusyIndicator();
                 },
                 context: this
-    
+
               });
           }////END INCOMING PAYMENTS
         });
@@ -578,7 +578,7 @@ sap.ui.define([
       }  /////POSTING A/R INVOICE END
     }); ////GOODS ISSUE END
   },
-  
+
   ////POSTING ON BU TO VALE
   fBuToVale: function (transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey) {
     //Initialize Variables
@@ -619,7 +619,7 @@ sap.ui.define([
         AppUI5.fErrorLogs("OIGE","Insert","null","null",Message,"Bu to Vale",this.sUserCode,"null",JSON.stringify(oGoodsIssue));
         console.error(JSON.stringify(Message));
         sap.m.MessageToast.show(Message);
-        
+
       },
       success: function (json) {
         AppUI5.hideBusyIndicator();
@@ -657,7 +657,7 @@ sap.ui.define([
             AppUI5.fErrorLogs("OINV","Insert","null","null",Message,"Bu to Vale",this.sUserCode,"null",JSON.stringify(oInvoice));
             console.error(JSON.stringify(Message));
             sap.m.MessageToast.show(Message);
-            
+
           },
           success: function (json) {
             //this.oPage.setBusy(false);
@@ -776,7 +776,7 @@ sap.ui.define([
         AppUI5.fErrorLogs("OIGE","Insert","null","null",Message,"Inter Org Issue",this.sUserCode,"null",JSON.stringify(oGoodsIssue));
         console.error(JSON.stringify(Message));
         sap.m.MessageToast.show(Message);
-        
+
       },
       success: function (json) {
         AppUI5.hideBusyIndicator();
@@ -815,7 +815,7 @@ sap.ui.define([
             AppUI5.fErrorLogs("OINV","Insert","null","null",Message,"Inter Org Issue",this.sUserCode,"null",JSON.stringify(oInvoice));
             console.error(JSON.stringify(Message));
             sap.m.MessageToast.show(Message);
-            
+
           },
           success: function (json) {
            //UPDATE RECORDS ON UDT
@@ -835,7 +835,7 @@ sap.ui.define([
       }  /////POSTING A/R INVOICE END
     }); ////GOODS ISSUE END
   },
-  
+
     ///PREPARING BATCH REQUEST
     fprepareBatchRequestBody: function (oRequest) {
       var batchRequest = "";
@@ -887,7 +887,7 @@ sap.ui.define([
       oInvoiceHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
       oInvoiceHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
       oInvoiceHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice; //adjustment
-      
+
       ///Goods Issue Details
       oGoodsReceiptHeader.WarehouseCode = this.oReceiveBu;
       oGoodsReceiptHeader.CostingCode = "01";
@@ -903,7 +903,7 @@ sap.ui.define([
       oGoodsReceipt.DocumentLines.push(JSON.parse(JSON.stringify(oGoodsReceiptHeader)));
     }
     var batchArray = [
-      //directly insert data if data is single row per table 
+      //directly insert data if data is single row per table
       {
         "tableName": "PurchaseInvoices",
         "data": oInvoice
@@ -1033,7 +1033,7 @@ sap.ui.define([
 		  	oBusiness_Unit.U_APP_AttachmentKey = oAttachmentKey;
         ///HEADER BATCH
         var BatchHeader =
-          //directly insert data if data is single row per table 
+          //directly insert data if data is single row per table
           {
             "tableName": "U_APP_OINT",
             "data": oBusiness_Unit
@@ -1077,7 +1077,7 @@ sap.ui.define([
             sap.m.MessageToast.show(Message);
           },
           success: function (json) {
-           
+
           },
           context: this
         }).done(function (results) {
@@ -1098,6 +1098,6 @@ sap.ui.define([
           }
         });
       }
-  
+
   });
 });
