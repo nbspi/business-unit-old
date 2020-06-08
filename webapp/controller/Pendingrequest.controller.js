@@ -385,7 +385,9 @@ sap.ui.define([
 				/////Call Renewable Energy Transfer Function
 				this.fRenewableEnergyTransfer(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey);
 			}
-  },
+	},
+
+
   ////POSTING BU TO BU BUSINESS TYPE
   fBuToBu: function (transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey) {
     AppUI5.showBusyIndicator(4000);
