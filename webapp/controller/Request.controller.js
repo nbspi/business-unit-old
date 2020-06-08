@@ -101,15 +101,15 @@ sap.ui.define([
 			this.oReceiveBu= "";
 			//	this.fprepareTable(true,"");
 			//CPA
-			this.currentFile = {}; //File Object	
+			this.currentFile = {}; //File Object
 			//For Attachment File Key
 			this.FileKey = null;
 
 			/// REQUESTOR DATA
 			var oRequestor =this.sUserCode;
 			this.getView().byId("inputrequestor").setValue(oRequestor);
-	 
-	 
+
+
 	// this.oModel.getData().EditRecord.DocumentLines.length = 0;
 	},
 		//GETTING DATE NOW
@@ -212,7 +212,7 @@ sap.ui.define([
 						this.getView().setModel(this.oMdlAllBP, "oMdlAllBP");
 					}
 				});
-	
+
 
 			var aList = this.oMdlAllBP.getProperty("/allbp");
 
@@ -279,7 +279,7 @@ sap.ui.define([
 				this._oValueHelpDialogscodereceive.open();
 			}
 		},
-    
+
     ///GETTING ALL ISSUING WAREHOUSE
 		f_configValueHelpDialogsWhsIssue: function () {
 			var sInputValue = this.byId("inputwhsissue").getValue();
@@ -402,12 +402,14 @@ sap.ui.define([
 					var oItem = {};
 					oItem.ItemCode = oContext.getObject().ItemCode;
 					oItem.ItemName = oContext.getObject().ItemName;
+					oItem.InventoryUom = oContext.getObject().InvntryUom;
 					return oItem;
 				});
 			}
 			oEvent.getSource().getBinding("items").filter([]);
 			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].ItemNum = ItemDetails[0].ItemCode;
 			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].Description = ItemDetails[0].ItemName;
+			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].Uom = ItemDetails[0].InventoryUom;
 			if(transtype === "6"){
 				var oCostToProduce =this.f_getAveragePrice(ItemDetails[0].ItemCode,receivebu);
 				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].CostProd = this.f_getAveragePrice(ItemDetails[0].ItemCode,receivebu);
@@ -417,7 +419,7 @@ sap.ui.define([
 			}
 			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].MarketPrice = this.f_getMarketPrice(ItemDetails[0].ItemCode);
 			var oMarketPrice = this.f_getMarketPrice(ItemDetails[0].ItemCode);
-			
+
 			if (transtype === "1") {
 				if(oCostToProduce <= oMarketPrice){
 					this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice = oCostToProduce;
@@ -456,7 +458,7 @@ sap.ui.define([
 					var Message = xhr.responseJSON["error"].message.value;
 					console.error(JSON.stringify(Message));
 					sap.m.MessageToast.show(Message);
-					
+
 				},
 				success: function (json) {},
 				context: this
@@ -558,6 +560,15 @@ sap.ui.define([
 				this.getView().byId("inputmarkuptype").setEnabled(true);
 				this.oModel.getData().EditRecord.DocumentLines.length = 0;
 				this.oModel.refresh();
+			}else if (transtype === "7") {
+				this.getView().byId("inputbpcode").setValue("");
+				this.getView().byId("inputwhsreceive").setValue("");
+				this.getView().byId("inputbpcode").setEnabled(false);
+				this.getView().byId("inputwhsissue").setEnabled(true);
+				this.getView().byId("inputwhsreceive").setEnabled(true);
+				this.getView().byId("inputmarkuptype").setEnabled(false);
+				this.oModel.getData().EditRecord.DocumentLines.length = 0;
+				this.oModel.refresh();
 			} else {
 				this.getView().byId("inputbpcode").setEnabled(true);
 				this.getView().byId("inputwhsreceive").setEnabled(true);
@@ -570,6 +581,7 @@ sap.ui.define([
 			oitemdetails.ItemNum = "";
 			oitemdetails.Description = "";
 			oitemdetails.Quantity = "";
+			oitemdetails.Uom = "";
 			oitemdetails.CostProd = "";
 			oitemdetails.MarkupPrice = "";
 			oitemdetails.TransferPrice = "";
@@ -579,56 +591,71 @@ sap.ui.define([
 			if (transtype === "" ) {
 				sap.m.MessageToast.show("Please Select Transaction Type.");
 			} else {
-					if (transtype === "1") {
-						oitemdetails.DescriptionEnable = false;
-						oitemdetails.CostProdEnable = false;
-						oitemdetails.MarkupPriceEnable = false;
-						oitemdetails.TransferPriceEnable = false;
-						oitemdetails.MarketPriceEnable = false;
-						this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
-						this.oModel.refresh();
-					} else if (transtype === "2") {
-						oitemdetails.DescriptionEnable = false;
-						oitemdetails.CostProdEnable = false;
-						oitemdetails.MarkupPriceEnable = true;
-						oitemdetails.TransferPriceEnable = false;
-						oitemdetails.MarketPriceEnable = false;
-						this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
-						this.oModel.refresh();
-					} else if (transtype === "3") {
-						oitemdetails.DescriptionEnable = false;
-						oitemdetails.CostProdEnable = false;
-						oitemdetails.MarkupPriceEnable = true;
-						oitemdetails.TransferPriceEnable = false;
-						oitemdetails.MarketPriceEnable = false;
-						this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
-						this.oModel.refresh();
-					} else if (transtype === "4") {
-						oitemdetails.DescriptionEnable = false;
-						oitemdetails.CostProdEnable = false;
-						oitemdetails.MarkupPriceEnable = true;
-						oitemdetails.TransferPriceEnable = false;
-						oitemdetails.MarketPriceEnable = false;
-						this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
-						this.oModel.refresh();
-					} else if (transtype === "5") {
-						oitemdetails.DescriptionEnable = false;
-						oitemdetails.CostProdEnable = false;
-						oitemdetails.MarkupPriceEnable = true;
-						oitemdetails.TransferPriceEnable = false;
-						oitemdetails.MarketPriceEnable = false;
-						this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
-						this.oModel.refresh();
-					} else if (transtype === "6") {
-						oitemdetails.DescriptionEnable = false;
-						oitemdetails.CostProdEnable = false;
-						oitemdetails.MarkupPriceEnable = true;
-						oitemdetails.TransferPriceEnable = false;
-						oitemdetails.MarketPriceEnable = false;
-						this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
-						this.oModel.refresh();
-					}
-			} 
+				if (transtype === "1") {
+					oitemdetails.DescriptionEnable = false;
+					oitemdetails.CostProdEnable = false;
+					oitemdetails.MarkupPriceEnable = false;
+					oitemdetails.TransferPriceEnable = false;
+					oitemdetails.MarketPriceEnable = false;
+					oitemdetails.UomEnable = false;
+					this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
+					this.oModel.refresh();
+				} else if (transtype === "2") {
+					oitemdetails.DescriptionEnable = false;
+					oitemdetails.CostProdEnable = false;
+					oitemdetails.MarkupPriceEnable = false;
+					oitemdetails.TransferPriceEnable = false;
+					oitemdetails.MarketPriceEnable = false;
+					oitemdetails.UomEnable = false;
+					this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
+					this.oModel.refresh();
+				} else if (transtype === "3") {
+					oitemdetails.DescriptionEnable = false;
+					oitemdetails.CostProdEnable = false;
+					oitemdetails.MarkupPriceEnable = false;
+					oitemdetails.TransferPriceEnable = false;
+					oitemdetails.MarketPriceEnable = false;
+					oitemdetails.UomEnable = false;
+					this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
+					this.oModel.refresh();
+				} else if (transtype === "4") {
+					oitemdetails.DescriptionEnable = false;
+					oitemdetails.CostProdEnable = false;
+					oitemdetails.MarkupPriceEnable = false;
+					oitemdetails.TransferPriceEnable = false;
+					oitemdetails.MarketPriceEnable = false;
+					oitemdetails.UomEnable = false;
+					this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
+					this.oModel.refresh();
+				} else if (transtype === "5") {
+					oitemdetails.DescriptionEnable = false;
+					oitemdetails.CostProdEnable = false;
+					oitemdetails.MarkupPriceEnable = true;
+					oitemdetails.TransferPriceEnable = false;
+					oitemdetails.MarketPriceEnable = false;
+					oitemdetails.UomEnable = false;
+					this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
+					this.oModel.refresh();
+				} else if (transtype === "6") {
+					oitemdetails.DescriptionEnable = false;
+					oitemdetails.CostProdEnable = false;
+					oitemdetails.MarkupPriceEnable = true;
+					oitemdetails.TransferPriceEnable = false;
+					oitemdetails.MarketPriceEnable = false;
+					oitemdetails.UomEnable = false;
+					this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
+					this.oModel.refresh();
+				} else if (transtype === "7") {
+					oitemdetails.DescriptionEnable = false;
+					oitemdetails.CostProdEnable = false;
+					oitemdetails.MarkupPriceEnable = false;
+					oitemdetails.TransferPriceEnable = false;
+					oitemdetails.MarketPriceEnable = false;
+					oitemdetails.UomEnable = false;
+					this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
+					this.oModel.refresh();
+				}
+			}
     },
     ////REMOVE ROW ON TABLE
 		onRemoveRow: function (oEvent) {
@@ -687,7 +714,7 @@ sap.ui.define([
 			}else{
 				this.fAddRequest();
 			}
-			
+
 		},
 		////ADD REQUEST Function POSTING ON UDT
 		fAddRequestDraft: function (oEvent) {
@@ -712,7 +739,7 @@ sap.ui.define([
 					AppUI5.hideBusyIndicator();
 				},
 				success: function (json) {
-			
+
 				},
 				context: this
 			}).done(function (results) {
@@ -742,7 +769,7 @@ sap.ui.define([
 			oBusiness_Unit.U_APP_AttachmentKey = this.FileKey;
 			///HEADER BATCH Array
 			var batchArray = [
-				//directly insert data if data is single row per table 
+				//directly insert data if data is single row per table
 				{
 					"tableName": "U_APP_OINT",
 					"data": oBusiness_Unit
@@ -764,6 +791,7 @@ sap.ui.define([
 				oBusiness_Unit_Details.U_APP_MarketPrice = this.oModel.getData().EditRecord.DocumentLines[d].MarketPrice;
 				oBusiness_Unit_Details.U_APP_TransNo = sGeneratedTransNo;
 				oBusiness_Unit_Details.U_APP_TransType = TransType;
+				oBusiness_Unit_Details.U_APP_Uom = this.oModel.getData().EditRecord.DocumentLines[d].Uom;
 				//oBusiness_Unit_Details.APP_TransNo = this.getView().byId("TransNo").getValue();
 				batchArray.push(JSON.parse(JSON.stringify(({
 					"tableName": "U_APP_INT1",
@@ -788,7 +816,7 @@ sap.ui.define([
 					sap.m.MessageToast.show(xhr.responseText);
 				},
 				success: function (json) {
-				
+
 				},
 				context: this
 			}).done(function (results) {
@@ -832,7 +860,7 @@ sap.ui.define([
 					AppUI5.hideBusyIndicator();
 				},
 				success: function (json) {
-			
+
 				},
 				context: this
 			}).done(function (results) {
@@ -862,7 +890,7 @@ sap.ui.define([
 			oBusiness_Unit.U_APP_AttachmentKey = this.FileKey;
 			///HEADER BATCH Array
 			var batchArray = [
-				//directly insert data if data is single row per table 
+				//directly insert data if data is single row per table
 				{
 					"tableName": "U_APP_OINT",
 					"data": oBusiness_Unit
@@ -884,6 +912,7 @@ sap.ui.define([
 				oBusiness_Unit_Details.U_APP_MarketPrice = this.oModel.getData().EditRecord.DocumentLines[d].MarketPrice;
 				oBusiness_Unit_Details.U_APP_TransNo = sGeneratedTransNo;
 				oBusiness_Unit_Details.U_APP_TransType = TransType;
+				oBusiness_Unit_Details.U_APP_Uom = this.oModel.getData().EditRecord.DocumentLines[d].Uom;
 				//oBusiness_Unit_Details.APP_TransNo = this.getView().byId("TransNo").getValue();
 				batchArray.push(JSON.parse(JSON.stringify(({
 					"tableName": "U_APP_INT1",
@@ -908,7 +937,7 @@ sap.ui.define([
 					sap.m.MessageToast.show(xhr.responseText);
 				},
 				success: function (json) {
-				
+
 				},
 				context: this
 			}).done(function (results) {
@@ -948,10 +977,10 @@ sap.ui.define([
 			var aFiles = oEvt.getParameters().files;
 			this.currentFile = aFiles[0];
 			var FileName = this.getView().byId("fileUploader").getValue();
-	
+
 			var form = new FormData();
 			form.append("",this.currentFile,FileName);
-	
+
 			//Postinf Attachment in SAP
 			$.ajax({
 				url: "https://18.136.35.41:50000/b1s/v1/Attachments2",
@@ -971,12 +1000,12 @@ sap.ui.define([
 				},
 				context: this,
 				success: function (json) {}
-			}).done(function (results) {			
+			}).done(function (results) {
 				if (results) {
 					var oResult =JSON.parse(results);
 					this.FileKey = oResult.AbsoluteEntry;
 				}
-			}); 
+			});
 		}
   });
 });

@@ -45,8 +45,6 @@ sap.ui.define([
 			doc.autoTable(columns,data,{startY:100});
 			doc.output('Test.pdf');
 			doc.save('Test.pdf');
-
-
 		}
 
   });

@@ -231,6 +231,7 @@
 														<!--<Text text="{oMdlAP>DocNum}"/>-->
 													</t:template>
 												</t:Column>
+
 												<t:Column width="7rem">
 													<Label text="Quantity"/>
 													<t:template>
@@ -238,6 +239,15 @@
 														<!--<Text text="{oMdlAP>DocDate}"/>-->
 													</t:template>
 												</t:Column>
+
+												<t:Column width="7rem">
+													<Label text="UOM"/>
+													<t:template>
+														<Input value="{Uom}"  textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
+														<!--<Text text="{oMdlAP>DocNum}"/>-->
+													</t:template>
+												</t:Column>
+
 												<t:Column width="9rem">
 													<Label text="Cost to Produce"/>
 													<t:template>

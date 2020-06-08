@@ -21,6 +21,7 @@
 			"ItemNum": "",
 			"Description": "",
 			"Quantity": 0,
+			"Uom": "",
 			"CostProd": 0,
 			"MarkUp": 0,
 			"TransferPrice": 0,
@@ -30,7 +31,8 @@
 			"MarkupPriceEnable": false,
 			"TransferPriceEnable": false,
 			"MarketPriceEnable": false,
-			"DescriptionEnable": false
+			"DescriptionEnable": false,
+			"UomEnable": false
 		}]
 	},
 	"AllItems": [{
@@ -73,6 +75,9 @@
 		}, {
 			"key": "6",
 			"value": "6 - Inter Org - Receipt"
+		},{
+			"key": "7",
+			"value": "7 - Renewable Energy Transfer"
 		}
 	],
 	"SelectedTransType": {

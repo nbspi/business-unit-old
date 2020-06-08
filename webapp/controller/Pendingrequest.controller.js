@@ -381,7 +381,10 @@ sap.ui.define([
       }else if(transtype === "6"){
         /////Call Bu to Inter Org - Receipt and Draft
 				this.fBuToInterOrgReceipt(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey);
-      }
+      }else if (transtype === "7") {
+				/////Call Renewable Energy Transfer Function
+				this.fRenewableEnergyTransfer(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey);
+			}
   },
   ////POSTING BU TO BU BUSINESS TYPE
   fBuToBu: function (transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey) {
@@ -392,7 +395,8 @@ sap.ui.define([
     var oGoodsIssue = {};
     var oGoodsIssueHeader = {};
     oGoodsIssue.Comments = this.oModel.getData().EditRecord.Remarks;
-    oGoodsIssue.AttachmentEntry = oAttachmentKey;
+		oGoodsIssue.AttachmentEntry = oAttachmentKey;
+		oGoodsIssue.U_APP_GI_TransType = "BU";
     oGoodsIssue.DocumentLines = [];
     ///LOOP FOR THE DETAILS
     var d;
@@ -451,7 +455,8 @@ sap.ui.define([
     var ocardcode = this.oModel.getData().EditRecord.BPCode;
     var oDescription = this.oModel.getData().EditRecord.Remarks;
     oGoodsIssue.Comments = this.oModel.getData().EditRecord.Remarks;
-    oGoodsIssue.AttachmentEntry = oAttachmentKey;
+		oGoodsIssue.AttachmentEntry = oAttachmentKey;
+		oGoodsIssue.U_APP_GI_TransType = "BU";
     oGoodsIssue.DocumentLines = [];
     ///LOOP FOR THE DETAILS
     var d;
@@ -590,7 +595,8 @@ sap.ui.define([
     var ocardcode = this.oModel.getData().EditRecord.BPCode;
     var oDescription = this.oModel.getData().EditRecord.Remarks;
     oGoodsIssue.Comments = this.oModel.getData().EditRecord.Remarks;
-    oGoodsIssue.AttachmentEntry = oAttachmentKey;
+		oGoodsIssue.AttachmentEntry = oAttachmentKey;
+		oGoodsIssue.U_APP_GI_TransType = "BU";
     oGoodsIssue.DocumentLines = [];
     ///LOOP FOR THE DETAILS
     var d;
@@ -687,7 +693,8 @@ sap.ui.define([
     var oGoodsIssue = {};
     var oGoodsIssueHeader = {};
     oGoodsIssue.Comments = this.oModel.getData().EditRecord.Remarks;
-    oGoodsIssue.AttachmentEntry = oAttachmentKey;
+		oGoodsIssue.AttachmentEntry = oAttachmentKey;
+		oGoodsIssue.U_APP_GI_TransType = "BU";
     oGoodsIssue.DocumentLines = [];
     ///LOOP FOR THE DETAILS
     var d;
@@ -747,7 +754,8 @@ sap.ui.define([
     var ocardcode = this.oModel.getData().EditRecord.BPCode;
     var oDescription = this.oModel.getData().EditRecord.Remarks;
     oGoodsIssue.Comments = this.oModel.getData().EditRecord.Remarks;
-    oGoodsIssue.AttachmentEntry = oAttachmentKey;
+		oGoodsIssue.AttachmentEntry = oAttachmentKey;
+		oGoodsIssue.U_APP_GI_TransType = "BU";
     oGoodsIssue.DocumentLines = [];
     ///LOOP FOR THE DETAILS
     var d;
@@ -872,7 +880,8 @@ sap.ui.define([
     oInvoice.CardCode = this.oModel.getData().EditRecord.BPCode;
     oInvoice.Comments = this.oModel.getData().EditRecord.Remarks;
     oInvoice.DocumentLines = [];
-    oGoodsReceipt.Comments = this.oModel.getData().EditRecord.Remarks;
+		oGoodsReceipt.Comments = this.oModel.getData().EditRecord.Remarks;
+		// oGoodsReceipt.U_APP_GR_TransType = "BU";
     oGoodsReceipt.DocumentLines = [];
     ///LOOP FOR THE DETAILS
     var d;
@@ -954,7 +963,65 @@ sap.ui.define([
         }
       }
     });
-  },
+	},
+	////POSTING Renewable Energy Transfer BUSINESS TYPE
+	fRenewableEnergyTransfer: function (transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey) {
+		AppUI5.showBusyIndicator(4000);
+		//Initialize Variables
+		var ostatus= "1";
+		var oDocType ="Goods Issue";
+		var oGoodsIssue = {};
+		var oGoodsIssueHeader = {};
+		oGoodsIssue.Comments = this.oModel.getData().EditRecord.Remarks;
+		oGoodsIssue.U_APP_GI_TransType = "BU";
+		oGoodsIssue.AttachmentEntry = oAttachmentKey;
+		oGoodsIssue.DocumentLines = [];
+		///LOOP FOR THE DETAILS
+		var d;
+		for (d = 0; d < this.oModel.getData().EditRecord.DocumentLines.length; d++) {
+			oGoodsIssueHeader.WarehouseCode = this.oIssueBu;
+			oGoodsIssueHeader.CostingCode = "01";
+			oGoodsIssueHeader.CostingCode2 = "G101";
+			oGoodsIssueHeader.CostingCode3 = "D001";
+			oGoodsIssueHeader.CostingCode4 = "0001";
+			oGoodsIssueHeader.CostingCode5 = "OS000";
+			oGoodsIssueHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
+			oGoodsIssueHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
+			oGoodsIssueHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
+			oGoodsIssue.DocumentLines.push(JSON.parse(JSON.stringify(oGoodsIssueHeader)));
+		}
+
+		$.ajax({
+			url: "https://18.136.35.41:50000/b1s/v1/InventoryGenExits",
+			type: "POST",
+			data: JSON.stringify(oGoodsIssue),
+			xhrFields: {
+				withCredentials: true
+			},
+			error: function (xhr, status, error) {
+				var Message = xhr.responseJSON["error"].message.value;
+				AppUI5.fErrorLogs("OIGE","Insert","null","null",Message,"Bu to Bu",this.sUserCode,"null",JSON.stringify(oGoodsIssue));
+				console.error(JSON.stringify(Message));
+				sap.m.MessageToast.show(Message);
+				AppUI5.hideBusyIndicator();
+			},
+			success: function (json) {
+				//UPDATE RECORDS ON UDT
+				this.fUpdatePending(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
+				sap.m.MessageToast.show("Added Successfully");
+				this.fClearField();
+				this.oModel.refresh();
+				AppUI5.hideBusyIndicator();
+			},
+			context: this
+
+		}).done(function (results) {
+			if (results) {
+				//
+
+			}
+		});
+	},
   //Batch Request for Updating Draft
   fprepareUpdatePostedRequestBody: function (oHeader,oDetails,getcode) {
     var batchRequest = "";
@@ -1055,6 +1122,7 @@ sap.ui.define([
 				oBusiness_Unit_Details.U_APP_MarketPrice = this.oModel.getData().EditRecord.DocumentLines[d].MarketPrice;
 				oBusiness_Unit_Details.U_APP_TransNo = TransNo;
 				oBusiness_Unit_Details.U_APP_TransType = TransType;
+				oBusiness_Unit_Details.U_APP_Uom = this.oModel.getData().EditRecord.DocumentLines[d].Uom;
 				//	oBusiness_Unit_Details.APP_TransNo = this.getView().byId("TransNo").getValue();
 				batchArray.push(JSON.parse(JSON.stringify(({
 					"tableName": "U_APP_INT1",

@@ -69,7 +69,7 @@ sap.ui.define([
 		///On Clear Fields Function
 		fClearField: function () {
 			try {
-	
+
 				this.oModel.getData().EditRecord.TransType = "";
 				this.oModel.getData().EditRecord.TransNo = "";
 				this.oModel.getData().EditRecord.BPCode = "";
@@ -85,9 +85,9 @@ sap.ui.define([
 			} catch (err) {
 				//console.log(err.message);
 			}
-	
+
 		},
-    
+
     onTransTypeFilter : function(oEvent){
 			this.fprepareTable("",0);
 			this.oMdlAllRecord.refresh();
@@ -118,7 +118,7 @@ sap.ui.define([
 			}else{
 				var aResults = this.fgetAllTransaction(transtypefilter);
 			}
-		
+
 			if (aResults.length !== 0) {
 				this.aCols = Object.keys(aResults[0]);
 				var i;
@@ -174,7 +174,7 @@ sap.ui.define([
 				urltag ="https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&QUERYTAG=getTransactions&VALUE1=&VALUE2=&VALUE3=&VALUE4=";
 			}else{
 				urltag ="https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&QUERYTAG=getAllPendingTransaction&VALUE1="+ value1 +"&VALUE2=1&VALUE3=&VALUE4=";
-			
+
 			}
 			$.ajax({
 				url: urltag,
@@ -320,7 +320,7 @@ sap.ui.define([
 
 					//this.oModel.setJSON("{\"EditRecord/DocumentLines\" : " + JSON.stringify(results) + "}");
 
-					
+
 
 				}
 			});
@@ -394,7 +394,7 @@ sap.ui.define([
 				var aContexts = oEvent.getParameter("selectedContexts");
 				var ItemDetails = {};
 				if (aContexts && aContexts.length) {
-	
+
 					ItemDetails = aContexts.map(function (oContext) {
 						var oItem = {};
 						oItem.ItemCode = oContext.getObject().ItemCode;
@@ -409,7 +409,7 @@ sap.ui.define([
 				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].MarketPrice = this.f_getMarketPrice(ItemDetails[0].ItemCode);
 				var oCostToProduce =this.f_getAveragePrice(ItemDetails[0].ItemCode);
 				var oMarketPrice = this.f_getMarketPrice(ItemDetails[0].ItemCode);
-				
+
 				if (transtype === "1") {
 					if(oCostToProduce <= oMarketPrice){
 						this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice = oCostToProduce;
@@ -439,6 +439,7 @@ sap.ui.define([
 				var oGoodsReceiptHeader = {};
 				//oGoodsReceipt.CardCode = this.oModel.getData().EditRecord.BPCode;
 				oGoodsReceipt.Comments = this.oModel.getData().EditRecord.Remarks;
+				// oGoodsReceipt.U_APP_GR_TransType = "BU";
 				oGoodsReceipt.DocumentLines = [];
 				///LOOP FOR THE DETAILS
 				var d;
@@ -455,7 +456,7 @@ sap.ui.define([
 					oGoodsReceiptHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
 					oGoodsReceipt.DocumentLines.push(JSON.parse(JSON.stringify(oGoodsReceiptHeader)));
 				}
-	
+
 				$.ajax({
 					url: "https://18.136.35.41:50000/b1s/v1/InventoryGenEntries",
 					type: "POST",
@@ -466,7 +467,7 @@ sap.ui.define([
 					error: function (xhr, status, error) {
 						var Message = xhr.responseJSON["error"].message.value;
 						AppUI5.fErrorLogs("OPDN","Insert","null","null",Message,"Receipt",this.sUserCode,"null",JSON.stringify(oGoodsReceipt));
-					
+
 						console.error(JSON.stringify(Message));
 						sap.m.MessageToast.show(Message);
 						AppUI5.hideBusyIndicator();
@@ -482,15 +483,15 @@ sap.ui.define([
 						AppUI5.hideBusyIndicator();
 					},
 					context: this
-	
+
 				}).done(function (results) {
 					if (results) {
 						//
-	
+
 					}
 				});
 			},
-	
+
 			onAddReceipt: function (oEvent) {
 				this.fAddReceipt();
 			},
@@ -545,7 +546,7 @@ sap.ui.define([
 			oBusiness_Unit.U_APP_ReceivedBy = this.sUserCode;
 			///HEADER BATCH
 			var BatchHeader =
-				//directly insert data if data is single row per table 
+				//directly insert data if data is single row per table
 				{
 					"tableName": "U_APP_OINT",
 					"data": oBusiness_Unit
@@ -565,7 +566,7 @@ sap.ui.define([
 					sap.m.MessageToast.show(Message);
 				},
 				success: function (json) {
-				
+
 				},
 				context: this
 			}).done(function (results) {
@@ -578,14 +579,14 @@ sap.ui.define([
 				}else{
 					if (results) {
 					//	sap.m.MessageToast.show("Transaction Type "+ TransType +" Draft Has Been Created!");
-						
+
 						this.fprepareTable(false,"");
 						this.fClearField();
 						this.oModel.refresh();
 						AppUI5.hideBusyIndicator();
 					}
 				}
-				
+
 			});
 		},
 		// Batch POSTING ON UDT
@@ -611,7 +612,7 @@ sap.ui.define([
 					AppUI5.hideBusyIndicator();
 				},
 				success: function (json) {
-			
+
 				},
 				context: this
 			}).done(function (results) {
@@ -639,7 +640,7 @@ sap.ui.define([
 			oBusiness_Unit.U_APP_DocType = oDocType;
 			///HEADER BATCH Array
 			var batchArray = [
-				//directly insert data if data is single row per table 
+				//directly insert data if data is single row per table
 				{
 					"tableName": "U_APP_OINT",
 					"data": oBusiness_Unit
@@ -660,6 +661,7 @@ sap.ui.define([
 				oBusiness_Unit_Details.U_APP_MarketPrice = this.oModel.getData().EditRecord.DocumentLines[d].MarketPrice;
 				oBusiness_Unit_Details.U_APP_TransNo = sGeneratedTransNo;
 				oBusiness_Unit_Details.U_APP_TransType = TransType;
+				oBusiness_Unit_Details.U_APP_Uom = this.oModel.getData().EditRecord.DocumentLines[d].Uom;
 				//oBusiness_Unit_Details.APP_TransNo = this.getView().byId("TransNo").getValue();
 				batchArray.push(JSON.parse(JSON.stringify(({
 					"tableName": "U_APP_INT1",
@@ -683,7 +685,7 @@ sap.ui.define([
 					sap.m.MessageToast.show(Message);
 				},
 				success: function (json) {
-				
+
 				},
 				context: this
 			}).done(function (results) {
