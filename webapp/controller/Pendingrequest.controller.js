@@ -6,7 +6,8 @@ sap.ui.define([
   "com/apptech/bfi-businessunit/controller/AppUI5",
   "sap/ui/model/FilterOperator"
 ], function(Controller, JSONModel, Fragment, Filter, AppUI5, FilterOperator) {
-  "use strict";
+	"use strict";
+	var doc = new jsPDF();
   return Controller.extend("com.apptech.bfi-businessunit.controller.Pendingrequest", {
 
     onRoutePatternMatched: function(event){
@@ -70,7 +71,42 @@ sap.ui.define([
 			//For Attachment File Key
 			this.FileKey = null;
 
-  },
+	},
+	fprintGoodsIssue: function(transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey){
+
+		doc.text(20, 20, 'Biotech Farms Inc.(BFI)');
+		doc.setFontSize(12)
+		doc.text(20, 28, 'Bo.6,Banga, South Cotabato');
+
+		doc.setFontSize(22)
+		// doc.text(20,40, 'MATERIAL REQUESITION AND ISSUANCE SLIP');
+		// doc.text(80,40, 'GOODS ISSUE');
+		doc.text(70,50, 'GOODS ISSUE');
+
+		doc.setFontSize(12)
+		doc.text(150, 60, 'Date:________________');
+		doc.text(166, 59, oPostingDate);
+
+		doc.setFontSize(12)
+		doc.text(20, 80, 'REQUESTOR: '+ oIssueBU +'');
+		doc.text(20, 90, 'PURPOSE: '+ oRemarks +'');
+
+		var oModel  = oDetails;
+			var columns = ["Item Code","Quantity","UOM","Description"];
+			var data = [];
+					for(var i=0;i<oModel.length;i++)
+					{
+							data[i]=[oModel[i].ItemNum,oModel[i].Quantity,oModel[i].Uom,oModel[i].Description];
+					}
+		doc.autoTable(columns,data,{startY:100});
+		doc.text(20, 170, 'REQUESTED BY:____________________');
+		doc.text(20, 180, 'APPROVED BY:____________________');
+		doc.text(20, 190, 'RECEIVED BY:____________________');
+		doc.text(120, 170, 'PREPARED BY:____________________');
+		doc.text(120, 180, 'CHECKED BY:______________________');
+		doc.output('Goods Issue.pdf');
+		doc.save('Goods Issue.pdf');
+	},
 
   //GETTING DATE NOW
   fgetTodaysDate: function () {
@@ -386,8 +422,6 @@ sap.ui.define([
 				this.fRenewableEnergyTransfer(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey);
 			}
 	},
-
-
   ////POSTING BU TO BU BUSINESS TYPE
   fBuToBu: function (transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey) {
     AppUI5.showBusyIndicator(4000);
@@ -432,7 +466,8 @@ sap.ui.define([
       success: function (json) {
         //ADD UDT RECORDS
         this.fUpdatePending(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
-        sap.m.MessageToast.show("Added Successfully");
+				this.fprintGoodsIssue(transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
+				sap.m.MessageToast.show("Added Successfully");
         this.fClearField();
         this.oModel.refresh();
         AppUI5.hideBusyIndicator();
@@ -571,7 +606,8 @@ sap.ui.define([
                 success: function (json) {
                   //UPDATE RECORDS ON UDT
                   this.fUpdatePending(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
-                  sap.m.MessageToast.show("Successfully Added");
+									this.fprintGoodsIssue(transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
+									sap.m.MessageToast.show("Successfully Added");
                   this.fClearField();
                   this.oModel.refresh();
                   AppUI5.hideBusyIndicator();
@@ -671,7 +707,8 @@ sap.ui.define([
             //this.oPage.setBusy(false);
             //UPDATE RECORDS ON UDT
             this.fUpdatePending(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
-            sap.m.MessageToast.show("Posting of Goods Issue is Successful");
+						this.fprintGoodsIssue(transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
+						sap.m.MessageToast.show("Posting of Goods Issue is Successful");
             this.fClearField();
             this.oModel.refresh();
             AppUI5.hideBusyIndicator();
@@ -731,7 +768,8 @@ sap.ui.define([
       success: function (json) {
         //UPDATE RECORDS ON UDT
         this.fUpdatePending(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
-        sap.m.MessageToast.show("Added Successfully");
+				this.fprintGoodsIssue(transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
+				sap.m.MessageToast.show("Added Successfully");
         this.fClearField();
         this.oModel.refresh();
         AppUI5.hideBusyIndicator();
@@ -830,7 +868,8 @@ sap.ui.define([
           success: function (json) {
            //UPDATE RECORDS ON UDT
            this.fUpdatePending(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
-            sap.m.MessageToast.show("Posting of Goods Issue is Successful");
+					 this.fprintGoodsIssue(transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
+					 sap.m.MessageToast.show("Posting of Goods Issue is Successful");
             this.fClearField();
             this.oModel.refresh();
             AppUI5.hideBusyIndicator();
@@ -1010,6 +1049,7 @@ sap.ui.define([
 			success: function (json) {
 				//UPDATE RECORDS ON UDT
 				this.fUpdatePending(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
+				this.fprintGoodsIssue(transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
 				sap.m.MessageToast.show("Added Successfully");
 				this.fClearField();
 				this.oModel.refresh();

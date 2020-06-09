@@ -43,6 +43,12 @@ sap.ui.define([
 								data[i]=[oModel[i].Id,oModel[i].quantity,oModel[i].uom,oModel[i].description];
 						}
 			doc.autoTable(columns,data,{startY:100});
+			doc.text(20, 170, 'REQUEST BY:____________________');
+			doc.text(20, 180, 'APPROVED BY:____________________');
+			doc.text(20, 190, 'RECEIVED BY:____________________');
+
+			doc.text(120, 170, 'PREPARED BY:____________________');
+			doc.text(120, 180, 'CHECKED BY:______________________');
 			doc.output('Test.pdf');
 			doc.save('Test.pdf');
 		}
