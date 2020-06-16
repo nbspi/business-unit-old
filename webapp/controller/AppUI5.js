@@ -26,7 +26,7 @@ sap.ui.define([
 
 			var stringTableInfo = JSON.stringify(tableInfo);
 			$.ajax({
-				url: "/destinations/APP_SL/b1s/v1/UserTablesMD",
+				url: "https://18.136.35.41:50000/b1s/v1/UserTablesMD",
 				data: stringTableInfo,
 				type: "POST",
 				async: false,
@@ -51,7 +51,7 @@ sap.ui.define([
 					Table Name - ex. "@APP_OAMS"
 					Field Type - ("db_Alpha", "db_Date","db_Float","db_Memo","db_Numeric")
 					Field SubType - ("st_Percentage", "st_Price", "st_Quantity", "st_Rate", "st_Sum", "st_Image")
-					Character Size 
+					Character Size
 		*/
 		createField: function (sFieldName, sDescription, sTableName, sType, sSubType, iSize) {
 			var oFieldInfo = {};
@@ -78,7 +78,7 @@ sap.ui.define([
 			var dataString = JSON.stringify(oFieldInfo);
 
 			$.ajax({
-				url: "/destinations/APP_SL/b1s/v1/UserFieldsMD",
+				url: "https://18.136.35.41:50000/b1s/v1/UserFieldsMD",
 				data: dataString,
 				type: "POST",
 				async: false,
@@ -233,7 +233,7 @@ sap.ui.define([
 					res.Cause = xhr.responseText;
 					returnValue = res;
 					jQuery.sap.log.error("error on AppUi5.postData() " + xhr.responseText);
-					
+
 				},
 				success: function (json) {},
 				context: this
@@ -395,14 +395,14 @@ sap.ui.define([
 		renameKey: function (obj, old_key, new_key) {
 			if (old_key !== new_key) {
 				Object.defineProperty(obj, new_key, Object.getOwnPropertyDescriptor(obj, old_key));
-				delete obj[old_key]; 
+				delete obj[old_key];
 			}
 		},
-		
+
 		deleteKey: function(obj, delete_key){
 			delete obj[delete_key];
 		},
-		
+
 		addKey: function(obj, add_key, add_value){
 			obj[add_key] = add_value;
 		},
@@ -427,7 +427,7 @@ sap.ui.define([
 				}.bind(this), iDuration);
 			}
 		},
-		
+
 		fErrorLogs: function (sTableAffected,sOperation,sKey1,sKey2,sErrorDesc,sProcess,sProcessBy,sKey3,sInputbody) {
 			//var returnValue = 0;
 			var oDate = this.getTodaysDate();
@@ -482,7 +482,7 @@ sap.ui.define([
 					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
 				},
 				error: function (xhr, status, error) {
-					var Message = xhr.responseJSON["error"].message.value;			
+					var Message = xhr.responseJSON["error"].message.value;
 					sap.m.MessageToast.show(Message);
 				},
 				success: function (json) {},
@@ -494,7 +494,7 @@ sap.ui.define([
 			});
 			return aReturnResult;
 		}
-	
+
 
 	});
 

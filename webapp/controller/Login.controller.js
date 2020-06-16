@@ -59,7 +59,7 @@ sap.ui.define([
             var oLoginCredentials = {};
             oLoginCredentials.CompanyDB = sDBCompany;
             oLoginCredentials.UserName = username;//"manager";
-            oLoginCredentials.Password = password;//"1234"; 
+            oLoginCredentials.Password = password;//"1234";
             $.ajax({
                 url: "https://18.136.35.41:50000/b1s/v1/Login",
                 data: JSON.stringify(oLoginCredentials),
@@ -78,17 +78,18 @@ sap.ui.define([
                 success: function (json) { }
             }).done(function (results) {
                 if (results) {
-                    sap.m.MessageToast.show("Welcome: " + username);
+					sap.m.MessageToast.show("Welcome: " + username);
+					this.loadUDandUDF();
                     sap.ui.core.UIComponent.getRouterFor(this).navTo("Request");
                     jQuery.sap.storage.Storage.put("dataBase",sDBCompany);
 					jQuery.sap.storage.Storage.put("userCode",username);
                     jQuery.sap.intervalCall(1800000,this,"hidePanelAgain",[this]);
                     AppUI5.hideBusyIndicator();
                 }
-            }); 
+            });
         },
 
-        //---- If Session is 30 mins Already 
+        //---- If Session is 30 mins Already
         hidePanelAgain: function (passedthis) {
             MessageToast.show("Timed Out");
             jQuery.sap.storage.Storage.clear();
@@ -119,10 +120,53 @@ sap.ui.define([
 					this.getView().setModel(this.oMdlDatabase, "oMdlDatabase");
 				}
 			});
-		
-		}
 
-    
+		},
+		loadUDandUDF:function(){
+			//create udt
+			//Business Unit Draft  Header
+			// AppUI5.createTable("APP_OINT", "Business Unit - Header", "bott_NoObject");
+			//Business Unit
+			// AppUI5.createTable("APP_INT1", "Business Unit - Details", "bott_NoObject");
+
+		   //ACTIVITY LOG
+			// AppUI5.createTable("APP_ACTIVITYLOGS", "Activity Log", "bott_NoObject");
+
+			//create udf
+			//Business Unit Header
+			// AppUI5.createField("APP_TransType", "Transaction Type", "@APP_OINT", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_TransNo", "Transaction Number", "@APP_OINT", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_TransDate", "Transaction Date", "@APP_OINT", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_CardCode", "Customer No", "@APP_OINT", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_CustomerName", "Customer Name", "@APP_OINT", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_MarkupType", "Markup Type", "@APP_OINT", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_IssueBU", "Issuing BU", "@APP_OINT", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_ReceivingBU", "Receiving BU", "@APP_OINT", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_Remarks", "Remarks", "@APP_OINT", "db_Alpha", "", 200);
+			// AppUI5.createField("CreatedBy", "Created By", "@APP_OINT", "db_Alpha", "", 50);
+			// AppUI5.createField("UpdatedBy", "Updated By", "@APP_OINT", "db_Alpha", "", 50);
+			// AppUI5.createField("UpdatedDate", "Updated Date", "@APP_OINT", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_PostingDate", "Posting Date", "@APP_OINT", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_Status", "Status", "@APP_OINT", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_DocType", "Document Type", "@APP_OINT", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_ReceivedBy", "Received By", "@APP_OINT", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_Attachment", "Attachment", "@APP_OINT", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_AttachmentKey", "Attechment Key", "@APP_OINT", "db_Alpha", "", 50);
+
+			// //Business Unit Details
+			// AppUI5.createField("APP_ItemNum", "Item Number", "@APP_INT1", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_Description", "Description", "@APP_INT1", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_Quantity", "Quantity", "@APP_INT1", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_CostProd", "Cost to Produce", "@APP_INT1", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_MarkUp", "Mark Up", "@APP_INT1", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_TransferPrice", "Transfer Price", "@APP_INT1", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_MarketPrice", "Market Price", "@APP_INT1", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_TransNo", "Transaction Number", "@APP_INT1", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_TransType", "Transaction Type", "@APP_INT1", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_Uom", "UOM", "@APP_INT1", "db_Alpha", "", 50);
+		  }
+
+
 
         });
 });
