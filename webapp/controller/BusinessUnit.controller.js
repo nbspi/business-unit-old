@@ -682,6 +682,7 @@ sap.ui.define([
 		handleSearchWhs: function (oEvent) {
 			var sValue = oEvent.getParameter("value");
 			var oFilter = new Filter("WhsCode", FilterOperator.Contains, sValue);
+			var oFilter2 = new Filter("WhsName", FilterOperator.Contains, sValue);
 			var oBinding = oEvent.getSource().getBinding("items");
 			oBinding.filter([oFilter]);
 		},

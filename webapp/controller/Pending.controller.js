@@ -435,6 +435,7 @@ sap.ui.define([
 			////POSTING BU TO BU BUSINESS TYPE
 			fAddReceipt: function () {
 				AppUI5.showBusyIndicator(4000);
+				var oDocType = "Journal Entry";
 				//Initialize Variables
 				var oGoodsReceipt = {};
 				var oGoodsReceiptHeader = {};
@@ -477,7 +478,81 @@ sap.ui.define([
 						//this.oPage.setBusy(false);
 						sap.m.MessageToast.show("Added Successfully");
 						this.fUpdatePending();
-						this.fAddNewReceipt();
+						this.fAddNewReceipt(oDocType);
+						this.fprepareTable(false,"");
+						this.fClearField();
+						this.oModel.refresh();
+						AppUI5.hideBusyIndicator();
+					},
+					context: this
+
+				}).done(function (results) {
+					if (results) {
+						//
+
+					}
+				});
+			},
+			///CREATE JOURNAL ENTRY
+			fCreateJE: function () {
+				AppUI5.showBusyIndicator(4000);
+				var oDocType = "Journal Entry";
+				//Initialize Variables
+				var oJournalEnty = {};
+				var oJournalEntyHeaderCredit = {};
+				var oJournalEntyHeaderDebit = {};
+				oJournalEnty.JournalEntryLines = [];
+				var d;
+				var oQuantity ="";
+				var oCostProd="";
+				var oSubTotal = "";
+				var oTotal ="";
+				for (d = 0; d < this.oModel.getData().EditRecord.DocumentLines.length; d++) {
+					oQuantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
+					oCostProd = this.oModel.getData().EditRecord.DocumentLines[d].CostProd;
+					oSubTotal = Number([oQuantity]) * Number([oCostProd]);
+					oTotal = Number([oTotal]) + Number([oSubTotal]);
+				}
+				//For Credit
+				oJournalEntyHeaderCredit.AccountCode = "5110101101";
+				oJournalEntyHeaderCredit.Credit = oTotal;
+				oJournalEntyHeaderCredit.CostingCode = "01";
+				oJournalEntyHeaderCredit.CostingCode2 = "G101";
+				oJournalEntyHeaderCredit.CostingCode3 = "D001";
+				oJournalEntyHeaderCredit.CostingCode4 = "0001";
+				oJournalEntyHeaderCredit.CostingCode5 = "OS000";
+				oJournalEnty.JournalEntryLines.push(JSON.parse(JSON.stringify(oJournalEntyHeaderCredit)));
+				//For Debit
+				oJournalEntyHeaderDebit.AccountCode = "5110101101";
+				oJournalEntyHeaderDebit.Debit = oTotal;
+				oJournalEntyHeaderDebit.CostingCode = "01";
+				oJournalEntyHeaderDebit.CostingCode2 = "G101";
+				oJournalEntyHeaderDebit.CostingCode3 = "D001";
+				oJournalEntyHeaderDebit.CostingCode4 = "0001";
+				oJournalEntyHeaderDebit.CostingCode5 = "OS000";
+				oJournalEnty.JournalEntryLines.push(JSON.parse(JSON.stringify(oJournalEntyHeaderDebit)));
+
+
+				$.ajax({
+					url: "https://18.136.35.41:50000/b1s/v1/JournalEntries",
+					type: "POST",
+					data: JSON.stringify(oJournalEnty),
+					xhrFields: {
+						withCredentials: true
+					},
+					error: function (xhr, status, error) {
+						var Message = xhr.responseJSON["error"].message.value;
+						AppUI5.fErrorLogs("OJDT","Insert","null","null",Message,"Journal Entry",this.sUserCode,"null",JSON.stringify(oJournalEnty));
+
+						console.error(JSON.stringify(Message));
+						sap.m.MessageToast.show(Message);
+						AppUI5.hideBusyIndicator();
+					},
+					success: function (json) {
+						//this.oPage.setBusy(false);
+						sap.m.MessageToast.show("Added Successfully");
+						this.fUpdatePending();
+						this.fAddNewReceipt(oDocType);
 						this.fprepareTable(false,"");
 						this.fClearField();
 						this.oModel.refresh();
@@ -494,7 +569,14 @@ sap.ui.define([
 			},
 
 			onAddReceipt: function (oEvent) {
-				this.fAddReceipt();
+				var oTransType = this.oModel.getData().EditRecord.TransType;
+				if(oTransType === "7"){
+					this.fCreateJE();
+				}else{
+					this.fAddReceipt();
+				}
+
+
 			},
 //GETTING DATE NOW
 		fgetTodaysDate: function () {
@@ -591,9 +673,8 @@ sap.ui.define([
 			});
 		},
 		// Batch POSTING ON UDT
-		fAddNewReceipt: function () {
-				var ostatus ="2";
-				var oDocType="Goods Receipt";
+		fAddNewReceipt: function (oDocType) {
+			var ostatus ="2";
 			AppUI5.showBusyIndicator(4000);
 			//GET TRANSACTION NUMBER
 			var sGeneratedTransNo = "";
@@ -698,7 +779,7 @@ sap.ui.define([
 					sap.m.MessageToast.show(oMessage);
 				}else{
 					if (results) {
-						sap.m.MessageToast.show("Goods Receipt Has Been Posted!");
+						sap.m.MessageToast.show(""+ oDocType +" Has Been Posted!");
 						this.fprepareTable(false,"");
 						this.fClearField();
 						this.oModel.refresh();

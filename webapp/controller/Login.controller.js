@@ -165,8 +165,5 @@ sap.ui.define([
 			// AppUI5.createField("APP_TransType", "Transaction Type", "@APP_INT1", "db_Alpha", "", 50);
 			// AppUI5.createField("APP_Uom", "UOM", "@APP_INT1", "db_Alpha", "", 50);
 		  }
-
-
-
         });
 });
