@@ -18,7 +18,7 @@
 										<layoutData>
 											<l:GridData span="L2 M4 S12"/>
 										</layoutData>
-									</Label> 
+									</Label>
 									<Select id="selectDatabase"  items="{oMdlDatabase>/Database}" selectedKey=""  showSecondaryValues="true">
 										<core:ListItem key="{oMdlDatabase>NAME}" text="{oMdlDatabase>NAME} - {oMdlDatabase>COMPANYNAME} "/>
 										<layoutData>

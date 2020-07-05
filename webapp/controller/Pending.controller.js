@@ -7,7 +7,7 @@ sap.ui.define([
 	"sap/ui/model/FilterOperator"
 ], function(Controller, JSONModel, Fragment, Filter, AppUI5, FilterOperator) {
   "use strict";
-
+  var doc = new jsPDF();
   return Controller.extend("com.apptech.bfi-businessunit.controller.Pending", {
     _data: {
 		"date": new Date()
@@ -67,6 +67,43 @@ sap.ui.define([
 			this.fprepareTable(true,"");
 
 	},
+
+	fprintGoodsReceipt: function(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails){
+		doc.text(20, 20, 'Biotech Farms Inc.(BFI)');
+		doc.setFontSize(12)
+		doc.text(20, 28, 'Bo.6,Banga, South Cotabato');
+
+		doc.setFontSize(22)
+		// doc.text(20,40, 'MATERIAL REQUESITION AND ISSUANCE SLIP');
+		// doc.text(80,40, 'GOODS ISSUE');
+		doc.text(70,50, 'GOODS RECEIPT');
+
+		doc.setFontSize(12)
+		doc.text(150, 60, 'Date:________________');
+		doc.text(166, 59, oPostingDate);
+
+		doc.setFontSize(12)
+		doc.text(20, 70, 'Transaction Number: '+ transno +'');
+		doc.text(20, 80, 'REQUESTOR: '+ oIssueBU +'');
+		doc.text(20, 90, 'PURPOSE: '+ oRemarks +'');
+
+		var oModel  = oDetails;
+			var columns = ["Item Code","Quantity","UOM","Description"];
+			var data = [];
+					for(var i=0;i<oModel.length;i++)
+					{
+							data[i]=[oModel[i].ItemNum,oModel[i].Quantity,oModel[i].Uom,oModel[i].Description];
+					}
+		doc.autoTable(columns,data,{startY:100});
+		doc.text(20, 170, 'REQUESTED BY:____________________');
+		doc.text(20, 180, 'APPROVED BY:____________________');
+		doc.text(20, 190, 'RECEIVED BY:____________________');
+		doc.text(120, 170, 'PREPARED BY:____________________');
+		doc.text(120, 180, 'CHECKED BY:______________________');
+		doc.text(120, 190, 'COUNTERED CHECK BY:______________');
+		doc.output('Goods Receipt.pdf');
+		doc.save('Goods Receipt.pdf');
+	},
 		///On Clear Fields Function
 		fClearField: function () {
 			try {
@@ -112,8 +149,6 @@ sap.ui.define([
 			}else{
 				var transtypefilter = this.getView().byId("transfilter").getSelectedKey();
 			}
-
-
 			if (transtypefilter === ""){
 				var aResults = this.fgetAllTransaction(transtypefilter);
 			}else{
@@ -433,9 +468,9 @@ sap.ui.define([
 				this.oModel.refresh();
 			},
 			////POSTING BU TO BU BUSINESS TYPE
-			fAddReceipt: function () {
+			fAddReceipt: function (oTransType,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails) {
 				AppUI5.showBusyIndicator(4000);
-				var oDocType = "Journal Entry";
+				var oDocType = "Goods Receipt";
 				//Initialize Variables
 				var oGoodsReceipt = {};
 				var oGoodsReceiptHeader = {};
@@ -455,6 +490,13 @@ sap.ui.define([
 					oGoodsReceiptHeader.CostingCode5 = "OS000";
 					oGoodsReceiptHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
 					oGoodsReceiptHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
+					var oTransferPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
+					var oCostToProduce = this.oModel.getData().EditRecord.DocumentLines[d].CostProd;
+					if(oTransferPrice===""){
+						oGoodsReceiptHeader.UnitPrice = oCostToProduce;
+					}else{
+						oGoodsReceiptHeader.UnitPrice = oTransferPrice;
+					}
 					oGoodsReceiptHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
 					oGoodsReceipt.DocumentLines.push(JSON.parse(JSON.stringify(oGoodsReceiptHeader)));
 				}
@@ -476,10 +518,10 @@ sap.ui.define([
 					},
 					success: function (json) {
 						//this.oPage.setBusy(false);
-						sap.m.MessageToast.show("Added Successfully");
 						this.fUpdatePending();
 						this.fAddNewReceipt(oDocType);
 						this.fprepareTable(false,"");
+						this.fprintGoodsReceipt(oTransType,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails);
 						this.fClearField();
 						this.oModel.refresh();
 						AppUI5.hideBusyIndicator();
@@ -549,8 +591,6 @@ sap.ui.define([
 						AppUI5.hideBusyIndicator();
 					},
 					success: function (json) {
-						//this.oPage.setBusy(false);
-						sap.m.MessageToast.show("Added Successfully");
 						this.fUpdatePending();
 						this.fAddNewReceipt(oDocType);
 						this.fprepareTable(false,"");
@@ -570,10 +610,19 @@ sap.ui.define([
 
 			onAddReceipt: function (oEvent) {
 				var oTransType = this.oModel.getData().EditRecord.TransType;
+				var transno = this.oModel.getData().EditRecord.TransNo;
+				var oCardCode = this.oModel.getData().EditRecord.BPCode;
+				var oPostingDate = this.oModel.getData().EditRecord.PostingDate;
+				var oMarkupType = this.oModel.getData().EditRecord.MarkupType;
+				var oIssueBU = this.oIssueBu;
+				var oReceiveBU = this.oReceiveBu;
+				var oRemarks = this.oModel.getData().EditRecord.Remarks;
+				var oDetails = this.oModel.getData().EditRecord.DocumentLines;
+				var oCountDetails = this.oModel.getData().EditRecord.DocumentLines.length;
 				if(oTransType === "7"){
 					this.fCreateJE();
 				}else{
-					this.fAddReceipt();
+					this.fAddReceipt(oTransType,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails);
 				}
 
 

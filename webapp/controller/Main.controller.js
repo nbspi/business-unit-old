@@ -12,7 +12,6 @@ sap.ui.define([
   "use strict";
 
   return Controller.extend("com.apptech.bfi-businessunit.controller.Main", {
-
     onInit: function () {
 			//USER DATA
 			this.sDataBase = jQuery.sap.storage.Storage.get("dataBase");

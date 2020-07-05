@@ -118,8 +118,6 @@ sap.ui.define([
 		},
 
 		fprintGoodsIssue: function(transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey){
-
-
 			doc.text(20, 20, 'Biotech Farms Inc.(BFI)');
 			doc.setFontSize(12)
 			doc.text(20, 28, 'Bo.6,Banga, South Cotabato');
@@ -134,6 +132,8 @@ sap.ui.define([
 			doc.text(166, 59, oPostingDate);
 
 			doc.setFontSize(12)
+
+			doc.text(20, 70, 'Transaction #: '+ transno +'');
 			doc.text(20, 80, 'REQUESTOR: '+ oIssueBU +'');
 			doc.text(20, 90, 'PURPOSE: '+ oRemarks +'');
 
@@ -150,6 +150,7 @@ sap.ui.define([
 			doc.text(20, 190, 'RECEIVED BY:____________________');
 			doc.text(120, 170, 'PREPARED BY:____________________');
 			doc.text(120, 180, 'CHECKED BY:______________________');
+			doc.text(120, 190, 'COUNTERED CHECK BY:______________________');
 			doc.output('Goods Issue.pdf');
 			doc.save('Goods Issue.pdf');
 		},
@@ -911,7 +912,13 @@ sap.ui.define([
 				oGoodsIssueHeader.CostingCode5 = "OS000";
 				oGoodsIssueHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
 				oGoodsIssueHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
-				oGoodsIssueHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
+				var oTransferPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
+				var oCostToProduce = this.oModel.getData().EditRecord.DocumentLines[d].CostProd;
+				if(oTransferPrice===""){
+					oGoodsIssueHeader.UnitPrice = oCostToProduce;
+				}else{
+					oGoodsIssueHeader.UnitPrice = oTransferPrice;
+				}
 				oGoodsIssue.DocumentLines.push(JSON.parse(JSON.stringify(oGoodsIssueHeader)));
 			}
 
@@ -1435,7 +1442,7 @@ sap.ui.define([
 				}else{
 					if (results) {
 						this.fAddDraftFunction(transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
-						sap.m.MessageToast.show("Transaction Type "+ TransType +" Draft Has Been Created!");
+						sap.m.MessageToast.show("Transaction Type "+ transtype +" Draft Has Been Created!");
 						this.fClearField();
 						this.oModel.refresh();
 						AppUI5.hideBusyIndicator();
@@ -1800,7 +1807,6 @@ sap.ui.define([
 			var aFiles = oEvt.getParameters().files;
 			this.currentFile = aFiles[0];
 			var FileName = this.getView().byId("fileUploader").getValue();
-
 			var form = new FormData();
 			form.append("",this.currentFile,FileName);
 

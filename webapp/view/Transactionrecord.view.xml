@@ -252,21 +252,21 @@
 												<t:Column width="9rem">
 													<Label text="Cost to Produce"/>
 													<t:template>
-														<Input value="{CostProd}" type="Number" placeholder="0.00" textAlign="End" fieldWidth="80%" width="100%" enabled="{CostProdEnable}"/>
+														<Input placeholder="0.00" textAlign="End" fieldWidth="80%" width="100%" enabled="{CostProdEnable}" value="{ path:'CostProd' , type: 'sap.ui.model.type.Float', formatOptions: {maxFractionDigits: 2, minFractionDigits: 2}}"/>
 														<!--<Text text="{oMdlAP>DocDueDate}"/>-->
 													</t:template>
 												</t:Column>
 												<t:Column width="6rem">
 													<Label text="Mark Up"/>
 													<t:template>
-														<Input value="{MarkUp}" type="Number" id="markprice" placeholder="0.00" textAlign="End" fieldWidth="80%" width="100%" enabled="{MarkupPriceEnable}" liveChange="fgetmarkup"/>
+														<Input id="markprice" placeholder="0.00" textAlign="End" fieldWidth="80%" width="100%" enabled="{MarkupPriceEnable}" liveChange="fgetmarkup" value="{ path:'MarkupPrice' , type: 'sap.ui.model.type.Float', formatOptions: {maxFractionDigits: 2, minFractionDigits: 2}}"/>
 														<!--<Text text="{oMdlAP>NumAtCard}"/>-->
 													</t:template>
 												</t:Column>
 												<t:Column width="9rem">
 													<Label text="Transfer Price"/>
 													<t:template>
-														<Input value="{TransferPrice}" type="Number" id="transferprice" placeholder="0.00" textAlign="End" fieldWidth="80%" width="100%" enabled="{TransferPriceEnable}"/>
+														<Input id="transferprice" placeholder="0.00" textAlign="End" fieldWidth="80%" width="100%" enabled="{TransferPriceEnable}" value="{ path:'TransferPrice' , type: 'sap.ui.model.type.Float', formatOptions: {maxFractionDigits: 2, minFractionDigits: 2}}"/>
 														<!--<Text text="{oMdlAP>Comments}"/>-->
 													</t:template>
 												</t:Column>
