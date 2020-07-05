@@ -20,7 +20,7 @@ sap.ui.define([
 
 		onInit: function () {
 
-		
+
 
 			//TO STORED SELECTED ROW
 			this.iSelectedRow = 0;
@@ -71,7 +71,7 @@ sap.ui.define([
 					this.oMdlAllRecord.refresh();
 				}
 			});
-			
+
 			//// INITIALIZE Variables FOR TABLE
 			this.isClickedIssue = true;
 			this.aCols = [];
@@ -111,7 +111,7 @@ sap.ui.define([
 			}else{
 				var aResults = this.getAllTransaction(transtypefilter);
 			}
-		
+
 			if (aResults.length !== 0) {
 				this.aCols = Object.keys(aResults[0]);
 				var i;
@@ -129,6 +129,7 @@ sap.ui.define([
 					columns: this.columnData
 				});
 				if (bIsInit) {
+
 					this.oTable = this.getView().byId(this.tableId);
 					this.oTable.setModel(this.oMdlAllRecord);
 					this.oTable.bindColumns("/columns", function (sId, oContext) {
@@ -157,7 +158,7 @@ sap.ui.define([
 				urltag ="https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=SBODEMOAU_SL&procName=spAppBusinessUnit&QUERYTAG=getTransactions&VALUE1=&VALUE2=&VALUE3=&VALUE4=";
 			}else{
 				urltag ="https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=SBODEMOAU_SL&procName=spAppBusinessUnit&QUERYTAG=getFilteredTransactions&VALUE1="+ value1 +"&VALUE2=&VALUE3=&VALUE4=";
-			
+
 			}
 			$.ajax({
 				url: urltag,
@@ -211,7 +212,7 @@ sap.ui.define([
 			var tab = this.getView().byId("idIconTabBarInlineMode");
 			tab.setSelectedKey("tab2");
 
-			//Clear All Fields 
+			//Clear All Fields
 			this.onClearField();
 			this.getView().byId("inputbpcode").setEnabled(true);
 			this.getView().byId("inputaccountname").setEnabled(true);
@@ -333,7 +334,7 @@ sap.ui.define([
 			oBusiness_Unit.U_APP_Status = "0";
 			///HEADER BATCH Array
 			var batchArray = [
-				//directly insert data if data is single row per table 
+				//directly insert data if data is single row per table
 				{
 					"tableName": "U_APP_OINT",
 					"data": oBusiness_Unit
@@ -881,7 +882,7 @@ sap.ui.define([
 
 					//this.oModel.setJSON("{\"EditRecord/DocumentLines\" : " + JSON.stringify(results) + "}");
 
-					
+
 
 				}
 			});
@@ -984,7 +985,7 @@ sap.ui.define([
 			}
 
 			var batchArray = [
-				//directly insert data if data is single row per table 
+				//directly insert data if data is single row per table
 				{
 					"tableName": "Invoices",
 					"data": oInvoice
@@ -1109,7 +1110,7 @@ sap.ui.define([
 			}
 
 			var batchArray = [
-				//directly insert data if data is single row per table 
+				//directly insert data if data is single row per table
 				{
 					"tableName": "Invoices",
 					"data": oInvoice
@@ -1271,7 +1272,7 @@ sap.ui.define([
 			return batchRequest;
 
 		},
-		////UPDATE TESTING 
+		////UPDATE TESTING
 		onUpdateDraft: function () {
 			//GET MARKET PRICE
 			var TransNo = this.oModel.getData().EditRecord.TransNo;
@@ -1318,7 +1319,7 @@ sap.ui.define([
 
 			///HEADER BATCH
 			var BatchHeader =
-				//directly insert data if data is single row per table 
+				//directly insert data if data is single row per table
 				{
 					"tableName": "U_APP_OINT",
 					"data": oBusiness_Unit
@@ -1332,7 +1333,7 @@ sap.ui.define([
 				oBusiness_Unit_Details.Code = code;
 				oBusiness_Unit_Details.Name = code;
 
-				
+
 				oBusiness_Unit_Details.U_APP_ItemNum = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
 				oBusiness_Unit_Details.U_APP_Description = this.oModel.getData().EditRecord.DocumentLines[d].Description;
 				oBusiness_Unit_Details.U_APP_Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
