@@ -83,7 +83,7 @@ sap.ui.define([
 		doc.text(166, 59, oPostingDate);
 
 		doc.setFontSize(12)
-		doc.text(20, 70, 'Transaction Number: '+ transno +'');
+		doc.text(20, 70, 'Transaction #: '+ transno +'');
 		doc.text(20, 80, 'REQUESTOR: '+ oIssueBU +'');
 		doc.text(20, 90, 'PURPOSE: '+ oRemarks +'');
 
