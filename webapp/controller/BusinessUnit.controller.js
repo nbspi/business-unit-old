@@ -812,7 +812,7 @@ sap.ui.define([
 			var iReturnMarketPrice = 0;
 			$.ajax({
 				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getMarketPrice&value1=" + ItemCode +
-					"&value2=7&value3&value4",
+					"&value2=1&value3&value4",
 				type: "GET",
 				async: false,
 				datatype:"json",
