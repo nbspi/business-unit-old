@@ -117,15 +117,25 @@ sap.ui.define([
 			this.FileKey = null;
 		},
 
-		fprintGoodsIssue: function(transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey){
-			doc.text(20, 20, 'Biotech Farms Inc.(BFI)');
+		fprintGoodsIssue: function(transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey,transno){
+			//doc.text(20, 20, 'Biotech Farms Inc.(BFI)');
 			doc.setFontSize(12)
-			doc.text(20, 28, 'Bo.6,Banga, South Cotabato');
+			doc.text(77, 32, 'Bo.6,Banga, South Cotabato');
 
 			doc.setFontSize(22)
 			// doc.text(20,40, 'MATERIAL REQUESITION AND ISSUANCE SLIP');
 			// doc.text(80,40, 'GOODS ISSUE');
-			doc.text(70,50, 'GOODS ISSUE');
+			doc.text(77,50, 'GOODS ISSUE');
+
+			var img = new Image()
+			img.src = './css/BFI.jpg'
+			doc.addImage(img, 'jpg', 85, 8, 40, 20)//margin, position, imgWidth, imgHeight
+
+			// var img = new Image();
+			// img.src = path.resolve('sample.jpg');
+
+			// var doc = new jsPDF('p', 'mm', 'a3');  // optional parameters
+			// doc.addImage(img, 'JPEG', 1, 2);
 
 			doc.setFontSize(12)
 			doc.text(150, 60, 'Date:________________');
@@ -889,7 +899,7 @@ sap.ui.define([
 
 		},
 		////POSTING BU TO BU BUSINESS TYPE
-		fBuToBu: function (transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey) {
+		fBuToBu: function (transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey,transno) {
 			AppUI5.showBusyIndicator(4000);
 			//Initialize Variables
 			var ostatus= "1";
@@ -938,7 +948,7 @@ sap.ui.define([
 				success: function (json) {
 					//ADD UDT RECORDS
 					this.fAddDraftFunction(transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
-					this.fprintGoodsIssue(transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
+					this.fprintGoodsIssue(transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey,transno);
 					sap.m.MessageToast.show("Added Successfully");
 					this.fClearField();
 					this.oModel.refresh();
@@ -1531,7 +1541,7 @@ sap.ui.define([
 				sap.m.MessageToast.show("Please Enter Item Details");
 			}else if (transtype === "1" & transno === "" & oIssueBU !== "" & oReceiveBU !== "") {
 				/////Call BU to BU AND DRAFT transaction Function
-				this.fBuToBu(transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey);
+				this.fBuToBu(transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey,transno);
 			}else if (transtype === "2" & transno === "") {
 				/////Call Bu to Cash Sales AND DRAFT Function
 				this.fBuToCashSales(transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey);

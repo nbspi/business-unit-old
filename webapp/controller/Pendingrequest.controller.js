@@ -74,14 +74,18 @@ sap.ui.define([
 	},
 	fprintGoodsIssue: function(transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey){
 
-		doc.text(20, 20, 'Biotech Farms Inc.(BFI)');
+		//doc.text(20, 20, 'Biotech Farms Inc.(BFI)');
 		doc.setFontSize(12)
-		doc.text(20, 28, 'Bo.6,Banga, South Cotabato');
+		doc.text(77, 32, 'Bo.6,Banga, South Cotabato');
 
 		doc.setFontSize(22)
 		// doc.text(20,40, 'MATERIAL REQUESITION AND ISSUANCE SLIP');
 		// doc.text(80,40, 'GOODS ISSUE');
-		doc.text(70,50, 'GOODS ISSUE');
+    doc.text(77,50, 'GOODS ISSUE');
+    
+    var img = new Image()
+    img.src = './css/BFI.jpg'
+    doc.addImage(img, 'jpg', 85, 8, 40, 20)//margin, position, imgWidth, imgHeight
 
 		doc.setFontSize(12)
 		doc.text(150, 60, 'Date:________________');
