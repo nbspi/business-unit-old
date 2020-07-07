@@ -923,7 +923,7 @@ sap.ui.define([
 				oGoodsIssueHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
 				var oTransferPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
 				var oCostToProduce = this.oModel.getData().EditRecord.DocumentLines[d].CostProd;
-				if(oTransferPrice===""){
+				if(oTransferPrice==="0" || oTransferPrice===0 || oTransferPrice===""){
 					oGoodsIssueHeader.UnitPrice = oCostToProduce;
 				}else{
 					oGoodsIssueHeader.UnitPrice = oTransferPrice;
@@ -1391,7 +1391,14 @@ sap.ui.define([
 				oInvoiceHeader.CostingCode5 = "OS000";
 				oInvoiceHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
 				oInvoiceHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
-				oInvoiceHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice; //adjustment
+				var oTransferPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
+				var oCostToProduce = this.oModel.getData().EditRecord.DocumentLines[d].CostProd;
+				if(oTransferPrice==="0" || oTransferPrice===0 || oTransferPrice===""){
+					oInvoiceHeader.UnitPrice = oCostToProduce;
+				}else{
+					oInvoiceHeader.UnitPrice = oTransferPrice;
+				}
+				// oInvoiceHeader.UnitPrice = (this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice === 0 ? this.oModel.getData().EditRecord.DocumentLines[d].CostProd : this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice); //adjustment 
 
 				///Goods Issue Details
 				oGoodsReceiptHeader.WarehouseCode = this.oReceiveBu;
