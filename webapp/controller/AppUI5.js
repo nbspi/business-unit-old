@@ -3,6 +3,7 @@ sap.ui.define([
 	"sap/m/MessageBox"
 ], function (BusyIndicator,MessageBox) {
 	"use strict";
+	var doc = new jsPDF();
 	return ("com.apptech.bfi-businessunit.controller.AppUI5",{
 
 		/*
@@ -493,6 +494,55 @@ sap.ui.define([
 				}
 			});
 			return aReturnResult;
+		},
+		//NDC 07/08/2020
+		//Goods Receipt
+		fprintGoodsReceipt: function(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails){
+			try {
+				//doc.text(20, 20, 'Biotech Farms Inc.(BFI)');
+			doc.setFontSize(12)
+			doc.text(77, 32, 'Bo.6,Banga, South Cotabato');
+	
+			doc.setFontSize(22)
+			// doc.text(20,40, 'MATERIAL REQUESITION AND ISSUANCE SLIP');
+			// doc.text(80,40, 'GOODS ISSUE');
+			doc.text(77,50, 'GOODS RECEIPT');
+	
+			var img = new Image()
+			img.src = './css/BFI.jpg'
+			doc.addImage(img, 'jpg', 85, 8, 40, 20)//margin, position, imgWidth, imgHeight
+	
+			doc.setFontSize(12)
+			doc.text(150, 60, 'Date:________________');
+			doc.text(166, 59, oPostingDate);
+	
+			doc.setFontSize(12)
+			doc.text(20, 70, 'Transaction #: '+ transno +'');
+			doc.text(20, 80, 'REQUESTOR: '+ oIssueBU +'');
+			doc.text(20, 90, 'PURPOSE: '+ oRemarks +'');
+	
+			var oModel  = oDetails;
+			var columns = ["Item Code","Quantity","UOM","Description"];
+			var data = [];
+				for(var i=0;i<oModel.length;i++)
+				{
+						data[i]=[oModel[i].ItemNum,oModel[i].Quantity,oModel[i].Uom,oModel[i].Description];
+				}
+			doc.autoTable(columns,data,{startY:100});
+			doc.text(20, 170, 'REQUESTED BY:____________________');
+			doc.text(20, 180, 'APPROVED BY:____________________');
+			doc.text(20, 190, 'RECEIVED BY:____________________');
+			doc.text(120, 170, 'PREPARED BY:____________________');
+			doc.text(120, 180, 'CHECKED BY:______________________');
+			doc.text(120, 190, 'COUNTERED CHECK BY:______________');
+			doc.output('Goods Receipt.pdf');
+			doc.save('Goods Receipt.pdf');
+
+			return true;
+			} catch (error) {
+				console.log("Error on printing GOODS RECEIPT.")
+				//return false;
+			}
 		}
 
 

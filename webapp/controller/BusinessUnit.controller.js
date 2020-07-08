@@ -115,9 +115,11 @@ sap.ui.define([
 			this.currentFile = {}; //File Object
 			//For Attachment File Key
 			this.FileKey = null;
+			//NDC 07/08/2020 Transaction Number
+			this.iTranNum = 0;
 		},
 
-		fprintGoodsIssue: function(transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey,transno){
+		fprintGoodsIssue: function(transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey){
 			//doc.text(20, 20, 'Biotech Farms Inc.(BFI)');
 			doc.setFontSize(12)
 			doc.text(77, 32, 'Bo.6,Banga, South Cotabato');
@@ -142,7 +144,7 @@ sap.ui.define([
 			doc.text(166, 59, oPostingDate);
 
 			doc.setFontSize(12)
-			doc.text(20, 70, 'Transaction #: '+ transno +'');
+			doc.text(20, 70, 'Transaction #: '+ this.iTranNum +'');
 			doc.text(20, 80, 'REQUESTOR: '+ oIssueBU +'');
 			doc.text(20, 90, 'PURPOSE: '+ oRemarks +'');
 
@@ -292,6 +294,7 @@ sap.ui.define([
 
 		////DRAFT Function POSTING ON UDT
 		fAddDraftFunction: function (transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey) {
+			this.iTranNum = 0;
 			if (ostatus===""){
 				var ostatus ="0";
 			}else if(oDocType===""){
@@ -404,6 +407,7 @@ sap.ui.define([
 				}else{
 					if (results) {
 						sap.m.MessageToast.show("Transaction Type "+ TransType +" Draft Has Been Created!");
+						this.iTranNum = sGeneratedTransNo;
 						this.fClearField();
 						this.oModel.refresh();
 						AppUI5.hideBusyIndicator();
@@ -899,7 +903,7 @@ sap.ui.define([
 
 		},
 		////POSTING BU TO BU BUSINESS TYPE
-		fBuToBu: function (transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey,transno) {
+		fBuToBu: function (transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey) {
 			AppUI5.showBusyIndicator(4000);
 			//Initialize Variables
 			var ostatus= "1";
@@ -948,7 +952,7 @@ sap.ui.define([
 				success: function (json) {
 					//ADD UDT RECORDS
 					this.fAddDraftFunction(transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
-					this.fprintGoodsIssue(transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey,transno);
+					this.fprintGoodsIssue(transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
 					sap.m.MessageToast.show("Added Successfully");
 					this.fClearField();
 					this.oModel.refresh();
@@ -1458,6 +1462,7 @@ sap.ui.define([
 				}else{
 					if (results) {
 						this.fAddDraftFunction(transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
+						AppUI5.fprintGoodsReceipt(transtype,this.iTranNum,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails);
 						sap.m.MessageToast.show("Transaction Type "+ transtype +" Draft Has Been Created!");
 						this.fClearField();
 						this.oModel.refresh();
@@ -1548,7 +1553,7 @@ sap.ui.define([
 				sap.m.MessageToast.show("Please Enter Item Details");
 			}else if (transtype === "1" & transno === "" & oIssueBU !== "" & oReceiveBU !== "") {
 				/////Call BU to BU AND DRAFT transaction Function
-				this.fBuToBu(transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey,transno);
+				this.fBuToBu(transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey);
 			}else if (transtype === "2" & transno === "") {
 				/////Call Bu to Cash Sales AND DRAFT Function
 				this.fBuToCashSales(transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey);
