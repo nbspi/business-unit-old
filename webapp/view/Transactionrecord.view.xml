@@ -208,7 +208,7 @@
 										</f:content>
 									</f:SimpleForm>
 									<f:SimpleForm editable="true" layout="ResponsiveGridLayout" id="form01" width="100%">
-										<t:Table id="tblDetails" rows="{/EditRecord/DocumentLines}" selectionMode="Multi" visibleRowCount="10" ariaLabelledBy="title">
+										<t:Table id="tblDetails" rows="{/EditRecord/DocumentLines}" selectionMode="MultiToggle" visibleRowCount="10" threshold="15" ariaLabelledBy="title">
 											<t:extension>
 												<Toolbar>
 													<content>

@@ -162,8 +162,9 @@ sap.ui.define([
 			doc.text(120, 170, 'PREPARED BY:____________________');
 			doc.text(120, 180, 'CHECKED BY:______________________');
 			doc.text(120, 190, 'COUNTERED CHECK BY:______________________');
-			doc.output('Goods Issue.pdf');
-			doc.save('Goods Issue.pdf');
+			doc.output('Goods Issue_'+ this.iTranNum +'.pdf');
+			doc.save('Goods Issue_'+ this.iTranNum +'.pdf');
+			doc = new jsPDF();
 		},
 		///On Clear Fields Function
 		fClearField: function () {
@@ -312,7 +313,7 @@ sap.ui.define([
 					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
 			  	},
 				error: function (xhr, status, error) {
-					var Message = xhr.responseJSON["error"].message.value;
+					var Message = xhr.responseJSON["ErrorMessage"].message.value;
 					console.error(JSON.stringify(Message));
 					sap.m.MessageToast.show(Message);
 					AppUI5.hideBusyIndicator();
@@ -324,6 +325,7 @@ sap.ui.define([
 			}).done(function (results) {
 				if (results) {
 					sGeneratedTransNo = results[0][""];
+					this.iTranNum = sGeneratedTransNo;
 				}
 			});
 			///GET GENERATED CODE FROM SP
@@ -406,8 +408,8 @@ sap.ui.define([
 					sap.m.MessageToast.show(oMessage);
 				}else{
 					if (results) {
-						sap.m.MessageToast.show("Transaction Type "+ TransType +" Draft Has Been Created!");
-						this.iTranNum = sGeneratedTransNo;
+						// sap.m.MessageToast.show("Transaction Type "+ TransType +" Draft Has Been Created!");
+						// this.iTranNum = sGeneratedTransNo;
 						this.fClearField();
 						this.oModel.refresh();
 						AppUI5.hideBusyIndicator();

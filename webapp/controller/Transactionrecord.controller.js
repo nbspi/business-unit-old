@@ -13,7 +13,7 @@ sap.ui.define([
   return Controller.extend("com.apptech.bfi-businessunit.controller.Transactionrecord", {
 	onRoutePatternMatched: function(event){
 		this.fClearField();
-		this.fprepareTable(false,"");
+		this.fprepareTable("",0);
 		this.oModel.refresh();
 		},
     onInit: function () {

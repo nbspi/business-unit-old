@@ -105,8 +105,9 @@ sap.ui.define([
 		doc.text(120, 170, 'PREPARED BY:____________________');
 		doc.text(120, 180, 'CHECKED BY:______________________');
 		doc.text(120, 190, 'COUNTERED CHECK BY:______________');
-		doc.output('Goods Receipt.pdf');
-		doc.save('Goods Receipt.pdf');
+		doc.output('Goods Receipt_'+ transno +'.pdf');
+		doc.save('Goods Receipt_'+ transno +'.pdf');
+		doc = new jsPDF();
 	},
 		///On Clear Fields Function
 		fClearField: function () {
