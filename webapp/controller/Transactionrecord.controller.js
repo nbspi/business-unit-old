@@ -911,11 +911,11 @@ sap.ui.define([
     var d;
     for (d = 0; d < this.oModel.getData().EditRecord.DocumentLines.length; d++) {
       oGoodsIssueHeader.WarehouseCode = this.oIssueBu;
-      oGoodsIssueHeader.CostingCode = "01";
-      oGoodsIssueHeader.CostingCode2 = "G101";
-      oGoodsIssueHeader.CostingCode3 = "D001";
-      oGoodsIssueHeader.CostingCode4 = "0001";
-      oGoodsIssueHeader.CostingCode5 = "OS000";
+    //   oGoodsIssueHeader.CostingCode = "01";
+    //   oGoodsIssueHeader.CostingCode2 = "G101";
+    //   oGoodsIssueHeader.CostingCode3 = "D001";
+    //   oGoodsIssueHeader.CostingCode4 = "0001";
+    //   oGoodsIssueHeader.CostingCode5 = "OS000";
       oGoodsIssueHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
       oGoodsIssueHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
       oGoodsIssueHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
@@ -972,11 +972,6 @@ sap.ui.define([
 			var d;
 			for (d = 0; d < this.oModel.getData().EditRecord.DocumentLines.length; d++) {
 			  oGoodsIssueHeader.WarehouseCode = this.oIssueBu;
-			  oGoodsIssueHeader.CostingCode = "01";
-			  oGoodsIssueHeader.CostingCode2 = "G101";
-			  oGoodsIssueHeader.CostingCode3 = "D001";
-			  oGoodsIssueHeader.CostingCode4 = "0001";
-			  oGoodsIssueHeader.CostingCode5 = "OS000";
 			  oGoodsIssueHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
 			  oGoodsIssueHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
 			  oGoodsIssueHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
@@ -1013,11 +1008,6 @@ sap.ui.define([
 				///HARD CODED ACCOUNT CODE FOR TESTING
 				oInvoiceHeader.ItemDescription = oDescription;
 				oInvoiceHeader.AccountCode ="4110101101";
-				oInvoiceHeader.CostingCode = "01";
-				oInvoiceHeader.CostingCode2 = "G101";
-				oInvoiceHeader.CostingCode3 = "D001";
-				oInvoiceHeader.CostingCode4 = "0001";
-				oInvoiceHeader.CostingCode5 = "OS000";
 				oInvoiceHeader.TaxCode = "GST-EO";
 				oInvoiceHeader.LineTotal =results.DocTotal;
 				oInvoice.DocumentLines.push(JSON.parse(JSON.stringify(oInvoiceHeader)));
@@ -1111,11 +1101,6 @@ sap.ui.define([
 			var d;
 			for (d = 0; d < this.oModel.getData().EditRecord.DocumentLines.length; d++) {
 			  oGoodsIssueHeader.WarehouseCode = this.oIssueBu;
-			  oGoodsIssueHeader.CostingCode = "01";
-			  oGoodsIssueHeader.CostingCode2 = "G101";
-			  oGoodsIssueHeader.CostingCode3 = "D001";
-			  oGoodsIssueHeader.CostingCode4 = "0001";
-			  oGoodsIssueHeader.CostingCode5 = "OS000";
 			  oGoodsIssueHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
 			  oGoodsIssueHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
 			  oGoodsIssueHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
@@ -1152,11 +1137,6 @@ sap.ui.define([
 				///HARD CODED ACCOUNT CODE FOR TESTING
 				oInvoiceHeader.ItemDescription = oDescription;
 				oInvoiceHeader.AccountCode ="4110101101";
-				oInvoiceHeader.CostingCode = "01";
-				oInvoiceHeader.CostingCode2 = "G101";
-				oInvoiceHeader.CostingCode3 = "D001";
-				oInvoiceHeader.CostingCode4 = "0001";
-				oInvoiceHeader.CostingCode5 = "OS000";
 				oInvoiceHeader.LineTotal =results.DocTotal;
 				oInvoice.DocumentLines.push(JSON.parse(JSON.stringify(oInvoiceHeader)));
 				$.ajax({
@@ -1210,11 +1190,6 @@ sap.ui.define([
 					var d;
 					for (d = 0; d < this.oModel.getData().EditRecord.DocumentLines.length; d++) {
 					oGoodsIssueHeader.WarehouseCode = this.oIssueBu;
-					oGoodsIssueHeader.CostingCode = "01";
-					oGoodsIssueHeader.CostingCode2 = "G101";
-					oGoodsIssueHeader.CostingCode3 = "D001";
-					oGoodsIssueHeader.CostingCode4 = "0001";
-					oGoodsIssueHeader.CostingCode5 = "OS000";
 					oGoodsIssueHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
 					oGoodsIssueHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
 					oGoodsIssueHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
@@ -1272,11 +1247,6 @@ sap.ui.define([
 			var d;
 			for (d = 0; d < this.oModel.getData().EditRecord.DocumentLines.length; d++) {
 			  oGoodsIssueHeader.WarehouseCode = this.oIssueBu;
-			  oGoodsIssueHeader.CostingCode = "01";
-			  oGoodsIssueHeader.CostingCode2 = "G101";
-			  oGoodsIssueHeader.CostingCode3 = "D001";
-			  oGoodsIssueHeader.CostingCode4 = "0001";
-			  oGoodsIssueHeader.CostingCode5 = "OS000";
 			  oGoodsIssueHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
 			  oGoodsIssueHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
 			  oGoodsIssueHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
@@ -1313,11 +1283,6 @@ sap.ui.define([
 				///HARD CODED ACCOUNT CODE FOR TESTING
 				oInvoiceHeader.ItemDescription = oDescription;
 				oInvoiceHeader.AccountCode ="4110101101";
-				oInvoiceHeader.CostingCode = "01";
-				oInvoiceHeader.CostingCode2 = "G101";
-				oInvoiceHeader.CostingCode3 = "D001";
-				oInvoiceHeader.CostingCode4 = "0001";
-				oInvoiceHeader.CostingCode5 = "OS000";
 				oInvoiceHeader.LineTotal =results.DocTotal;
 				oInvoice.DocumentLines.push(JSON.parse(JSON.stringify(oInvoiceHeader)));
 
@@ -1398,22 +1363,12 @@ sap.ui.define([
 		  for (d = 0; d < this.oModel.getData().EditRecord.DocumentLines.length; d++) {
 			///Goods Receipt Details
 			oInvoiceHeader.WarehouseCode = this.oReceiveBu;
-			oInvoiceHeader.CostingCode = "01";
-			oInvoiceHeader.CostingCode2 = "G101";
-			oInvoiceHeader.CostingCode3 = "D001";
-			oInvoiceHeader.CostingCode4 = "0001";
-			oInvoiceHeader.CostingCode5 = "OS000";
 			oInvoiceHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
 			oInvoiceHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
 			oInvoiceHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice; //adjustment
 
 			///Goods Issue Details
 			oGoodsReceiptHeader.WarehouseCode = this.oReceiveBu;
-			oGoodsReceiptHeader.CostingCode = "01";
-			oGoodsReceiptHeader.CostingCode2 = "G101";
-			oGoodsReceiptHeader.CostingCode3 = "D001";
-			oGoodsReceiptHeader.CostingCode4 = "0001";
-			oGoodsReceiptHeader.CostingCode5 = "OS000";
 			oGoodsReceiptHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
 			oGoodsReceiptHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
 			oGoodsReceiptHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
@@ -1490,11 +1445,6 @@ sap.ui.define([
 		var d;
 		for (d = 0; d < this.oModel.getData().EditRecord.DocumentLines.length; d++) {
 			oGoodsIssueHeader.WarehouseCode = this.oIssueBu;
-			oGoodsIssueHeader.CostingCode = "01";
-			oGoodsIssueHeader.CostingCode2 = "G101";
-			oGoodsIssueHeader.CostingCode3 = "D001";
-			oGoodsIssueHeader.CostingCode4 = "0001";
-			oGoodsIssueHeader.CostingCode5 = "OS000";
 			oGoodsIssueHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
 			oGoodsIssueHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
 			oGoodsIssueHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;

@@ -493,11 +493,6 @@ sap.ui.define([
 				for (d = 0; d < this.oModel.getData().EditRecord.DocumentLines.length; d++) {
 					// oGoodsIssueHeader.WarehouseCode = this.oModel.getData().EditRecord.IssueBU;
 					oGoodsReceiptHeader.WarehouseCode = this.oReceiveBu;
-					oGoodsReceiptHeader.CostingCode = "01";
-					oGoodsReceiptHeader.CostingCode2 = "G101";
-					oGoodsReceiptHeader.CostingCode3 = "D001";
-					oGoodsReceiptHeader.CostingCode4 = "0001";
-					oGoodsReceiptHeader.CostingCode5 = "OS000";
 					oGoodsReceiptHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
 					oGoodsReceiptHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
 					var oTransferPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
@@ -568,20 +563,10 @@ sap.ui.define([
 				//For Credit
 				oJournalEntyHeaderCredit.AccountCode = this.oModel.getData().EditRecord.DocumentLines[0].CreditAccount;
 				oJournalEntyHeaderCredit.Credit = oTotal;
-				oJournalEntyHeaderCredit.CostingCode = "01";
-				oJournalEntyHeaderCredit.CostingCode2 = "G101";
-				oJournalEntyHeaderCredit.CostingCode3 = "D001";
-				oJournalEntyHeaderCredit.CostingCode4 = "0001";
-				oJournalEntyHeaderCredit.CostingCode5 = "OS000";
 				oJournalEnty.JournalEntryLines.push(JSON.parse(JSON.stringify(oJournalEntyHeaderCredit)));
 				//For Debit
 				oJournalEntyHeaderDebit.AccountCode = this.oModel.getData().EditRecord.DocumentLines[0].DebitAccount;
 				oJournalEntyHeaderDebit.Debit = oTotal;
-				oJournalEntyHeaderDebit.CostingCode = "01";
-				oJournalEntyHeaderDebit.CostingCode2 = "G101";
-				oJournalEntyHeaderDebit.CostingCode3 = "D001";
-				oJournalEntyHeaderDebit.CostingCode4 = "0001";
-				oJournalEntyHeaderDebit.CostingCode5 = "OS000";
 				oJournalEnty.JournalEntryLines.push(JSON.parse(JSON.stringify(oJournalEntyHeaderDebit)));
 
 
