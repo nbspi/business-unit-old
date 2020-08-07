@@ -94,7 +94,7 @@ sap.ui.define([
             MessageToast.show("Timed Out");
             jQuery.sap.storage.Storage.clear();
             this.oLogin.getData().Login.Pass = "";
-            this.oLogin.refresh;
+            this.oLogin.refresh();
             sap.ui.core.UIComponent.getRouterFor(this).navTo("Login");
         },
 

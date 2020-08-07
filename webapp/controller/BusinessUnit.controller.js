@@ -130,7 +130,11 @@ sap.ui.define([
 			doc.text(77,50, 'GOODS ISSUE');
 
 			var img = new Image()
-			img.src = './css/BFI.jpg'
+			if (this.sDataBase.toLocaleUpperCase().includes("BIOTECH") || this.sDataBase.toLocaleUpperCase().includes("BFI")){
+				img.src = './css/BFI.jpg'
+			}else{
+				img.src = './css/REVIVE.jpg'
+			}
 			doc.addImage(img, 'jpg', 85, 8, 40, 20)//margin, position, imgWidth, imgHeight
 
 			// var img = new Image();

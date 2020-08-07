@@ -84,7 +84,12 @@ sap.ui.define([
     doc.text(77,50, 'GOODS ISSUE');
     
     var img = new Image()
-    img.src = './css/BFI.jpg'
+    var img = new Image()
+    if (this.sDataBase.toLocaleUpperCase().includes("BIOTECH") || this.sDataBase.toLocaleUpperCase().includes("BFI")){
+      img.src = './css/BFI.jpg'
+    }else{
+      img.src = './css/REVIVE.jpg'
+    }
     doc.addImage(img, 'jpg', 85, 8, 40, 20)//margin, position, imgWidth, imgHeight
 
 		doc.setFontSize(12)
@@ -109,7 +114,8 @@ sap.ui.define([
 		doc.text(120, 170, 'PREPARED BY:____________________');
 		doc.text(120, 180, 'CHECKED BY:______________________');
 		doc.output('Goods Issue.pdf');
-		doc.save('Goods Issue.pdf');
+    doc.save('Goods Issue.pdf');
+    doc = new jsPDF();
 	},
 
   //GETTING DATE NOW
