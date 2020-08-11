@@ -9,7 +9,7 @@ services:
     build:
       context: ./bfi-businessunit
       dockerfile: Dockerfile
-    container_name: bfi-businessunit
+    container_name: bfi-businessunit-dev
     restart: unless-stopped
     volumes:
       - ./bfi-businessunit:/usr/scr/app
