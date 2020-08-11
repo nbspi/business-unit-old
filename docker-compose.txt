@@ -1,0 +1,21 @@
+This is a text file!!
+
+
+
+version: "3"
+
+services:
+  bfi-businessunit:
+    build:
+      context: ./bfi-businessunit
+      dockerfile: Dockerfile
+    container_name: bfi-businessunit
+    restart: unless-stopped
+    volumes:
+      - ./bfi-businessunit:/usr/scr/app
+      - bfi-businessunit_node_modules:/usr/src/app/node_modules
+    ports:
+      - 8083:80
+
+volumes:
+  bfi-businessunit_node_modules:
