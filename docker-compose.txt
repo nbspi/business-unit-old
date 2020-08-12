@@ -1,6 +1,7 @@
 This is a text file!!
 
 
+# dev
 
 version: "3"
 
@@ -13,9 +14,51 @@ services:
     restart: unless-stopped
     volumes:
       - ./bfi-businessunit:/usr/scr/app
-      - bfi-businessunit_node_modules:/usr/src/app/node_modules
+      - bfi-businessunit_dev_node_modules:/usr/src/app/node_modules
     ports:
       - 8083:80
 
 volumes:
-  bfi-businessunit_node_modules:
+  bfi-businessunit_dev_node_modules:
+
+
+# sqa
+
+version: "3"
+
+services:
+  bfi-businessunit:
+    build:
+      context: ./bfi-businessunit
+      dockerfile: Dockerfile
+    container_name: bfi-businessunit-sqa
+    restart: unless-stopped
+    volumes:
+      - ./bfi-businessunit:/usr/scr/app
+      - bfi-businessunit_sqa_node_modules:/usr/src/app/node_modules
+    ports:
+      - 8093:80
+
+volumes:
+  bfi-businessunit_sqa_node_modules:
+
+
+# uat
+
+version: "3"
+
+services:
+  bfi-businessunit:
+    build:
+      context: ./bfi-businessunit
+      dockerfile: Dockerfile
+    container_name: bfi-businessunit-uat
+    restart: unless-stopped
+    volumes:
+      - ./bfi-businessunit:/usr/scr/app
+      - bfi-businessunit_uat_node_modules:/usr/src/app/node_modules
+    ports:
+      - 9003:80
+
+volumes:
+  bfi-businessunit_uat_node_modules:
