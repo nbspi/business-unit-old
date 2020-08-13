@@ -3,16 +3,17 @@ sap.ui.define([
 	"sap/ui/Device",
 	"sap/ui/core/Fragment",
 	"sap/ui/core/mvc/Controller",
+	"com/apptech/bfi-businessunit/controller/AppUI5",
 	"sap/ui/model/json/JSONModel",
 	"sap/m/Popover",
 	"sap/m/Button",
 	"sap/m/library",
 	"sap/m/MessageToast"
-], function(jQuery, Device, Fragment, Controller, JSONModel, Popover, Button, mobileLibrary, MessageToast) {
+], function(jQuery, Device, Fragment, Controller,AppUI5, JSONModel, Popover, Button, mobileLibrary, MessageToast) {
   "use strict";
 
-  return Controller.extend("com.apptech.bfi-businessunit.controller.Main", {
-    onInit: function () {
+  	return Controller.extend("com.apptech.bfi-businessunit.controller.Main", {
+   		onInit: function () {
 			//USER DATA
 			this.sDataBase = jQuery.sap.storage.Storage.get("dataBase");
 			this.sUserCode = jQuery.sap.storage.Storage.get("userCode");
@@ -55,7 +56,6 @@ sap.ui.define([
 				}
 			});
 		},
-		//-------------------------------------------
 		handleRouteMatched : function (evt) {
 			this.sDataBase = jQuery.sap.storage.Storage.get("dataBase");
 			this.sUserCode = jQuery.sap.storage.Storage.get("userCode");
@@ -78,8 +78,6 @@ sap.ui.define([
 			this.router = this.getOwnerComponent().getRouter();
 			this.router.navTo(event.getParameter("key"));
 		},
-
-		//-------------------------------------------
 
 		onMenuButtonPress: function () {
 			var toolPage = this.byId("toolPage");

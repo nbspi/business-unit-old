@@ -126,13 +126,7 @@ sap.ui.define([
 					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
 			  	},
 				error: function (xhr, status, error) {
-					// if (xhr.status === 400) {
-					// 	sap.m.MessageToast.show("Session End. Redirecting to Login Page..");
-					// 	sap.ui.core.UIComponent.getRouterFor(this).navTo("Login");
-					// }else{
-					// 	sap.m.MessageToast.show(error);
-					// }
-						sap.m.MessageToast.show(error);
+					sap.m.MessageToast.show(error);
 				},
 				success: function (json) {
 					generatedCode = json[0][""];
@@ -543,6 +537,33 @@ sap.ui.define([
 				console.log("Error on printing GOODS RECEIPT.")
 				//return false;
 			}
+		},
+		fGenerateTransNum: function(sDataBase){
+			var sGeneratedTransNo = ""
+			$.ajax({
+				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ sDataBase +"&procName=spAppBusinessUnit&queryTag=getTransactionNumber&value1&value2&value3&value4",
+				type: "GET",
+				async: false,
+				datatype:"json",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
+			  	},
+				error: function (xhr, status, error) {
+					var Message = xhr.responseJSON["ErrorMessage"].message.value;
+					console.error(JSON.stringify(Message));
+					sap.m.MessageToast.show(Message);
+					AppUI5.hideBusyIndicator();
+				},
+				success: function (json) {
+
+				},
+				context: this
+			}).done(function (results) {
+				if (results) {
+					sGeneratedTransNo = results[0][""];
+				}
+			});
+			return sGeneratedTransNo;
 		}
 
 

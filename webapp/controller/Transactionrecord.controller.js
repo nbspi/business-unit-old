@@ -1,22 +1,22 @@
 sap.ui.define([
-  "sap/ui/core/BusyIndicator",
+  	"sap/ui/core/BusyIndicator",
 	"sap/ui/core/Element",
-  "sap/ui/core/mvc/Controller",
+  	"sap/ui/core/mvc/Controller",
 	"sap/ui/model/json/JSONModel",
 	"sap/ui/core/Fragment",
 	"sap/ui/model/Filter",
 	"com/apptech/bfi-businessunit/controller/AppUI5",
 	"sap/ui/model/FilterOperator"
 ], function(BusyIndicator,Element,Controller, JSONModel, Fragment, Filter, AppUI5, FilterOperator) {
-  "use strict";
+  	"use strict";
 
-  return Controller.extend("com.apptech.bfi-businessunit.controller.Transactionrecord", {
-	onRoutePatternMatched: function(event){
-		this.fClearField();
-		this.fprepareTable("",0);
-		this.oModel.refresh();
+  	return Controller.extend("com.apptech.bfi-businessunit.controller.Transactionrecord", {
+		onRoutePatternMatched: function(event){
+			this.fClearField();
+			this.fprepareTable("",0);
+			this.oModel.refresh();
 		},
-    onInit: function () {
+		onInit: function () {
 			///ON LOAD
 			var route = this.getOwnerComponent().getRouter().getRoute("Transactionrecord");
 			route.attachPatternMatched(this.onRoutePatternMatched,this);
@@ -74,7 +74,7 @@ sap.ui.define([
 				datatype:"json",
 				beforeSend: function (xhr) {
 					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
-			  	},
+				},
 				error: function (xhr, status, error) {
 					var Message = xhr.responseJSON["error"].message.value;
 					console.error(JSON.stringify(Message));
@@ -109,9 +109,7 @@ sap.ui.define([
 			this.Attachment = "";
 			//For Attachment File Key
 			this.FileKey = null;
-
-
-    },
+		},
 			//GETTING DATE NOW
 		fgetTodaysDate: function () {
 			var today = new Date();
@@ -124,8 +122,6 @@ sap.ui.define([
 			this.oMdlAllRecord.refresh();
 		},
 		onSelectionChange: function (oEvent) {
-			// var oTranstypefilter = this.getView().byId("transfilter").getSelectedKey();
-			// var oStatus = this.getView().byId("TranStatus").getSelectedKey();
 			this.fprepareTable("",0);
 			this.oMdlAllRecord.refresh();
 
@@ -262,8 +258,8 @@ sap.ui.define([
 			});
 			return aReturnResult;
 
-    },
-    //DISABLING TEXTBOX
+    	},
+   		//DISABLING TEXTBOX
 		onChangeTrans: function (oEvent) {
 			var transtype = this.getView().byId("TransID").getSelectedKey();
 			if (transtype === "1") {
@@ -272,24 +268,16 @@ sap.ui.define([
 				this.getView().byId("inputwhsreceive").setEnabled(true);
 				this.getView().byId("inputmarkuptype").setEnabled(false);
 			} else if (transtype === "2") {
-				this.getView().byId("inputbpcode").setEnabled(true);
-				this.getView().byId("inputwhsreceive").setEnabled(false);
-				this.getView().byId("inputmarkuptype").setEnabled(false);
-			} else if (transtype === "3") {
-				this.getView().byId("inputbpcode").setEnabled(true);
-				this.getView().byId("inputwhsreceive").setEnabled(false);
-				this.getView().byId("inputmarkuptype").setEnabled(false);
-			} else if (transtype === "4") {
 				this.getView().byId("inputbpcode").setValue("");
 				this.getView().byId("inputbpcode").setEnabled(false);
 				this.getView().byId("inputwhsreceive").setEnabled(false);
 				this.getView().byId("inputmarkuptype").setEnabled(false);
-			}else if (transtype === "5") {
+			}else if (transtype === "3") {
 				this.getView().byId("inputbpcode").setValue("");
 				this.getView().byId("inputbpcode").setEnabled(true);
 				this.getView().byId("inputwhsreceive").setEnabled(false);
 				this.getView().byId("inputmarkuptype").setEnabled(true);
-			}else if (transtype === "6") {
+			}else if (transtype === "4") {
 				this.getView().byId("inputbpcode").setValue("");
 				this.getView().byId("inputbpcode").setEnabled(true);
 				this.getView().byId("inputwhsissue").setEnabled(false);
@@ -472,30 +460,42 @@ sap.ui.define([
 		///Search on BP
 		handleSearchBP: function (oEvent) {
 			var sValue = oEvent.getParameter("value");
-			var oFilter = new Filter("CardName", FilterOperator.Contains, sValue);
+			var oFilters = new Filter([
+				new Filter("CardCode", FilterOperator.Contains, sValue),
+				new Filter("CardName", FilterOperator.Contains, sValue)
+				], false);
 			var oBinding = oEvent.getSource().getBinding("items");
-			oBinding.filter([oFilter]);
+			oBinding.filter(oFilters);
 		},
 		///Search on Issuing Whs
 		handleSearchWhs: function (oEvent) {
 			var sValue = oEvent.getParameter("value");
-			var oFilter = new Filter("WhsCode", FilterOperator.Contains, sValue);
+			var oFilters = new Filter([
+				new Filter("WhsCode", FilterOperator.Contains, sValue),
+				new Filter("WhsName", FilterOperator.Contains, sValue)
+				], false);
 			var oBinding = oEvent.getSource().getBinding("items");
-			oBinding.filter([oFilter]);
+			oBinding.filter(oFilters);
 		},
 		///Search on Receiving Whs
 		handleSearchWhsreceive: function (oEvent) {
 			var sValue = oEvent.getParameter("value");
-			var oFilter = new Filter("WhsCode", FilterOperator.Contains, sValue);
+			var oFilters = new Filter([
+				new Filter("WhsCode", FilterOperator.Contains, sValue),
+				new Filter("WhsName", FilterOperator.Contains, sValue)
+				], false);
 			var oBinding = oEvent.getSource().getBinding("items");
-			oBinding.filter([oFilter]);
+			oBinding.filter(oFilters);
 		},
 		///Search on Item
 		handleSearchItem: function (oEvent) {
 			var sValue = oEvent.getParameter("value");
-			var oFilter = new Filter("ItemName", FilterOperator.Contains, sValue);
+			var oFilters = new Filter([
+				new Filter("ItemName", FilterOperator.Contains, sValue),
+				new Filter("ItemCode", FilterOperator.Contains, sValue)
+				], false);
 			var oBinding = oEvent.getSource().getBinding("items");
-			oBinding.filter([oFilter]);
+			oBinding.filter(oFilters);
 		},
 		//Closing selection on Search BP
 		handleValueHelpCloseBatch: function (oEvent) {
@@ -572,7 +572,7 @@ sap.ui.define([
 			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].ItemNum = ItemDetails[0].ItemCode;
 			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].Description = ItemDetails[0].ItemName;
 			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].Uom = ItemDetails[0].InventoryUom;
-			if(transtype === "6"){
+			if(transtype === "4"){
 				var oCostToProduce =this.f_getAveragePrice(ItemDetails[0].ItemCode,receivebu);
 				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].CostProd = this.f_getAveragePrice(ItemDetails[0].ItemCode,receivebu);
 			}else{
@@ -588,16 +588,12 @@ sap.ui.define([
 				}else{
 					this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice=oMarketPrice;
 				}
-			}else if (transtype === "2") {
+			} else if (transtype === "2") {
 				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice = oCostToProduce;
-			} else if (transtype === "3") {
-				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice = oCostToProduce;
-			} else if (transtype === "4") {
-				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice = oCostToProduce;
-			}else if (transtype === "5") {
+			}else if (transtype === "3") {
 				///for revise
 				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice = oCostToProduce;
-			}else if (transtype === "6") {
+			}else if (transtype === "4") {
 				///for revise
 				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice = oCostToProduce;
 			}
@@ -662,8 +658,8 @@ sap.ui.define([
 			return iReturnAveragePrice;
 
 		},
-    ///ON VIEW SHOWING ALL DATA AND CHANGING NAME INTO EDIT
-	onProcess: function (oEvent) {
+		///ON VIEW SHOWING ALL DATA AND CHANGING NAME INTO EDIT
+		onProcess: function (oEvent) {
 			var iIndex = this.oTable.getSelectedIndex();
 			var TransNo = "";
 			var TransType = "";
@@ -739,13 +735,6 @@ sap.ui.define([
 						this.getView().byId("inputbpcode").setEnabled(false);
 
 					} else if (transtype === "2") {
-						this.getView().byId("inputbpcode").setEnabled(true);
-						this.getView().byId("inputwhsreceive").setEnabled(false);
-
-					} else if (transtype === "3") {
-						this.getView().byId("inputbpcode").setEnabled(true);
-						this.getView().byId("inputwhsreceive").setEnabled(false);
-					} else if (transtype === "4") {
 						this.getView().byId("inputwhsreceive").setEnabled(true);
 						this.getView().byId("inputbpcode").setEnabled(false);
 					}
@@ -785,11 +774,10 @@ sap.ui.define([
 					this.oModel.getData().EditRecord.DocumentLines = results;
 					this.oModel.refresh();
 
-					//this.oModel.setJSON("{\"EditRecord/DocumentLines\" : " + JSON.stringify(results) + "}");
 				}
 			});
-    },
-    ///On Clear Fields Function
+    	},
+    	///On Clear Fields Function
 		fClearField: function () {
 			try {
 				this.oModel.getData().EditRecord.TransType = "";
@@ -823,55 +811,39 @@ sap.ui.define([
 			if (transtype === "") {
 				sap.m.MessageToast.show("Please Select Transaction Type.");
 			} else {
-					if (transtype === "1") {
-						oitemdetails.DescriptionEnable = false;
-						oitemdetails.CostProdEnable = false;
-						oitemdetails.MarkupPriceEnable = false;
-						oitemdetails.TransferPriceEnable = false;
-						oitemdetails.MarketPriceEnable = false;
-						this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
-						this.oModel.refresh();
-					} else if (transtype === "2") {
-						oitemdetails.DescriptionEnable = false;
-						oitemdetails.CostProdEnable = false;
-						oitemdetails.MarkupPriceEnable = true;
-						oitemdetails.TransferPriceEnable = false;
-						oitemdetails.MarketPriceEnable = false;
-						this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
-						this.oModel.refresh();
-					} else if (transtype === "3") {
-						oitemdetails.DescriptionEnable = false;
-						oitemdetails.CostProdEnable = false;
-						oitemdetails.MarkupPriceEnable = true;
-						oitemdetails.TransferPriceEnable = false;
-						oitemdetails.MarketPriceEnable = false;
-						this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
-						this.oModel.refresh();
-					} else if (transtype === "4") {
-						oitemdetails.DescriptionEnable = false;
-						oitemdetails.CostProdEnable = false;
-						oitemdetails.MarkupPriceEnable = true;
-						oitemdetails.TransferPriceEnable = false;
-						oitemdetails.MarketPriceEnable = false;
-						this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
-						this.oModel.refresh();
-					} else if (transtype === "5") {
-						oitemdetails.DescriptionEnable = false;
-						oitemdetails.CostProdEnable = false;
-						oitemdetails.MarkupPriceEnable = true;
-						oitemdetails.TransferPriceEnable = false;
-						oitemdetails.MarketPriceEnable = false;
-						this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
-						this.oModel.refresh();
-					} else if (transtype === "6") {
-						oitemdetails.DescriptionEnable = false;
-						oitemdetails.CostProdEnable = false;
-						oitemdetails.MarkupPriceEnable = true;
-						oitemdetails.TransferPriceEnable = false;
-						oitemdetails.MarketPriceEnable = false;
-						this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
-						this.oModel.refresh();
-					}
+				if (transtype === "1") {
+					oitemdetails.DescriptionEnable = false;
+					oitemdetails.CostProdEnable = false;
+					oitemdetails.MarkupPriceEnable = false;
+					oitemdetails.TransferPriceEnable = false;
+					oitemdetails.MarketPriceEnable = false;
+					this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
+					this.oModel.refresh();
+				} else if (transtype === "2") {
+					oitemdetails.DescriptionEnable = false;
+					oitemdetails.CostProdEnable = false;
+					oitemdetails.MarkupPriceEnable = true;
+					oitemdetails.TransferPriceEnable = false;
+					oitemdetails.MarketPriceEnable = false;
+					this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
+					this.oModel.refresh();
+				} else if (transtype === "3") {
+					oitemdetails.DescriptionEnable = false;
+					oitemdetails.CostProdEnable = false;
+					oitemdetails.MarkupPriceEnable = true;
+					oitemdetails.TransferPriceEnable = false;
+					oitemdetails.MarketPriceEnable = false;
+					this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
+					this.oModel.refresh();
+				} else if (transtype === "4") {
+					oitemdetails.DescriptionEnable = false;
+					oitemdetails.CostProdEnable = false;
+					oitemdetails.MarkupPriceEnable = true;
+					oitemdetails.TransferPriceEnable = false;
+					oitemdetails.MarketPriceEnable = false;
+					this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
+					this.oModel.refresh();
+				}
 			}
 		},
 		////REMOVE ROW ON TABLE
@@ -891,68 +863,66 @@ sap.ui.define([
 			oTable.clearSelection();
 			this.oModel.refresh();
 
-			//	this.oModel.getData().EditRecord.DocumentLines.splice(this.oTableDetails.selectedIndeices(), 1);
-			// this.oModel.refresh();
-    },
+   		},
 
-   ////POSTING BU TO BU BUSINESS TYPE
-  fBuToBu: function (transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey) {
-    AppUI5.showBusyIndicator(4000);
-    //Initialize Variables
-    var ostatus= "1";
-    var oDocType ="Goods Issue";
-    var oGoodsIssue = {};
-    var oGoodsIssueHeader = {};
-    oGoodsIssue.Comments = this.oModel.getData().EditRecord.Remarks;
-	oGoodsIssue.AttachmentEntry = oAttachmentKey;
-	oGoodsIssue.U_APP_GI_TransType = "BU";
-    oGoodsIssue.DocumentLines = [];
-    ///LOOP FOR THE DETAILS
-    var d;
-    for (d = 0; d < this.oModel.getData().EditRecord.DocumentLines.length; d++) {
-      oGoodsIssueHeader.WarehouseCode = this.oIssueBu;
-    //   oGoodsIssueHeader.CostingCode = "01";
-    //   oGoodsIssueHeader.CostingCode2 = "G101";
-    //   oGoodsIssueHeader.CostingCode3 = "D001";
-    //   oGoodsIssueHeader.CostingCode4 = "0001";
-    //   oGoodsIssueHeader.CostingCode5 = "OS000";
-      oGoodsIssueHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
-      oGoodsIssueHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
-      oGoodsIssueHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
-      oGoodsIssue.DocumentLines.push(JSON.parse(JSON.stringify(oGoodsIssueHeader)));
-    }
+		////POSTING BU TO BU BUSINESS TYPE
+		fBuToBu: function (transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey) {
+			AppUI5.showBusyIndicator(4000);
+			//Initialize Variables
+			var ostatus= "1";
+			var oDocType ="Goods Issue";
+			var oGoodsIssue = {};
+			var oGoodsIssueHeader = {};
+			oGoodsIssue.Comments = this.oModel.getData().EditRecord.Remarks;
+			oGoodsIssue.AttachmentEntry = oAttachmentKey;
+			oGoodsIssue.U_APP_GI_TransType = "BU";
+			oGoodsIssue.DocumentLines = [];
+			///LOOP FOR THE DETAILS
+			var d;
+			for (d = 0; d < this.oModel.getData().EditRecord.DocumentLines.length; d++) {
+			oGoodsIssueHeader.WarehouseCode = this.oIssueBu;
+			//   oGoodsIssueHeader.CostingCode = "01";
+			//   oGoodsIssueHeader.CostingCode2 = "G101";
+			//   oGoodsIssueHeader.CostingCode3 = "D001";
+			//   oGoodsIssueHeader.CostingCode4 = "0001";
+			//   oGoodsIssueHeader.CostingCode5 = "OS000";
+			oGoodsIssueHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
+			oGoodsIssueHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
+			oGoodsIssueHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
+			oGoodsIssue.DocumentLines.push(JSON.parse(JSON.stringify(oGoodsIssueHeader)));
+			}
 
-    $.ajax({
-      url: "https://18.136.35.41:50000/b1s/v1/InventoryGenExits",
-      type: "POST",
-      data: JSON.stringify(oGoodsIssue),
-      xhrFields: {
-        withCredentials: true
-      },
-      error: function (xhr, status, error) {
-        var Message = xhr.responseJSON["error"].message.value;
-        AppUI5.fErrorLogs("OIGE","Insert","null","null",Message,"Bu to Bu",this.sUserCode,"null",JSON.stringify(oGoodsIssue));
-        console.error(JSON.stringify(Message));
-        sap.m.MessageToast.show(Message);
-        AppUI5.hideBusyIndicator();
-      },
-      success: function (json) {
-        //ADD UDT RECORDS
-        this.fUpdatePending(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
-        sap.m.MessageToast.show("Added Successfully");
-        this.fClearField();
-        this.oModel.refresh();
-        AppUI5.hideBusyIndicator();
-      },
-      context: this
+			$.ajax({
+			url: "https://18.136.35.41:50000/b1s/v1/InventoryGenExits",
+			type: "POST",
+			data: JSON.stringify(oGoodsIssue),
+			xhrFields: {
+				withCredentials: true
+			},
+			error: function (xhr, status, error) {
+				var Message = xhr.responseJSON["error"].message.value;
+				AppUI5.fErrorLogs("OIGE","Insert","null","null",Message,"Bu to Bu",this.sUserCode,"null",JSON.stringify(oGoodsIssue));
+				console.error(JSON.stringify(Message));
+				sap.m.MessageToast.show(Message);
+				AppUI5.hideBusyIndicator();
+			},
+			success: function (json) {
+				//ADD UDT RECORDS
+				this.fUpdatePending(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
+				sap.m.MessageToast.show("Added Successfully");
+				this.fClearField();
+				this.oModel.refresh();
+				AppUI5.hideBusyIndicator();
+			},
+			context: this
 
-    }).done(function (results) {
-      if (results) {
-        //
+			}).done(function (results) {
+			if (results) {
+				//
 
-      }
-    });
-  },
+			}
+			});
+		},
 
 		////POSTING BU TO CASH SALES
 		fBuToCashSales: function (transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey) {
@@ -1082,7 +1052,7 @@ sap.ui.define([
 
 			  }  /////POSTING A/R INVOICE END
 			}); ////GOODS ISSUE END
-		  },
+		},
 		////POSTING ON BU TO VALE
 		fBuToVale: function (transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey) {
 			//Initialize Variables
@@ -1172,62 +1142,62 @@ sap.ui.define([
 
 			  }  /////POSTING A/R INVOICE END
 			}); ////GOODS ISSUE END
-		  },
+		},
 
-	////POSTING ON BU TO CHARGE TO EXPENSE
-  				fBUtoChargetoExpense: function (transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey) {
-					AppUI5.showBusyIndicator(4000);
-					//Initialize Variables
-					var ostatus="2";
-					var oDocType ="Goods Issue";
-					var oGoodsIssue = {};
-					var oGoodsIssueHeader = {};
-					oGoodsIssue.Comments = this.oModel.getData().EditRecord.Remarks;
-					oGoodsIssue.AttachmentEntry = oAttachmentKey;
-					oGoodsIssue.U_APP_GI_TransType = "BU";
-					oGoodsIssue.DocumentLines = [];
-					///LOOP FOR THE DETAILS
-					var d;
-					for (d = 0; d < this.oModel.getData().EditRecord.DocumentLines.length; d++) {
-					oGoodsIssueHeader.WarehouseCode = this.oIssueBu;
-					oGoodsIssueHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
-					oGoodsIssueHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
-					oGoodsIssueHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
-					oGoodsIssue.DocumentLines.push(JSON.parse(JSON.stringify(oGoodsIssueHeader)));
-					}
+		////POSTING ON BU TO CHARGE TO EXPENSE
+		fBUtoChargetoExpense: function (transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey) {
+			AppUI5.showBusyIndicator(4000);
+			//Initialize Variables
+			var ostatus="2";
+			var oDocType ="Goods Issue";
+			var oGoodsIssue = {};
+			var oGoodsIssueHeader = {};
+			oGoodsIssue.Comments = this.oModel.getData().EditRecord.Remarks;
+			oGoodsIssue.AttachmentEntry = oAttachmentKey;
+			oGoodsIssue.U_APP_GI_TransType = "BU";
+			oGoodsIssue.DocumentLines = [];
+			///LOOP FOR THE DETAILS
+			var d;
+			for (d = 0; d < this.oModel.getData().EditRecord.DocumentLines.length; d++) {
+			oGoodsIssueHeader.WarehouseCode = this.oIssueBu;
+			oGoodsIssueHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
+			oGoodsIssueHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
+			oGoodsIssueHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
+			oGoodsIssue.DocumentLines.push(JSON.parse(JSON.stringify(oGoodsIssueHeader)));
+			}
 
-					$.ajax({
+			$.ajax({
 
-					url: "https://18.136.35.41:50000/b1s/v1/InventoryGenExits",
-					type: "POST",
-					data: JSON.stringify(oGoodsIssue),
-					xhrFields: {
-						withCredentials: true
-					},
-					error: function (xhr, status, error) {
-						var Message = xhr.responseJSON["error"].message.value;
-						AppUI5.fErrorLogs("OIGE","Insert","null","null",Message,"Charge to Expense",this.sUserCode,"null",JSON.stringify(oGoodsIssue));
-						console.error(JSON.stringify(Message));
-						sap.m.MessageToast.show(Message);
-						AppUI5.hideBusyIndicator();
-					},
-					success: function (json) {
-						//UPDATE RECORDS ON UDT
-						this.fUpdatePending(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
-						sap.m.MessageToast.show("Added Successfully");
-						this.fClearField();
-						this.oModel.refresh();
-						AppUI5.hideBusyIndicator();
-					},
-					context: this
+			url: "https://18.136.35.41:50000/b1s/v1/InventoryGenExits",
+			type: "POST",
+			data: JSON.stringify(oGoodsIssue),
+			xhrFields: {
+				withCredentials: true
+			},
+			error: function (xhr, status, error) {
+				var Message = xhr.responseJSON["error"].message.value;
+				AppUI5.fErrorLogs("OIGE","Insert","null","null",Message,"Charge to Expense",this.sUserCode,"null",JSON.stringify(oGoodsIssue));
+				console.error(JSON.stringify(Message));
+				sap.m.MessageToast.show(Message);
+				AppUI5.hideBusyIndicator();
+			},
+			success: function (json) {
+				//UPDATE RECORDS ON UDT
+				this.fUpdatePending(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
+				sap.m.MessageToast.show("Added Successfully");
+				this.fClearField();
+				this.oModel.refresh();
+				AppUI5.hideBusyIndicator();
+			},
+			context: this
 
-					}).done(function (results) {
-					if (results) {
-						//
+			}).done(function (results) {
+			if (results) {
+				//
 
-					}
-					});
-				},
+			}
+			});
+		},
 
 		////POSTING ON BU TO INTER ORG ISSUE
 		fBuToInterOrgIssue: function (transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey) {
@@ -1246,33 +1216,33 @@ sap.ui.define([
 			///LOOP FOR THE DETAILS
 			var d;
 			for (d = 0; d < this.oModel.getData().EditRecord.DocumentLines.length; d++) {
-			  oGoodsIssueHeader.WarehouseCode = this.oIssueBu;
-			  oGoodsIssueHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
-			  oGoodsIssueHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
-			  oGoodsIssueHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
-			  oGoodsIssue.DocumentLines.push(JSON.parse(JSON.stringify(oGoodsIssueHeader)));
+				oGoodsIssueHeader.WarehouseCode = this.oIssueBu;
+				oGoodsIssueHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
+				oGoodsIssueHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
+				oGoodsIssueHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
+				oGoodsIssue.DocumentLines.push(JSON.parse(JSON.stringify(oGoodsIssueHeader)));
 			}
 			$.ajax({
-			  url: "https://18.136.35.41:50000/b1s/v1/InventoryGenExits",
-			  type: "POST",
-			  data: JSON.stringify(oGoodsIssue),
-			  crossDomain: true,
-					  xhrFields: {
+				url: "https://18.136.35.41:50000/b1s/v1/InventoryGenExits",
+				type: "POST",
+				data: JSON.stringify(oGoodsIssue),
+				crossDomain: true,
+						xhrFields: {
 				withCredentials: true
-			  },
-			  error: function (xhr, status, error) {
+				},
+				error: function (xhr, status, error) {
 				var Message = xhr.responseJSON["error"].message.value;
 				AppUI5.fErrorLogs("OIGE","Insert","null","null",Message,"Inter Org Issue",this.sUserCode,"null",JSON.stringify(oGoodsIssue));
 				console.error(JSON.stringify(Message));
 				sap.m.MessageToast.show(Message);
 
-			  },
-			  success: function (json) {
+				},
+				success: function (json) {
 				AppUI5.hideBusyIndicator();
-			  },
-			  context: this
+				},
+				context: this
 			}).done(function (results) {
-			  if (results) {
+				if (results) {
 				//POSTING OF INVOICE
 				var oInvoice = {};
 				var oInvoiceHeader = {};
@@ -1287,40 +1257,40 @@ sap.ui.define([
 				oInvoice.DocumentLines.push(JSON.parse(JSON.stringify(oInvoiceHeader)));
 
 				$.ajax({
-				  url: "https://18.136.35.41:50000/b1s/v1/Invoices",
-				  type: "POST",
-				  data: JSON.stringify(oInvoice),
-				  crossDomain: true,
-				  xhrFields: {
+					url: "https://18.136.35.41:50000/b1s/v1/Invoices",
+					type: "POST",
+					data: JSON.stringify(oInvoice),
+					crossDomain: true,
+					xhrFields: {
 					withCredentials: true
-				  },
-				  error: function (xhr, status, error) {
+					},
+					error: function (xhr, status, error) {
 					var Message = xhr.responseJSON["error"].message.value;
 					AppUI5.fErrorLogs("OINV","Insert","null","null",Message,"Inter Org Issue",this.sUserCode,"null",JSON.stringify(oInvoice));
 					console.error(JSON.stringify(Message));
 					sap.m.MessageToast.show(Message);
 
-				  },
-				  success: function (json) {
-				   //UPDATE RECORDS ON UDT
-				   this.fUpdatePending(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
+					},
+					success: function (json) {
+					//UPDATE RECORDS ON UDT
+					this.fUpdatePending(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
 					sap.m.MessageToast.show("Posting of Goods Issue is Successful");
 					this.fClearField();
 					this.oModel.refresh();
 					AppUI5.hideBusyIndicator();
-				  },
-				  context: this
+					},
+					context: this
 				}).done(function (results) {
-				  if (results) {
+					if (results) {
 					////////
-				  }
+					}
 				});
 
-			  }  /////POSTING A/R INVOICE END
+				}  /////POSTING A/R INVOICE END
 			}); ////GOODS ISSUE END
-		  },
+		},
 		 ///PREPARING BATCH REQUEST
-		 fprepareBatchRequestBody: function (oRequest) {
+		fprepareBatchRequestBody: function (oRequest) {
 			var batchRequest = "";
 			var beginBatch = "--a\nContent-Type: multipart/mixed;boundary=b\n\n";
 			var endBatch = "--b--\n--a--";
@@ -1341,7 +1311,7 @@ sap.ui.define([
 
 			return batchRequest;
 
-		  },
+		},
 		///POSTING ON BU TO INTER ORG ISSUE
 		fBuToInterOrgReceipt: function (transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey) {
 		  AppUI5.showBusyIndicator(4000);
@@ -1430,58 +1400,58 @@ sap.ui.define([
 		  });
 		},
 		////POSTING Renewable Energy Transfer BUSINESS TYPE
-	fRenewableEnergyTransfer: function (transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey) {
-		AppUI5.showBusyIndicator(4000);
-		//Initialize Variables
-		var ostatus= "1";
-		var oDocType ="Goods Issue";
-		var oGoodsIssue = {};
-		var oGoodsIssueHeader = {};
-		oGoodsIssue.Comments = this.oModel.getData().EditRecord.Remarks;
-		oGoodsIssue.U_APP_GI_TransType = "BU";
-		oGoodsIssue.AttachmentEntry = oAttachmentKey;
-		oGoodsIssue.DocumentLines = [];
-		///LOOP FOR THE DETAILS
-		var d;
-		for (d = 0; d < this.oModel.getData().EditRecord.DocumentLines.length; d++) {
-			oGoodsIssueHeader.WarehouseCode = this.oIssueBu;
-			oGoodsIssueHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
-			oGoodsIssueHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
-			oGoodsIssueHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
-			oGoodsIssue.DocumentLines.push(JSON.parse(JSON.stringify(oGoodsIssueHeader)));
-		}
-
-		$.ajax({
-			url: "https://18.136.35.41:50000/b1s/v1/InventoryGenExits",
-			type: "POST",
-			data: JSON.stringify(oGoodsIssue),
-			xhrFields: {
-				withCredentials: true
-			},
-			error: function (xhr, status, error) {
-				var Message = xhr.responseJSON["error"].message.value;
-				AppUI5.fErrorLogs("OIGE","Insert","null","null",Message,"Bu to Bu",this.sUserCode,"null",JSON.stringify(oGoodsIssue));
-				console.error(JSON.stringify(Message));
-				sap.m.MessageToast.show(Message);
-				AppUI5.hideBusyIndicator();
-			},
-			success: function (json) {
-				//UPDATE RECORDS ON UDT
-				this.fUpdatePending(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
-				sap.m.MessageToast.show("Added Successfully");
-				this.fClearField();
-				this.oModel.refresh();
-				AppUI5.hideBusyIndicator();
-			},
-			context: this
-
-		}).done(function (results) {
-			if (results) {
-				//
-
+		fRenewableEnergyTransfer: function (transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey) {
+			AppUI5.showBusyIndicator(4000);
+			//Initialize Variables
+			var ostatus= "1";
+			var oDocType ="Goods Issue";
+			var oGoodsIssue = {};
+			var oGoodsIssueHeader = {};
+			oGoodsIssue.Comments = this.oModel.getData().EditRecord.Remarks;
+			oGoodsIssue.U_APP_GI_TransType = "BU";
+			oGoodsIssue.AttachmentEntry = oAttachmentKey;
+			oGoodsIssue.DocumentLines = [];
+			///LOOP FOR THE DETAILS
+			var d;
+			for (d = 0; d < this.oModel.getData().EditRecord.DocumentLines.length; d++) {
+				oGoodsIssueHeader.WarehouseCode = this.oIssueBu;
+				oGoodsIssueHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
+				oGoodsIssueHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
+				oGoodsIssueHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
+				oGoodsIssue.DocumentLines.push(JSON.parse(JSON.stringify(oGoodsIssueHeader)));
 			}
-		});
-	},
+
+			$.ajax({
+				url: "https://18.136.35.41:50000/b1s/v1/InventoryGenExits",
+				type: "POST",
+				data: JSON.stringify(oGoodsIssue),
+				xhrFields: {
+					withCredentials: true
+				},
+				error: function (xhr, status, error) {
+					var Message = xhr.responseJSON["error"].message.value;
+					AppUI5.fErrorLogs("OIGE","Insert","null","null",Message,"Bu to Bu",this.sUserCode,"null",JSON.stringify(oGoodsIssue));
+					console.error(JSON.stringify(Message));
+					sap.m.MessageToast.show(Message);
+					AppUI5.hideBusyIndicator();
+				},
+				success: function (json) {
+					//UPDATE RECORDS ON UDT
+					this.fUpdatePending(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
+					sap.m.MessageToast.show("Added Successfully");
+					this.fClearField();
+					this.oModel.refresh();
+					AppUI5.hideBusyIndicator();
+				},
+				context: this
+
+			}).done(function (results) {
+				if (results) {
+					//
+
+				}
+			});
+		},
 		onAddDraft: function (oEvent) {
 			var transtype = this.getView().byId("TransID").getSelectedKey();
 			var ostatus= "0";
@@ -1511,33 +1481,43 @@ sap.ui.define([
 			var oCountDetails = this.oModel.getData().EditRecord.DocumentLines.length;
 			var oAttachment = this.Attachment;
 			var oAttachmentKey = this.FileKey;
-			  if (transtype === "" || transno === "") {
-						sap.m.MessageToast.show("Please Select Transaction.");
-					}else if(oCountDetails===0){
-						sap.m.MessageToast.show("Please Select Transaction.");
-					}else if(transtype === "1"){
+			if (transtype === "" || transno === "") {
+				sap.m.MessageToast.show("Please Select Transaction.");
+			}else if(oCountDetails===0){
+				sap.m.MessageToast.show("Please Select Transaction.");
+			}else if(transtype === "1"){
 				/////Call BU to BU AND DRAFT transaction Function
 			this.fBuToBu(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey);
-			  }else if(transtype === "2"){
-				/////Call Bu to Cash Sales AND DRAFT Function
-						this.fBuToCashSales(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey);
-			  }else if(transtype === "3"){
-				/////Call Bu to Vale and Draft
-						this.fBuToVale(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey);
-			  }else if(transtype === "4"){
+			}else if(transtype === "2"){
 				/////Call Bu to Charge to Expense and Draft
-						this.fBUtoChargetoExpense(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey);
-			  }else if(transtype === "5"){
-				/////Call Bu to Inter Org - ISSUE and Draft
-						this.fBuToInterOrgIssue(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey);
-			  }else if(transtype === "6"){
-				/////Call Bu to Inter Org - Receipt and Draft
-						this.fBuToInterOrgReceipt(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey);
-			  }else if (transtype === "7") {
-					/////Call Renewable Energy Transfer Function
+				this.fBUtoChargetoExpense(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey);
+			}else if(transtype === "3"){
+			/////Call Bu to Inter Org - ISSUE and Draft
+				this.fBuToInterOrgIssue(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey);
+			}else if(transtype === "4"){
+			/////Call Bu to Inter Org - Receipt and Draft
+				this.fBuToInterOrgReceipt(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey);
+			}else if (transtype === "5") {
+				/////Call Renewable Energy Transfer Function
 				this.fRenewableEnergyTransfer(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey);
 			}
-		  },
+		},
+		onCancelRecord: function (oEvent) {
+			var oTransType = this.oModel.getData().EditRecord.TransType;
+			var transno = this.oModel.getData().EditRecord.TransNo;
+			var oCardCode = this.oModel.getData().EditRecord.BPCode;
+			var oPostingDate = this.oModel.getData().EditRecord.PostingDate;
+			var oMarkupType = this.oModel.getData().EditRecord.MarkupType;
+			var oIssueBU = this.oIssueBu;
+			var oReceiveBU = this.oReceiveBu;
+			var oRemarks = this.oModel.getData().EditRecord.Remarks;
+			var oDetails = this.oModel.getData().EditRecord.DocumentLines;
+			var oCountDetails = this.oModel.getData().EditRecord.DocumentLines.length;
+			this.bCancel = true;
+			if(oTransType !== "5"){
+				this.fAddReceipt(oTransType,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails);
+			}
+		},
 		//Batch Request for Updating Draft
 		fprepareUpdateBatchRequestBody: function (oHeader, oRequest, getcode) {
 			var batchRequest = "";
@@ -1598,120 +1578,120 @@ sap.ui.define([
 			return batchRequest;
 
 		  },
-	////UPDATE  POSTED
-	fUpdatePending: function (transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey) {
-        var TransNo = transno;
-        var TransType = transtype;
-        $.ajax({
-          url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=" + this.sDataBase + "&procName=spAppBusinessUnit&queryTag=deleteDraftDetails&value1=" +
-            TransNo + "&value2=" + TransType + "&value3&value4",
-          type: "POST",
-          contentType: "application/json",
-          async: false,
-          datatype:"json",
-          beforeSend: function(xhr){
-            xhr.setRequestHeader("Authorization","Basic " + btoa("SYSTEM:P@ssw0rd805~"));
-          },
-          error: function (xhr, status, error) {
-            var Message = xhr.responseJSON["error"].message.value;
-            console.error(JSON.stringify(Message));
-            sap.m.MessageToast.show(Message);
-            AppUI5.hideBusyIndicator();
-          },
-          success: function (json) {},
-          context: this
-        }).done(function (results) {
-          if (results) {
-            ///
-          }
-        });
-        //INITIALIZE FOR UPDATE
-        var getcode = this.code;
-        var oBusiness_Unit = {};
-        var oBusiness_Unit_Details = {};
-        oBusiness_Unit.Code = getcode;
-        oBusiness_Unit.Name = getcode;
-        oBusiness_Unit.U_APP_TransType = TransType;
-        oBusiness_Unit.U_APP_TransNo = TransNo;
-        oBusiness_Unit.U_APP_TransDate = this.fgetTodaysDate();
-        oBusiness_Unit.U_APP_CardCode = oCardCode;
-        oBusiness_Unit.U_APP_PostingDate = oPostingDate;
-        oBusiness_Unit.U_APP_MarkupType = oMarkupType;
-        oBusiness_Unit.U_APP_IssueBU = this.oIssueBu;
-        oBusiness_Unit.U_APP_ReceivingBU = this.oReceiveBu;
-        oBusiness_Unit.U_APP_Remarks = oRemarks;
-        oBusiness_Unit.U_APP_Status = ostatus;
-        oBusiness_Unit.U_APP_DocType = oDocType;
-        oBusiness_Unit.U_APP_Attachment = oAttachment;
-		oBusiness_Unit.U_APP_AttachmentKey = oAttachmentKey;
-        ///HEADER BATCH
-        var BatchHeader =
-          //directly insert data if data is single row per table
-          {
-            "tableName": "U_APP_OINT",
-            "data": oBusiness_Unit
-          };
-
-        var d;
-        var code = "";
-        var batchArray = [];
-        for (d = 0; d < oDetails.length; d++) {
-				code = AppUI5.generateUDTCode("GetCode");
-        oBusiness_Unit_Details.Code = code;
-				oBusiness_Unit_Details.Name = code;
-				oBusiness_Unit_Details.U_APP_ItemNum = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
-				oBusiness_Unit_Details.U_APP_Description = this.oModel.getData().EditRecord.DocumentLines[d].Description;
-				oBusiness_Unit_Details.U_APP_Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
-				oBusiness_Unit_Details.U_APP_CostProd = this.oModel.getData().EditRecord.DocumentLines[d].CostProd;
-				oBusiness_Unit_Details.U_APP_MarkUp = this.oModel.getData().EditRecord.DocumentLines[d].MarkupPrice;
-				oBusiness_Unit_Details.U_APP_TransferPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
-				oBusiness_Unit_Details.U_APP_MarketPrice = this.oModel.getData().EditRecord.DocumentLines[d].MarketPrice;
-				oBusiness_Unit_Details.U_APP_TransNo = TransNo;
-				oBusiness_Unit_Details.U_APP_TransType = TransType;
-				oBusiness_Unit_Details.U_APP_Uom = this.oModel.getData().EditRecord.DocumentLines[d].Uom;
-				//	oBusiness_Unit_Details.APP_TransNo = this.getView().byId("TransNo").getValue();
-				batchArray.push(JSON.parse(JSON.stringify(({
-					"tableName": "U_APP_INT1",
-					"data": oBusiness_Unit_Details
-				}))));
-
+		////UPDATE  POSTED
+		fUpdatePending: function (transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey) {
+			var TransNo = transno;
+			var TransType = transtype;
+			$.ajax({
+			url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=" + this.sDataBase + "&procName=spAppBusinessUnit&queryTag=deleteDraftDetails&value1=" +
+				TransNo + "&value2=" + TransType + "&value3&value4",
+			type: "POST",
+			contentType: "application/json",
+			async: false,
+			datatype:"json",
+			beforeSend: function(xhr){
+				xhr.setRequestHeader("Authorization","Basic " + btoa("SYSTEM:P@ssw0rd805~"));
+			},
+			error: function (xhr, status, error) {
+				var Message = xhr.responseJSON["error"].message.value;
+				console.error(JSON.stringify(Message));
+				sap.m.MessageToast.show(Message);
+				AppUI5.hideBusyIndicator();
+			},
+			success: function (json) {},
+			context: this
+			}).done(function (results) {
+			if (results) {
+				///
 			}
-        var sBodyRequest = this.fprepareUpdatePostedRequestBody(BatchHeader,batchArray, getcode);
-        $.ajax({
-          url: "https://18.136.35.41:50000/b1s/v1/$batch",
-          type: "POST",
-          contentType: "multipart/mixed;boundary=a",
-          data: sBodyRequest,
-          xhrFields: {
-            withCredentials: true
-          },
-          error: function (xhr, status, error) {
-            var Message = xhr.responseJSON["error"].message.value;
-            console.error(JSON.stringify(Message));
-            sap.m.MessageToast.show(Message);
-          },
-          success: function (json) {
+			});
+			//INITIALIZE FOR UPDATE
+			var getcode = this.code;
+			var oBusiness_Unit = {};
+			var oBusiness_Unit_Details = {};
+			oBusiness_Unit.Code = getcode;
+			oBusiness_Unit.Name = getcode;
+			oBusiness_Unit.U_APP_TransType = TransType;
+			oBusiness_Unit.U_APP_TransNo = TransNo;
+			oBusiness_Unit.U_APP_TransDate = this.fgetTodaysDate();
+			oBusiness_Unit.U_APP_CardCode = oCardCode;
+			oBusiness_Unit.U_APP_PostingDate = oPostingDate;
+			oBusiness_Unit.U_APP_MarkupType = oMarkupType;
+			oBusiness_Unit.U_APP_IssueBU = this.oIssueBu;
+			oBusiness_Unit.U_APP_ReceivingBU = this.oReceiveBu;
+			oBusiness_Unit.U_APP_Remarks = oRemarks;
+			oBusiness_Unit.U_APP_Status = ostatus;
+			oBusiness_Unit.U_APP_DocType = oDocType;
+			oBusiness_Unit.U_APP_Attachment = oAttachment;
+			oBusiness_Unit.U_APP_AttachmentKey = oAttachmentKey;
+			///HEADER BATCH
+			var BatchHeader =
+			//directly insert data if data is single row per table
+			{
+				"tableName": "U_APP_OINT",
+				"data": oBusiness_Unit
+			};
 
-          },
-          context: this
-        }).done(function (results) {
-          if(JSON.stringify(results).search("400 Bad") !== -1) {
-            var oStartIndex = results.search("value") + 10;
-            var oEndIndex = results.indexOf("}") - 8;
-            var oMessage = results.substring(oStartIndex,oEndIndex);
-            AppUI5.fErrorLogs("APP_OINT/APP_INT1","Update",TransNo,"null",oMessage,"Update",this.sUserCode,"null",sBodyRequest);
-            sap.m.MessageToast.show(oMessage);
-          }else{
-            if (results) {
-              sap.m.MessageToast.show("Transaction Type "+ TransType +" Has Been Posted!");
-              this.fprepareTable(false,"");
-              this.fClearField();
-              this.oModel.refresh();
-              AppUI5.hideBusyIndicator();
-            }
-          }
-        });
-      },
+			var d;
+			var code = "";
+			var batchArray = [];
+			for (d = 0; d < oDetails.length; d++) {
+					code = AppUI5.generateUDTCode("GetCode");
+			oBusiness_Unit_Details.Code = code;
+					oBusiness_Unit_Details.Name = code;
+					oBusiness_Unit_Details.U_APP_ItemNum = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
+					oBusiness_Unit_Details.U_APP_Description = this.oModel.getData().EditRecord.DocumentLines[d].Description;
+					oBusiness_Unit_Details.U_APP_Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
+					oBusiness_Unit_Details.U_APP_CostProd = this.oModel.getData().EditRecord.DocumentLines[d].CostProd;
+					oBusiness_Unit_Details.U_APP_MarkUp = this.oModel.getData().EditRecord.DocumentLines[d].MarkupPrice;
+					oBusiness_Unit_Details.U_APP_TransferPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
+					oBusiness_Unit_Details.U_APP_MarketPrice = this.oModel.getData().EditRecord.DocumentLines[d].MarketPrice;
+					oBusiness_Unit_Details.U_APP_TransNo = TransNo;
+					oBusiness_Unit_Details.U_APP_TransType = TransType;
+					oBusiness_Unit_Details.U_APP_Uom = this.oModel.getData().EditRecord.DocumentLines[d].Uom;
+					//	oBusiness_Unit_Details.APP_TransNo = this.getView().byId("TransNo").getValue();
+					batchArray.push(JSON.parse(JSON.stringify(({
+						"tableName": "U_APP_INT1",
+						"data": oBusiness_Unit_Details
+					}))));
+
+				}
+			var sBodyRequest = this.fprepareUpdatePostedRequestBody(BatchHeader,batchArray, getcode);
+			$.ajax({
+			url: "https://18.136.35.41:50000/b1s/v1/$batch",
+			type: "POST",
+			contentType: "multipart/mixed;boundary=a",
+			data: sBodyRequest,
+			xhrFields: {
+				withCredentials: true
+			},
+			error: function (xhr, status, error) {
+				var Message = xhr.responseJSON["error"].message.value;
+				console.error(JSON.stringify(Message));
+				sap.m.MessageToast.show(Message);
+			},
+			success: function (json) {
+
+			},
+			context: this
+			}).done(function (results) {
+			if(JSON.stringify(results).search("400 Bad") !== -1) {
+				var oStartIndex = results.search("value") + 10;
+				var oEndIndex = results.indexOf("}") - 8;
+				var oMessage = results.substring(oStartIndex,oEndIndex);
+				AppUI5.fErrorLogs("APP_OINT/APP_INT1","Update",TransNo,"null",oMessage,"Update",this.sUserCode,"null",sBodyRequest);
+				sap.m.MessageToast.show(oMessage);
+			}else{
+				if (results) {
+				sap.m.MessageToast.show("Transaction Type "+ TransType +" Has Been Posted!");
+				this.fprepareTable(false,"");
+				this.fClearField();
+				this.oModel.refresh();
+				AppUI5.hideBusyIndicator();
+				}
+			}
+			});
+		},
 		fgetmarkup: function (oEvent) {
 			var oMarkupType = this.getView().byId("inputmarkuptype").getSelectedKey();
 			var oMarkPrice = oEvent.mParameters.value;
@@ -1725,5 +1705,5 @@ sap.ui.define([
 			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice=oTransferPrice;
 			this.oModel.refresh();
 		}
-  });
+  	});
 });

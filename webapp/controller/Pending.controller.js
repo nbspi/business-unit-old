@@ -7,22 +7,20 @@ sap.ui.define([
 	"sap/ui/model/FilterOperator"
 ], function(Controller, JSONModel, Fragment, Filter, AppUI5, FilterOperator) {
   "use strict";
-  var doc = new jsPDF();
-  return Controller.extend("com.apptech.bfi-businessunit.controller.Pending", {
-    _data: {
-		"date": new Date()
-	},
-	onRoutePatternMatched: function(event){
-		this.fprepareTable(false,"");
-		this.fClearField();
-		this.oModel.refresh();
+	var doc = new jsPDF();
+	return Controller.extend("com.apptech.bfi-businessunit.controller.Pending", {
+		_data: {
+			"date": new Date()
 		},
-
-
-    onInit: function () {
-		  ///ON LOAD
-		  var route = this.getOwnerComponent().getRouter().getRoute("Pending");
-		  route.attachPatternMatched(this.onRoutePatternMatched,this);
+		onRoutePatternMatched: function(event){
+			this.fprepareTable(false,"");
+			this.fClearField();
+			this.oModel.refresh();
+		},
+		onInit: function () {
+			///ON LOAD
+			var route = this.getOwnerComponent().getRouter().getRoute("Pending");
+			route.attachPatternMatched(this.onRoutePatternMatched,this);
 			//USER DATA
 			this.sDataBase = jQuery.sap.storage.Storage.get("dataBase");
 			this.sUserCode = jQuery.sap.storage.Storage.get("userCode");
@@ -47,6 +45,7 @@ sap.ui.define([
 			this.oMdlAllItems.getData().allitems = [];
 				// Get DateToday
 			this.getView().byId("transactiondate").setDateValue(new Date());
+			this.bCancel = false;
 
 			///Initialize model
 			this.oModel = new JSONModel("model/pending.json");
@@ -66,54 +65,54 @@ sap.ui.define([
 			this.oReceiveBu= "";
 			this.fprepareTable(true,"");
 
-	},
+		},
 
-	fprintGoodsReceipt: function(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails){
-		//doc.text(20, 20, 'Biotech Farms Inc.(BFI)');
-		doc.setFontSize(12)
-		doc.text(77, 32, 'Bo.6,Banga, South Cotabato');
+		fprintGoodsReceipt: function(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails){
+			//doc.text(20, 20, 'Biotech Farms Inc.(BFI)');
+			doc.setFontSize(12)
+			doc.text(77, 32, 'Bo.6,Banga, South Cotabato');
 
-		doc.setFontSize(22)
-		// doc.text(20,40, 'MATERIAL REQUESITION AND ISSUANCE SLIP');
-		// doc.text(80,40, 'GOODS ISSUE');
-		doc.text(77,50, 'GOODS RECEIPT');
+			doc.setFontSize(22)
+			// doc.text(20,40, 'MATERIAL REQUESITION AND ISSUANCE SLIP');
+			// doc.text(80,40, 'GOODS ISSUE');
+			doc.text(77,50, 'GOODS RECEIPT');
 
-		var img = new Image()
-		var img = new Image()
-		if (this.sDataBase.toLocaleUpperCase().includes("BIOTECH") || this.sDataBase.toLocaleUpperCase().includes("BFI")){
-			img.src = './css/BFI.jpg'
-		}else{
-			img.src = './css/REVIVE.jpg'
-		}
-		doc.addImage(img, 'jpg', 85, 8, 40, 20)//margin, position, imgWidth, imgHeight
+			var img = new Image()
+			var img = new Image()
+			if (this.sDataBase.toLocaleUpperCase().includes("BIOTECH") || this.sDataBase.toLocaleUpperCase().includes("BFI")){
+				img.src = './css/BFI.jpg'
+			}else{
+				img.src = './css/REVIVE.jpg'
+			}
+			doc.addImage(img, 'jpg', 85, 8, 40, 20)//margin, position, imgWidth, imgHeight
 
-		doc.setFontSize(12)
-		doc.text(150, 60, 'Date:________________');
-		doc.text(166, 59, oPostingDate);
+			doc.setFontSize(12)
+			doc.text(150, 60, 'Date:________________');
+			doc.text(166, 59, oPostingDate);
 
-		doc.setFontSize(12)
-		doc.text(20, 70, 'Transaction #: '+ transno +'');
-		doc.text(20, 80, 'REQUESTOR: '+ oIssueBU +'');
-		doc.text(20, 90, 'PURPOSE: '+ oRemarks +'');
+			doc.setFontSize(12)
+			doc.text(20, 70, 'Transaction #: '+ transno +'');
+			doc.text(20, 80, 'REQUESTOR: '+ oIssueBU +'');
+			doc.text(20, 90, 'PURPOSE: '+ oRemarks +'');
 
-		var oModel  = oDetails;
+			var oModel  = oDetails;
 			var columns = ["Item Code","Quantity","UOM","Description"];
 			var data = [];
-					for(var i=0;i<oModel.length;i++)
-					{
-							data[i]=[oModel[i].ItemNum,oModel[i].Quantity,oModel[i].Uom,oModel[i].Description];
-					}
-		doc.autoTable(columns,data,{startY:100});
-		doc.text(20, 170, 'REQUESTED BY:____________________');
-		doc.text(20, 180, 'APPROVED BY:____________________');
-		doc.text(20, 190, 'RECEIVED BY:____________________');
-		doc.text(120, 170, 'PREPARED BY:____________________');
-		doc.text(120, 180, 'CHECKED BY:______________________');
-		doc.text(120, 190, 'COUNTERED CHECK BY:______________');
-		doc.output('Goods Receipt_'+ transno +'.pdf');
-		doc.save('Goods Receipt_'+ transno +'.pdf');
-		doc = new jsPDF();
-	},
+				for(var i=0;i<oModel.length;i++)
+				{
+					data[i]=[oModel[i].ItemNum,oModel[i].Quantity,oModel[i].Uom,oModel[i].Description];
+				}
+			doc.autoTable(columns,data,{startY:100});
+			doc.text(20, 170, 'REQUESTED BY:____________________');
+			doc.text(20, 180, 'APPROVED BY:____________________');
+			doc.text(20, 190, 'RECEIVED BY:____________________');
+			doc.text(120, 170, 'PREPARED BY:____________________');
+			doc.text(120, 180, 'CHECKED BY:______________________');
+			doc.text(120, 190, 'COUNTERED CHECK BY:______________');
+			doc.output('Goods Receipt_'+ transno +'.pdf');
+			doc.save('Goods Receipt_'+ transno +'.pdf');
+			doc = new jsPDF();
+		},
 		///On Clear Fields Function
 		fClearField: function () {
 			try {
@@ -136,11 +135,11 @@ sap.ui.define([
 
 		},
 
-    onTransTypeFilter : function(oEvent){
+   		onTransTypeFilter : function(oEvent){
 			this.fprepareTable("",0);
 			this.oMdlAllRecord.refresh();
 		},
-    frenameColumns: function () {
+		frenameColumns: function () {
 			this.oTable.getColumns()[0].setLabel("Transaction No");
 			this.oTable.getColumns()[0].setFilterProperty("U_APP_TransNo");
 			this.oTable.getColumns()[1].setLabel("Transaction Type");
@@ -151,8 +150,8 @@ sap.ui.define([
 			this.oTable.getColumns()[3].setFilterProperty("U_APP_Remarks");
 			this.oTable.getColumns()[4].setLabel("Doc Type");
 			this.oTable.getColumns()[4].setFilterProperty("U_APP_Doctype");
-    },
-    //Preparing table
+		},
+		//Preparing table
 		fprepareTable: function (bIsInit,transType) {
 			if (transType === ""){
 				var transtypefilter = "1";
@@ -199,18 +198,13 @@ sap.ui.define([
 					this.frenameColumns();
 				}
 			}else{
-				// var table = this.getView().byId(this.tableId)
-				// table.removeColumn();
-				// table.setNoData(new sap.ui.commons.TextView({text: "Sorry, no data available!"}));
 				var table = this.getView().byId(this.tableId);
 				var oModel1 = new sap.ui.model.json.JSONModel();
 				var data =[];
 				this.oMdlAllRecord.setData(data);
-				// var aData = oModel1.getProperty("/d/results");
-				// oModel1.setData({ modelData : aData });
 				table.setModel(this.oMdlAllRecord, "odata");
 			}
-    },
+		},
     	///GETTING ALL THE THE TRANSACTION DATA/S
 		fgetAllTransaction: function (transtypefilter) {
 			var value1 = transtypefilter;
@@ -317,13 +311,6 @@ sap.ui.define([
 						this.getView().byId("inputbpcode").setEnabled(false);
 
 					} else if (transtype === "2") {
-						this.getView().byId("inputbpcode").setEnabled(true);
-						this.getView().byId("inputwhsreceive").setEnabled(false);
-
-					} else if (transtype === "3") {
-						this.getView().byId("inputbpcode").setEnabled(true);
-						this.getView().byId("inputwhsreceive").setEnabled(false);
-					} else if (transtype === "4") {
 						this.getView().byId("inputwhsreceive").setEnabled(true);
 						this.getView().byId("inputbpcode").setEnabled(false);
 					}
@@ -351,22 +338,9 @@ sap.ui.define([
 				context: this
 			}).done(function (results) {
 				if (results) {
-					////	console.log(results);
-					// var transtype = this.oModel.getData().EditRecord.DocumentLines.TransType = results[0].TransType;
-					// if (transtype === "1") {
-					// 	this.getView().byId("markupprice").setEnabled(false);
-					// } else if (transtype === "2") {
-					// 	this.getView().byId("inputbpcode").setEnabled(true);
-					//      	this.getView().byId("inputaccountname").setEnabled(true);
-					// 	this.getView().byId("inputwhsreceive").setEnabled(false);
-					// }
 					results.map(obj=> ({ ...obj, CostProdEnable: false }));
 					this.oModel.getData().EditRecord.DocumentLines = results;
 					this.oModel.refresh();
-
-					//this.oModel.setJSON("{\"EditRecord/DocumentLines\" : " + JSON.stringify(results) + "}");
-
-
 
 				}
 			});
@@ -414,9 +388,6 @@ sap.ui.define([
 						this.oModel.getData().allitems.length = 0;
 						this.oModel.getData().allitems = JSON.parse(JSON.stringify(results));
 						this.oModel.refresh();
-
-						// this.oMdlAllItems.getData().allitems = results;
-						// this.getView().setModel(this.oMdlAllItems, "oMdlAllItems");
 					}
 				});
 			}
@@ -430,199 +401,218 @@ sap.ui.define([
 		///Search on Item
 		handleSearchItem: function (oEvent) {
 			var sValue = oEvent.getParameter("value");
-			var oFilter = new Filter("ItemCode", FilterOperator.Contains, sValue);
+			var oFilters = new Filter([
+				new Filter("ItemCode", FilterOperator.Contains, sValue),
+				new Filter("ItemName", FilterOperator.Contains, sValue)
+				], false);
 			var oBinding = oEvent.getSource().getBinding("items");
-			oBinding.filter([oFilter]);
+			oBinding.filter(oFilters);
 		},
-			//Closing selection on Item
-			handleValueHelpCloseItem: function (oEvent) {
-				var transtype = this.oModel.getData().EditRecord.TransType;
-				var aContexts = oEvent.getParameter("selectedContexts");
-				var ItemDetails = {};
-				if (aContexts && aContexts.length) {
+		//Closing selection on Item
+		handleValueHelpCloseItem: function (oEvent) {
+			var transtype = this.oModel.getData().EditRecord.TransType;
+			var aContexts = oEvent.getParameter("selectedContexts");
+			var ItemDetails = {};
+			if (aContexts && aContexts.length) {
 
-					ItemDetails = aContexts.map(function (oContext) {
-						var oItem = {};
-						oItem.ItemCode = oContext.getObject().ItemCode;
-						oItem.ItemName = oContext.getObject().ItemName;
-						return oItem;
-					});
-				}
-				oEvent.getSource().getBinding("items").filter([]);
-				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].ItemNum = ItemDetails[0].ItemCode;
-				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].Description = ItemDetails[0].ItemName;
-				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].CostProd = this.f_getAveragePrice(ItemDetails[0].ItemCode);
-				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].MarketPrice = this.f_getMarketPrice(ItemDetails[0].ItemCode);
-				var oCostToProduce =this.f_getAveragePrice(ItemDetails[0].ItemCode);
-				var oMarketPrice = this.f_getMarketPrice(ItemDetails[0].ItemCode);
-
-				if (transtype === "1") {
-					if(oCostToProduce <= oMarketPrice){
-						this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice = oCostToProduce;
-					}else{
-						this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice=oMarketPrice;
-					}
-				}else if (transtype === "2") {
-					this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice = oCostToProduce;
-				} else if (transtype === "3") {
-					this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice = oCostToProduce;
-				} else if (transtype === "4") {
-					this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice = oCostToProduce;
-				}else if (transtype === "5") {
-					///for revise
-					this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice = oCostToProduce;
-				}else if (transtype === "6") {
-					///for revise
-					this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice = oCostToProduce;
-				}
-				this.oModel.refresh();
-			},
-			////POSTING BU TO BU BUSINESS TYPE
-			fAddReceipt: function (oTransType,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails) {
-				AppUI5.showBusyIndicator(4000);
-				var oDocType = "Goods Receipt";
-				//Initialize Variables
-				var oGoodsReceipt = {};
-				var oGoodsReceiptHeader = {};
-				//oGoodsReceipt.CardCode = this.oModel.getData().EditRecord.BPCode;
-				oGoodsReceipt.Comments = this.oModel.getData().EditRecord.Remarks;
-				// oGoodsReceipt.U_APP_GR_TransType = "BU";
-				oGoodsReceipt.DocumentLines = [];
-				///LOOP FOR THE DETAILS
-				var d;
-				for (d = 0; d < this.oModel.getData().EditRecord.DocumentLines.length; d++) {
-					// oGoodsIssueHeader.WarehouseCode = this.oModel.getData().EditRecord.IssueBU;
-					oGoodsReceiptHeader.WarehouseCode = this.oReceiveBu;
-					oGoodsReceiptHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
-					oGoodsReceiptHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
-					var oTransferPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
-					var oCostToProduce = this.oModel.getData().EditRecord.DocumentLines[d].CostProd;
-					if(oTransferPrice==="0" || oTransferPrice===0 || oTransferPrice===""){
-						oGoodsReceiptHeader.UnitPrice = oCostToProduce;
-					}else{
-						oGoodsReceiptHeader.UnitPrice = oTransferPrice;
-					}
-					oGoodsReceiptHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
-					oGoodsReceipt.DocumentLines.push(JSON.parse(JSON.stringify(oGoodsReceiptHeader)));
-				}
-
-				$.ajax({
-					url: "https://18.136.35.41:50000/b1s/v1/InventoryGenEntries",
-					type: "POST",
-					data: JSON.stringify(oGoodsReceipt),
-					xhrFields: {
-						withCredentials: true
-					},
-					error: function (xhr, status, error) {
-						var Message = xhr.responseJSON["error"].message.value;
-						AppUI5.fErrorLogs("OPDN","Insert","null","null",Message,"Receipt",this.sUserCode,"null",JSON.stringify(oGoodsReceipt));
-
-						console.error(JSON.stringify(Message));
-						sap.m.MessageToast.show(Message);
-						AppUI5.hideBusyIndicator();
-					},
-					success: function (json) {
-						//this.oPage.setBusy(false);
-						this.fUpdatePending();
-						this.fAddNewReceipt(oDocType);
-						this.fprepareTable(false,"");
-						this.fprintGoodsReceipt(oTransType,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails);
-						this.fClearField();
-						this.oModel.refresh();
-						AppUI5.hideBusyIndicator();
-					},
-					context: this
-
-				}).done(function (results) {
-					if (results) {
-						//
-
-					}
+				ItemDetails = aContexts.map(function (oContext) {
+					var oItem = {};
+					oItem.ItemCode = oContext.getObject().ItemCode;
+					oItem.ItemName = oContext.getObject().ItemName;
+					return oItem;
 				});
-			},
-			///CREATE JOURNAL ENTRY
-			fCreateJE: function () {
-				AppUI5.showBusyIndicator(4000);
-				var oDocType = "Journal Entry";
-				//Initialize Variables
-				var oJournalEnty = {};
-				var oJournalEntyHeaderCredit = {};
-				var oJournalEntyHeaderDebit = {};
-				oJournalEnty.JournalEntryLines = [];
-				var d;
-				var oQuantity ="";
-				var oCostProd="";
-				var oSubTotal = "";
-				var oTotal ="";
-				for (d = 0; d < this.oModel.getData().EditRecord.DocumentLines.length; d++) {
-					oQuantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
-					oCostProd = this.oModel.getData().EditRecord.DocumentLines[d].CostProd;
-					oSubTotal = Number([oQuantity]) * Number([oCostProd]);
-					oTotal = Number([oTotal]) + Number([oSubTotal]);
-				}
-				//For Credit
-				oJournalEntyHeaderCredit.AccountCode = this.oModel.getData().EditRecord.DocumentLines[0].CreditAccount;
-				oJournalEntyHeaderCredit.Credit = oTotal;
-				oJournalEnty.JournalEntryLines.push(JSON.parse(JSON.stringify(oJournalEntyHeaderCredit)));
-				//For Debit
-				oJournalEntyHeaderDebit.AccountCode = this.oModel.getData().EditRecord.DocumentLines[0].DebitAccount;
-				oJournalEntyHeaderDebit.Debit = oTotal;
-				oJournalEnty.JournalEntryLines.push(JSON.parse(JSON.stringify(oJournalEntyHeaderDebit)));
+			}
+			oEvent.getSource().getBinding("items").filter([]);
+			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].ItemNum = ItemDetails[0].ItemCode;
+			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].Description = ItemDetails[0].ItemName;
+			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].CostProd = this.f_getAveragePrice(ItemDetails[0].ItemCode);
+			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].MarketPrice = this.f_getMarketPrice(ItemDetails[0].ItemCode);
+			var oCostToProduce =this.f_getAveragePrice(ItemDetails[0].ItemCode);
+			var oMarketPrice = this.f_getMarketPrice(ItemDetails[0].ItemCode);
 
-
-				$.ajax({
-					url: "https://18.136.35.41:50000/b1s/v1/JournalEntries",
-					type: "POST",
-					data: JSON.stringify(oJournalEnty),
-					xhrFields: {
-						withCredentials: true
-					},
-					error: function (xhr, status, error) {
-						var Message = xhr.responseJSON["error"].message.value;
-						AppUI5.fErrorLogs("OJDT","Insert","null","null",Message,"Journal Entry",this.sUserCode,"null",JSON.stringify(oJournalEnty));
-
-						console.error(JSON.stringify(Message));
-						sap.m.MessageToast.show(Message);
-						AppUI5.hideBusyIndicator();
-					},
-					success: function (json) {
-						this.fUpdatePending();
-						this.fAddNewReceipt(oDocType);
-						this.fprepareTable(false,"");
-						this.fClearField();
-						this.oModel.refresh();
-						AppUI5.hideBusyIndicator();
-					},
-					context: this
-
-				}).done(function (results) {
-					if (results) {
-						//
-
-					}
-				});
-			},
-
-			onAddReceipt: function (oEvent) {
-				var oTransType = this.oModel.getData().EditRecord.TransType;
-				var transno = this.oModel.getData().EditRecord.TransNo;
-				var oCardCode = this.oModel.getData().EditRecord.BPCode;
-				var oPostingDate = this.oModel.getData().EditRecord.PostingDate;
-				var oMarkupType = this.oModel.getData().EditRecord.MarkupType;
-				var oIssueBU = this.oIssueBu;
-				var oReceiveBU = this.oReceiveBu;
-				var oRemarks = this.oModel.getData().EditRecord.Remarks;
-				var oDetails = this.oModel.getData().EditRecord.DocumentLines;
-				var oCountDetails = this.oModel.getData().EditRecord.DocumentLines.length;
-				if(oTransType === "7"){
-					this.fCreateJE();
+			if (transtype === "1") {
+				if(oCostToProduce <= oMarketPrice){
+					this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice = oCostToProduce;
 				}else{
-					this.fAddReceipt(oTransType,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails);
+					this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice=oMarketPrice;
 				}
+			} else if (transtype === "2") {
+				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice = oCostToProduce;
+			}else if (transtype === "3") {
+				///for revise
+				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice = oCostToProduce;
+			}else if (transtype === "4") {
+				///for revise
+				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice = oCostToProduce;
+			}
+			this.oModel.refresh();
+		},
+		////POSTING BU TO BU BUSINESS TYPE
+		fAddReceipt: function (oTransType,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails) {
+			AppUI5.showBusyIndicator(4000);
+			var oDocType = "Goods Receipt";
+			//Initialize Variables
+			var oGoodsReceipt = {};
+			var oGoodsReceiptHeader = {};
+			//oGoodsReceipt.CardCode = this.oModel.getData().EditRecord.BPCode;
+			oGoodsReceipt.Comments = this.oModel.getData().EditRecord.Remarks;
+			oGoodsReceipt.U_APP_BU_TransNum = transno;
+			// oGoodsReceipt.U_APP_GR_TransType = "BU";
+			oGoodsReceipt.DocumentLines = [];
+			///LOOP FOR THE DETAILS
+			var d;
+			for (d = 0; d < this.oModel.getData().EditRecord.DocumentLines.length; d++) {
+				// oGoodsIssueHeader.WarehouseCode = this.oModel.getData().EditRecord.IssueBU;
+				oGoodsReceiptHeader.WarehouseCode = this.oReceiveBu;
+				oGoodsReceiptHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
+				oGoodsReceiptHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
+				var oTransferPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
+				var oCostToProduce = this.oModel.getData().EditRecord.DocumentLines[d].CostProd;
+				if(oTransferPrice==="0" || oTransferPrice===0 || oTransferPrice===""){
+					oGoodsReceiptHeader.UnitPrice = oCostToProduce;
+				}else{
+					oGoodsReceiptHeader.UnitPrice = oTransferPrice;
+				}
+				oGoodsReceiptHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
+				oGoodsReceipt.DocumentLines.push(JSON.parse(JSON.stringify(oGoodsReceiptHeader)));
+			}
+
+			$.ajax({
+				url: "https://18.136.35.41:50000/b1s/v1/InventoryGenEntries",
+				type: "POST",
+				data: JSON.stringify(oGoodsReceipt),
+				xhrFields: {
+					withCredentials: true
+				},
+				error: function (xhr, status, error) {
+					var Message = xhr.responseJSON["error"].message.value;
+					AppUI5.fErrorLogs("OPDN","Insert","null","null",Message,"Receipt",this.sUserCode,"null",JSON.stringify(oGoodsReceipt));
+
+					console.error(JSON.stringify(Message));
+					sap.m.MessageToast.show(Message);
+					AppUI5.hideBusyIndicator();
+				},
+				success: function (json) {
+					//this.oPage.setBusy(false);
+					this.fUpdatePending();
+					if (this.bCancel === false){
+						this.fAddNewReceipt(oDocType);
+						this.fprintGoodsReceipt(oTransType,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails);
+					}
+					this.fprepareTable(false,"");
+					this.bCancel = false;
+					this.fClearField();
+					this.oModel.refresh();
+					AppUI5.hideBusyIndicator();
+				},
+				context: this
+
+			}).done(function (results) {
+				if (results) {
+					//
+
+				}
+			});
+		},
+		///CREATE JOURNAL ENTRY
+		fCreateJE: function () {
+			AppUI5.showBusyIndicator(4000);
+			var oDocType = "Journal Entry";
+			//Initialize Variables
+			var oJournalEnty = {};
+			var oJournalEntyHeaderCredit = {};
+			var oJournalEntyHeaderDebit = {};
+			oJournalEnty.JournalEntryLines = [];
+			var d;
+			var oQuantity ="";
+			var oCostProd="";
+			var oSubTotal = "";
+			var oTotal ="";
+			for (d = 0; d < this.oModel.getData().EditRecord.DocumentLines.length; d++) {
+				oQuantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
+				oCostProd = this.oModel.getData().EditRecord.DocumentLines[d].CostProd;
+				oSubTotal = Number([oQuantity]) * Number([oCostProd]);
+				oTotal = Number([oTotal]) + Number([oSubTotal]);
+			}
+			//For Credit
+			oJournalEntyHeaderCredit.AccountCode = this.oModel.getData().EditRecord.DocumentLines[0].CreditAccount;
+			oJournalEntyHeaderCredit.Credit = oTotal;
+			oJournalEnty.JournalEntryLines.push(JSON.parse(JSON.stringify(oJournalEntyHeaderCredit)));
+			//For Debit
+			oJournalEntyHeaderDebit.AccountCode = this.oModel.getData().EditRecord.DocumentLines[0].DebitAccount;
+			oJournalEntyHeaderDebit.Debit = oTotal;
+			oJournalEnty.JournalEntryLines.push(JSON.parse(JSON.stringify(oJournalEntyHeaderDebit)));
 
 
-			},
-//GETTING DATE NOW
+			$.ajax({
+				url: "https://18.136.35.41:50000/b1s/v1/JournalEntries",
+				type: "POST",
+				data: JSON.stringify(oJournalEnty),
+				xhrFields: {
+					withCredentials: true
+				},
+				error: function (xhr, status, error) {
+					var Message = xhr.responseJSON["error"].message.value;
+					AppUI5.fErrorLogs("OJDT","Insert","null","null",Message,"Journal Entry",this.sUserCode,"null",JSON.stringify(oJournalEnty));
+
+					console.error(JSON.stringify(Message));
+					sap.m.MessageToast.show(Message);
+					AppUI5.hideBusyIndicator();
+				},
+				success: function (json) {
+					this.fUpdatePending();
+					this.fAddNewReceipt(oDocType);
+					this.fprepareTable(false,"");
+					this.fClearField();
+					this.oModel.refresh();
+					AppUI5.hideBusyIndicator();
+				},
+				context: this
+
+			}).done(function (results) {
+				if (results) {
+					//
+
+				}
+			});
+		},
+
+		onAddReceipt: function (oEvent) {
+			var oTransType = this.oModel.getData().EditRecord.TransType;
+			var transno = this.oModel.getData().EditRecord.TransNo;
+			var oCardCode = this.oModel.getData().EditRecord.BPCode;
+			var oPostingDate = this.oModel.getData().EditRecord.PostingDate;
+			var oMarkupType = this.oModel.getData().EditRecord.MarkupType;
+			var oIssueBU = this.oIssueBu;
+			var oReceiveBU = this.oReceiveBu;
+			var oRemarks = this.oModel.getData().EditRecord.Remarks;
+			var oDetails = this.oModel.getData().EditRecord.DocumentLines;
+			var oCountDetails = this.oModel.getData().EditRecord.DocumentLines.length;
+			if(oTransType === "5"){
+				this.fCreateJE();
+			}else{
+				this.fAddReceipt(oTransType,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails);
+			}
+
+
+		},
+		onCancelReceipt: function (oEvent) {
+			var oTransType = this.oModel.getData().EditRecord.TransType;
+			var transno = this.oModel.getData().EditRecord.TransNo;
+			var oCardCode = this.oModel.getData().EditRecord.BPCode;
+			var oPostingDate = this.oModel.getData().EditRecord.PostingDate;
+			var oMarkupType = this.oModel.getData().EditRecord.MarkupType;
+			var oIssueBU = this.oIssueBu;
+			var oReceiveBU = this.oReceiveBu;
+			var oRemarks = this.oModel.getData().EditRecord.Remarks;
+			var oDetails = this.oModel.getData().EditRecord.DocumentLines;
+			var oCountDetails = this.oModel.getData().EditRecord.DocumentLines.length;
+			this.bCancel = true;
+			if(oTransType !== "5"){
+				this.fAddReceipt(oTransType,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails);
+			}
+		},
+		//GETTING DATE NOW
 		fgetTodaysDate: function () {
 			var today = new Date();
 			var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
@@ -650,7 +640,7 @@ sap.ui.define([
 		},
 			////UPDATE  POSTED
 		fUpdatePending: function () {
-			var ostatus ="2";
+			var ostatus = (this.bCancel ? "5" : "2");
 			AppUI5.showBusyIndicator(4000);
 			var TransNo = this.oModel.getData().EditRecord.TransNo;
 			var TransType = this.oModel.getData().EditRecord.TransType;
@@ -705,8 +695,6 @@ sap.ui.define([
 					sap.m.MessageToast.show(oMessage);
 				}else{
 					if (results) {
-					//	sap.m.MessageToast.show("Transaction Type "+ TransType +" Draft Has Been Created!");
-
 						this.fprepareTable(false,"");
 						this.fClearField();
 						this.oModel.refresh();
@@ -832,5 +820,5 @@ sap.ui.define([
 				}
 			});
 		}
-  });
+  	});
 });

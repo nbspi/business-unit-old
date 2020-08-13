@@ -37,11 +37,11 @@
         "key": "1",
         "value": "1 - BU to BU"
     }, {
-        "key": "6",
-        "value": "6 - Inter Org - Receipt"
+        "key": "4",
+        "value": "4 - Inter Org - Receipt"
     },{
-		"key": "7",
-		"value": "7 - Renewable Energy Transfer"
+		"key": "5",
+		"value": "5 - Renewable Energy Transfer"
 	}
 ],
 "SelectedTransType": {

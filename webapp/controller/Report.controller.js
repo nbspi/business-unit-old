@@ -1,7 +1,7 @@
 sap.ui.define([
-  "sap/ui/core/BusyIndicator",
+  	"sap/ui/core/BusyIndicator",
 	"sap/ui/core/Element",
-  "sap/ui/core/mvc/Controller",
+  	"sap/ui/core/mvc/Controller",
 	"sap/ui/model/json/JSONModel",
 	"sap/ui/core/Fragment",
 	"sap/ui/model/Filter",
@@ -10,8 +10,8 @@ sap.ui.define([
 ], function(BusyIndicator,Element,Controller, JSONModel, Fragment, Filter, AppUI5, FilterOperatortroller) {
   "use strict";
   var doc = new jsPDF();
-  return Controller.extend("com.apptech.bfi-businessunit.controller.Report", {
-    onInit: function () {
+  	return Controller.extend("com.apptech.bfi-businessunit.controller.Report", {
+    	onInit: function () {
 			//USER DATA
 			this.oModel = new JSONModel("model/report.json");
 			this.getView().setModel(this.oModel);

@@ -8,15 +8,15 @@ sap.ui.define([
 ], function(Controller, JSONModel, Fragment, Filter, AppUI5, FilterOperator) {
   "use strict";
 
-  return Controller.extend("com.apptech.bfi-businessunit.controller.Request", {
-	onRoutePatternMatched: function(event){
-		this.fClearField();
+  	return Controller.extend("com.apptech.bfi-businessunit.controller.Request", {
+		onRoutePatternMatched: function(event){
+			this.fClearField();
 		},
-    onInit: function () {
-		//ON LOAD
+		onInit: function () {
+			//ON LOAD
 			var route = this.getOwnerComponent().getRouter().getRoute("Request");
 			route.attachPatternMatched(this.onRoutePatternMatched,this);
-      	 //USER DATA
+			//USER DATA
 			this.sDataBase = jQuery.sap.storage.Storage.get("dataBase");
 			this.sUserCode = jQuery.sap.storage.Storage.get("userCode");
 
@@ -24,11 +24,11 @@ sap.ui.define([
 			this.oMdlButtons = new JSONModel();
 			this.oResults = AppUI5.fGetButtons(this.sDataBase,this.sUserCode,"Request");
 			var newresult = [];
-				this.oResults.forEach((e)=> {
-					var d = {};
-					d[e.U_ActionDesc] = JSON.parse(e.visible);
-					newresult.push(JSON.parse(JSON.stringify(d)));
-				});
+			this.oResults.forEach((e)=> {
+				var d = {};
+				d[e.U_ActionDesc] = JSON.parse(e.visible);
+				newresult.push(JSON.parse(JSON.stringify(d)));
+			});
 			var modelresult = JSON.parse("{" + JSON.stringify(newresult).replace(/{/g,"").replace(/}/g,"").replace("[","").replace("]","") + "}");
 			this.oMdlButtons.setJSON("{\"buttons\" : " + JSON.stringify(modelresult) + "}");
 			this.getView().setModel(this.oMdlButtons, "buttons");
@@ -55,7 +55,6 @@ sap.ui.define([
 			this.oModel = new JSONModel("model/request.json");
 			this.getView().setModel(this.oModel);
 
-			//this.oModel.getData().EditRecord.DocumentLines.length = 0;
 			///INITIALIZE FOR MARKETPRICE
 			this.MarketPrice = "";
 			////Initialize code when onview is clicked
@@ -67,24 +66,24 @@ sap.ui.define([
 
 			//GET ALL WAREHOUSE
 			$.ajax({
-				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getallwarehouses&value1&value2&value3&value4",
-				type: "GET",
-				datatype:"json",
-				beforeSend: function (xhr) {
-					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
-			  	},
-				error: function (xhr, status, error) {
-					var Message = xhr.responseJSON["error"].message.value;
-					console.error(JSON.stringify(Message));
-					sap.m.MessageToast.show(Message);
-				},
-				success: function (json) {},
-				context: this
+			url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getallwarehouses&value1&value2&value3&value4",
+			type: "GET",
+			datatype:"json",
+			beforeSend: function (xhr) {
+				xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
+			},
+			error: function (xhr, status, error) {
+				var Message = xhr.responseJSON["error"].message.value;
+				console.error(JSON.stringify(Message));
+				sap.m.MessageToast.show(Message);
+			},
+			success: function (json) {},
+			context: this
 			}).done(function (results) {
-				if (results) {
-					this.oModel.getData().AllWarehouses = results;
-					this.oMdlAllRecord.refresh();
-				}
+			if (results) {
+				this.oModel.getData().AllWarehouses = results;
+				this.oMdlAllRecord.refresh();
+			}
 			});
 			//// INITIALIZE Variables FOR TABLE
 			this.isClickedIssue = true;
@@ -99,26 +98,21 @@ sap.ui.define([
 			this.tableId = "tblDrafts";
 			this.oIssueBu = "";
 			this.oReceiveBu= "";
-			//	this.fprepareTable(true,"");
 			//CPA
 			this.currentFile = {}; //File Object
 			//For Attachment File Key
 			this.FileKey = null;
-
 			/// REQUESTOR DATA
 			var oRequestor =this.sUserCode;
 			this.getView().byId("inputrequestor").setValue(oRequestor);
-
-
-	// this.oModel.getData().EditRecord.DocumentLines.length = 0;
-	},
+			AppUI5.hideBusyIndicator();
+		},
 		//GETTING DATE NOW
 		getTodaysDate: function () {
 			var today = new Date();
 			var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
 			return date;
 		},
-
 		///On Clear Fields Function
 		fClearField: function () {
 			try {
@@ -140,14 +134,10 @@ sap.ui.define([
 			} catch (err) {
 				//console.log(err.message);
 			}
-
 		},
-
-    	//ALL ITEM LIST FROM FRAGMENT
+		//ALL ITEM LIST FROM FRAGMENT
 		handleValueitemdetails: function (oEvent) {
-
 			this.iSelectedRow = oEvent.getSource().getBindingContext().sPath.match(/\d+/g)[0];
-
 			if (!this._oValueHelpDialogsItem) {
 				Fragment.load({
 					name: "com.apptech.bfi-businessunit.view.fragments.ItemDialogFragment",
@@ -167,7 +157,7 @@ sap.ui.define([
 		handleValueHelpBPCode: function () {
 			var TransType = this.getView().byId("TransID").getSelectedKey();
 			var customertype ="";
-					if (TransType ==="6"){
+					if (TransType ==="4"){
 						customertype = "S";
 					}else{
 						customertype = "C";
@@ -212,8 +202,6 @@ sap.ui.define([
 						this.getView().setModel(this.oMdlAllBP, "oMdlAllBP");
 					}
 				});
-
-
 			var aList = this.oMdlAllBP.getProperty("/allbp");
 
 			aList.forEach(function (oRecord) {
@@ -223,16 +211,18 @@ sap.ui.define([
 		///Search on BP
 		handleSearchBP: function (oEvent) {
 			var sValue = oEvent.getParameter("value");
-			var oFilter = new Filter("CardName", FilterOperator.Contains, sValue);
+			var oFilters = new Filter([
+				new Filter("CardName", FilterOperator.Contains, sValue),
+				new Filter("CardCode", FilterOperator.Contains, sValue)
+				], false);
 			var oBinding = oEvent.getSource().getBinding("items");
-			oBinding.filter([oFilter]);
+			oBinding.filter(oFilters);
 		},
 		//Closing selection on Search BP
 		handleValueHelpCloseBatch: function (oEvent) {
 			var aContexts = oEvent.getParameter("selectedContexts");
 			var CardDetails = {};
 			if (aContexts && aContexts.length) {
-
 				CardDetails = aContexts.map(function (oContext) {
 					var oCard = {};
 					oCard.CardCode = oContext.getObject().CardCode;
@@ -244,7 +234,7 @@ sap.ui.define([
 			this.getView().byId("inputbpcode").setValue(CardDetails[0].CardCode);
 			this.oModel.refresh();
 		},
-    ///GETTING WAREHOUSE LIST FROM FRAGMENTS
+		///GETTING WAREHOUSE LIST FROM FRAGMENTS
 		handleValueHelpIssueingBu: function (oEvent) {
 			if (!this._oValueHelpDialogscodeissue) {
 				Fragment.load({
@@ -260,8 +250,8 @@ sap.ui.define([
 				this.f_configValueHelpDialogsWhsIssue();
 				this._oValueHelpDialogscodeissue.open();
 			}
-    },
-    //Warehouse List For Requesting BU from Fragment
+		},
+		//Warehouse List For Requesting BU from Fragment
 		handleValueHelpRequestingBu: function () {
 			if (!this._oValueHelpDialogscodereceive) {
 				Fragment.load({
@@ -279,26 +269,24 @@ sap.ui.define([
 				this._oValueHelpDialogscodereceive.open();
 			}
 		},
-
-    ///GETTING ALL ISSUING WAREHOUSE
+		///GETTING ALL ISSUING WAREHOUSE
 		f_configValueHelpDialogsWhsIssue: function () {
 			var sInputValue = this.byId("inputwhsissue").getValue();
 			var aList = this.oModel.getProperty("/AllWarehouses");
 			aList.forEach(function (oRecord) {
 				oRecord.selected = (oRecord.WhsCode === sInputValue);
 			});
-    },
-    ///GETTING ALL REQUESTING WAREHOUSE
+		},
+		///GETTING ALL REQUESTING WAREHOUSE
 		f_configValueHelpDialogsWhsReceive: function () {
 			var sInputValuereceive = this.byId("inputwhsreceive").getValue();
 			var aList = this.oModel.getProperty("/AllWarehouses");
 			aList.forEach(function (oRecord) {
 				oRecord.selected = (oRecord.WhsCode === sInputValuereceive);
 			});
-    },
-    	///GETTING ALL ITEMS CONFIGURATION FROM UDT
+		},
+		///GETTING ALL ITEMS CONFIGURATION FROM UDT
 		f_configValueHelpDialogsItems: function () {
-			// var sInputValue = this.byId("inputitemnum").getValue();
 			if (this.oModel.getData().AllItems.length <= 1) {
 				//GET ALL ITEMS
 				$.ajax({
@@ -320,9 +308,6 @@ sap.ui.define([
 						this.oModel.getData().AllItems.length = 0;
 						this.oModel.getData().AllItems = JSON.parse(JSON.stringify(results));
 						this.oModel.refresh();
-
-						// this.oMdlAllItems.getData().allitems = results;
-						// this.getView().setModel(this.oMdlAllItems, "oMdlAllItems");
 					}
 				});
 			}
@@ -332,28 +317,37 @@ sap.ui.define([
 				//	oRecord.selected = (oRecord.ItemCode === sInputValue);
 			});
 		},
-    ///Search on Issuing Whs
+		///Search on Issuing Whs
 		handleSearchWhs: function (oEvent) {
 			var sValue = oEvent.getParameter("value");
-			var oFilter = new Filter("WhsCode", FilterOperator.Contains, sValue);
+			var oFilters = new Filter([
+				new Filter("WhsCode", FilterOperator.Contains, sValue),
+				new Filter("WhsName", FilterOperator.Contains, sValue)
+				], false);
 			var oBinding = oEvent.getSource().getBinding("items");
-			oBinding.filter([oFilter]);
-    },
-    ///Search on Requesting Whs
+			oBinding.filter(oFilters);
+		},
+		///Search on Requesting Whs
 		handleSearchWhsreceive: function (oEvent) {
 			var sValue = oEvent.getParameter("value");
-			var oFilter = new Filter("WhsCode", FilterOperator.Contains, sValue);
+			var oFilters = new Filter([
+				new Filter("WhsCode", FilterOperator.Contains, sValue),
+				new Filter("WhsName", FilterOperator.Contains, sValue)
+				], false);
 			var oBinding = oEvent.getSource().getBinding("items");
-			oBinding.filter([oFilter]);
-    },
-    ///Search on Item
+			oBinding.filter(oFilters);
+		},
+		///Search on Item
 		handleSearchItem: function (oEvent) {
 			var sValue = oEvent.getParameter("value");
-			var oFilter = new Filter("ItemName", FilterOperator.Contains, sValue);
+			var oFilters = new Filter([
+				new Filter("ItemName", FilterOperator.Contains, sValue),
+				new Filter("ItemCode", FilterOperator.Contains, sValue)
+				], false);
 			var oBinding = oEvent.getSource().getBinding("items");
-			oBinding.filter([oFilter]);
+			oBinding.filter(oFilters);
 		},
-    //Closing selection on Issuing Whs
+		//Closing selection on Issuing Whs
 		handleValueHelpCloseWhs: function (oEvent) {
 			var aContexts = oEvent.getParameter("selectedContexts");
 			var CardDetails = {};
@@ -370,13 +364,12 @@ sap.ui.define([
 			this.getView().byId("inputwhsissue").setValue(CardDetails[0].WhsName);
 			this.oIssueBu=CardDetails[0].WhsCode;
 			this.oModel.refresh();
-    },
-    	//Closing selection on Requesting Whs
+		},
+		//Closing selection on Requesting Whs
 		handleValueHelpCloseWhsreceive: function (oEvent) {
 			var aContexts = oEvent.getParameter("selectedContexts");
 			var CardDetails = {};
 			if (aContexts && aContexts.length) {
-
 				CardDetails = aContexts.map(function (oContext) {
 					var oCard = {};
 					oCard.WhsCode = oContext.getObject().WhsCode;
@@ -388,8 +381,8 @@ sap.ui.define([
 			this.getView().byId("inputwhsreceive").setValue(CardDetails[0].WhsName);
 			this.oReceiveBu=CardDetails[0].WhsCode;
 			this.oModel.refresh();
-    },
-    //Closing selection on Item
+		},
+		//Closing selection on Item
 		handleValueHelpCloseItem: function (oEvent) {
 			var transtype = this.oModel.getData().EditRecord.TransType;
 			var issuebu = this.oIssueBu;
@@ -410,7 +403,7 @@ sap.ui.define([
 			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].ItemNum = ItemDetails[0].ItemCode;
 			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].Description = ItemDetails[0].ItemName;
 			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].Uom = ItemDetails[0].InventoryUom;
-			if(transtype === "6"){
+			if(transtype === "4"){
 				var oCostToProduce =this.f_getAveragePrice(ItemDetails[0].ItemCode,receivebu);
 				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].CostProd = this.f_getAveragePrice(ItemDetails[0].ItemCode,receivebu);
 			}else{
@@ -426,24 +419,17 @@ sap.ui.define([
 				}else{
 					this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice=oMarketPrice;
 				}
-			}else if (transtype === "2") {
+			} else if (transtype === "2") {
 				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice = oCostToProduce;
-			} else if (transtype === "3") {
+			}else if (transtype === "3") {
 				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice = oCostToProduce;
-			} else if (transtype === "4") {
-				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice = oCostToProduce;
-			}else if (transtype === "5") {
-				///for revise
-				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice = oCostToProduce;
-			}else if (transtype === "6") {
-				///for revise
+			}else if (transtype === "4") {
 				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice = oCostToProduce;
 			}
 			this.oModel.refresh();
-	},
+		},
 		///GET Market Type
 		f_getMarketPrice: function (ItemCode) {
-			//GET MARKET PRICE
 			var iReturnMarketPrice = 0;
 			$.ajax({
 				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getMarketPrice&value1=" + ItemCode +
@@ -473,7 +459,6 @@ sap.ui.define([
 		},
 
 		f_getAveragePrice: function (ItemCode,WareHouse) {
-			//GET MARKET PRICE
 			var iReturnAveragePrice = 0;
 			$.ajax({
 				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getAveragePrice&value1=" + ItemCode +
@@ -514,24 +499,6 @@ sap.ui.define([
 				this.oModel.getData().EditRecord.DocumentLines.length = 0;
 				this.oModel.refresh();
 			} else if (transtype === "2") {
-				this.getView().byId("inputwhsreceive").setValue("");
-				this.getView().byId("inputbpcode").setEnabled(true);
-				this.getView().byId("inputwhsissue").setEnabled(true);
-				this.getView().byId("inputwhsreceive").setEnabled(false);
-				this.getView().byId("inputmarkuptype").setEnabled(false);
-				this.getView().byId("inputmarkuptype").setValue("");
-				this.oModel.getData().EditRecord.DocumentLines.length = 0;
-				this.oModel.refresh();
-			} else if (transtype === "3") {
-				this.getView().byId("inputwhsreceive").setValue("");
-				this.getView().byId("inputbpcode").setEnabled(true);
-				this.getView().byId("inputwhsissue").setEnabled(true);
-				this.getView().byId("inputwhsreceive").setEnabled(false);
-				this.getView().byId("inputmarkuptype").setEnabled(false);
-				this.getView().byId("inputmarkuptype").setValue("");
-				this.oModel.getData().EditRecord.DocumentLines.length = 0;
-				this.oModel.refresh();
-			} else if (transtype === "4") {
 				this.getView().byId("inputbpcode").setValue("");
 				this.getView().byId("inputwhsreceive").setValue("");
 				this.getView().byId("inputbpcode").setEnabled(false);
@@ -541,7 +508,7 @@ sap.ui.define([
 				this.getView().byId("inputmarkuptype").setValue("");
 				this.oModel.getData().EditRecord.DocumentLines.length = 0;
 				this.oModel.refresh();
-			}else if (transtype === "5") {
+			}else if (transtype === "3") {
 				this.getView().byId("inputbpcode").setValue("");
 				this.getView().byId("inputwhsreceive").setValue("");
 				this.getView().byId("inputbpcode").setEnabled(true);
@@ -550,7 +517,7 @@ sap.ui.define([
 				this.getView().byId("inputmarkuptype").setEnabled(true);
 				this.oModel.getData().EditRecord.DocumentLines.length = 0;
 				this.oModel.refresh();
-			}else if (transtype === "6") {
+			}else if (transtype === "4") {
 				this.getView().byId("inputbpcode").setValue("");
 				this.getView().byId("inputwhsissue").setValue("");
 				this.getView().byId("inputwhsreceive").setValue("");
@@ -560,7 +527,7 @@ sap.ui.define([
 				this.getView().byId("inputmarkuptype").setEnabled(true);
 				this.oModel.getData().EditRecord.DocumentLines.length = 0;
 				this.oModel.refresh();
-			}else if (transtype === "7") {
+			}else if (transtype === "5") {
 				this.getView().byId("inputbpcode").setValue("");
 				this.getView().byId("inputwhsreceive").setValue("");
 				this.getView().byId("inputbpcode").setEnabled(false);
@@ -574,8 +541,7 @@ sap.ui.define([
 				this.getView().byId("inputwhsreceive").setEnabled(true);
 			}
 		},
-
-    // ADD ROWS ON TABLE
+		// ADD ROWS ON TABLE
 		onAddRow: function (oEvent) {
 			var oitemdetails = {};
 			oitemdetails.ItemNum = "";
@@ -612,7 +578,7 @@ sap.ui.define([
 				} else if (transtype === "3") {
 					oitemdetails.DescriptionEnable = false;
 					oitemdetails.CostProdEnable = false;
-					oitemdetails.MarkupPriceEnable = false;
+					oitemdetails.MarkupPriceEnable = true;
 					oitemdetails.TransferPriceEnable = false;
 					oitemdetails.MarketPriceEnable = false;
 					oitemdetails.UomEnable = false;
@@ -621,31 +587,13 @@ sap.ui.define([
 				} else if (transtype === "4") {
 					oitemdetails.DescriptionEnable = false;
 					oitemdetails.CostProdEnable = false;
-					oitemdetails.MarkupPriceEnable = false;
+					oitemdetails.MarkupPriceEnable = true;
 					oitemdetails.TransferPriceEnable = false;
 					oitemdetails.MarketPriceEnable = false;
 					oitemdetails.UomEnable = false;
 					this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
 					this.oModel.refresh();
 				} else if (transtype === "5") {
-					oitemdetails.DescriptionEnable = false;
-					oitemdetails.CostProdEnable = false;
-					oitemdetails.MarkupPriceEnable = true;
-					oitemdetails.TransferPriceEnable = false;
-					oitemdetails.MarketPriceEnable = false;
-					oitemdetails.UomEnable = false;
-					this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
-					this.oModel.refresh();
-				} else if (transtype === "6") {
-					oitemdetails.DescriptionEnable = false;
-					oitemdetails.CostProdEnable = false;
-					oitemdetails.MarkupPriceEnable = true;
-					oitemdetails.TransferPriceEnable = false;
-					oitemdetails.MarketPriceEnable = false;
-					oitemdetails.UomEnable = false;
-					this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
-					this.oModel.refresh();
-				} else if (transtype === "7") {
 					oitemdetails.DescriptionEnable = false;
 					oitemdetails.CostProdEnable = false;
 					oitemdetails.MarkupPriceEnable = false;
@@ -656,11 +604,10 @@ sap.ui.define([
 					this.oModel.refresh();
 				}
 			}
-    },
-    ////REMOVE ROW ON TABLE
+		},
+		////REMOVE ROW ON TABLE
 		onRemoveRow: function (oEvent) {
 			var oTable = this.oTableDetails;
-			// var myTableRows= oTable.getRows();
 			var selectedIndeices = oTable.getSelectedIndices();
 			//ROW COUNT VARIABLE
 			var row;
@@ -673,12 +620,7 @@ sap.ui.define([
 			//Clearing Table Selection
 			oTable.clearSelection();
 			this.oModel.refresh();
-
-			//	this.oModel.getData().EditRecord.DocumentLines.splice(this.oTableDetails.selectedIndeices(), 1);
-			// this.oModel.refresh();
 		},
-
-
 		onAddDraft: function (oEvent){
 			var oIssueBu = this.getView().byId("inputwhsissue").getValue();
 			var oRequestBu = this.getView().byId("inputwhsreceive").getValue();
@@ -731,7 +673,7 @@ sap.ui.define([
 				datatype:"json",
 				beforeSend: function (xhr) {
 					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
-			  	},
+				},
 				error: function (xhr, status, error) {
 					var Message = xhr.responseJSON["error"].message.value;
 					console.error(JSON.stringify(Message));
@@ -775,7 +717,6 @@ sap.ui.define([
 					"data": oBusiness_Unit
 				}
 			];
-
 			var d;
 			var code = "";
 			for (d = 0; d < this.oModel.getData().EditRecord.DocumentLines.length; d++) {
@@ -852,7 +793,7 @@ sap.ui.define([
 				datatype:"json",
 				beforeSend: function (xhr) {
 					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
-			  	},
+				},
 				error: function (xhr, status, error) {
 					var Message = xhr.responseJSON["error"].message.value;
 					console.error(JSON.stringify(Message));
@@ -913,7 +854,6 @@ sap.ui.define([
 				oBusiness_Unit_Details.U_APP_TransNo = sGeneratedTransNo;
 				oBusiness_Unit_Details.U_APP_TransType = TransType;
 				oBusiness_Unit_Details.U_APP_Uom = this.oModel.getData().EditRecord.DocumentLines[d].Uom;
-				//oBusiness_Unit_Details.APP_TransNo = this.getView().byId("TransNo").getValue();
 				batchArray.push(JSON.parse(JSON.stringify(({
 					"tableName": "U_APP_INT1",
 					"data": oBusiness_Unit_Details //this.generateUDTCode();
@@ -950,7 +890,6 @@ sap.ui.define([
 				}else{
 					if (results) {
 						sap.m.MessageToast.show("Request Has Been Sent");
-						//this.fprepareTable(false,"");
 						this.fClearField();
 						this.oModel.refresh();
 						AppUI5.hideBusyIndicator();
@@ -972,15 +911,12 @@ sap.ui.define([
 			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice=oTransferPrice;
 			this.oModel.refresh();
 		},
-
 		handleValueChange: function (oEvt){
 			var aFiles = oEvt.getParameters().files;
 			this.currentFile = aFiles[0];
 			var FileName = this.getView().byId("fileUploader").getValue();
-
 			var form = new FormData();
 			form.append("",this.currentFile,FileName);
-
 			//Postinf Attachment in SAP
 			$.ajax({
 				url: "https://18.136.35.41:50000/b1s/v1/Attachments2",
@@ -1007,5 +943,5 @@ sap.ui.define([
 				}
 			});
 		}
-  });
+  	});
 });

@@ -50,7 +50,7 @@ sap.ui.define([
         },
 
         onLogin: function (oEvent) {
-            AppUI5.showBusyIndicator(4000);
+            AppUI5.showBusyIndicator(10000);
             var sDBCompany = this.getView().byId("selectDatabase").getSelectedKey();
            /// var sDBCompany = this.oMdlDatabase.getData().Database;
             var username = this.oMdlLogin.getData().Login.username;
@@ -72,7 +72,7 @@ sap.ui.define([
                     var Message = xhr.responseJSON["error"].message.value;
 					console.error(JSON.stringify(Message));
                     MessageToast.show(Message);
-                 AppUI5.hideBusyIndicator();
+                    AppUI5.hideBusyIndicator();
                 },
                 context: this,
                 success: function (json) { }
@@ -84,7 +84,7 @@ sap.ui.define([
                     jQuery.sap.storage.Storage.put("dataBase",sDBCompany);
 					jQuery.sap.storage.Storage.put("userCode",username);
                     jQuery.sap.intervalCall(1800000,this,"hidePanelAgain",[this]);
-                    AppUI5.hideBusyIndicator();
+                    //AppUI5.hideBusyIndicator();
                 }
             });
         },
@@ -163,7 +163,10 @@ sap.ui.define([
 		// 	AppUI5.createField("APP_MarketPrice", "Market Price", "@APP_INT1", "db_Alpha", "", 50);
 		// 	AppUI5.createField("APP_TransNo", "Transaction Number", "@APP_INT1", "db_Alpha", "", 50);
 		// 	AppUI5.createField("APP_TransType", "Transaction Type", "@APP_INT1", "db_Alpha", "", 50);
-		// 	AppUI5.createField("APP_Uom", "UOM", "@APP_INT1", "db_Alpha", "", 50);
-		  }
-        });
+        // 	AppUI5.createField("APP_Uom", "UOM", "@APP_INT1", "db_Alpha", "", 50);
+        
+        ////NDC add udf in OIGE
+        ///////AppUI5.createField("APP_BU_TransNum", "BU TransNum", "OIGE", "db_Alpha", "", 30);
+		}
+    });
 });

@@ -62,22 +62,16 @@
 			"value": "1 - BU to BU"
 		}, {
 			"key": "2",
-			"value": "2 - BU to Employee - Cash Sales"
+			"value": "2 - BU to Employee - Charge to Expense"
 		}, {
 			"key": "3",
-			"value": "3 - BU to Employee - VALE"
+			"value": "3 - Inter Org - Issue"
 		}, {
 			"key": "4",
-			"value": "4 - BU to Employee - Charge to Expense"
-		}, {
-			"key": "5",
-			"value": "5 - Inter Org - Issue"
-		}, {
-			"key": "6",
-			"value": "6 - Inter Org - Receipt"
+			"value": "4 - Inter Org - Receipt"
 		},{
-			"key": "7",
-			"value": "7 - Renewable Energy Transfer"
+			"key": "5",
+			"value": "5 - Renewable Energy Transfer"
 		}
 	],
 	"SelectedTransType": {

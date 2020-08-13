@@ -50,6 +50,7 @@
 											<content>
 												<!-- <Button text="ADD DRAFT" id="btnSaveDraft" tooltip="ADD DRAFT" press="onAddDraft" icon="sap-icon://add"/> -->
 												<Button text="ADD" id="btnAddRecords" tooltip="ADD" visible="{buttons>/buttons/btnAddRecords}" press="onAddRecords" icon="sap-icon://save"/>
+												<Button text="CANCEL" id="btnCancelRecords" tooltip="CANCEL" press="onCancelRecords" icon="sap-icon://sys-cancel-2"/>
 												<ToolbarSpacer/>
 											</content>
 										</Toolbar>
