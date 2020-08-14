@@ -151,7 +151,9 @@ sap.ui.define([
 		// 	AppUI5.createField("APP_DocType", "Document Type", "@APP_OINT", "db_Alpha", "", 50);
 		// 	AppUI5.createField("APP_ReceivedBy", "Received By", "@APP_OINT", "db_Alpha", "", 50);
 		// 	AppUI5.createField("APP_Attachment", "Attachment", "@APP_OINT", "db_Alpha", "", 50);
-		// 	AppUI5.createField("APP_AttachmentKey", "Attechment Key", "@APP_OINT", "db_Alpha", "", 50);
+        // 	AppUI5.createField("APP_AttachmentKey", "Attechment Key", "@APP_OINT", "db_Alpha", "", 50);
+        // AppUI5.createField("APP_IsPostedGI", "Posted Goods Issue", "@APP_OINT", "db_Alpha", "", 10);
+        // AppUI5.createField("APP_IsPostedGR", "Posted Goods Receipt", "@APP_OINT", "db_Alpha", "", 10);
 
 		// 	//Business Unit Details
 		// 	AppUI5.createField("APP_ItemNum", "Item Number", "@APP_INT1", "db_Alpha", "", 50);

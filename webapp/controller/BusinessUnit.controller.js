@@ -88,6 +88,7 @@ sap.ui.define([
 					this.oMdlAllRecord.refresh();
 				}
 			});
+			this.isDraft = false;
 
 			//// INITIALIZE Variables FOR TABLE
 			this.isClickedIssue = true;
@@ -285,6 +286,13 @@ sap.ui.define([
 			oBusiness_Unit.U_APP_DocType = oDocType;
 			oBusiness_Unit.U_APP_Attachment = oAttachment;
 			oBusiness_Unit.U_APP_AttachmentKey = oAttachmentKey;
+			if(!this.isDraft){
+				if(transtype === "4") {
+					oBusiness_Unit.U_APP_IsPostedGR = "Y";
+				}else{
+					oBusiness_Unit.U_APP_IsPostedGI = "Y";
+				}
+			}
 			///HEADER BATCH Array
 			var batchArray = [
 				//directly insert data if data is single row per table
@@ -330,6 +338,7 @@ sap.ui.define([
 					var Message = xhr.responseJSON["error"].message.value;
 					console.error(JSON.stringify(Message));
 					sap.m.MessageToast.show(Message);
+					AppUI5.hideBusyIndicator();
 				},
 				success: function (json) {
 
@@ -344,6 +353,9 @@ sap.ui.define([
 					sap.m.MessageToast.show(oMessage);
 				}else{
 					if (results) {
+						if(this.isDraft){
+							sap.m.MessageToast.show("Added Successfully");
+						}
 						this.fClearField();
 						this.oModel.refresh();
 						AppUI5.hideBusyIndicator();
@@ -367,6 +379,7 @@ sap.ui.define([
 			var oAttachmentKey = this.FileKey;
 			var ostatus= "0";
 			var oDocType= "Draft";
+			this.isDraft = true;
 			if (transtype === "") {
 				sap.m.MessageToast.show("Please Select Transaction Type.");
 			}else if(oCountDetails===0){
@@ -1503,6 +1516,8 @@ sap.ui.define([
 			oBusiness_Unit.U_APP_Remarks = this.oModel.getData().EditRecord.Remarks;
 			oBusiness_Unit.U_APP_Attachment = this.getView().byId("fileUploader").getValue();
 			oBusiness_Unit.U_APP_AttachmentKey = this.FileKey;
+			oBusiness_Unit.U_APP_IsPostedGI = "";
+			oBusiness_Unit.U_APP_IsPostedGR = "";
 			///HEADER BATCH
 			var BatchHeader =
 				//directly insert data if data is single row per table

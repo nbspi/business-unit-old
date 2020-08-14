@@ -72,7 +72,7 @@ sap.ui.define([
       this.FileKey = null;
 
     },
-    fprintGoodsIssue: function(transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey){
+    fprintGoodsIssue: function(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey){
 
       //doc.text(20, 20, 'Biotech Farms Inc.(BFI)');
       doc.setFontSize(12)
@@ -113,8 +113,8 @@ sap.ui.define([
       doc.text(20, 190, 'RECEIVED BY:____________________');
       doc.text(120, 170, 'PREPARED BY:____________________');
       doc.text(120, 180, 'CHECKED BY:______________________');
-      doc.output('Goods Issue.pdf');
-      doc.save('Goods Issue.pdf');
+      doc.output('Goods Issue_'+ transno +'.pdf');
+      doc.save('Goods Issue_'+ transno +'.pdf');
       doc = new jsPDF();
     },
 
@@ -433,7 +433,7 @@ sap.ui.define([
         success: function (json) {
           //ADD UDT RECORDS
           this.fUpdatePending(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
-          this.fprintGoodsIssue(transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
+          this.fprintGoodsIssue(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
           sap.m.MessageToast.show("Added Successfully");
           this.fClearField();
           this.oModel.refresh();
@@ -563,7 +563,7 @@ sap.ui.define([
                   success: function (json) {
                     //UPDATE RECORDS ON UDT
                     this.fUpdatePending(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
-                    this.fprintGoodsIssue(transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
+                    this.fprintGoodsIssue(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
                     sap.m.MessageToast.show("Successfully Added");
                     this.fClearField();
                     this.oModel.refresh();
@@ -654,7 +654,7 @@ sap.ui.define([
               //this.oPage.setBusy(false);
               //UPDATE RECORDS ON UDT
               this.fUpdatePending(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
-              this.fprintGoodsIssue(transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
+              this.fprintGoodsIssue(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
               sap.m.MessageToast.show("Posting of Goods Issue is Successful");
               this.fClearField();
               this.oModel.refresh();
@@ -711,7 +711,7 @@ sap.ui.define([
         success: function (json) {
           //UPDATE RECORDS ON UDT
           this.fUpdatePending(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
-          this.fprintGoodsIssue(transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
+          this.fprintGoodsIssue(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
           sap.m.MessageToast.show("Added Successfully");
           this.fClearField();
           this.oModel.refresh();
@@ -802,7 +802,7 @@ sap.ui.define([
             success: function (json) {
             //UPDATE RECORDS ON UDT
             this.fUpdatePending(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
-            this.fprintGoodsIssue(transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
+            this.fprintGoodsIssue(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
             sap.m.MessageToast.show("Posting of Goods Issue is Successful");
               this.fClearField();
               this.oModel.refresh();
@@ -969,7 +969,7 @@ sap.ui.define([
         success: function (json) {
           //UPDATE RECORDS ON UDT
           this.fUpdatePending(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
-          this.fprintGoodsIssue(transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
+          this.fprintGoodsIssue(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
           sap.m.MessageToast.show("Added Successfully");
           this.fClearField();
           this.oModel.refresh();
@@ -1060,6 +1060,11 @@ sap.ui.define([
       oBusiness_Unit.U_APP_DocType = oDocType;
       oBusiness_Unit.U_APP_Attachment = oAttachment;
       oBusiness_Unit.U_APP_AttachmentKey = oAttachmentKey;
+      if(transtype === "4") {
+        oBusiness_Unit.U_APP_IsPostedGR = "Y";
+      }else{
+        oBusiness_Unit.U_APP_IsPostedGI = "Y";
+      }
       ///HEADER BATCH
       var BatchHeader =
         //directly insert data if data is single row per table

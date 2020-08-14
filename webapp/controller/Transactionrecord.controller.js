@@ -227,7 +227,7 @@ sap.ui.define([
 			var aReturnResult = [];
 			var urltag = "";
 			if (value1 ===""){
-				urltag ="https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&QUERYTAG=getTransactions&VALUE1=&VALUE2=&VALUE3=&VALUE4=";
+				urltag ="https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&QUERYTAG=getTransactions&VALUE1=1&VALUE2=0&VALUE3=&VALUE4=";
 			}else{
 				urltag ="https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&QUERYTAG=getFilteredTransactions&VALUE1="+ value1 +"&VALUE2="+ value2 +"&VALUE3=&VALUE4=";
 			}
@@ -683,6 +683,12 @@ sap.ui.define([
 			this.getView().byId("idIconTabBarInlineMode").getItems()[1].setText("Transaction No: " + TransNo + " [EDIT]");
 			var tab = this.getView().byId("idIconTabBarInlineMode");
 			tab.setSelectedKey("tab2");
+			var oTransTatus = this.getView().byId("TranStatus").getSelectedKey();
+			if(oTransTatus === "5"){
+				this.getView().byId("btnCancelRecords").setVisible(false);
+			}else{
+				this.getView().byId("btnCancelRecords").setVisible(true);
+			}
 		},
 		//Generic selecting of data
 		fgetHeader: function (dbName, procName, queryTag, value1, value2, value3, value4) {
@@ -867,7 +873,7 @@ sap.ui.define([
 
 		////POSTING BU TO BU BUSINESS TYPE
 		fBuToBu: function (transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey) {
-			AppUI5.showBusyIndicator(4000);
+			AppUI5.showBusyIndicator(10000);
 			//Initialize Variables
 			var ostatus= "1";
 			var oDocType ="Goods Issue";
@@ -1314,7 +1320,7 @@ sap.ui.define([
 		},
 		///POSTING ON BU TO INTER ORG ISSUE
 		fBuToInterOrgReceipt: function (transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey) {
-		  AppUI5.showBusyIndicator(4000);
+		  AppUI5.showBusyIndicator(10000);
 		  //Initialize Variables
 		  var ostatus="2";
 		  var oDocType ="Goods Receipt/Purchase Invoices";
@@ -1502,21 +1508,61 @@ sap.ui.define([
 				this.fRenewableEnergyTransfer(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey);
 			}
 		},
-		onCancelRecord: function (oEvent) {
+		onCancelRecords: function (oEvent) {
+			AppUI5.showBusyIndicator(10000);
+			var oTransTatus = this.getView().byId("TranStatus").getSelectedKey();	
 			var oTransType = this.oModel.getData().EditRecord.TransType;
-			var transno = this.oModel.getData().EditRecord.TransNo;
-			var oCardCode = this.oModel.getData().EditRecord.BPCode;
-			var oPostingDate = this.oModel.getData().EditRecord.PostingDate;
-			var oMarkupType = this.oModel.getData().EditRecord.MarkupType;
-			var oIssueBU = this.oIssueBu;
-			var oReceiveBU = this.oReceiveBu;
-			var oRemarks = this.oModel.getData().EditRecord.Remarks;
-			var oDetails = this.oModel.getData().EditRecord.DocumentLines;
-			var oCountDetails = this.oModel.getData().EditRecord.DocumentLines.length;
 			this.bCancel = true;
-			if(oTransType !== "5"){
-				this.fAddReceipt(oTransType,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails);
-			}
+			// if(oTransTatus === "0"){}
+			var getcode = this.code;
+			var oBusiness_Unit = {};
+			oBusiness_Unit.U_APP_Status = "5";
+			oBusiness_Unit.U_APP_IsPostedGR = "N";
+			oBusiness_Unit.U_APP_IsPostedGI = "N";
+			///HEADER BATCH
+			var BatchHeader =
+				{
+					"tableName": "U_APP_OINT",
+					"data": oBusiness_Unit
+				};
+			var sBodyRequest = this.fprepareUpdatePostedRequestBody(BatchHeader, "",getcode);
+			$.ajax({
+				url: "https://18.136.35.41:50000/b1s/v1/$batch",
+				type: "POST",
+				contentType: "multipart/mixed;boundary=a",
+				data: sBodyRequest,
+				xhrFields: {
+					withCredentials: true
+				},
+				error: function (xhr, status, error) {
+					var Message = xhr.responseJSON["error"].message.value;
+					console.error(JSON.stringify(Message));
+					sap.m.MessageToast.show(Message);
+					AppUI5.hideBusyIndicator();
+				},
+				success: function (json) {
+				
+				},
+				context: this
+			}).done(function (results) {
+				if(JSON.stringify(results).search("400 Bad") !== -1) {
+					var oStartIndex = results.search("value") + 10;
+					var oEndIndex = results.indexOf("}") - 8;
+					var oMessage = results.substring(oStartIndex,oEndIndex);
+					AppUI5.fErrorLogs("U_APP_OINT/U_APP_INT1","Update",TransNo,"null",oMessage,"Update",this.sUserCode,"null",sBodyRequest);
+					sap.m.MessageToast.show(oMessage);
+					AppUI5.hideBusyIndicator();
+				}else{
+					if (results) {
+						sap.m.MessageToast.show("Record Cancelled!");
+						this.fprepareTable(false,"");
+						this.fClearField();
+						this.oModel.refresh();
+						AppUI5.hideBusyIndicator();
+					}
+				}
+			});
+		
 		},
 		//Batch Request for Updating Draft
 		fprepareUpdateBatchRequestBody: function (oHeader, oRequest, getcode) {
@@ -1563,15 +1609,16 @@ sap.ui.define([
 			batchRequest = batchRequest + "\nContent-Type: application/json\n\n";
 			batchRequest = batchRequest + JSON.stringify(objectUDTHeader.data) + "\n\n";
 
+			if(oDetails !== ""){
 			var objectUDTDetails = "";
-
 			//objectUDTDetails = oDetails;
-			for (var i = 0; i < oDetails.length; i++) {
-			  objectUDTDetails = oDetails[i];
-			  batchRequest = batchRequest + "--b\nContent-Type:application/http\nContent-Transfer-Encoding:binary\n\n";
-			  batchRequest = batchRequest + "POST /b1s/v1/" + objectUDTDetails.tableName;
-			  batchRequest = batchRequest + "\nContent-Type: application/json\n\n";
-			  batchRequest = batchRequest + JSON.stringify(objectUDTDetails.data) + "\n\n";
+				for (var i = 0; i < oDetails.length; i++) {
+				objectUDTDetails = oDetails[i];
+				batchRequest = batchRequest + "--b\nContent-Type:application/http\nContent-Transfer-Encoding:binary\n\n";
+				batchRequest = batchRequest + "POST /b1s/v1/" + objectUDTDetails.tableName;
+				batchRequest = batchRequest + "\nContent-Type: application/json\n\n";
+				batchRequest = batchRequest + JSON.stringify(objectUDTDetails.data) + "\n\n";
+				}
 			}
 			batchRequest = batchRequest + endBatch;
 
@@ -1624,6 +1671,12 @@ sap.ui.define([
 			oBusiness_Unit.U_APP_DocType = oDocType;
 			oBusiness_Unit.U_APP_Attachment = oAttachment;
 			oBusiness_Unit.U_APP_AttachmentKey = oAttachmentKey;
+			if(transtype === "4") {
+				oBusiness_Unit.U_APP_IsPostedGR = "Y";
+			}else{
+				oBusiness_Unit.U_APP_IsPostedGI = "Y";
+			}
+			
 			///HEADER BATCH
 			var BatchHeader =
 			//directly insert data if data is single row per table
@@ -1636,26 +1689,26 @@ sap.ui.define([
 			var code = "";
 			var batchArray = [];
 			for (d = 0; d < oDetails.length; d++) {
-					code = AppUI5.generateUDTCode("GetCode");
-			oBusiness_Unit_Details.Code = code;
-					oBusiness_Unit_Details.Name = code;
-					oBusiness_Unit_Details.U_APP_ItemNum = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
-					oBusiness_Unit_Details.U_APP_Description = this.oModel.getData().EditRecord.DocumentLines[d].Description;
-					oBusiness_Unit_Details.U_APP_Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
-					oBusiness_Unit_Details.U_APP_CostProd = this.oModel.getData().EditRecord.DocumentLines[d].CostProd;
-					oBusiness_Unit_Details.U_APP_MarkUp = this.oModel.getData().EditRecord.DocumentLines[d].MarkupPrice;
-					oBusiness_Unit_Details.U_APP_TransferPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
-					oBusiness_Unit_Details.U_APP_MarketPrice = this.oModel.getData().EditRecord.DocumentLines[d].MarketPrice;
-					oBusiness_Unit_Details.U_APP_TransNo = TransNo;
-					oBusiness_Unit_Details.U_APP_TransType = TransType;
-					oBusiness_Unit_Details.U_APP_Uom = this.oModel.getData().EditRecord.DocumentLines[d].Uom;
-					//	oBusiness_Unit_Details.APP_TransNo = this.getView().byId("TransNo").getValue();
-					batchArray.push(JSON.parse(JSON.stringify(({
-						"tableName": "U_APP_INT1",
-						"data": oBusiness_Unit_Details
-					}))));
+				code = AppUI5.generateUDTCode("GetCode");
+				oBusiness_Unit_Details.Code = code;
+				oBusiness_Unit_Details.Name = code;
+				oBusiness_Unit_Details.U_APP_ItemNum = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
+				oBusiness_Unit_Details.U_APP_Description = this.oModel.getData().EditRecord.DocumentLines[d].Description;
+				oBusiness_Unit_Details.U_APP_Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
+				oBusiness_Unit_Details.U_APP_CostProd = this.oModel.getData().EditRecord.DocumentLines[d].CostProd;
+				oBusiness_Unit_Details.U_APP_MarkUp = this.oModel.getData().EditRecord.DocumentLines[d].MarkupPrice;
+				oBusiness_Unit_Details.U_APP_TransferPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
+				oBusiness_Unit_Details.U_APP_MarketPrice = this.oModel.getData().EditRecord.DocumentLines[d].MarketPrice;
+				oBusiness_Unit_Details.U_APP_TransNo = TransNo;
+				oBusiness_Unit_Details.U_APP_TransType = TransType;
+				oBusiness_Unit_Details.U_APP_Uom = this.oModel.getData().EditRecord.DocumentLines[d].Uom;
+				//	oBusiness_Unit_Details.APP_TransNo = this.getView().byId("TransNo").getValue();
+				batchArray.push(JSON.parse(JSON.stringify(({
+					"tableName": "U_APP_INT1",
+					"data": oBusiness_Unit_Details
+				}))));
 
-				}
+			}
 			var sBodyRequest = this.fprepareUpdatePostedRequestBody(BatchHeader,batchArray, getcode);
 			$.ajax({
 			url: "https://18.136.35.41:50000/b1s/v1/$batch",

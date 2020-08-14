@@ -829,6 +829,7 @@ sap.ui.define([
 			oBusiness_Unit.U_APP_DocType = oDocType;
 			oBusiness_Unit.U_APP_Attachment = this.getView().byId("fileUploader").getValue();
 			oBusiness_Unit.U_APP_AttachmentKey = this.FileKey;
+			//oBusiness_Unit.U_APP_IsPostedGI = ""
 			///HEADER BATCH Array
 			var batchArray = [
 				//directly insert data if data is single row per table

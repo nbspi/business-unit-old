@@ -449,7 +449,7 @@ sap.ui.define([
 		},
 		////POSTING BU TO BU BUSINESS TYPE
 		fAddReceipt: function (oTransType,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails) {
-			AppUI5.showBusyIndicator(4000);
+			AppUI5.showBusyIndicator(10000);
 			var oDocType = "Goods Receipt";
 			//Initialize Variables
 			var oGoodsReceipt = {};
@@ -496,7 +496,7 @@ sap.ui.define([
 					//this.oPage.setBusy(false);
 					this.fUpdatePending();
 					if (this.bCancel === false){
-						this.fAddNewReceipt(oDocType);
+						//this.fAddNewReceipt(oDocType);
 						this.fprintGoodsReceipt(oTransType,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails);
 					}
 					this.fprepareTable(false,"");
@@ -516,7 +516,7 @@ sap.ui.define([
 		},
 		///CREATE JOURNAL ENTRY
 		fCreateJE: function () {
-			AppUI5.showBusyIndicator(4000);
+			AppUI5.showBusyIndicator(10000);
 			var oDocType = "Journal Entry";
 			//Initialize Variables
 			var oJournalEnty = {};
@@ -561,7 +561,7 @@ sap.ui.define([
 				},
 				success: function (json) {
 					this.fUpdatePending();
-					this.fAddNewReceipt(oDocType);
+					//this.fAddNewReceipt(oDocType);
 					this.fprepareTable(false,"");
 					this.fClearField();
 					this.oModel.refresh();
@@ -608,7 +608,7 @@ sap.ui.define([
 			var oDetails = this.oModel.getData().EditRecord.DocumentLines;
 			var oCountDetails = this.oModel.getData().EditRecord.DocumentLines.length;
 			this.bCancel = true;
-			if(oTransType !== "5"){
+			if(oTransType !== "4"){
 				this.fAddReceipt(oTransType,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails);
 			}
 		},
@@ -661,6 +661,15 @@ sap.ui.define([
 			oBusiness_Unit.U_APP_Remarks = this.oModel.getData().EditRecord.Remarks;
 			oBusiness_Unit.U_APP_Status = ostatus;
 			oBusiness_Unit.U_APP_ReceivedBy = this.sUserCode;
+			if(TransType === "4"){
+				oBusiness_Unit.U_APP_IsPostedGR = "Y";
+			}
+			if(this.bCancel !== false){
+				oBusiness_Unit.U_APP_IsPostedGI = "Y";
+			}else{
+				oBusiness_Unit.U_APP_IsPostedGR = "N";
+				oBusiness_Unit.U_APP_IsPostedGR = "N";
+			}
 			///HEADER BATCH
 			var BatchHeader =
 				//directly insert data if data is single row per table

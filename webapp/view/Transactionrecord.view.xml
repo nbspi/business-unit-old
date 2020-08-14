@@ -33,7 +33,6 @@
 									<t:extension>
 										<Toolbar>
 											<content>
-												<!-- <Button text="ADD" id="btnOnAdd" tooltip="ADD" press="onAddMode" icon="sap-icon://add"/> -->
 												<Button text="VIEW" id="btnOnView" tooltip="PROCESS" visible="{buttons>/buttons/btnOnView}" press="onProcess" icon="sap-icon://edit"/>
 												<ToolbarSpacer/>
 											</content>
@@ -44,11 +43,8 @@
 
 							</IconTabFilter>
 							<IconTabFilter id="tab2" text="Transaction" key="tab2">
-								<!--<Button text="Post Outgoing Payment Draft" id="btnPostDraft" tooltip="Save" press="onPostDraftOP" icon="sap-icon://save"/>-->
-								<!--<Button text="Export File" tooltip="Export" press="handleExcelExport"/>-->
 									<Toolbar>
 											<content>
-												<!-- <Button text="ADD DRAFT" id="btnSaveDraft" tooltip="ADD DRAFT" press="onAddDraft" icon="sap-icon://add"/> -->
 												<Button text="ADD" id="btnAddRecords" tooltip="ADD" visible="{buttons>/buttons/btnAddRecords}" press="onAddRecords" icon="sap-icon://save"/>
 												<Button text="CANCEL" id="btnCancelRecords" tooltip="CANCEL" press="onCancelRecords" icon="sap-icon://sys-cancel-2"/>
 												<ToolbarSpacer/>
@@ -106,20 +102,6 @@
 													<l:GridData span="L3 M4 S12"/>
 												</layoutData>
 											</DatePicker>
-
-											<!--Account Name -->
-											<!-- <Label text="Customer/Vendor" width="100%">
-												<layoutData>
-													<l:GridData span="L3 M2 S12"/>
-												</layoutData>
-											</Label>
-											<Input width="100%" id="inputaccountname" value="{/EditRecord/BPName}">
-												<layoutData>
-													<l:GridData span="L3 M4 S12"/>
-												</layoutData>
-											</Input> -->
-
-											<!--Issueing Bu-->
 											<Label text="Issuing BU" width="100%">
 												<layoutData>
 													<l:GridData span="L3 M2 S12"/>
@@ -131,14 +113,6 @@
 													<l:GridData span="L3 M4 S12"/>
 												</layoutData>
 											</Input>
-											<!--<Select forceSelection="false" selectedKey="{/EditRecord/IssueBU}" items="{/AllMarkupTypes}">-->
-											<!--	<core:Item key="{key}" text="{value}"/>-->
-											<!--	<layoutData>-->
-											<!--		<l:GridData span="L3 M4 S12"/>-->
-											<!--	</layoutData>-->
-											<!--</Select> -->
-
-
 											<!--Posting Date-->
 											<Label text="Posting Date" width="100%">
 												<layoutData>
@@ -150,8 +124,6 @@
 													<l:GridData span="L3 M4 S12"/>
 												</layoutData>
 											</DatePicker>
-
-
 											<!--Receiving BU -->
 											<Label text="Receiving BU" width="100%">
 												<layoutData>
@@ -177,14 +149,6 @@
 													<l:GridData span="L3 M4 S12"/>
 												</layoutData>
 											</Select>
-											<!--<Select id="selectDatabase"  items="{oMdlDocStat>/Status}" selectedKey="{oMdlEditRecord>/EditRecord/Status}"  showSecondaryValues="true">-->
-											<!--	<core:ListItem key="{oMdlDocStat>text}" text="{oMdlDocStat>key}"/>-->
-											<!--	<layoutData>-->
-											<!--		<l:GridData span="L3 M4 S12"/>-->
-											<!--	</layoutData>-->
-											<!--</Select>-->
-
-
 											<!--REMARKS-->
 											<Label text="Remarks" width="100%">
 												<layoutData>
@@ -196,16 +160,6 @@
 													<l:GridData span="L3 M4 S12"/>
 												</layoutData>
 											</Input>
-											<!--<Panel-->
-											<!--	id="dataBindingDatePanel"-->
-											<!--	headerText="DatePicker using data binding">-->
-											<!--	<Label text="DatePicker using DataBinding" labelFor="DP4"/>-->
-											<!--	<DatePicker-->
-											<!--		id="DP4"-->
-											<!--		value="{path:'/dateValue', type:'sap.ui.model.type.Date', formatOptions: { style: 'medium', strictParsing: true}}"-->
-											<!--		class="sapUiSmallMarginBottom"/>-->
-											<!--	<Text text="{path:'/dateValue', type:'sap.ui.model.type.Date', formatOptions: { style: 'long'}}" class="sapUiSmallMargin"/>-->
-											<!--</Panel>-->
 										</f:content>
 									</f:SimpleForm>
 									<f:SimpleForm editable="true" layout="ResponsiveGridLayout" id="form01" width="100%">
@@ -281,21 +235,11 @@
 											</t:columns>
 										</t:Table>
 									</f:SimpleForm>
-									<!--<f:SimpleForm>-->
-									<!--	<Label text="Remarks" width="100%">-->
-									<!--		<layoutData>-->
-									<!--			<l:GridData span="L3 M2 S12"/>-->
-									<!--		</layoutData>-->
-									<!--	</Label>-->
-									<!--	<TextArea id="Remarks" value="{/EditRecord>Remarks}" maxLength="254" width="100%" placeholder="Remarks"/>-->
-									<!--</f:SimpleForm>-->
-									<!--</content>-->
 								</VBox>
 							</IconTabFilter>
 						</items>
 					</IconTabBar>
 				</content>
-
 			</Page>
 		</pages>
 	</App>
