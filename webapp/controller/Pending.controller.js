@@ -495,8 +495,6 @@ sap.ui.define([
 					if (this.bCancel === false){
 						//this.fAddNewReceipt(oDocType);
 						this.fprintGoodsReceipt(oTransType,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails);
-					}else{
-						this.fPostGoodsIssue(transno);
 					}
 					this.fprepareTable(false,"");
 					this.bCancel = false;
