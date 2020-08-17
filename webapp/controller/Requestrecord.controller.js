@@ -284,10 +284,7 @@ sap.ui.define([
           if (transtype === "1") {
             this.getView().byId("inputwhsreceive").setEnabled(true);
             this.getView().byId("inputbpcode").setEnabled(false);
-          } else if (transtype === "2") {
-            this.getView().byId("inputwhsreceive").setEnabled(true);
-            this.getView().byId("inputbpcode").setEnabled(false);
-          }
+          } 
           this.oModel.refresh();
         }
       });

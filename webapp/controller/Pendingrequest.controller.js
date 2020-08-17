@@ -324,9 +324,6 @@ sap.ui.define([
           if (transtype === "1") {
             this.getView().byId("inputwhsreceive").setEnabled(true);
             this.getView().byId("inputbpcode").setEnabled(false);
-          } else if (transtype === "2") {
-            this.getView().byId("inputwhsreceive").setEnabled(true);
-            this.getView().byId("inputbpcode").setEnabled(false);
           }
           this.oModel.refresh();
         }
@@ -380,15 +377,12 @@ sap.ui.define([
           /////Call BU to BU AND DRAFT transaction Function
           this.fBuToBu(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey);
         }else if(transtype === "2"){
-          /////Call Bu to Charge to Expense and Draft
-          this.fBUtoChargetoExpense(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey);
-        }else if(transtype === "3"){
           /////Call Bu to Inter Org - ISSUE and Draft
           this.fBuToInterOrgIssue(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey);
-        }else if(transtype === "4"){
+        }else if(transtype === "3"){
           /////Call Bu to Inter Org - Receipt and Draft
           this.fBuToInterOrgReceipt(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey);
-        }else if (transtype === "5") {
+        }else if (transtype === "4") {
           /////Call Renewable Energy Transfer Function
           this.fRenewableEnergyTransfer(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey);
         }
@@ -443,8 +437,6 @@ sap.ui.define([
 
       }).done(function (results) {
         if (results) {
-          //
-
         }
       });
     },
@@ -1060,7 +1052,7 @@ sap.ui.define([
       oBusiness_Unit.U_APP_DocType = oDocType;
       oBusiness_Unit.U_APP_Attachment = oAttachment;
       oBusiness_Unit.U_APP_AttachmentKey = oAttachmentKey;
-      if(transtype === "4") {
+      if(transtype === "3") {
         oBusiness_Unit.U_APP_IsPostedGR = "Y";
       }else{
         oBusiness_Unit.U_APP_IsPostedGI = "Y";

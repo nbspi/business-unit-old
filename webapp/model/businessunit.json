@@ -45,16 +45,13 @@
 			"value": "1 - BU to BU"
 		}, {
 			"key": "2",
-			"value": "2 - BU to Employee - Charge to Expense"
+			"value": "2 - Inter Org - Issue"
 		}, {
 			"key": "3",
-			"value": "3 - Inter Org - Issue"
+			"value": "3 - Inter Org - Receipt"
 		}, {
 			"key": "4",
-			"value": "4 - Inter Org - Receipt"
-		}, {
-			"key": "5",
-			"value": "5 - Renewable Energy Transfer"
+			"value": "4 - Renewable Energy Transfer"
 		}
 	],
 	"SelectedTransType": {

@@ -202,7 +202,7 @@ sap.ui.define([
 				} else if (transtype === "2") {
 					oitemdetails.DescriptionEnable = false;
 					oitemdetails.CostProdEnable = false;
-					oitemdetails.MarkupPriceEnable = false;
+					oitemdetails.MarkupPriceEnable = true;
 					oitemdetails.TransferPriceEnable = false;
 					oitemdetails.MarketPriceEnable = false;
 					oitemdetails.UomEnable = false;
@@ -218,15 +218,6 @@ sap.ui.define([
 					this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
 					this.oModel.refresh();
 				} else if (transtype === "4") {
-					oitemdetails.DescriptionEnable = false;
-					oitemdetails.CostProdEnable = false;
-					oitemdetails.MarkupPriceEnable = true;
-					oitemdetails.TransferPriceEnable = false;
-					oitemdetails.MarketPriceEnable = false;
-					oitemdetails.UomEnable = false;
-					this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
-					this.oModel.refresh();
-				} else if (transtype === "5") {
 					oitemdetails.DescriptionEnable = false;
 					oitemdetails.CostProdEnable = false;
 					oitemdetails.MarkupPriceEnable = false;
@@ -287,7 +278,7 @@ sap.ui.define([
 			oBusiness_Unit.U_APP_Attachment = oAttachment;
 			oBusiness_Unit.U_APP_AttachmentKey = oAttachmentKey;
 			if(!this.isDraft){
-				if(transtype === "4") {
+				if(transtype === "3") {
 					oBusiness_Unit.U_APP_IsPostedGR = "Y";
 				}else{
 					oBusiness_Unit.U_APP_IsPostedGI = "Y";
@@ -407,16 +398,7 @@ sap.ui.define([
 				this.getView().byId("inputmarkuptype").setEnabled(false);
 				this.oModel.getData().EditRecord.DocumentLines.length = 0;
 				this.oModel.refresh();
-			} else if (transtype === "2") {
-				this.getView().byId("inputbpcode").setValue("");
-				this.getView().byId("inputwhsreceive").setValue("");
-				this.getView().byId("inputbpcode").setEnabled(false);
-				this.getView().byId("inputwhsissue").setEnabled(true);
-				this.getView().byId("inputwhsreceive").setEnabled(false);
-				this.getView().byId("inputmarkuptype").setEnabled(false);
-				this.oModel.getData().EditRecord.DocumentLines.length = 0;
-				this.oModel.refresh();
-			}else if (transtype === "3") {
+			}else if (transtype === "2") {
 				this.getView().byId("inputbpcode").setValue("");
 				this.getView().byId("inputwhsreceive").setValue("");
 				this.getView().byId("inputbpcode").setEnabled(true);
@@ -425,7 +407,7 @@ sap.ui.define([
 				this.getView().byId("inputmarkuptype").setEnabled(true);
 				this.oModel.getData().EditRecord.DocumentLines.length = 0;
 				this.oModel.refresh();
-			}else if (transtype === "4") {
+			}else if (transtype === "3") {
 				this.getView().byId("inputbpcode").setValue("");
 				this.getView().byId("inputwhsissue").setValue("");
 				this.getView().byId("inputwhsreceive").setValue("");
@@ -435,7 +417,7 @@ sap.ui.define([
 				this.getView().byId("inputmarkuptype").setEnabled(true);
 				this.oModel.getData().EditRecord.DocumentLines.length = 0;
 				this.oModel.refresh();
-			}else if (transtype === "5") {
+			}else if (transtype === "4") {
 				this.getView().byId("inputbpcode").setValue("");
 				this.getView().byId("inputwhsreceive").setValue("");
 				this.getView().byId("inputbpcode").setEnabled(false);

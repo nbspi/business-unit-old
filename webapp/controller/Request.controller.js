@@ -403,7 +403,7 @@ sap.ui.define([
 			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].ItemNum = ItemDetails[0].ItemCode;
 			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].Description = ItemDetails[0].ItemName;
 			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].Uom = ItemDetails[0].InventoryUom;
-			if(transtype === "4"){
+			if(transtype === "3"){
 				var oCostToProduce =this.f_getAveragePrice(ItemDetails[0].ItemCode,receivebu);
 				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].CostProd = this.f_getAveragePrice(ItemDetails[0].ItemCode,receivebu);
 			}else{
@@ -419,11 +419,9 @@ sap.ui.define([
 				}else{
 					this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice=oMarketPrice;
 				}
-			} else if (transtype === "2") {
+			}else if (transtype === "2") {
 				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice = oCostToProduce;
 			}else if (transtype === "3") {
-				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice = oCostToProduce;
-			}else if (transtype === "4") {
 				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice = oCostToProduce;
 			}
 			this.oModel.refresh();
@@ -498,26 +496,7 @@ sap.ui.define([
 				this.getView().byId("inputmarkuptype").setValue("");
 				this.oModel.getData().EditRecord.DocumentLines.length = 0;
 				this.oModel.refresh();
-			} else if (transtype === "2") {
-				this.getView().byId("inputbpcode").setValue("");
-				this.getView().byId("inputwhsreceive").setValue("");
-				this.getView().byId("inputbpcode").setEnabled(false);
-				this.getView().byId("inputwhsissue").setEnabled(true);
-				this.getView().byId("inputwhsreceive").setEnabled(false);
-				this.getView().byId("inputmarkuptype").setEnabled(false);
-				this.getView().byId("inputmarkuptype").setValue("");
-				this.oModel.getData().EditRecord.DocumentLines.length = 0;
-				this.oModel.refresh();
-			}else if (transtype === "3") {
-				this.getView().byId("inputbpcode").setValue("");
-				this.getView().byId("inputwhsreceive").setValue("");
-				this.getView().byId("inputbpcode").setEnabled(true);
-				this.getView().byId("inputwhsissue").setEnabled(true);
-				this.getView().byId("inputwhsreceive").setEnabled(false);
-				this.getView().byId("inputmarkuptype").setEnabled(true);
-				this.oModel.getData().EditRecord.DocumentLines.length = 0;
-				this.oModel.refresh();
-			}else if (transtype === "4") {
+			}else if (transtype === "2") {
 				this.getView().byId("inputbpcode").setValue("");
 				this.getView().byId("inputwhsissue").setValue("");
 				this.getView().byId("inputwhsreceive").setValue("");
@@ -527,7 +506,7 @@ sap.ui.define([
 				this.getView().byId("inputmarkuptype").setEnabled(true);
 				this.oModel.getData().EditRecord.DocumentLines.length = 0;
 				this.oModel.refresh();
-			}else if (transtype === "5") {
+			}else if (transtype === "3") {
 				this.getView().byId("inputbpcode").setValue("");
 				this.getView().byId("inputwhsreceive").setValue("");
 				this.getView().byId("inputbpcode").setEnabled(false);
@@ -565,11 +544,11 @@ sap.ui.define([
 					oitemdetails.MarketPriceEnable = false;
 					oitemdetails.UomEnable = false;
 					this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
-					this.oModel.refresh();
+					this.oModel.refresh();	
 				} else if (transtype === "2") {
 					oitemdetails.DescriptionEnable = false;
 					oitemdetails.CostProdEnable = false;
-					oitemdetails.MarkupPriceEnable = false;
+					oitemdetails.MarkupPriceEnable = true;
 					oitemdetails.TransferPriceEnable = false;
 					oitemdetails.MarketPriceEnable = false;
 					oitemdetails.UomEnable = false;
@@ -585,15 +564,6 @@ sap.ui.define([
 					this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
 					this.oModel.refresh();
 				} else if (transtype === "4") {
-					oitemdetails.DescriptionEnable = false;
-					oitemdetails.CostProdEnable = false;
-					oitemdetails.MarkupPriceEnable = true;
-					oitemdetails.TransferPriceEnable = false;
-					oitemdetails.MarketPriceEnable = false;
-					oitemdetails.UomEnable = false;
-					this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
-					this.oModel.refresh();
-				} else if (transtype === "5") {
 					oitemdetails.DescriptionEnable = false;
 					oitemdetails.CostProdEnable = false;
 					oitemdetails.MarkupPriceEnable = false;
