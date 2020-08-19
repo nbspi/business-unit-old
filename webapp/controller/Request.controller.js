@@ -46,6 +46,7 @@ sap.ui.define([
 
 			// Get DateToday
 			this.getView().byId("transactiondate").setDateValue(new Date());
+			this.getView().byId("dpickerpostingdate").setDateValue(new Date());
 
 			//BLANK JSONMODEL FOR ALL ITEMS FOR TEMPLATE
 			this.oMdlAllItems = new JSONModel();
@@ -617,12 +618,15 @@ sap.ui.define([
 			var oPostingDate = this.getView().byId("dpickerpostingdate").getValue();
 			var oRemarks = this.getView().byId("inputremarks").getValue();
 			var oDetails = this.oModel.getData().EditRecord.DocumentLines.length;
+			var oFile = this.getView().byId("fileUploader").getValue();
 			if(oPostingDate===""){
 				sap.m.MessageToast.show("Please Select Posting Date");
 			}else if(oRemarks===""){
 				sap.m.MessageToast.show("Please Enter Remarks");
 			}else if(oDetails===0){
 				sap.m.MessageToast.show("Please Enter Item Details");
+			}else if(oFile === ""){
+				sap.m.MessageToast.show("Please attach a document");
 			}else{
 				this.fAddRequest();
 			}

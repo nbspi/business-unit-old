@@ -33,16 +33,16 @@
             "DescriptionEnable": false
         }]
 },
-    "AllTransactionTypes": [{
-        "key": "1",
-        "value": "1 - BU to BU"
+"AllTransactionTypes": [{
+    "key": "1",
+    "value": "1 - INTRA-ORG-TRANSFER"
+    }, {
+        "key": "3",
+        "value": "3 - Inter Affiliates - Receipt"
     }, {
         "key": "4",
-        "value": "4 - Inter Org - Receipt"
-    },{
-		"key": "5",
-		"value": "5 - Renewable Energy Transfer"
-	}
+        "value": "4 - RE - Electricity Transfer"
+    }
 ],
 "SelectedTransType": {
     "TransactionType": "1"

@@ -41,6 +41,7 @@ sap.ui.define([
 			this.oMdlAllItems.getData().allitems = [];
 				// Get DateToday
 			this.getView().byId("transactiondate").setDateValue(new Date());
+      this.getView().byId("dpickerpostingdate").setDateValue(new Date());
 
 			///Initialize model
 			this.oModel = new JSONModel("model/requestrecord.json");

@@ -45,6 +45,7 @@ sap.ui.define([
 			this.oMdlAllItems.getData().allitems = [];
 				// Get DateToday
 			this.getView().byId("transactiondate").setDateValue(new Date());
+			this.getView().byId("dpickerpostingdate").setDateValue(new Date());
 			this.bCancel = false;
 
 			///Initialize model
@@ -585,6 +586,10 @@ sap.ui.define([
 			var oRemarks = this.oModel.getData().EditRecord.Remarks;
 			var oDetails = this.oModel.getData().EditRecord.DocumentLines;
 			var oCountDetails = this.oModel.getData().EditRecord.DocumentLines.length;
+			var sAttachment = this.getView().byId("fileUploader").getValue();
+			if(sAttachment===""){
+				sap.m.MessageToast.show("Please attach a document");
+			}	 
 			if(oTransType === "4"){
 				this.fCreateJE();
 			}else{

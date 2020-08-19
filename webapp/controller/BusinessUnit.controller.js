@@ -50,6 +50,7 @@ sap.ui.define([
 
 			// Get DateToday
 			this.getView().byId("transactiondate").setDateValue(new Date());
+			this.getView().byId("dpickerpostingdate").setDateValue(new Date());
 
 			//BLANK JSONMODEL FOR ALL ITEMS FOR TEMPLATE
 			this.oMdlAllItems = new JSONModel();
@@ -393,8 +394,8 @@ sap.ui.define([
 				this.getView().byId("inputbpcode").setValue("");
 				this.getView().byId("inputwhsreceive").setValue("");
 				this.getView().byId("inputbpcode").setEnabled(false);
-				this.getView().byId("inputwhsissue").setEnabled(true);
-				this.getView().byId("inputwhsreceive").setEnabled(true);
+				this.getView().byId("inputwhsissue").setEnabled(false);
+				this.getView().byId("inputwhsreceive").setEnabled(false);
 				this.getView().byId("inputmarkuptype").setEnabled(false);
 				this.oModel.getData().EditRecord.DocumentLines.length = 0;
 				this.oModel.refresh();
@@ -403,7 +404,7 @@ sap.ui.define([
 				this.getView().byId("inputwhsreceive").setValue("");
 				this.getView().byId("inputbpcode").setEnabled(true);
 				this.getView().byId("inputwhsissue").setEnabled(true);
-				this.getView().byId("inputwhsreceive").setEnabled(false);
+				this.getView().byId("inputwhsreceive").setEnabled(true);
 				this.getView().byId("inputmarkuptype").setEnabled(true);
 				this.oModel.getData().EditRecord.DocumentLines.length = 0;
 				this.oModel.refresh();
@@ -412,7 +413,7 @@ sap.ui.define([
 				this.getView().byId("inputwhsissue").setValue("");
 				this.getView().byId("inputwhsreceive").setValue("");
 				this.getView().byId("inputbpcode").setEnabled(true);
-				this.getView().byId("inputwhsissue").setEnabled(false);
+				this.getView().byId("inputwhsissue").setEnabled(true);
 				this.getView().byId("inputwhsreceive").setEnabled(true);
 				this.getView().byId("inputmarkuptype").setEnabled(true);
 				this.oModel.getData().EditRecord.DocumentLines.length = 0;
@@ -1400,6 +1401,8 @@ sap.ui.define([
 			var oAttachmentKey = this.FileKey;
 			if (transtype === "") {
 				sap.m.MessageToast.show("Please Select Transaction Type.");
+			}else if(oAttachment === ""){
+				sap.m.MessageToast.show("Please attach a document");
 			}else if (transtype === "1" & transno === "" & oIssueBU === "" & oReceiveBU === "") {
 				sap.m.MessageToast.show("Please Select Issuing/Receiving BU");
 			}else if(oCountDetails===0){

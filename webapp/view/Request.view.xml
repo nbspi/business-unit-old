@@ -85,13 +85,13 @@
 											</Input> -->
 
 											<!--Issueing Bu-->
-											<Label text="Issuing BU" width="100%">
+											<Label text="From" width="100%">
 												<layoutData>
 													<l:GridData span="L3 M2 S12"/>
 												</layoutData>
 											</Label>
 											<Input width="100%" id="inputwhsissue" value="{/EditRecord/IssueBU}" showValueHelp="true" valueHelpOnly="true"
-												valueHelpRequest="handleValueHelpIssueingBu">
+												valueHelpRequest="handleValueHelpIssueingBu" editable="false">
 												<layoutData>
 													<l:GridData span="L3 M4 S12"/>
 												</layoutData>
@@ -110,7 +110,8 @@
 													<l:GridData span="L3 M2 S12"/>
 												</layoutData>
 											</Label>
-											<DatePicker id="dpickerpostingdate" value="{/EditRecord/PostingDate}" valueFormat="yyyy-MM-dd" displayFormat="yyyy-MM-dd" change="handleChange">
+											<DatePicker id="dpickerpostingdate" valueFormat="" displayFormat="yyyy-MM-dd" change="handleChange" editable="false">
+											<!-- <DatePicker id="dpickerpostingdate" value="{/EditRecord/PostingDate}" valueFormat="yyyy-MM-dd" displayFormat="yyyy-MM-dd" change="handleChange" editable="false"> -->
 												<layoutData>
 													<l:GridData span="L3 M4 S12"/>
 												</layoutData>
@@ -118,13 +119,13 @@
 
 
 											<!--Receiving BU -->
-											<Label text="Requesting BU" width="100%">
+											<Label text="To" width="100%">
 												<layoutData>
 													<l:GridData span="L3 M2 S12"/>
 												</layoutData>
 											</Label>
 											<Input width="100%" id="inputwhsreceive" value="{/EditRecord/ReceiveBU}" showValueHelp="true" valueHelpOnly="true"
-												valueHelpRequest="handleValueHelpRequestingBu">
+												valueHelpRequest="handleValueHelpRequestingBu" editable="false">
 												<layoutData>
 													<l:GridData span="L3 M4 S12"/>
 												</layoutData>

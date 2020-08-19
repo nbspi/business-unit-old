@@ -102,7 +102,7 @@
 													<l:GridData span="L3 M4 S12"/>
 												</layoutData>
 											</DatePicker>
-											<Label text="Issuing BU" width="100%">
+											<Label text="FROM" width="100%">
 												<layoutData>
 													<l:GridData span="L3 M2 S12"/>
 												</layoutData>
@@ -119,13 +119,14 @@
 													<l:GridData span="L3 M2 S12"/>
 												</layoutData>
 											</Label>
-											<DatePicker id="dpickerpostingdate" value="{/EditRecord/PostingDate}" valueFormat="yyyy-MM-dd" displayFormat="yyyy-MM-dd" change="handleChange">
+											<DatePicker id="dpickerpostingdate" valueFormat="" displayFormat="yyyy-MM-dd" change="handleChange" editable="false">
+											<!-- <DatePicker id="dpickerpostingdate" value="{/EditRecord/PostingDate}" valueFormat="yyyy-MM-dd" displayFormat="yyyy-MM-dd" change="handleChange"> -->
 												<layoutData>
 													<l:GridData span="L3 M4 S12"/>
 												</layoutData>
 											</DatePicker>
 											<!--Receiving BU -->
-											<Label text="Receiving BU" width="100%">
+											<Label text="TO" width="100%">
 												<layoutData>
 													<l:GridData span="L3 M2 S12"/>
 												</layoutData>

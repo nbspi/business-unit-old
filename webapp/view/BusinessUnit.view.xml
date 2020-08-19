@@ -119,7 +119,7 @@
 											</Input> -->
 
 											<!--Issueing Bu-->
-											<Label text="Issuing BU" width="100%">
+											<Label text="From" width="100%">
 												<layoutData>
 													<l:GridData span="L3 M2 S12"/>
 												</layoutData>
@@ -130,13 +130,6 @@
 													<l:GridData span="L3 M4 S12"/>
 												</layoutData>
 											</Input>
-											<!--<Select forceSelection="false" selectedKey="{/EditRecord/IssueBU}" items="{/AllMarkupTypes}">-->
-											<!--	<core:Item key="{key}" text="{value}"/>-->
-											<!--	<layoutData>-->
-											<!--		<l:GridData span="L3 M4 S12"/>-->
-											<!--	</layoutData>-->
-											<!--</Select> -->
-
 
 											<!--Posting Date-->
 											<Label text="Posting Date" width="100%">
@@ -144,7 +137,8 @@
 													<l:GridData span="L3 M2 S12"/>
 												</layoutData>
 											</Label>
-											<DatePicker id="dpickerpostingdate" value="{/EditRecord/PostingDate}" valueFormat="yyyy-MM-dd" displayFormat="yyyy-MM-dd" change="handleChange">
+											<DatePicker id="dpickerpostingdate" valueFormat="" displayFormat="yyyy-MM-dd" change="handleChange" editable="false">
+											<!-- <DatePicker id="dpickerpostingdate" value="{/EditRecord/PostingDate}" valueFormat="yyyy-MM-dd" displayFormat="yyyy-MM-dd" change="handleChange"> -->
 												<layoutData>
 													<l:GridData span="L3 M4 S12"/>
 												</layoutData>
@@ -152,7 +146,7 @@
 
 
 											<!--Receiving BU -->
-											<Label text="Receiving BU" width="100%">
+											<Label text="To" width="100%">
 												<layoutData>
 													<l:GridData span="L3 M2 S12"/>
 												</layoutData>

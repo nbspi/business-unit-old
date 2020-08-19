@@ -45,6 +45,7 @@ sap.ui.define([
       this.oMdlAllItems.getData().allitems = [];
         // Get DateToday
       this.getView().byId("transactiondate").setDateValue(new Date());
+      this.getView().byId("dpickerpostingdate").setDateValue(new Date());
 
       ///Initialize model
       this.oModel = new JSONModel("model/pendingrequest.json");
@@ -367,10 +368,13 @@ sap.ui.define([
         var oRemarks = this.oModel.getData().EditRecord.Remarks;
         var oDetails = this.oModel.getData().EditRecord.DocumentLines;
         var oCountDetails = this.oModel.getData().EditRecord.DocumentLines.length;
+        var sAttachment = this.getView().byId("fileUploader").getValue(); 
         var oAttachment = this.Attachment;
         var oAttachmentKey = this.FileKey;
         if (transtype === "" || transno === "") {
           sap.m.MessageToast.show("Please Select Transaction.");
+        }else if(sAttachment===""){
+          sap.m.MessageToast.show("Please attach a document");
         }else if(oCountDetails===0){
           sap.m.MessageToast.show("Please Select Transaction.");
         }else if(transtype === "1"){
