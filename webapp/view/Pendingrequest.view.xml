@@ -117,7 +117,7 @@
 												</layoutData>
 											</Label>
 											<Input width="100%" id="inputwhsissue" value="{/EditRecord/IssueBU}" showValueHelp="true" valueHelpOnly="true"
-												valueHelpRequest="handleValueHelpWhsCode" editable="false">
+												valueHelpRequest="handleValueHelpWhsCode" >
 												<layoutData>
 													<l:GridData span="L3 M4 S12"/>
 												</layoutData>
@@ -151,7 +151,7 @@
 												</layoutData>
 											</Label>
 											<Input width="100%" id="inputwhsreceive" value="{/EditRecord/ReceiveBU}" showValueHelp="true" valueHelpOnly="true"
-												valueHelpRequest="handleValueHelpWhsCodeReceive" editable="false">
+												valueHelpRequest="handleValueHelpWhsCodeReceive" >
 												<layoutData>
 													<l:GridData span="L3 M4 S12"/>
 												</layoutData>

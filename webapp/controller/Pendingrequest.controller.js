@@ -46,6 +46,8 @@ sap.ui.define([
         // Get DateToday
       this.getView().byId("transactiondate").setDateValue(new Date());
       this.getView().byId("dpickerpostingdate").setDateValue(new Date());
+      //get warehouse
+      this.fGetAllWareHouse();
 
       ///Initialize model
       this.oModel = new JSONModel("model/pendingrequest.json");
@@ -1128,6 +1130,137 @@ sap.ui.define([
           }
         }
       });
+    },
+    ///GETTING WAREHOUSE LIST FROM FRAGMENTS
+		handleValueHelpWhsCode: function (oEvent) {
+			if (!this._oValueHelpDialogscodeissue) {
+				Fragment.load({
+					name: "com.apptech.bfi-businessunit.view.fragments.WarehouseDialogFragment",
+					controller: this
+				}).then(function (oValueHelpDialogs) {
+					this._oValueHelpDialogscodeissue = oValueHelpDialogs;
+					this.getView().addDependent(this._oValueHelpDialogscodeissue);
+					this.f_configValueHelpDialogsWhsIssue();
+					this._oValueHelpDialogscodeissue.open();
+				}.bind(this));
+			} else {
+				this.f_configValueHelpDialogsWhsIssue();
+				this._oValueHelpDialogscodeissue.open();
+			}
+		},
+		//Warehouse List For Receiving BU from Fragment
+		handleValueHelpWhsCodeReceive: function () {
+			if (!this._oValueHelpDialogscodereceive) {
+				Fragment.load({
+					name: "com.apptech.bfi-businessunit.view.fragments.WarehouseDialogFragmentReceive",
+					controller: this
+				}).then(function (oValueHelpDialogs) {
+					this._oValueHelpDialogscodereceive = oValueHelpDialogs;
+					this.getView().addDependent(this._oValueHelpDialogscodereceive);
+					this.f_configValueHelpDialogsWhsReceive();
+					this._oValueHelpDialogscodereceive.open();
+
+				}.bind(this));
+			} else {
+				this.f_configValueHelpDialogsWhsReceive();
+				this._oValueHelpDialogscodereceive.open();
+			}
+    },
+    ///GETTING ALL ISSUING WAREHOUSE
+		f_configValueHelpDialogsWhsIssue: function () {
+			var sInputValue = this.byId("inputwhsissue").getValue();
+			var aList = this.oModel.getProperty("/AllWarehouses");
+			aList.forEach(function (oRecord) {
+				oRecord.selected = (oRecord.WhsCode === sInputValue);
+			});
+		},
+		///GETTING ALL RECEIVING WAREHOUSE
+		f_configValueHelpDialogsWhsReceive: function () {
+			var sInputValuereceive = this.byId("inputwhsreceive").getValue();
+
+			var aList = this.oModel.getProperty("/AllWarehouses");
+			aList.forEach(function (oRecord) {
+				oRecord.selected = (oRecord.WhsCode === sInputValuereceive);
+			});
+    },
+    ///Search on Issuing Whs
+		handleSearchWhs: function (oEvent) {
+			var sValue = oEvent.getParameter("value");
+			var oFilters = new Filter([
+				new Filter("WhsCode", FilterOperator.Contains, sValue),
+				new Filter("WhsName", FilterOperator.Contains, sValue)
+				], false);
+			var oBinding = oEvent.getSource().getBinding("items");
+			oBinding.filter(oFilters);
+		},
+
+		///Search on Receiving Whs
+		handleSearchWhsreceive: function (oEvent) {
+			var sValue = oEvent.getParameter("value");
+			var oFilters = new Filter([
+				new Filter("WhsCode", FilterOperator.Contains, sValue),
+				new Filter("WhsName", FilterOperator.Contains, sValue)
+				], false);
+			var oBinding = oEvent.getSource().getBinding("items");
+			oBinding.filter(oFilters);
+    },
+    //Closing selection on Issuing Whs
+		handleValueHelpCloseWhs: function (oEvent) {
+			var aContexts = oEvent.getParameter("selectedContexts");
+			var CardDetails = {};
+			if (aContexts && aContexts.length) {
+
+				CardDetails = aContexts.map(function (oContext) {
+					var oCard = {};
+					oCard.WhsCode = oContext.getObject().WhsCode;
+					oCard.WhsName = oContext.getObject().WhsName;
+					return oCard;
+				});
+			}
+			oEvent.getSource().getBinding("items").filter([]);
+			this.getView().byId("inputwhsissue").setValue(CardDetails[0].WhsName);
+			this.oIssueBu=CardDetails[0].WhsCode;
+			this.oModel.refresh();
+		},
+		//Closing selection on Receiving Whs
+		handleValueHelpCloseWhsreceive: function (oEvent) {
+			var aContexts = oEvent.getParameter("selectedContexts");
+			var CardDetails = {};
+			if (aContexts && aContexts.length) {
+
+				CardDetails = aContexts.map(function (oContext) {
+					var oCard = {};
+					oCard.WhsCode = oContext.getObject().WhsCode;
+					oCard.WhsName = oContext.getObject().WhsName;
+					return oCard;
+				});
+			}
+			oEvent.getSource().getBinding("items").filter([]);
+			this.getView().byId("inputwhsreceive").setValue(CardDetails[0].WhsName);
+			this.oReceiveBu=CardDetails[0].WhsCode;
+			this.oModel.refresh();
+    },
+    fGetAllWareHouse: function(){
+      $.ajax({
+				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getallwarehouses&value1&value2&value3&value4",
+				type: "GET",
+				datatype:"json",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
+			  	},
+				error: function (xhr, status, error) {
+					var Message = xhr.responseJSON["error"].message.value;
+					console.error(JSON.stringify(Message));
+					sap.m.MessageToast.show(Message);
+				},
+				success: function (json) {},
+				context: this
+			}).done(function (results) {
+				if (results) {
+					this.oModel.getData().AllWarehouses = results;
+					this.oMdlAllRecord.refresh();
+				}
+			});
     }
 
   });

@@ -269,7 +269,7 @@ sap.ui.define([
 			oBusiness_Unit.U_APP_TransNo = sGeneratedTransNo;
 			oBusiness_Unit.U_APP_TransDate = this.getTodaysDate();
 			oBusiness_Unit.U_APP_CardCode = oCardCode;
-			oBusiness_Unit.U_APP_PostingDate = oPostingDate;
+			oBusiness_Unit.U_APP_PostingDate = this.getTodaysDate();//oPostingDate;
 			oBusiness_Unit.U_APP_MarkupType = oMarkupType;
 			oBusiness_Unit.U_APP_IssueBU = oIssueBU;
 			oBusiness_Unit.U_APP_ReceivingBU = oReceiveBU;
@@ -394,8 +394,8 @@ sap.ui.define([
 				this.getView().byId("inputbpcode").setValue("");
 				this.getView().byId("inputwhsreceive").setValue("");
 				this.getView().byId("inputbpcode").setEnabled(false);
-				this.getView().byId("inputwhsissue").setEnabled(false);
-				this.getView().byId("inputwhsreceive").setEnabled(false);
+				this.getView().byId("inputwhsissue").setEnabled(true);
+				this.getView().byId("inputwhsreceive").setEnabled(true);
 				this.getView().byId("inputmarkuptype").setEnabled(false);
 				this.oModel.getData().EditRecord.DocumentLines.length = 0;
 				this.oModel.refresh();
@@ -404,7 +404,7 @@ sap.ui.define([
 				this.getView().byId("inputwhsreceive").setValue("");
 				this.getView().byId("inputbpcode").setEnabled(true);
 				this.getView().byId("inputwhsissue").setEnabled(true);
-				this.getView().byId("inputwhsreceive").setEnabled(true);
+				this.getView().byId("inputwhsreceive").setEnabled(false);
 				this.getView().byId("inputmarkuptype").setEnabled(true);
 				this.oModel.getData().EditRecord.DocumentLines.length = 0;
 				this.oModel.refresh();
@@ -413,7 +413,7 @@ sap.ui.define([
 				this.getView().byId("inputwhsissue").setValue("");
 				this.getView().byId("inputwhsreceive").setValue("");
 				this.getView().byId("inputbpcode").setEnabled(true);
-				this.getView().byId("inputwhsissue").setEnabled(true);
+				this.getView().byId("inputwhsissue").setEnabled(false);
 				this.getView().byId("inputwhsreceive").setEnabled(true);
 				this.getView().byId("inputmarkuptype").setEnabled(true);
 				this.oModel.getData().EditRecord.DocumentLines.length = 0;
@@ -491,7 +491,7 @@ sap.ui.define([
 		handleValueHelpBPCode: function () {
 			var TransType = this.getView().byId("TransID").getSelectedKey();
 			var customertype ="";
-			if (TransType ==="4"){
+			if (TransType ==="3"){
 				customertype = "S";
 			}else{
 				customertype = "C";
@@ -713,10 +713,11 @@ sap.ui.define([
 				var oCostToProduce =this.f_getAveragePrice(ItemDetails[0].ItemCode,issuebu);
 				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].CostProd = this.f_getAveragePrice(ItemDetails[0].ItemCode,issuebu);
 			}
-			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].MarketPrice = this.f_getMarketPrice(ItemDetails[0].ItemCode);
+			// this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].MarketPrice = this.f_getMarketPrice(ItemDetails[0].ItemCode);
 			var oMarketPrice = this.f_getMarketPrice(ItemDetails[0].ItemCode);
 
 			if (transtype === "1") {
+				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].MarketPrice = this.f_getMarketPrice(ItemDetails[0].ItemCode);
 				if(oCostToProduce <= oMarketPrice){
 					this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice = oCostToProduce;
 				}else{
