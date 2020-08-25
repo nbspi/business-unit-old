@@ -817,7 +817,7 @@ sap.ui.define([
 
 		},
 		////POSTING BU TO BU BUSINESS TYPE
-		fBuToBu: function (transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey) {
+		fBuToBu: function (transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey,transno) {
 			AppUI5.showBusyIndicator(10000);
 			//this.iTranNum = AppUI5.fGenerateTransNum(this.sDataBase);
 			//Initialize Variables
@@ -828,7 +828,7 @@ sap.ui.define([
 			oGoodsIssue.Comments = this.oModel.getData().EditRecord.Remarks;
 			oGoodsIssue.AttachmentEntry = oAttachmentKey;
 			oGoodsIssue.U_APP_GI_TransType = "BU";
-			oGoodsIssue.U_APP_BU_TransNum = "";
+			oGoodsIssue.U_APP_BU_TransNum = transno;
 			oGoodsIssue.DocumentLines = [];
 			///LOOP FOR THE DETAILS
 			var d;
@@ -1149,7 +1149,7 @@ sap.ui.define([
 		},
 
 		////POSTING ON BU TO INTER ORG ISSUE
-		fBuToInterOrgIssue: function (transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey) {
+		fBuToInterOrgIssue: function (transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey,transno) {
 			//Initialize Variables
 			AppUI5.showBusyIndicator(10000);
 			var ostatus="2";
@@ -1161,6 +1161,7 @@ sap.ui.define([
 			oGoodsIssue.Comments = this.oModel.getData().EditRecord.Remarks;
 			oGoodsIssue.AttachmentEntry = this.FileKey;
 			oGoodsIssue.U_APP_GI_TransType = "BU";
+			oGoodsIssue.U_APP_BU_TransNum = transno;
 			oGoodsIssue.DocumentLines = [];
 			///LOOP FOR THE DETAILS
 			var d;
@@ -1238,7 +1239,7 @@ sap.ui.define([
 			}); ////GOODS ISSUE END
 		},
 		///POSTING ON BU TO INTER ORG ISSUE
-		fBuToInterOrgReceipt: function (transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey) {
+		fBuToInterOrgReceipt: function (transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey,transno) {
 			AppUI5.showBusyIndicator(10000);
 			//Initialize Variables
 			var ostatus="2";
@@ -1254,6 +1255,7 @@ sap.ui.define([
 			oGoodsReceipt.Comments = this.oModel.getData().EditRecord.Remarks;
 			oGoodsReceipt.AttachmentEntry = this.FileKey;
 			// oGoodsReceipt.U_APP_GR_TransType = "BU";
+			oGoodsReceipt.U_APP_BU_TransNum = transno;
 			oGoodsReceipt.DocumentLines = [];
 			///LOOP FOR THE DETAILS
 			var d;
@@ -1332,7 +1334,7 @@ sap.ui.define([
 			});
 		},
 		////POSTING Renewable Energy Transfer BUSINESS TYPE
-		fRenewableEnergyTransfer: function (transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey) {
+		fRenewableEnergyTransfer: function (transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey,transno) {
 			AppUI5.showBusyIndicator(10000);
 			//Initialize Variables
 			var ostatus= "1";
@@ -1342,6 +1344,7 @@ sap.ui.define([
 			oGoodsIssue.Comments = this.oModel.getData().EditRecord.Remarks;
 			oGoodsIssue.U_APP_GI_TransType = "BU";
 			oGoodsIssue.AttachmentEntry = oAttachmentKey;
+			oGoodsReceipt.U_APP_BU_TransNum = transno;
 			oGoodsIssue.DocumentLines = [];
 			///LOOP FOR THE DETAILS
 			var d;
@@ -1400,29 +1403,32 @@ sap.ui.define([
 			var oCountDetails = this.oModel.getData().EditRecord.DocumentLines.length;
 			var oAttachment = this.getView().byId("fileUploader").getValue();
 			var oAttachmentKey = this.FileKey;
+			if (transno === ""){
+				var transno = AppUI5.fGenerateTransNum(this.sDataBase);
+			}
 			if (transtype === "") {
 				sap.m.MessageToast.show("Please Select Transaction Type.");
 			}else if(oAttachment === ""){
 				sap.m.MessageToast.show("Please attach a document");
-			}else if (transtype === "1" & transno === "" & oIssueBU === "" & oReceiveBU === "") {
+			}else if (transtype === "1" & oIssueBU === "" || oReceiveBU === "") {
 				sap.m.MessageToast.show("Please Select Issuing/Receiving BU");
 			}else if(oCountDetails===0){
 				sap.m.MessageToast.show("Please Enter Item Details");
-			}else if (transtype === "1" & transno === "" & oIssueBU !== "" & oReceiveBU !== "") {
+			}else if (transtype === "1" & oIssueBU !== "" & oReceiveBU !== "") {
 				/////Call BU to BU AND DRAFT transaction Function
-				this.fBuToBu(transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey);
-			}else if (transtype === "2" & transno === "") {
-				/////Call Bu to Charge to Expense and Draft
-				this.fBUtoChargetoExpense(transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey);
-			}else if (transtype === "3" & transno === "") {
+				this.fBuToBu(transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey,transno);
+			// }else if (transtype === "2" & transno === "") {
+			// 	/////Call Bu to Charge to Expense and Draft
+			// 	this.fBUtoChargetoExpense(transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey);
+			}else if (transtype === "2") {
 				/////Call Bu to Inter Org - ISSUE and Draft
-				this.fBuToInterOrgIssue(transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey);
-			}else if (transtype === "4" & transno === "") {
+				this.fBuToInterOrgIssue(transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey,transno);
+			}else if (transtype === "3") {
 				/////Call Bu to Inter Org - Receipt and Draft
-				this.fBuToInterOrgReceipt(transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey);
-			}else if (transtype === "5" & transno === "") {
+				this.fBuToInterOrgReceipt(transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey,transno);
+			}else if (transtype === "4") {
 				/////Call Renewable Energy Transfer Function
-				this.fRenewableEnergyTransfer(transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey);
+				this.fRenewableEnergyTransfer(transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey,transno);
 			}
 		},
 		//Batch Request for Updating Draft

@@ -461,7 +461,7 @@ sap.ui.define([
 			var d;
 			for (d = 0; d < this.oModel.getData().EditRecord.DocumentLines.length; d++) {
 				// oGoodsIssueHeader.WarehouseCode = this.oModel.getData().EditRecord.IssueBU;
-				oGoodsReceiptHeader.WarehouseCode = (this.bCancel ? this.oReceiveBu : this.oIssueBu);
+				oGoodsReceiptHeader.WarehouseCode = (this.bCancel ? this.oIssueBu : this.oReceiveBu);
 				oGoodsReceiptHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
 				oGoodsReceiptHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
 				var oTransferPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
@@ -585,11 +585,7 @@ sap.ui.define([
 			var oReceiveBU = this.oReceiveBu;
 			var oRemarks = this.oModel.getData().EditRecord.Remarks;
 			var oDetails = this.oModel.getData().EditRecord.DocumentLines;
-			var oCountDetails = this.oModel.getData().EditRecord.DocumentLines.length;
-			var sAttachment = this.getView().byId("fileUploader").getValue();
-			if(sAttachment===""){
-				sap.m.MessageToast.show("Please attach a document");
-			}	 
+			var oCountDetails = this.oModel.getData().EditRecord.DocumentLines.length; 
 			if(oTransType === "4"){
 				this.fCreateJE();
 			}else{
@@ -612,6 +608,7 @@ sap.ui.define([
 			this.bCancel = true;
 			if(oTransType !== "3"){
 				this.fAddReceipt(oTransType,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails);
+				sap.m.MessageToast.show("Transaction Cancelled!");
 			}
 		},
 		//GETTING DATE NOW

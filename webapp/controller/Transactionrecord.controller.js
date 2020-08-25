@@ -13,7 +13,7 @@ sap.ui.define([
   	return Controller.extend("com.apptech.bfi-businessunit.controller.Transactionrecord", {
 		onRoutePatternMatched: function(event){
 			this.fClearField();
-			this.fprepareTable("",0);
+			this.fprepareTable(false,0);
 			this.oModel.refresh();
 		},
 		onInit: function () {
@@ -228,7 +228,7 @@ sap.ui.define([
 			var aReturnResult = [];
 			var urltag = "";
 			if (value1 ===""){
-				urltag ="https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&QUERYTAG=getTransactions&VALUE1=1&VALUE2=0&VALUE3=&VALUE4=";
+				urltag ="https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&QUERYTAG=getFilteredTransactions&VALUE1=1&VALUE2=0&VALUE3=&VALUE4=";// getTransactions
 			}else{
 				urltag ="https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&QUERYTAG=getFilteredTransactions&VALUE1="+ value1 +"&VALUE2="+ value2 +"&VALUE3=&VALUE4=";
 			}
@@ -1521,6 +1521,9 @@ sap.ui.define([
 					var Message = xhr.responseJSON["error"].message.value;
 					console.error(JSON.stringify(Message));
 					sap.m.MessageToast.show(Message);
+					if (Message === "Invalid session."){
+						this.fRoutToLogin();
+					}
 					AppUI5.hideBusyIndicator();
 				},
 				success: function (json) {
@@ -1740,6 +1743,10 @@ sap.ui.define([
 			this.getView().byId("transferprice").setValue(oTransferPrice);
 			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice=oTransferPrice;
 			this.oModel.refresh();
+		},
+		fRoutToLogin: function(){
+			jQuery.sap.storage.Storage.clear();
+			sap.ui.core.UIComponent.getRouterFor(this).navTo("Login", null, true);
 		}
   	});
 });

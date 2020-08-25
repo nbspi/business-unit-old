@@ -46,12 +46,14 @@ sap.ui.define([
         // Get DateToday
       this.getView().byId("transactiondate").setDateValue(new Date());
       this.getView().byId("dpickerpostingdate").setDateValue(new Date());
-      //get warehouse
-      this.fGetAllWareHouse();
 
       ///Initialize model
       this.oModel = new JSONModel("model/pendingrequest.json");
       this.getView().setModel(this.oModel);
+
+      ////get warehouse
+      this.fGetAllWareHouse();
+
       //// INITIALIZE Variables FOR TABLE
       this.isClickedIssue = true;
       this.aCols = [];
@@ -370,13 +372,10 @@ sap.ui.define([
         var oRemarks = this.oModel.getData().EditRecord.Remarks;
         var oDetails = this.oModel.getData().EditRecord.DocumentLines;
         var oCountDetails = this.oModel.getData().EditRecord.DocumentLines.length;
-        var sAttachment = this.getView().byId("fileUploader").getValue(); 
         var oAttachment = this.Attachment;
         var oAttachmentKey = this.FileKey;
         if (transtype === "" || transno === "") {
           sap.m.MessageToast.show("Please Select Transaction.");
-        }else if(sAttachment===""){
-          sap.m.MessageToast.show("Please attach a document");
         }else if(oCountDetails===0){
           sap.m.MessageToast.show("Please Select Transaction.");
         }else if(transtype === "1"){
@@ -1206,7 +1205,11 @@ sap.ui.define([
     },
     //Closing selection on Issuing Whs
 		handleValueHelpCloseWhs: function (oEvent) {
-			var aContexts = oEvent.getParameter("selectedContexts");
+      var aContexts = oEvent.getParameter("selectedContexts");
+      if (aContexts === undefined){
+        //sap.m.MessageToast.show("No Selected Whs");
+        return
+      }
 			var CardDetails = {};
 			if (aContexts && aContexts.length) {
 
@@ -1258,7 +1261,8 @@ sap.ui.define([
 			}).done(function (results) {
 				if (results) {
 					this.oModel.getData().AllWarehouses = results;
-					this.oMdlAllRecord.refresh();
+          this.oMdlAllRecord.refresh();
+          this.oModel.refresh();
 				}
 			});
     }
