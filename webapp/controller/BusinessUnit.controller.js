@@ -1203,7 +1203,7 @@ sap.ui.define([
 					oInvoice.DocumentLines = [];
 					///HARD CODED ACCOUNT CODE FOR TESTING
 					oInvoiceHeader.ItemDescription = oDescription;
-					oInvoiceHeader.AccountCode ="4110101101";
+					oInvoiceHeader.AccountCode ="4110101101-000-000-000-000-000"; //4110101101
 					oInvoiceHeader.LineTotal =results.DocTotal;
 					oInvoice.DocumentLines.push(JSON.parse(JSON.stringify(oInvoiceHeader)));
 
@@ -1349,7 +1349,7 @@ sap.ui.define([
 			oGoodsIssue.Comments = this.oModel.getData().EditRecord.Remarks;
 			oGoodsIssue.U_APP_GI_TransType = "BU";
 			oGoodsIssue.AttachmentEntry = oAttachmentKey;
-			oGoodsReceipt.U_APP_BU_TransNum = transno;
+			oGoodsIssue.U_APP_BU_TransNum = transno;
 			oGoodsIssue.DocumentLines = [];
 			///LOOP FOR THE DETAILS
 			var d;

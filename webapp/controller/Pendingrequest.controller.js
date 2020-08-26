@@ -498,7 +498,7 @@ sap.ui.define([
           oInvoice.DocumentLines = [];
           ///HARD CODED ACCOUNT CODE FOR TESTING
           oInvoiceHeader.ItemDescription = oDescription;
-          oInvoiceHeader.AccountCode ="4110101101";
+          oInvoiceHeader.AccountCode ="4110101101-000-000-000-000-000";
           oInvoiceHeader.TaxCode = "GST-EO";
           oInvoiceHeader.LineTotal =results.DocTotal;
           oInvoice.DocumentLines.push(JSON.parse(JSON.stringify(oInvoiceHeader)));
@@ -629,7 +629,7 @@ sap.ui.define([
           oInvoice.DocumentLines = [];
           ///HARD CODED ACCOUNT CODE FOR TESTING
           oInvoiceHeader.ItemDescription = oDescription;
-          oInvoiceHeader.AccountCode ="4110101101";
+          oInvoiceHeader.AccountCode ="4110101101-000-000-000-000-000";
           oInvoiceHeader.LineTotal =results.DocTotal;
           oInvoice.DocumentLines.push(JSON.parse(JSON.stringify(oInvoiceHeader)));
           $.ajax({
@@ -777,7 +777,7 @@ sap.ui.define([
           oInvoice.DocumentLines = [];
           ///HARD CODED ACCOUNT CODE FOR TESTING
           oInvoiceHeader.ItemDescription = oDescription;
-          oInvoiceHeader.AccountCode ="4110101101";
+          oInvoiceHeader.AccountCode ="4110101101-000-000-000-000-000";
           oInvoiceHeader.LineTotal =results.DocTotal;
           oInvoice.DocumentLines.push(JSON.parse(JSON.stringify(oInvoiceHeader)));
 
