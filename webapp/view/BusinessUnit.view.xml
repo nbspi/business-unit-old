@@ -237,6 +237,13 @@
 														<!--<Text text="{oMdlAP>DocNum}"/>-->
 													</t:template>
 												</t:Column>
+												<t:Column width="7rem" visible="false">
+													<Label text="UOMEntry"/>
+													<t:template>
+														<Input value="{UomEntry}"  textAlign="End" fieldWidth="80%" width="100%" visible="false"/>
+														<!--<Text text="{oMdlAP>DocNum}"/>-->
+													</t:template>
+												</t:Column>
 
 
 												<t:Column width="9rem">

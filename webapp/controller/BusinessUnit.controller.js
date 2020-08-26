@@ -699,6 +699,7 @@ sap.ui.define([
 					oItem.ItemCode = oContext.getObject().ItemCode;
 					oItem.ItemName = oContext.getObject().ItemName;
 					oItem.InventoryUom = oContext.getObject().InvntryUom;
+					oItem.UomEntry = oContext.getObject().UomEntry;
 					return oItem;
 				});
 			}
@@ -706,6 +707,7 @@ sap.ui.define([
 			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].ItemNum = ItemDetails[0].ItemCode;
 			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].Description = ItemDetails[0].ItemName;
 			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].Uom = ItemDetails[0].InventoryUom;
+			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].UomEntry = ItemDetails[0].UomEntry;
 			if(transtype === "4"){
 				var oCostToProduce =this.f_getAveragePrice(ItemDetails[0].ItemCode,receivebu);
 				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].CostProd = this.f_getAveragePrice(ItemDetails[0].ItemCode,receivebu);
@@ -1271,11 +1273,14 @@ sap.ui.define([
 				}else{
 					oInvoiceHeader.UnitPrice = oTransferPrice;
 				}
+				oInvoiceHeader.UoMEntry = this.oModel.getData().EditRecord.DocumentLines[d].UomEntry;
+				oInvoiceHeader.VatGroup = "IVAT-E";
 				///Goods Issue Details
 				oGoodsReceiptHeader.WarehouseCode = this.oReceiveBu;
 				oGoodsReceiptHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
 				oGoodsReceiptHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
 				oGoodsReceiptHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
+				oGoodsReceiptHeader.UoMEntry = this.oModel.getData().EditRecord.DocumentLines[d].UomEntry;
 
 				oInvoice.DocumentLines.push(JSON.parse(JSON.stringify(oInvoiceHeader)));
 				oGoodsReceipt.DocumentLines.push(JSON.parse(JSON.stringify(oGoodsReceiptHeader)));
@@ -1410,7 +1415,7 @@ sap.ui.define([
 				sap.m.MessageToast.show("Please Select Transaction Type.");
 			}else if(oAttachment === ""){
 				sap.m.MessageToast.show("Please attach a document");
-			}else if (transtype === "1" & oIssueBU === "" || oReceiveBU === "") {
+			}else if (transtype === "1" & oIssueBU === "" & oReceiveBU === "") {
 				sap.m.MessageToast.show("Please Select Issuing/Receiving BU");
 			}else if(oCountDetails===0){
 				sap.m.MessageToast.show("Please Enter Item Details");

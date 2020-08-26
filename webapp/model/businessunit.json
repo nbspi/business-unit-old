@@ -16,6 +16,7 @@
 		"BPCodeDisabled": true,
 		"BPNameDisabled": true,
 		"ReceiveBUDisabled": true,
+		"UomEntry": "",
 		"DocumentLines": []
 	},
 	"AllItems": [{
