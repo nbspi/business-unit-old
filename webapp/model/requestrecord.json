@@ -33,15 +33,15 @@
             "DescriptionEnable": false
         }]
 },
-    "AllTransactionTypes": [{
+"AllTransactionTypes": [{
         "key": "1",
-        "value": "1 - BU to BU"
+        "value": "1 - INTRA-ORG-TRANSFER"
     }, {
         "key": "2",
-        "value": "2 - Inter Org - Issue"
+        "value": "2 - Inter Affiliates - Issue"
     }, {
         "key": "3",
-        "value": "3 - Inter Org - Receipt"
+        "value": "3 - Inter Affiliates - Receipt"
     }
 ],
 "SelectedTransType": {
