@@ -211,7 +211,7 @@ sap.ui.define([
 					this.oModel.refresh();
 				} else if (transtype === "3") {
 					oitemdetails.DescriptionEnable = false;
-					oitemdetails.CostProdEnable = false;
+					oitemdetails.CostProdEnable = true;
 					oitemdetails.MarkupPriceEnable = true;
 					oitemdetails.TransferPriceEnable = false;
 					oitemdetails.MarketPriceEnable = false;
