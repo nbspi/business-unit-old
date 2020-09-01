@@ -16,6 +16,8 @@ sap.ui.define([
 		},
 		onRoutePatternMatched: function(event){
 			this.fClearField();
+			this.gGetUserRoles();
+			this.gGetDefaultRole();
 			},
 		onInit: function () {
 			///ON LOAD
@@ -89,6 +91,12 @@ sap.ui.define([
 					this.oMdlAllRecord.refresh();
 				}
 			});
+			//Get User Roles
+			this.gGetUserRoles();
+			//Get Default & Set User Role
+			//this.oModel.getData().EditRecord = [];
+			this.gGetDefaultRole();
+
 			this.isDraft = false;
 
 			//// INITIALIZE Variables FOR TABLE
@@ -164,6 +172,7 @@ sap.ui.define([
 				this.oModel.getData().EditRecord.IssueBU = "";
 				this.oModel.getData().EditRecord.ReceiveBU = "";
 				this.oModel.getData().EditRecord.Remarks = "";
+				this.oModel.getData().EditRecord.UserRole = "";
 				this.oModel.getData().EditRecord.DocumentLines.length = 0;
 				this.oIssueBu = "";
 				this.oReceiveBu= "";
@@ -278,6 +287,7 @@ sap.ui.define([
 			oBusiness_Unit.U_APP_DocType = oDocType;
 			oBusiness_Unit.U_APP_Attachment = oAttachment;
 			oBusiness_Unit.U_APP_AttachmentKey = oAttachmentKey;
+			oBusiness_Unit.U_APP_UserRole = this.oModel.getData().EditRecord.UserRole;
 			if(!this.isDraft){
 				if(transtype === "3") {
 					oBusiness_Unit.U_APP_IsPostedGR = "Y";
@@ -360,7 +370,7 @@ sap.ui.define([
 			var transtype = this.getView().byId("TransID").getSelectedKey();
 			var transno = this.oModel.getData().EditRecord.TransNo;
 			var oCardCode = this.oModel.getData().EditRecord.BPCode;
-			var oPostingDate = this.oModel.getData().EditRecord.PostingDate;
+			var oPostingDate = this.getView().byId("dpickerpostingdate").getValue();
 			var oMarkupType = this.oModel.getData().EditRecord.MarkupType;
 			var oIssueBU = this.oIssueBu;
 			var oReceiveBU = this.oReceiveBu;
@@ -1203,7 +1213,7 @@ sap.ui.define([
 					oInvoice.DocumentLines = [];
 					///HARD CODED ACCOUNT CODE FOR TESTING
 					oInvoiceHeader.ItemDescription = oDescription;
-					oInvoiceHeader.AccountCode ="4110101101-000-000-000-000-000"; //4110101101
+					oInvoiceHeader.AccountCode ="_SYS00000000942"; //4110101101//_SYS00000000942//4110101101-000-000-000-000-000
 					oInvoiceHeader.LineTotal =results.DocTotal;
 					oInvoice.DocumentLines.push(JSON.parse(JSON.stringify(oInvoiceHeader)));
 
@@ -1399,7 +1409,7 @@ sap.ui.define([
 			var transtype = this.oModel.getData().EditRecord.TransType;
 			var transno = this.oModel.getData().EditRecord.TransNo;
 			var oCardCode = this.oModel.getData().EditRecord.BPCode;
-			var oPostingDate = this.oModel.getData().EditRecord.PostingDate;
+			var oPostingDate = this.getView().byId("dpickerpostingdate").getValue();
 			var oMarkupType = this.oModel.getData().EditRecord.MarkupType;
 			var oIssueBU = this.oIssueBu;
 			var oReceiveBU = this.oReceiveBu;
@@ -1720,6 +1730,53 @@ sap.ui.define([
 					this.FileKey = oResult.AbsoluteEntry;
 				}
 			});
+		},
+		gGetUserRoles: function(){
+			$.ajax({
+				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getUserRoles&value1&value2&value3&value4",
+				type: "GET",
+				datatype:"json",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
+			  	},
+				error: function (xhr, status, error) {
+					var Message = xhr.responseJSON["error"].message.value;
+					console.error(JSON.stringify(Message));
+					sap.m.MessageToast.show(Message);
+				},
+				success: function (json) {},
+				context: this
+			}).done(function (results) {
+				if (results) {
+					this.oModel.getData().UserRoles = results;
+					this.oModel.refresh();
+				}
+			});
+		},
+		gGetDefaultRole: function(){
+			$.ajax({
+				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getDefaultRole&value1="+ this.sUserCode +"&value2&value3&value4",
+				type: "GET",
+				datatype:"json",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
+			  	},
+				error: function (xhr, status, error) {
+					var Message = xhr.responseJSON["error"].message.value;
+					console.error(JSON.stringify(Message));
+					sap.m.MessageToast.show(Message);
+				},
+				success: function (json) {},
+				context: this
+			}).done(function (results) {
+				if (results) {
+					// this.oModel.getData().UserRoles = results[0].U_APP_Roles;
+					// this.oModel.refresh();
+					this.oModel.getData().EditRecord.UserRole = results[0].Value;
+					this.oModel.refresh();
+				}
+			});
 		}
+
 	});
 });

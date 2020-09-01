@@ -54,6 +54,14 @@ sap.ui.define([
       ////get warehouse
       this.fGetAllWareHouse();
 
+      // //Get User Roles
+			// //Database,StoredProcedure,QueryTag,Value1,Value2,Value3,Value4
+			// this.oModel.getData().UserRoles = AppUI5.gGetArrayOfValues(this.sDataBase,"spAppBusinessUnit","getUserRoles","","","","");
+			// // this.oModel.getData().EditRecord  = [];
+			// // //Get Default & Set User Role
+			// // this.oModel.getData().EditRecord.UserRole = AppUI5.gGetValue(this.sDataBase,"spAppBusinessUnit","getDefaultRole",this.sUserCode,"","","");
+			// this.oModel.refresh();
+
       //// INITIALIZE Variables FOR TABLE
       this.isClickedIssue = true;
       this.aCols = [];
@@ -282,6 +290,74 @@ sap.ui.define([
       var tab = this.getView().byId("idIconTabBarInlineMode");
       tab.setSelectedKey("tab2");
     },
+    	////CANCELL  POSTED
+		onCancel: function () {
+      var ostatus ="5";
+      var oDocType ="Cancelled";
+			var TransNo = this.oModel.getData().EditRecord.TransNo;
+			var TransType = this.oModel.getData().EditRecord.TransType;
+			//INITIALIZE FOR UPDATE
+			var getcode = this.code;
+			var oBusiness_Unit = {};
+			oBusiness_Unit.Code = getcode;
+			oBusiness_Unit.Name = getcode;
+			oBusiness_Unit.U_APP_TransType = TransType;
+			oBusiness_Unit.U_APP_TransNo = TransNo;
+			oBusiness_Unit.U_APP_TransDate = this.fgetTodaysDate();
+			oBusiness_Unit.U_APP_CardCode = this.oModel.getData().EditRecord.BPCode;
+			oBusiness_Unit.U_APP_CustomerName = this.oModel.getData().EditRecord.BPName;
+			oBusiness_Unit.U_APP_PostingDate = this.getView().byId("dpickerpostingdate").getValue();
+			oBusiness_Unit.U_APP_MarkupType = this.oModel.getData().EditRecord.MarkupType;
+			oBusiness_Unit.U_APP_IssueBU = this.oModel.getData().EditRecord.IssueBU;
+			oBusiness_Unit.U_APP_ReceivingBU = this.oModel.getData().EditRecord.ReceiveBU;
+			oBusiness_Unit.U_APP_Remarks = this.oModel.getData().EditRecord.Remarks;
+      oBusiness_Unit.U_APP_Status = ostatus;
+      oBusiness_Unit.U_APP_DocType = oDocType;
+			oBusiness_Unit.U_APP_ReceivedBy = this.sUserCode;
+			///HEADER BATCH
+			var BatchHeader =
+				//directly insert data if data is single row per table 
+				{
+					"tableName": "U_APP_OINT",
+					"data": oBusiness_Unit
+				};
+			var sBodyRequest = this.fprepareUpdatePostedRequestBody(BatchHeader,"", getcode,false);
+			$.ajax({
+				url: "https://18.136.35.41:50000/b1s/v1/$batch",
+				type: "POST",
+				contentType: "multipart/mixed;boundary=a",
+				data: sBodyRequest,
+				xhrFields: {
+					withCredentials: true
+				},
+				error: function (xhr, status, error) {
+          var Message = xhr.responseJSON["error"].message.value;
+          console.error(JSON.stringify(Message));
+					sap.m.MessageToast.show(Message);
+				},
+				success: function (json) {
+				
+				},
+				context: this
+			}).done(function (results) {
+				if(JSON.stringify(results).search("400 Bad") !== -1) {
+					var oStartIndex = results.search("value") + 10;
+					var oEndIndex = results.indexOf("}") - 8;
+					var oMessage = results.substring(oStartIndex,oEndIndex);
+					AppUI5.fErrorLogs("U_APP_OINT/U_APP_INT1","Update",TransNo,"null",oMessage,"Update",this.sUserCode,"null",sBodyRequest);
+					sap.m.MessageToast.show(oMessage);
+				}else{
+					if (results) {
+						sap.m.MessageToast.show("Request Has Been Cancelled!");
+						this.fprepareTable(false,"");
+						this.fClearField();
+						this.oModel.refresh();
+					
+					}
+				}
+				
+			});
+    },
     //Generic selecting of data
     fgetHeader: function (dbName, procName, queryTag, value1, value2, value3, value4) {
       //get all open AP base on parameters
@@ -365,7 +441,7 @@ sap.ui.define([
         var transtype = this.oModel.getData().EditRecord.TransType;
         var transno = this.oModel.getData().EditRecord.TransNo;
         var oCardCode = this.oModel.getData().EditRecord.BPCode;
-        var oPostingDate = this.oModel.getData().EditRecord.PostingDate;
+        var oPostingDate = this.getView().byId("dpickerpostingdate").getValue();
         var oMarkupType = this.oModel.getData().EditRecord.MarkupType;
         var oIssueBU = this.oIssueBu;
         var oReceiveBU = this.oReceiveBu;
@@ -982,7 +1058,7 @@ sap.ui.define([
       });
     },
     //Batch Request for Updating Draft
-    fprepareUpdatePostedRequestBody: function (oHeader,oDetails,getcode) {
+    fprepareUpdatePostedRequestBody: function (oHeader,oDetails,getcode,IsCancel) {
       var batchRequest = "";
       var beginBatch = "--a\nContent-Type: multipart/mixed;boundary=b\n\n";
       var endBatch = "--b--\n--a--";
@@ -997,14 +1073,15 @@ sap.ui.define([
       batchRequest = batchRequest + JSON.stringify(objectUDTHeader.data) + "\n\n";
 
       var objectUDTDetails = "";
-
-      //objectUDTDetails = oDetails;
-      for (var i = 0; i < oDetails.length; i++) {
-        objectUDTDetails = oDetails[i];
-        batchRequest = batchRequest + "--b\nContent-Type:application/http\nContent-Transfer-Encoding:binary\n\n";
-        batchRequest = batchRequest + "POST /b1s/v1/" + objectUDTDetails.tableName;
-        batchRequest = batchRequest + "\nContent-Type: application/json\n\n";
-        batchRequest = batchRequest + JSON.stringify(objectUDTDetails.data) + "\n\n";
+      if(!IsCancel){
+        //objectUDTDetails = oDetails;
+        for (var i = 0; i < oDetails.length; i++) {
+          objectUDTDetails = oDetails[i];
+          batchRequest = batchRequest + "--b\nContent-Type:application/http\nContent-Transfer-Encoding:binary\n\n";
+          batchRequest = batchRequest + "POST /b1s/v1/" + objectUDTDetails.tableName;
+          batchRequest = batchRequest + "\nContent-Type: application/json\n\n";
+          batchRequest = batchRequest + JSON.stringify(objectUDTDetails.data) + "\n\n";
+        } 
       }
       batchRequest = batchRequest + endBatch;
 

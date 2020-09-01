@@ -598,13 +598,13 @@ sap.ui.define([
 			var oPostingDate = this.getView().byId("dpickerpostingdate").getValue();
 			var oRemarks = this.getView().byId("inputremarks").getValue();
 			var oDetails = this.oModel.getData().EditRecord.DocumentLines.length;
-			if(oIssueBu===""){
-				sap.m.MessageToast.show("Please Select Issueing BU");
-			}else if(oRequestBu===""){
-				sap.m.MessageToast.show("Please Select Requesting BU");
-			}else if(oPostingDate===""){
-				sap.m.MessageToast.show("Please Select Posting Date");
-			}else if(oRemarks===""){
+			// if(oIssueBu===""){
+			// 	sap.m.MessageToast.show("Please Select Issueing BU");
+			// }else if(oRequestBu===""){
+			// 	sap.m.MessageToast.show("Please Select Requesting BU");
+			// }else if(oPostingDate===""){
+			// 	sap.m.MessageToast.show("Please Select Posting Date");
+			if(oRemarks===""){
 				sap.m.MessageToast.show("Please Enter Remarks");
 			}else if(oDetails===0){
 				sap.m.MessageToast.show("Please Enter Item Details");

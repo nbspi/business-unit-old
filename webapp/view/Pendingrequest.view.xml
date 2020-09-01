@@ -42,6 +42,7 @@
 											<content>
 												<!-- <Button text="ADD DRAFT" id="SaveDraft" tooltip="ADD DRAFT" press="onAddDraft" icon="sap-icon://add"/> -->
 												<Button text="ADD" id="btnAddReceipt" tooltip="ADD" visible="{buttons>/buttons/btnAddReceipt}" press="onAddReceipt" icon="sap-icon://save"/>
+												<Button text="CANCEL" id="btnCancel" tooltip="CANCEL" visible="{buttons>/buttons/btnCancel}" press="onCancel" icon="sap-icon://sys-cancel-2"/>
 												<ToolbarSpacer/>
 											</content>
 										</Toolbar>
@@ -199,6 +200,17 @@
 													<l:GridData span="L3 M4 S12"/>
 												</layoutData>
 											</Input>
+											<Label text="BU Tagged/Assigned to" width="100%">
+												<layoutData>
+													<l:GridData span="L3 M2 S12"/>
+												</layoutData>
+											</Label>
+											<Select id="userRole" forceSelection="false" selectedKey="{/EditRecord/UserRole}" items="{/UserRoles}" editable="false">
+												<core:Item key="{Code}" text="{Name}"/>
+												<layoutData>
+													<l:GridData span="L3 M4 S12"/>
+												</layoutData>
+											</Select>
 
 											<!-- ATTACHMENT UPLOADING
 											<u:FileUploader id="fileUploader" name="myFileUpload" tooltip="Upload your file to the local server"

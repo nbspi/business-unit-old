@@ -564,6 +564,56 @@ sap.ui.define([
 				}
 			});
 			return sGeneratedTransNo;
+		},
+		gGetArrayOfValues: function(oDB,oProc,oTag,oVal1,oVal2,oVal3,oVal4){
+			var oValue = ""
+			$.ajax({
+				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ oDB +"&procName="+ oProc +"&queryTag="+ oTag +
+				"&value1="+ oVal1 +"&value2="+ oVal2 +"&value3="+ oVal3 +"&value4="+ oVal4 +"",
+				type: "GET",
+				datatype:"json",
+				async: false,
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
+			  	},
+				error: function (xhr, status, error) {
+					var Message = xhr.responseJSON["error"].message.value;
+					console.error(JSON.stringify(Message));
+					sap.m.MessageToast.show(Message);
+				},
+				success: function (json) {},
+				context: this
+			}).done(function (results) {
+				if (results) {
+					oValue = results;
+				}
+			});
+			return oValue;
+		},
+		gGetValue: function(oDB,oProc,oTag,oVal1,oVal2,oVal3,oVal4){
+			var oValue = ""
+			$.ajax({
+				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ oDB +"&procName="+ oProc +"&queryTag="+ oTag +
+				"&value1="+ oVal1 +"&value2="+ oVal2 +"&value3="+ oVal3 +"&value4="+ oVal4 +"",
+				type: "GET",
+				datatype:"json",
+				async: false,
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
+			  	},
+				error: function (xhr, status, error) {
+					var Message = xhr.responseJSON["error"].message.value;
+					console.error(JSON.stringify(Message));
+					sap.m.MessageToast.show(Message);
+				},
+				success: function (json) {},
+				context: this
+			}).done(function (results) {
+				if (results) {
+					oValue = results[0].Value;
+				}
+			});
+			return oValue;
 		}
 
 

@@ -17,7 +17,8 @@
 		"BPNameDisabled": true,
 		"ReceiveBUDisabled": true,
 		"UomEntry": "",
-		"DocumentLines": []
+		"DocumentLines": [],
+		"UserRole": ""
 	},
 	"AllItems": [{
 		"ItemCode": "",
@@ -31,6 +32,11 @@
 	"AllWarehouses": [{
 		"WhsCode": "",
 		"WhsName": ""
+	}],
+
+	"UserRoles": [{
+		"Code": "",
+		"Name": ""
 	}],
 
 	"AllMarkupTypes": [{
