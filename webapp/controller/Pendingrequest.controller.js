@@ -1300,7 +1300,8 @@ sap.ui.define([
 			oEvent.getSource().getBinding("items").filter([]);
 			this.getView().byId("inputwhsissue").setValue(CardDetails[0].WhsName);
 			this.oIssueBu=CardDetails[0].WhsCode;
-			this.oModel.refresh();
+      this.oModel.refresh();
+      this.fGetPrices();
 		},
 		//Closing selection on Receiving Whs
 		handleValueHelpCloseWhsreceive: function (oEvent) {
@@ -1318,7 +1319,8 @@ sap.ui.define([
 			oEvent.getSource().getBinding("items").filter([]);
 			this.getView().byId("inputwhsreceive").setValue(CardDetails[0].WhsName);
 			this.oReceiveBu=CardDetails[0].WhsCode;
-			this.oModel.refresh();
+      this.oModel.refresh();
+      this.fGetPrices();
     },
     fGetAllWareHouse: function(){
       $.ajax({
@@ -1342,7 +1344,92 @@ sap.ui.define([
           this.oModel.refresh();
 				}
 			});
+    },
+    ///GET Market Type
+		f_getMarketPrice: function (ItemCode) {
+			var iReturnMarketPrice = 0;
+			$.ajax({
+				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getMarketPrice&value1=" + ItemCode +
+					"&value2=7&value3&value4",
+				type: "GET",
+				async: false,
+				datatype:"json",
+				beforeSend: function(xhr){
+					xhr.setRequestHeader("Authorization","Basic " + btoa("SYSTEM:P@ssw0rd805~"));
+				},
+				error: function (xhr, status, error) {
+					var Message = xhr.responseJSON["error"].message.value;
+					console.error(JSON.stringify(Message));
+					sap.m.MessageToast.show(Message);
+
+				},
+				success: function (json) {},
+				context: this
+			}).done(function (results) {
+				if (results.length > 0) {
+					iReturnMarketPrice = results[0].Price;
+				}
+
+			});
+			return iReturnMarketPrice;
+
+		},
+
+		f_getAveragePrice: function (ItemCode,WareHouse) {
+			var iReturnAveragePrice = 0;
+			$.ajax({
+				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getAveragePrice&value1=" + ItemCode +
+					"&value2=" + WareHouse + "&value3&value4",
+				type: "GET",
+				async: false,
+				datatype:"json",
+				beforeSend: function(xhr){
+					xhr.setRequestHeader("Authorization","Basic " + btoa("SYSTEM:P@ssw0rd805~"));
+				},
+				error: function (xhr, status, error) {
+					var Message = xhr.responseJSON["error"].message.value;
+					console.error(JSON.stringify(Message));
+					sap.m.MessageToast.show(Message);
+				},
+				success: function (json) {},
+				context: this
+			}).done(function (results) {
+				if (results.length > 0) {
+					iReturnAveragePrice = results[0].AvgPrice;
+				}
+
+			});
+			return iReturnAveragePrice;
+
+    },
+    fGetPrices: function(){
+      var transtype = this.oModel.getData().EditRecord.TransType;
+      for (var d = 0; d < this.oModel.getData().EditRecord.DocumentLines.length; d++) {
+        if(transtype === "3"){
+          var oCostToProduce =this.f_getAveragePrice(this.oModel.getData().EditRecord.DocumentLines[d].ItemNum,this.oReceiveBu);
+          this.oModel.getData().EditRecord.DocumentLines[d].CostProd = this.f_getAveragePrice(this.oModel.getData().EditRecord.DocumentLines[d].ItemNum,this.oReceiveBu);
+        }else{
+          var oCostToProduce =this.f_getAveragePrice(this.oModel.getData().EditRecord.DocumentLines[d].ItemNum,this.oIssueBu);
+          this.oModel.getData().EditRecord.DocumentLines[d].CostProd = this.f_getAveragePrice(this.oModel.getData().EditRecord.DocumentLines[d].ItemNum,this.oIssueBu);
+        }
+        this.oModel.getData().EditRecord.DocumentLines[d].MarketPrice = this.f_getMarketPrice(this.oModel.getData().EditRecord.DocumentLines[d].ItemNum);
+        var oMarketPrice = this.f_getMarketPrice(this.oModel.getData().EditRecord.DocumentLines[d].ItemNum);
+  
+        if (transtype === "1") {
+          if(oCostToProduce <= oMarketPrice){
+            this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice = oCostToProduce;
+          }else{
+            this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice=oMarketPrice;
+          }
+        }else if (transtype === "2") {
+          this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice = oCostToProduce;
+        }else if (transtype === "3") {
+          this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice = oCostToProduce;
+        }
+        this.oModel.refresh();
+      }
     }
+    
 
   });
 });
