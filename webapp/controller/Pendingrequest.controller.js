@@ -454,6 +454,10 @@ sap.ui.define([
           sap.m.MessageToast.show("Please Select Transaction.");
         }else if(oCountDetails===0){
           sap.m.MessageToast.show("Please Select Transaction.");
+        // }else if(this.getView().byId("inputwhsissue").getValue()===""){
+        //   sap.m.MessageToast.show("Please choose issuing whs!");
+        // }else if(this.getView().byId("inputwhsreceive").getValue() === ""){
+        //   sap.m.MessageToast.show("Please choose receiving whs!");
         }else if(transtype === "1"){
           /////Call BU to BU AND DRAFT transaction Function
           this.fBuToBu(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey);
@@ -574,7 +578,7 @@ sap.ui.define([
           oInvoice.DocumentLines = [];
           ///HARD CODED ACCOUNT CODE FOR TESTING
           oInvoiceHeader.ItemDescription = oDescription;
-          oInvoiceHeader.AccountCode ="4110101101-000-000-000-000-000";
+          oInvoiceHeader.AccountCode ="_SYS00000000942";
           oInvoiceHeader.TaxCode = "GST-EO";
           oInvoiceHeader.LineTotal =results.DocTotal;
           oInvoice.DocumentLines.push(JSON.parse(JSON.stringify(oInvoiceHeader)));
@@ -705,7 +709,7 @@ sap.ui.define([
           oInvoice.DocumentLines = [];
           ///HARD CODED ACCOUNT CODE FOR TESTING
           oInvoiceHeader.ItemDescription = oDescription;
-          oInvoiceHeader.AccountCode ="4110101101-000-000-000-000-000";
+          oInvoiceHeader.AccountCode ="_SYS00000000942";
           oInvoiceHeader.LineTotal =results.DocTotal;
           oInvoice.DocumentLines.push(JSON.parse(JSON.stringify(oInvoiceHeader)));
           $.ajax({
@@ -853,7 +857,7 @@ sap.ui.define([
           oInvoice.DocumentLines = [];
           ///HARD CODED ACCOUNT CODE FOR TESTING
           oInvoiceHeader.ItemDescription = oDescription;
-          oInvoiceHeader.AccountCode ="4110101101-000-000-000-000-000";
+          oInvoiceHeader.AccountCode ="_SYS00000000942";
           oInvoiceHeader.LineTotal =results.DocTotal;
           oInvoice.DocumentLines.push(JSON.parse(JSON.stringify(oInvoiceHeader)));
 
@@ -1428,6 +1432,11 @@ sap.ui.define([
         }
         this.oModel.refresh();
       }
+    },
+    fValidateFields: function(){
+      var oIssueBu = this.getView().byId("inputwhsissue").getValue();
+			var oRequestBu = this.getView().byId("inputwhsreceive").getValue();
+    
     }
     
 
