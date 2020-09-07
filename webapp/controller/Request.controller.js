@@ -510,7 +510,7 @@ sap.ui.define([
 			}else if (transtype === "3") {
 				this.getView().byId("inputbpcode").setValue("");
 				this.getView().byId("inputwhsreceive").setValue("");
-				this.getView().byId("inputbpcode").setEnabled(false);
+				this.getView().byId("inputbpcode").setEnabled(true);
 				this.getView().byId("inputwhsissue").setEnabled(true);
 				this.getView().byId("inputwhsreceive").setEnabled(true);
 				this.getView().byId("inputmarkuptype").setEnabled(false);
@@ -519,6 +519,7 @@ sap.ui.define([
 			} else {
 				this.getView().byId("inputbpcode").setEnabled(true);
 				this.getView().byId("inputwhsreceive").setEnabled(true);
+				this.getView().byId("inputbpcode").setEnabled(false);
 			}
 		},
 		// ADD ROWS ON TABLE
