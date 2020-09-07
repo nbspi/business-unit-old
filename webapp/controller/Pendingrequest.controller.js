@@ -402,10 +402,17 @@ sap.ui.define([
             this.FileKey = results[0].Attachmentkey;
           }
           var transtype = this.oModel.getData().EditRecord.TransType = results[0].TransType;
-          if (transtype === "1") {
+          if (transtype === "1" || transtype === "4"){
             this.getView().byId("inputwhsreceive").setEnabled(true);
             this.getView().byId("inputbpcode").setEnabled(false);
+          }else if(transtype === "2"){
+            this.getView().byId("inputwhsissue").setEnabled(true);
+            this.getView().byId("inputwhsreceive").setEnabled(false);
+          }else if(transtype === "3"){
+            this.getView().byId("inputwhsissue").setEnabled(false);
+            this.getView().byId("inputwhsreceive").setEnabled(true);
           }
+          
           this.oModel.refresh();
         }
       });
