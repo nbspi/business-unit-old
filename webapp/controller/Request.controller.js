@@ -158,7 +158,7 @@ sap.ui.define([
 		handleValueHelpBPCode: function () {
 			var TransType = this.getView().byId("TransID").getSelectedKey();
 			var customertype ="";
-					if (TransType ==="4"){
+					if (TransType ==="4" || TransType ==="3"){
 						customertype = "S";
 					}else{
 						customertype = "C";
