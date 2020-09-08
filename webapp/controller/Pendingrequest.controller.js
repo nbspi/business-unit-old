@@ -949,6 +949,8 @@ sap.ui.define([
         oInvoiceHeader.WarehouseCode = this.oReceiveBu;
         oInvoiceHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
         oInvoiceHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
+        oInvoiceHeader.UoMEntry = this.oModel.getData().EditRecord.DocumentLines[d].UomEntry;
+				oInvoiceHeader.VatGroup = "IVAT-E";
         oInvoiceHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice; //adjustment
 
         ///Goods Issue Details
@@ -1014,7 +1016,7 @@ sap.ui.define([
       });
     },
     ////POSTING Renewable Energy Transfer BUSINESS TYPE
-    fRenewableEnergyTransfer: function (transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey) {
+    fRenewableEnergyTransfer: function (transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey) {
       AppUI5.showBusyIndicator(10000);
       //Initialize Variables
       var ostatus= "1";
@@ -1142,9 +1144,9 @@ sap.ui.define([
       oBusiness_Unit.U_APP_ReceivingBU = this.oReceiveBu;
       oBusiness_Unit.U_APP_Remarks = oRemarks;
       oBusiness_Unit.U_APP_Status = ostatus;
-      oBusiness_Unit.U_APP_DocType = oDocType;
-      oBusiness_Unit.U_APP_Attachment = oAttachment;
-      oBusiness_Unit.U_APP_AttachmentKey = oAttachmentKey;
+      //oBusiness_Unit.U_APP_DocType = oDocType;
+      // oBusiness_Unit.U_APP_Attachment = oAttachment;
+      // oBusiness_Unit.U_APP_AttachmentKey = oAttachmentKey;
       if(transtype === "3") {
         oBusiness_Unit.U_APP_IsPostedGR = "Y";
       }else{
