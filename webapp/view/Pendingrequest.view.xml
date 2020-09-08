@@ -176,8 +176,6 @@
 											<!--		<l:GridData span="L3 M4 S12"/>-->
 											<!--	</layoutData>-->
 											<!--</Select>-->
-
-
 											<!--REMARKS-->
 											<Label text="Remarks" width="100%">
 												<layoutData>
