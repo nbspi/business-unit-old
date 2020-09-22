@@ -1,8 +1,9 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/ui/model/json/JSONModel",
+    "com/apptech/bfi-businessunit/controller/AppUI5",
     "sap/m/MessageToast"
-], function (Controller, JSONModel, MessageToast) {
+], function (Controller, JSONModel, AppUI5 ,MessageToast) {
     "use strict";
 
     return Controller.extend("com.apptech.bfi-businessunit.controller.Login", {
@@ -12,7 +13,7 @@ sap.ui.define([
             this.oMdlDatabase = new JSONModel("model/databases.json");
             this.oMdlLogin = new JSONModel("model/login.json");
             this.getView().setModel(this.oMdlLogin);
-            this.getAllRecords("getAllDB");
+            this.fGetAllRecords("getAllDB");
 
         },
 
@@ -49,19 +50,16 @@ sap.ui.define([
         },
 
         onLogin: function (oEvent) {
-            //	sap.ui.core.UIComponent.getRouterFor(this).navTo("Dashboard");
+            AppUI5.showBusyIndicator(10000);
+            var sDBCompany = this.getView().byId("selectDatabase").getSelectedKey();
+           /// var sDBCompany = this.oMdlDatabase.getData().Database;
             var username = this.oMdlLogin.getData().Login.username;
             var password = this.oMdlLogin.getData().Login.password;
-
-            var sUserName = this.getView().byId("Username");
-            var sPassword = this.getView().byId("Password");
-            var username = this.oMdlLogin.getData().Login.username;
-            var password = this.oMdlLogin.getData().Login.password;
-            var sDBCompany = "SBODEMOAU_SL";//"DEVBFI_FSQR";
+            //var sDBCompany = "SBODEMOAU_SL";//"DEVBFI_FSQR";
             var oLoginCredentials = {};
             oLoginCredentials.CompanyDB = sDBCompany;
             oLoginCredentials.UserName = username;//"manager";
-            oLoginCredentials.Password = password;//"1234"; 
+            oLoginCredentials.Password = password;//"1234";
             $.ajax({
                 url: "https://18.136.35.41:50000/b1s/v1/Login",
                 data: JSON.stringify(oLoginCredentials),
@@ -71,20 +69,36 @@ sap.ui.define([
 					withCredentials: true
 				},
                 error: function (xhr, status, error) {
-                    MessageToast.show("Invalid Credentials");
+                    var Message = xhr.responseJSON["error"].message.value;
+					console.error(JSON.stringify(Message));
+                    MessageToast.show(Message);
+                    AppUI5.hideBusyIndicator();
                 },
                 context: this,
                 success: function (json) { }
             }).done(function (results) {
                 if (results) {
-                    sap.m.MessageToast.show("Session ID: " + results.SessionId);
-                    sap.ui.core.UIComponent.getRouterFor(this).navTo("BusinessUnit");
+					sap.m.MessageToast.show("Welcome: " + username);
+					this.loadUDandUDF();
+                    sap.ui.core.UIComponent.getRouterFor(this).navTo("Request");
+                    jQuery.sap.storage.Storage.put("dataBase",sDBCompany);
+					jQuery.sap.storage.Storage.put("userCode",username);
+                    jQuery.sap.intervalCall(1800000,this,"hidePanelAgain",[this]);
+                    //AppUI5.hideBusyIndicator();
                 }
-            }); 
+            });
         },
 
-        getAllRecords: function(queryTag){
-			
+        //---- If Session is 30 mins Already
+        hidePanelAgain: function (passedthis) {
+            MessageToast.show("Timed Out");
+            jQuery.sap.storage.Storage.clear();
+            this.oLogin.getData().Login.Pass = "";
+            this.oLogin.refresh();
+            sap.ui.core.UIComponent.getRouterFor(this).navTo("Login");
+        },
+
+        fGetAllRecords: function(queryTag){
 			// var aReturnResult = [];
 			$.ajax({
 				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=SBODEMOAU_SL&procName=spAppBusinessUnit&QUERYTAG="+ queryTag +"&value1=&value2=&value3=&value4=",
@@ -94,7 +108,9 @@ sap.ui.define([
 					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
 			  	},
 				error: function (xhr, status, error) {
-					MessageToast.show(error);
+                    var Message = xhr.responseJSON["error"].message.value;
+					console.error(JSON.stringify(Message));
+					sap.m.MessageToast.show(Message);
 				},
 				success: function (json) {},
 				context: this
@@ -104,34 +120,56 @@ sap.ui.define([
 					this.getView().setModel(this.oMdlDatabase, "oMdlDatabase");
 				}
 			});
-		
-		}
 
-        // getAllRecords: function (queryTag) {
+		},
+		loadUDandUDF:function(){
+			// // create udt
+			// // Business Unit Draft  Header
+			// AppUI5.createTable("APP_OINT", "Business Unit - Header", "bott_NoObject");
+			// // Business Unit
+			// AppUI5.createTable("APP_INT1", "Business Unit - Details", "bott_NoObject");
 
-        //      var aReturnResult = [];
-        //     $.ajax({
-        //         url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=SBODEMOAU_SL&procName=spAppBusinessUnit&QUERYTAG="+ queryTag +"&VALUE1=&VALUE2=&VALUE3=&VALUE4=",
-        //         type: "GET",
-        //         beforeSend: function (xhr) {
-        //             xhr.setRequestHeader("Authorization", "Basic" + btoa("SYSTEM:P@ssw0rd805~"));
-        //         },
-        //         error: function (xhr, status, error) {
-        //             MessageToast.show(error);
-        //         },
-                
-        //         success: function (json) { },
-        //         context: this
-        //     }).done(function (results) {
-        //         if (results) {
-        //             this.oMdlDatabase.setJSON("{\"Database\" : " + JSON.stringify(results) + "}");
-		// 			this.getView().setModel(this.oMdlDatabase, "oMdlDatabase");
-        //         }
-                
-        //     });
-        //   }
+			// //create udf
+			// //Business Unit Header
+			// AppUI5.createField("APP_TransType", "Transaction Type", "@APP_OINT", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_TransNo", "Transaction Number", "@APP_OINT", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_TransDate", "Transaction Date", "@APP_OINT", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_CardCode", "Customer No", "@APP_OINT", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_CustomerName", "Customer Name", "@APP_OINT", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_MarkupType", "Markup Type", "@APP_OINT", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_IssueBU", "Issuing BU", "@APP_OINT", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_ReceivingBU", "Receiving BU", "@APP_OINT", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_Remarks", "Remarks", "@APP_OINT", "db_Alpha", "", 200);
+			// AppUI5.createField("CreatedBy", "Created By", "@APP_OINT", "db_Alpha", "", 50);
+			// AppUI5.createField("UpdatedBy", "Updated By", "@APP_OINT", "db_Alpha", "", 50);
+			// AppUI5.createField("UpdatedDate", "Updated Date", "@APP_OINT", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_PostingDate", "Posting Date", "@APP_OINT", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_Status", "Status", "@APP_OINT", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_DocType", "Document Type", "@APP_OINT", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_ReceivedBy", "Received By", "@APP_OINT", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_Attachment", "Attachment", "@APP_OINT", "db_Alpha", "", 50);
+        	// AppUI5.createField("APP_AttachmentKey", "Attechment Key", "@APP_OINT", "db_Alpha", "", 50);
+            // AppUI5.createField("APP_IsPostedGI", "Posted Goods Issue", "@APP_OINT", "db_Alpha", "", 10);
+            // AppUI5.createField("APP_IsPostedGR", "Posted Goods Receipt", "@APP_OINT", "db_Alpha", "", 10);
+            // AppUI5.createField("APP_UserRole", "User Role", "@APP_OINT", "db_Alpha", "", 10);
 
+			// //Business Unit Details
+			// AppUI5.createField("APP_ItemNum", "Item Number", "@APP_INT1", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_Description", "Description", "@APP_INT1", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_Quantity", "Quantity", "@APP_INT1", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_CostProd", "Cost to Produce", "@APP_INT1", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_MarkUp", "Mark Up", "@APP_INT1", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_TransferPrice", "Transfer Price", "@APP_INT1", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_MarketPrice", "Market Price", "@APP_INT1", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_TransNo", "Transaction Number", "@APP_INT1", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_TransType", "Transaction Type", "@APP_INT1", "db_Alpha", "", 50);
+        	// AppUI5.createField("APP_Uom", "UOM", "@APP_INT1", "db_Alpha", "", 50);
         
-
-        });
+            // //NDC add udf in OIGE
+            // AppUI5.createField("APP_BU_TransNum", "BU TransNum", "OIGE", "db_Alpha", "", 30);
+            ////User TAble
+            // AppUI5.createField("APP_UserRole", "User Role", "OUSR", "db_Alpha", "", 10);
+            
+		}
+    });
 });

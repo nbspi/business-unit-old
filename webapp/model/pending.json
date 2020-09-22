@@ -1,0 +1,58 @@
+{
+    "EditRecord": {
+        "Code": "",
+        "TransType": "0",
+        "TransNo": "",
+        "DraftNo": "",
+        "TransactionDate": "",
+        "BPCode": "",
+        "BPName": "",
+        "PostingDate": "",
+        "MarkupType": "1",
+        "IssueBU": "",
+        "ReceiveBU": "",
+        "Remarks": "",
+        "ReceivedBy": "",
+        "Status": "",
+        "BPCodeDisabled": true,
+        "BPNameDisabled": true,
+        "ReceiveBUDisabled": true,
+        "DocumentLines": [{
+            "ItemNum": "",
+            "Description": "",
+            "Quantity": 0,
+            "CostProd": 0,
+            "MarkUp": 0,
+            "TransferPrice": 0,
+            "MarketPrice": 0,
+            "TransNo": "",
+            "CostProdEnable": false,
+            "MarkupPriceEnable": false,
+            "TransferPriceEnable": false,
+            "MarketPriceEnable": false,
+            "DescriptionEnable": false
+        }]
+},
+"AllTransactionTypes": [{
+    "key": "1",
+    "value": "1 - INTRA-ORG-TRANSFER"
+    }, {
+        "key": "3",
+        "value": "3 - Inter Affiliates - Receipt"
+    }, {
+        "key": "4",
+        "value": "4 - RE - Electricity Transfer"
+    }
+],
+"SelectedTransType": {
+    "TransactionType": "1"
+},
+"AllMarkupTypes": [{
+    "key": "1",
+    "value": "Percent"
+}, {
+    "key": "2",
+    "value": "Amount"
+}]
+
+}

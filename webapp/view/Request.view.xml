@@ -1,55 +1,20 @@
- <mvc:View controllerName="com.apptech.bfi-businessunit.controller.BusinessUnit"
-	xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:uxap="sap.uxap" xmlns:f="sap.ui.layout.form"
-	 xmlns:l="sap.ui.layout" xmlns:u="sap.ui.unified" xmlns:tnt="sap.tnt"
+ <mvc:View controllerName="com.apptech.bfi-businessunit.controller.Request" xmlns:core="sap.ui.core"
+  xmlns:mvc="sap.ui.core.mvc" xmlns:u="sap.ui.unified" xmlns="sap.m" xmlns:uxap="sap.uxap" xmlns:f="sap.ui.layout.form"
+	 xmlns:l="sap.ui.layout" xmlns:tnt="sap.tnt"
 	xmlns:html="http://www.w3.org/1999/xhtml" xmlns:t="sap.ui.table">
-	<App>
+	<App id="idAppControl">
 		<pages>
-			<Page title="Business Unit Transfer" id="pageTerm">
+			<Page title="CREATE REQUEST" id="pageTerm">
 				<content>
 					<IconTabBar id="idIconTabBarInlineMode" headerMode="Inline" upperCase="true" expandable="false" class="sapUiResponsiveContentPadding">
 						<items>
-							<!-- <IconTabFilter id="tab1" text="RECORDS" count="0" key="tab1">
-								<Label text="Transaction Type" width="100%">
-									<layoutData>
-										<l:GridData span="L3 M2 S12"/>
-									</layoutData>
-								</Label>
-								<Select id="transfilter" forceSelection="false" selectedKey="{/SelectedTransType/TransactionType}" items="{/AllTransactionTypes}" change="onTransTypeFilter">
-									<core:Item key="{key}" text="{value}"/>
-									<layoutData>
-										<l:GridData span="L3 M4 S12"/>
-									</layoutData>
-								</Select>
-
-							<SegmentedButton id="TranStatus" selectionChange="onSelectionChange">
-							<items>
-								<SegmentedButtonItem text="DRAFT" key="0"/>
-								<SegmentedButtonItem text="POSTED" key="2"/>
-							</items>
-						</SegmentedButton>
-
-								<t:Table id="tblDrafts" selectionMode="Single" visibleRowCount="8" ariaLabelledBy="title" enableCellFilter="true"
-									rowSelectionChange="onSelectionChange">
-									<t:extension>
-										<Toolbar>
-											<content>
-												<Button text="ADD" id="btnOnAdd" tooltip="ADD" press="onAddMode" icon="sap-icon://add"/>
-												<Button text="VIEW" id="btnOnView" tooltip="VIEW" press="onView" icon="sap-icon://edit"/>
-												<ToolbarSpacer/>
-											</content>
-										</Toolbar>
-
-									</t:extension>
-								</t:Table>
-
-							</IconTabFilter> -->
-							<IconTabFilter id="tab2" text="Transaction" key="tab2">
+							<IconTabFilter id="tab2" text="Request" key="tab2">
 								<!--<Button text="Post Outgoing Payment Draft" id="btnPostDraft" tooltip="Save" press="onPostDraftOP" icon="sap-icon://save"/>-->
 								<!--<Button text="Export File" tooltip="Export" press="handleExcelExport"/>-->
 									<Toolbar>
 											<content>
-												<Button text="ADD DRAFT" id="btnSaveDraft" visible="{buttons>/buttons/btnSaveDraft}" tooltip="ADD DRAFT" press="onAddDraft" icon="sap-icon://add"/>
-												<Button text="ADD" id="btnAddRecords" visible="{buttons>/buttons/btnAddRecords}" tooltip="ADD" press="onAddRecords" icon="sap-icon://save"/>
+												<Button text="ADD DRAFT" id="btnSaveDraft" tooltip="ADD DRAFT" press="onAddDraft" icon="sap-icon://add"/>
+												<Button text="SEND REQUEST" id="btnAddRequest" tooltip="SEND REQUEST" visible="{buttons>/buttons/btnAddRequest}" press="onAddRequest" icon="sap-icon://save"/>
 												<ToolbarSpacer/>
 											</content>
 										</Toolbar>
@@ -62,6 +27,7 @@
 													<l:GridData span="L3 M2 S12"/>
 												</layoutData>
 											</Label>
+
 											<Select id="TransID" forceSelection="false" selectedKey="{/EditRecord/TransType}" items="{/AllTransactionTypes}" change="onChangeTrans">
 												<core:Item key="{key}" text="{value}"/>
 												<layoutData>
@@ -81,7 +47,7 @@
 												</layoutData>
 											</Input>
 
-											<!--Account Code -->
+												<!--Account Code -->
 											<Label text="Customer/Vendor" width="100%">
 												<layoutData>
 													<l:GridData span="L3 M2 S12"/>
@@ -125,11 +91,18 @@
 												</layoutData>
 											</Label>
 											<Input width="100%" id="inputwhsissue" value="{/EditRecord/IssueBU}" showValueHelp="true" valueHelpOnly="true"
-												valueHelpRequest="handleValueHelpWhsCode">
+												valueHelpRequest="handleValueHelpIssueingBu" editable="false">
 												<layoutData>
 													<l:GridData span="L3 M4 S12"/>
 												</layoutData>
 											</Input>
+											<!--<Select forceSelection="false" selectedKey="{/EditRecord/IssueBU}" items="{/AllMarkupTypes}">-->
+											<!--	<core:Item key="{key}" text="{value}"/>-->
+											<!--	<layoutData>-->
+											<!--		<l:GridData span="L3 M4 S12"/>-->
+											<!--	</layoutData>-->
+											<!--</Select> -->
+
 
 											<!--Posting Date-->
 											<Label text="Posting Date" width="100%">
@@ -138,7 +111,7 @@
 												</layoutData>
 											</Label>
 											<DatePicker id="dpickerpostingdate" valueFormat="" displayFormat="yyyy-MM-dd" change="handleChange" editable="false">
-											<!-- <DatePicker id="dpickerpostingdate" value="{/EditRecord/PostingDate}" valueFormat="yyyy-MM-dd" displayFormat="yyyy-MM-dd" change="handleChange"> -->
+											<!-- <DatePicker id="dpickerpostingdate" value="{/EditRecord/PostingDate}" valueFormat="yyyy-MM-dd" displayFormat="yyyy-MM-dd" change="handleChange" editable="false"> -->
 												<layoutData>
 													<l:GridData span="L3 M4 S12"/>
 												</layoutData>
@@ -152,7 +125,7 @@
 												</layoutData>
 											</Label>
 											<Input width="100%" id="inputwhsreceive" value="{/EditRecord/ReceiveBU}" showValueHelp="true" valueHelpOnly="true"
-												valueHelpRequest="handleValueHelpWhsCodeReceive">
+												valueHelpRequest="handleValueHelpRequestingBu" editable="false">
 												<layoutData>
 													<l:GridData span="L3 M4 S12"/>
 												</layoutData>
@@ -170,13 +143,17 @@
 													<l:GridData span="L3 M4 S12"/>
 												</layoutData>
 											</Select>
-											<!--<Select id="selectDatabase"  items="{oMdlDocStat>/Status}" selectedKey="{oMdlEditRecord>/EditRecord/Status}"  showSecondaryValues="true">-->
-											<!--	<core:ListItem key="{oMdlDocStat>text}" text="{oMdlDocStat>key}"/>-->
-											<!--	<layoutData>-->
-											<!--		<l:GridData span="L3 M4 S12"/>-->
-											<!--	</layoutData>-->
-											<!--</Select>-->
-
+											<!--REQUESTOR-->
+											<Label text="Requestor" width="100%">
+												<layoutData>
+													<l:GridData span="L3 M2 S12"/>
+												</layoutData>
+											</Label>
+											<Input width="100%" id="inputrequestor" value="" editable="false">
+												<layoutData>
+													<l:GridData span="L3 M4 S12"/>
+												</layoutData>
+											</Input>
 
 											<!--REMARKS-->
 											<Label text="Remarks" width="100%">
@@ -189,19 +166,7 @@
 													<l:GridData span="L3 M4 S12"/>
 												</layoutData>
 											</Input>
-
-											<Label text="BU Tagged/Assigned to" width="100%">
-												<layoutData>
-													<l:GridData span="L3 M2 S12"/>
-												</layoutData>
-											</Label>
-											<Select id="userRole" forceSelection="false" selectedKey="{/EditRecord/UserRole}" items="{/UserRoles}">
-												<core:Item key="{Code}" text="{Name}"/>
-												<layoutData>
-													<l:GridData span="L3 M4 S12"/>
-												</layoutData>
-											</Select>
-
+											<!--ATTACHMENT UPLOADING -->
 											<u:FileUploader id="fileUploader" name="myFileUpload" tooltip="Upload your file to the local server"
 											uploadComplete="onHandleUploadComplete"
 											change="handleValueChange"
@@ -241,23 +206,13 @@
 														<!--<Text text="{oMdlAP>DocDate}"/>-->
 													</t:template>
 												</t:Column>
-
-												<t:Column width="7rem">
+													<t:Column width="7rem">
 													<Label text="UOM"/>
 													<t:template>
 														<Input value="{Uom}"  textAlign="End" fieldWidth="80%" width="100%" enabled="{UomEnable}"/>
 														<!--<Text text="{oMdlAP>DocNum}"/>-->
 													</t:template>
 												</t:Column>
-												<t:Column width="7rem" visible="false">
-													<Label text="UOMEntry"/>
-													<t:template>
-														<Input value="{UomEntry}"  textAlign="End" fieldWidth="80%" width="100%" visible="false"/>
-														<!--<Text text="{oMdlAP>DocNum}"/>-->
-													</t:template>
-												</t:Column>
-
-
 												<t:Column width="9rem">
 													<Label text="Cost to Produce"/>
 													<t:template>
@@ -300,10 +255,10 @@
 									<!--</content>-->
 								</VBox>
 							</IconTabFilter>
+
 						</items>
 					</IconTabBar>
 				</content>
-
 			</Page>
 		</pages>
 	</App>

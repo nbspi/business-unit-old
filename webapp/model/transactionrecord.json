@@ -16,9 +16,21 @@
 		"BPCodeDisabled": true,
 		"BPNameDisabled": true,
 		"ReceiveBUDisabled": true,
-		"UomEntry": "",
-		"DocumentLines": [],
-		"UserRole": ""
+		"DocumentLines": [{
+			"ItemNum": "",
+			"Description": "",
+			"Quantity": 0,
+			"CostProd": 0,
+			"MarkUp": 0,
+			"TransferPrice": 0,
+			"MarketPrice": 0,
+			"TransNo": "",
+			"CostProdEnable": true,
+			"MarkupPriceEnable": true,
+			"TransferPriceEnable": true,
+			"MarketPriceEnable": false,
+			"DescriptionEnable": false
+		}]
 	},
 	"AllItems": [{
 		"ItemCode": "",
@@ -32,11 +44,6 @@
 	"AllWarehouses": [{
 		"WhsCode": "",
 		"WhsName": ""
-	}],
-
-	"UserRoles": [{
-		"Code": "",
-		"Name": ""
 	}],
 
 	"AllMarkupTypes": [{

@@ -3,7 +3,7 @@
 	<Shell id="shell">
 		<App id="app">
 			<pages>
-				<Page title="BFI Business Unit Transfer" id="pageLogin" busyIndicatorDelay="500">
+				<Page title="Inter Group Inventory Issuances and Receipts" id="pageLogin" busyIndicatorDelay="500">
 					<content>
 						<Panel xmlns="sap.m" class="sapUiResponsiveContentPadding" width="auto" expandable="true" expanded="true" id="panel0" headerText="Panel with SimpleForm">
 							<headerToolbar>
@@ -18,7 +18,7 @@
 										<layoutData>
 											<l:GridData span="L2 M4 S12"/>
 										</layoutData>
-									</Label> 
+									</Label>
 									<Select id="selectDatabase"  items="{oMdlDatabase>/Database}" selectedKey=""  showSecondaryValues="true">
 										<core:ListItem key="{oMdlDatabase>NAME}" text="{oMdlDatabase>NAME} - {oMdlDatabase>COMPANYNAME} "/>
 										<layoutData>
@@ -30,7 +30,7 @@
 											<l:GridData span="L2 M4 S12"/>
 										</layoutData>
 									</Label>
-									<Input width="100%" id="Username" required="true" value="{/Login/username}" >
+									<Input width="100%" id="Username" required="true" value="{/Login/username}" submit="onLogin">
 										<layoutData>
 											<l:GridData span="L10 M8 S12"/>
 										</layoutData>
@@ -40,7 +40,7 @@
 											<l:GridData span="L2 M4 S12"/>
 										</layoutData>
 									</Label>
-									<Input width="100%" id="Password" type="Password" required="true" value="{/Login/password}" >
+									<Input width="100%" id="Password" type="Password" required="true" value="{/Login/password}" submit="onLogin">
 										<layoutData>
 											<l:GridData span="L10 M8 S12"/>
 										</layoutData>

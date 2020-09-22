@@ -1,0 +1,65 @@
+{ 
+    "EditRecord": {
+        "Code": "",
+        "TransType": "0",
+        "TransNo": "",
+        "DraftNo": "",
+        "TransactionDate": "",
+        "BPCode": "",
+        "BPName": "",
+        "PostingDate": "",
+        "MarkupType": "",
+        "IssueBU": "",
+        "ReceiveBU": "",
+        "Remarks": "",
+        "ReceivedBy": "",
+        "Status": "",
+        "BPCodeDisabled": true,
+        "BPNameDisabled": true,
+        "ReceiveBUDisabled": true,
+        "DocumentLines": [{
+            "ItemNum": "",
+            "Description": "",
+            "Quantity": 0,
+            "CostProd": 0,
+            "MarkupPrice": 0,
+            "TransferPrice": 0,
+            "MarketPrice": 0,
+            "TransNo": "",
+            "CostProdEnable": false,
+            "MarkupPriceEnable": false,
+            "TransferPriceEnable": false,
+            "MarketPriceEnable": false,
+            "DescriptionEnable": false
+        }]
+},
+"AllTransactionTypes": [{
+        "key": "1",
+        "value": "1 - INTRA-ORG-TRANSFER"
+    }, {
+        "key": "2",
+        "value": "2 - Inter Affiliates - Issue"
+    }, {
+        "key": "3",
+        "value": "3 - Inter Affiliates - Receipt"
+    }
+],
+"SelectedTransType": {
+    "TransactionType": "1"
+},
+"AllMarkupTypes": [{
+    "key": "1",
+    "value": "Percent"
+}, {
+    "key": "2",
+    "value": "Amount"
+}],
+    "TableData" : [{
+        "U_APP_TransNo" : "",
+        "U_APP_TransType" : "",
+        "U_APP_PostingDate" : "",
+        "U_APP_Remarks" : "",
+        "U_APP_DocType" : ""
+    }]
+
+}

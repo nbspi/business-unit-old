@@ -12,13 +12,12 @@
 		"IssueBU": "",
 		"ReceiveBU": "",
 		"Remarks": "",
+		"Requestor": "",
 		"Status": "",
 		"BPCodeDisabled": true,
 		"BPNameDisabled": true,
 		"ReceiveBUDisabled": true,
-		"UomEntry": "",
-		"DocumentLines": [],
-		"UserRole": ""
+		"DocumentLines":[]
 	},
 	"AllItems": [{
 		"ItemCode": "",
@@ -32,11 +31,6 @@
 	"AllWarehouses": [{
 		"WhsCode": "",
 		"WhsName": ""
-	}],
-
-	"UserRoles": [{
-		"Code": "",
-		"Name": ""
 	}],
 
 	"AllMarkupTypes": [{
@@ -62,6 +56,6 @@
 		}
 	],
 	"SelectedTransType": {
-		"TransactionType": "1"
+		"TransactionType": "0"
 	}
 }

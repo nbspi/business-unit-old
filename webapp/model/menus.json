@@ -1,14 +1,40 @@
 {
-	"navigation": [{
-			"title": "Transactions",
-			"icon": "sap-icon://manager-insight",
-			"key": "butransfer"
+	"navigation": [
+		{
+			"title": "Request",
+			"icon": "sap-icon://add-activity-2",
+			"key": "Request",
+			"items":[{
+				"title":"Create Request",
+				"key":"Request"
+			} , {
+				"title":"Request Records",
+				"key":"Requestrecord"
+			}]  
 		},
 		{
-			"title": "Pending",
+			"title": "Transactions",
 			"icon": "sap-icon://manager-insight",
-			"key": "butransfer"
+			"key": "BusinessUnit",
+			"items":[{
+				"title":"Create Transaction",
+				"key":"BusinessUnit"
+			} , {
+				"title":"Transaction Records",
+				"key":"Transactionrecord"
+			},
+			{
+				"title": "Pending Request",
+				"key": "Pendingrequest"
+			}]
+		},
+		{
+			"title": "Receipts",
+			"icon": "sap-icon://documents",
+			"key": "Pending"
 		}
+		
+		
 
 	],
 	"fixedNavigation": [{
