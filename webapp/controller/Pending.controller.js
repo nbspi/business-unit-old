@@ -588,6 +588,8 @@ sap.ui.define([
 			var oCountDetails = this.oModel.getData().EditRecord.DocumentLines.length; 
 			if(oTransType === "4"){
 				this.fCreateJE();
+			}	else if(oTransType === "3"){
+				this.fPostAP(transno);
 			}else{
 				this.fAddReceipt(oTransType,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails);
 			}
@@ -874,6 +876,70 @@ sap.ui.define([
 
 			}).done(function (results) {
 				if (results) {
+				}
+			});
+		},
+		fPostAP: function(transno){
+			AppUI5.showBusyIndicator(10000);
+			var oDocType = "Goods ReceiptPurchase Invoices";
+			//Initialize Variables
+			var oInvoice = {};
+			var oInvoiceHeader = {};
+			oInvoice.CardCode = this.oModel.getData().EditRecord.BPCode;
+			oInvoice.Comments = this.oModel.getData().EditRecord.Remarks;
+			oInvoice.U_APP_BU_TransNum = transno;
+			// oGoodsReceipt.U_APP_GR_TransType = "BU";
+			oInvoice.DocumentLines = [];
+			///LOOP FOR THE DETAILS
+			var d;
+			for (d = 0; d < this.oModel.getData().EditRecord.DocumentLines.length; d++) {
+				// oGoodsIssueHeader.WarehouseCode = this.oModel.getData().EditRecord.IssueBU;
+				oInvoiceHeader.WarehouseCode = (this.bCancel ? this.oIssueBu : this.oReceiveBu);
+				oInvoiceHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
+				oInvoiceHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
+				var oTransferPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
+				var oCostToProduce = this.oModel.getData().EditRecord.DocumentLines[d].CostProd;
+				if(oTransferPrice==="0" || oTransferPrice===0 || oTransferPrice===""){
+					oInvoiceHeader.UnitPrice = oCostToProduce;
+				}else{
+					oInvoiceHeader.UnitPrice = oTransferPrice;
+				}
+				oInvoiceHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
+				oInvoiceHeader.UoMEntry = this.oModel.getData().EditRecord.DocumentLines[d].UomEntry;
+				oInvoiceHeader.VatGroup = "IVAT-E";
+				oInvoice.DocumentLines.push(JSON.parse(JSON.stringify(oInvoiceHeader)));
+			}
+
+			$.ajax({
+				url: "https://18.136.35.41:50000/b1s/v1/PurchaseInvoices",
+				type: "POST",
+				data: JSON.stringify(oInvoice),
+				xhrFields: {
+					withCredentials: true
+				},
+				error: function (xhr, status, error) {
+					var Message = xhr.responseJSON["error"].message.value;
+					AppUI5.fErrorLogs("OPDN","Insert","null","null",Message,"Receipt",this.sUserCode,"null",JSON.stringify(oInvoice));
+
+					console.error(JSON.stringify(Message));
+					sap.m.MessageToast.show(Message);
+					AppUI5.hideBusyIndicator();
+				},
+				success: function (json) {
+					//this.oPage.setBusy(false);
+					this.fUpdatePending();
+					this.fprepareTable(false,"");
+					this.bCancel = false;
+					this.fClearField();
+					this.oModel.refresh();
+					AppUI5.hideBusyIndicator();
+				},
+				context: this
+
+			}).done(function (results) {
+				if (results) {
+					//
+
 				}
 			});
 		}

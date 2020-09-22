@@ -123,53 +123,53 @@ sap.ui.define([
 
 		},
 		loadUDandUDF:function(){
-		// 	// create udt
-		// 	// Business Unit Draft  Header
-		// 	AppUI5.createTable("APP_OINT", "Business Unit - Header", "bott_NoObject");
-		// 	// Business Unit
-		// 	AppUI5.createTable("APP_INT1", "Business Unit - Details", "bott_NoObject");
+			// // create udt
+			// // Business Unit Draft  Header
+			// AppUI5.createTable("APP_OINT", "Business Unit - Header", "bott_NoObject");
+			// // Business Unit
+			// AppUI5.createTable("APP_INT1", "Business Unit - Details", "bott_NoObject");
 
-		//    //ACTIVITY LOG
-		// 	//AppUI5.createTable("APP_ACTIVITYLOGS", "Activity Log", "bott_NoObject");
+			// //create udf
+			// //Business Unit Header
+			// AppUI5.createField("APP_TransType", "Transaction Type", "@APP_OINT", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_TransNo", "Transaction Number", "@APP_OINT", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_TransDate", "Transaction Date", "@APP_OINT", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_CardCode", "Customer No", "@APP_OINT", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_CustomerName", "Customer Name", "@APP_OINT", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_MarkupType", "Markup Type", "@APP_OINT", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_IssueBU", "Issuing BU", "@APP_OINT", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_ReceivingBU", "Receiving BU", "@APP_OINT", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_Remarks", "Remarks", "@APP_OINT", "db_Alpha", "", 200);
+			// AppUI5.createField("CreatedBy", "Created By", "@APP_OINT", "db_Alpha", "", 50);
+			// AppUI5.createField("UpdatedBy", "Updated By", "@APP_OINT", "db_Alpha", "", 50);
+			// AppUI5.createField("UpdatedDate", "Updated Date", "@APP_OINT", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_PostingDate", "Posting Date", "@APP_OINT", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_Status", "Status", "@APP_OINT", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_DocType", "Document Type", "@APP_OINT", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_ReceivedBy", "Received By", "@APP_OINT", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_Attachment", "Attachment", "@APP_OINT", "db_Alpha", "", 50);
+        	// AppUI5.createField("APP_AttachmentKey", "Attechment Key", "@APP_OINT", "db_Alpha", "", 50);
+            // AppUI5.createField("APP_IsPostedGI", "Posted Goods Issue", "@APP_OINT", "db_Alpha", "", 10);
+            // AppUI5.createField("APP_IsPostedGR", "Posted Goods Receipt", "@APP_OINT", "db_Alpha", "", 10);
+            // AppUI5.createField("APP_UserRole", "User Role", "@APP_OINT", "db_Alpha", "", 10);
 
-		// 	//create udf
-		// 	//Business Unit Header
-		// 	AppUI5.createField("APP_TransType", "Transaction Type", "@APP_OINT", "db_Alpha", "", 50);
-		// 	AppUI5.createField("APP_TransNo", "Transaction Number", "@APP_OINT", "db_Alpha", "", 50);
-		// 	AppUI5.createField("APP_TransDate", "Transaction Date", "@APP_OINT", "db_Alpha", "", 50);
-		// 	AppUI5.createField("APP_CardCode", "Customer No", "@APP_OINT", "db_Alpha", "", 50);
-		// 	AppUI5.createField("APP_CustomerName", "Customer Name", "@APP_OINT", "db_Alpha", "", 50);
-		// 	AppUI5.createField("APP_MarkupType", "Markup Type", "@APP_OINT", "db_Alpha", "", 50);
-		// 	AppUI5.createField("APP_IssueBU", "Issuing BU", "@APP_OINT", "db_Alpha", "", 50);
-		// 	AppUI5.createField("APP_ReceivingBU", "Receiving BU", "@APP_OINT", "db_Alpha", "", 50);
-		// 	AppUI5.createField("APP_Remarks", "Remarks", "@APP_OINT", "db_Alpha", "", 200);
-		// 	AppUI5.createField("CreatedBy", "Created By", "@APP_OINT", "db_Alpha", "", 50);
-		// 	AppUI5.createField("UpdatedBy", "Updated By", "@APP_OINT", "db_Alpha", "", 50);
-		// 	AppUI5.createField("UpdatedDate", "Updated Date", "@APP_OINT", "db_Alpha", "", 50);
-		// 	AppUI5.createField("APP_PostingDate", "Posting Date", "@APP_OINT", "db_Alpha", "", 50);
-		// 	AppUI5.createField("APP_Status", "Status", "@APP_OINT", "db_Alpha", "", 50);
-		// 	AppUI5.createField("APP_DocType", "Document Type", "@APP_OINT", "db_Alpha", "", 50);
-		// 	AppUI5.createField("APP_ReceivedBy", "Received By", "@APP_OINT", "db_Alpha", "", 50);
-		// 	AppUI5.createField("APP_Attachment", "Attachment", "@APP_OINT", "db_Alpha", "", 50);
-        // 	AppUI5.createField("APP_AttachmentKey", "Attechment Key", "@APP_OINT", "db_Alpha", "", 50);
-        // AppUI5.createField("APP_IsPostedGI", "Posted Goods Issue", "@APP_OINT", "db_Alpha", "", 10);
-        // AppUI5.createField("APP_IsPostedGR", "Posted Goods Receipt", "@APP_OINT", "db_Alpha", "", 10);
-        //AppUI5.createField("APP_UserRole", "User Role", "@APP_OINT", "db_Alpha", "", 10);
-
-		// 	//Business Unit Details
-		// 	AppUI5.createField("APP_ItemNum", "Item Number", "@APP_INT1", "db_Alpha", "", 50);
-		// 	AppUI5.createField("APP_Description", "Description", "@APP_INT1", "db_Alpha", "", 50);
-		// 	AppUI5.createField("APP_Quantity", "Quantity", "@APP_INT1", "db_Alpha", "", 50);
-		// 	AppUI5.createField("APP_CostProd", "Cost to Produce", "@APP_INT1", "db_Alpha", "", 50);
-		// 	AppUI5.createField("APP_MarkUp", "Mark Up", "@APP_INT1", "db_Alpha", "", 50);
-		// 	AppUI5.createField("APP_TransferPrice", "Transfer Price", "@APP_INT1", "db_Alpha", "", 50);
-		// 	AppUI5.createField("APP_MarketPrice", "Market Price", "@APP_INT1", "db_Alpha", "", 50);
-		// 	AppUI5.createField("APP_TransNo", "Transaction Number", "@APP_INT1", "db_Alpha", "", 50);
-		// 	AppUI5.createField("APP_TransType", "Transaction Type", "@APP_INT1", "db_Alpha", "", 50);
-        // 	AppUI5.createField("APP_Uom", "UOM", "@APP_INT1", "db_Alpha", "", 50);
+			// //Business Unit Details
+			// AppUI5.createField("APP_ItemNum", "Item Number", "@APP_INT1", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_Description", "Description", "@APP_INT1", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_Quantity", "Quantity", "@APP_INT1", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_CostProd", "Cost to Produce", "@APP_INT1", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_MarkUp", "Mark Up", "@APP_INT1", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_TransferPrice", "Transfer Price", "@APP_INT1", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_MarketPrice", "Market Price", "@APP_INT1", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_TransNo", "Transaction Number", "@APP_INT1", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_TransType", "Transaction Type", "@APP_INT1", "db_Alpha", "", 50);
+        	// AppUI5.createField("APP_Uom", "UOM", "@APP_INT1", "db_Alpha", "", 50);
         
-        ////NDC add udf in OIGE
-        ///////AppUI5.createField("APP_BU_TransNum", "BU TransNum", "OIGE", "db_Alpha", "", 30);
+            // //NDC add udf in OIGE
+            // AppUI5.createField("APP_BU_TransNum", "BU TransNum", "OIGE", "db_Alpha", "", 30);
+            ////User TAble
+            // AppUI5.createField("APP_UserRole", "User Role", "OUSR", "db_Alpha", "", 10);
+            
 		}
     });
 });

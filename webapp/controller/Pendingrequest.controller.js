@@ -931,7 +931,7 @@ sap.ui.define([
       AppUI5.showBusyIndicator(10000);
       //Initialize Variables
       var ostatus="2";
-      var oDocType ="Goods Receipt/Purchase Invoices";
+      var oDocType ="Goods Receipt"; ///Purchase Invoices
       var oInvoice = {};
       var oGoodsReceipt= {};
       var oInvoiceHeader = {};
@@ -965,23 +965,25 @@ sap.ui.define([
       var batchArray = [
         //directly insert data if data is single row per table
         {
-          "tableName": "PurchaseInvoices",
-          "data": oInvoice
+          // "tableName": "PurchaseInvoices",
+          // "data": oInvoice
+          "tableName": "InventoryGenEntries",
+          "data": oGoodsReceipt
         }
       ];
 
-      batchArray.push(JSON.parse(JSON.stringify(({
-        "tableName": "InventoryGenEntries",
-        "data": oGoodsReceipt
-      }))));
+      // batchArray.push(JSON.parse(JSON.stringify(({
+      //   "tableName": "InventoryGenEntries",
+      //   "data": oGoodsReceipt
+      // }))));
 
       var sBodyRequest = this.fprepareBatchRequestBody(batchArray);
       //ajax call to SL
       $.ajax({
-        url: "https://18.136.35.41:50000/b1s/v1/$batch",
+        url: "https://18.136.35.41:50000/b1s/v1/InventoryGenEntries",
         type: "POST",
         contentType: "multipart/mixed;boundary=a",
-        data: sBodyRequest, //If batch, body data should not be JSON.stringified
+        data: JSON.stringify(oGoodsReceipt),//sBodyRequest, //If batch, body data should not be JSON.stringified
         xhrFields: {
           withCredentials: true
         },
@@ -1007,7 +1009,7 @@ sap.ui.define([
           if (results) {
           //UPDATE RECORDS ON UDT
           this.fUpdatePending(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
-            sap.m.MessageToast.show("Transaction Type "+ TransType +" Draft Has Been Created!");
+            sap.m.MessageToast.show("Transaction Type "+ transtype +" Draft Has Been Created!");
             this.fClearField();
             this.oModel.refresh();
             AppUI5.hideBusyIndicator();
