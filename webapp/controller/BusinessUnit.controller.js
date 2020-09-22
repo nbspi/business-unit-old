@@ -1540,6 +1540,7 @@ sap.ui.define([
 				oBusiness_Unit_Details.Code = code;
 				oBusiness_Unit_Details.Name = code;
 
+
 				oBusiness_Unit_Details.U_APP_ItemNum = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
 				oBusiness_Unit_Details.U_APP_Description = this.oModel.getData().EditRecord.DocumentLines[d].Description;
 				oBusiness_Unit_Details.U_APP_Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
