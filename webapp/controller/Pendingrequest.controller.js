@@ -934,7 +934,7 @@ sap.ui.define([
     fBuToInterOrgReceipt: function (transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey) {
       AppUI5.showBusyIndicator(10000);
       //Initialize Variables
-      var ostatus="2";
+      var ostatus="1"; //NDC change status from 2 to 1
       var oDocType ="Goods Receipt"; ///Purchase Invoices
       var oInvoice = {};
       var oGoodsReceipt= {};

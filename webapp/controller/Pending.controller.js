@@ -569,8 +569,7 @@ sap.ui.define([
 
 			}).done(function (results) {
 				if (results) {
-					//
-
+					sap.m.MessageToast.show("Transaction posted successfully!");
 				}
 			});
 		},
@@ -938,8 +937,7 @@ sap.ui.define([
 
 			}).done(function (results) {
 				if (results) {
-					//
-
+					sap.m.MessageToast.show("Transaction posted successfully!");
 				}
 			});
 		}
