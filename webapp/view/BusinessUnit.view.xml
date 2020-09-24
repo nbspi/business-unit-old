@@ -196,7 +196,7 @@
 												</layoutData>
 											</Label>
 											<Select id="userRole" forceSelection="false" selectedKey="{/EditRecord/UserRole}" items="{/UserRoles}">
-												<core:Item key="{Code}" text="{Name}"/>
+												<core:Item key="{IsActive}" text="{UserRole}"/>
 												<layoutData>
 													<l:GridData span="L3 M4 S12"/>
 												</layoutData>

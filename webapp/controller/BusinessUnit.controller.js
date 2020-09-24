@@ -17,7 +17,7 @@ sap.ui.define([
 		onRoutePatternMatched: function(event){
 			this.fClearField();
 			this.gGetUserRoles();
-			this.gGetDefaultRole();
+			// this.gGetDefaultRole();
 			},
 		onInit: function () {
 			///ON LOAD
@@ -95,7 +95,7 @@ sap.ui.define([
 			this.gGetUserRoles();
 			//Get Default & Set User Role
 			//this.oModel.getData().EditRecord = [];
-			this.gGetDefaultRole();
+			// this.gGetDefaultRole();
 
 			this.isDraft = false;
 
@@ -1734,7 +1734,7 @@ sap.ui.define([
 		},
 		gGetUserRoles: function(){
 			$.ajax({
-				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getUserRoles&value1&value2&value3&value4",
+				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getUserRoles&value1="+this.sUserCode+"&value2&value3&value4",
 				type: "GET",
 				datatype:"json",
 				beforeSend: function (xhr) {
