@@ -289,6 +289,8 @@ sap.ui.define([
     // this.getView().byId("idIconTabBarInlineMode").getItems()[1].setText("Transaction No: " + TransNo + " [EDIT]");
       var tab = this.getView().byId("idIconTabBarInlineMode");
       tab.setSelectedKey("tab2");
+
+      this.gGetUserRoles();
     },
     	////CANCELL  POSTED
 		onCancel: function () {
@@ -932,7 +934,7 @@ sap.ui.define([
     },
     ///POSTING ON BU TO INTER ORG ISSUE
     fBuToInterOrgReceipt: function (transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey) {
-      AppUI5.showBusyIndicator(10000);
+      AppUI5.showBusyIndicator(15000);
       //Initialize Variables
       var ostatus="1"; //NDC change status from 2 to 1
       var oDocType ="Goods Receipt"; ///Purchase Invoices
@@ -981,7 +983,7 @@ sap.ui.define([
       //   "data": oGoodsReceipt
       // }))));
 
-      var sBodyRequest = this.fprepareBatchRequestBody(batchArray);
+      // var sBodyRequest = this.fprepareBatchRequestBody(batchArray);
       //ajax call to SL
       $.ajax({
         url: "https://18.136.35.41:50000/b1s/v1/InventoryGenEntries",
@@ -1150,6 +1152,8 @@ sap.ui.define([
       oBusiness_Unit.U_APP_ReceivingBU = this.oReceiveBu;
       oBusiness_Unit.U_APP_Remarks = oRemarks;
       oBusiness_Unit.U_APP_Status = ostatus;
+      var sRole = this.oModel.getData().EditRecord.UserRole;
+      oBusiness_Unit.U_APP_UserRole = sRole;
       //oBusiness_Unit.U_APP_DocType = oDocType;
       // oBusiness_Unit.U_APP_Attachment = oAttachment;
       // oBusiness_Unit.U_APP_AttachmentKey = oAttachmentKey;
@@ -1452,7 +1456,30 @@ sap.ui.define([
       var oIssueBu = this.getView().byId("inputwhsissue").getValue();
 			var oRequestBu = this.getView().byId("inputwhsreceive").getValue();
     
-    }
+    },
+
+    gGetUserRoles: function(){
+			$.ajax({
+				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getUserRoles&value1="+this.sUserCode+"&value2&value3&value4",
+				type: "GET",
+				datatype:"json",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
+			  	},
+				error: function (xhr, status, error) {
+					var Message = xhr.responseJSON["error"].message.value;
+					console.error(JSON.stringify(Message));
+					sap.m.MessageToast.show(Message);
+				},
+				success: function (json) {},
+				context: this
+			}).done(function (results) {
+				if (results) {
+					this.oModel.getData().UserRoles = results;
+					this.oModel.refresh();
+				}
+			});
+		}
     
 
   });

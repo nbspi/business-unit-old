@@ -1252,22 +1252,19 @@ sap.ui.define([
 		},
 		///POSTING ON BU TO INTER ORG ISSUE
 		fBuToInterOrgReceipt: function (transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey,transno) {
-			AppUI5.showBusyIndicator(10000);
+			AppUI5.showBusyIndicator(15000);
 			//Initialize Variables
-			var ostatus="2";
-			var oDocType ="Goods Receipt/Purchase Invoices";
+			var ostatus="1"; //NDC change status from 2 to 1
+			var oDocType ="Goods Receipt"; ///Purchase Invoices
 			var oInvoice = {};
 			var oGoodsReceipt= {};
 			var oInvoiceHeader = {};
 			var oGoodsReceiptHeader = {};
 			oInvoice.CardCode = this.oModel.getData().EditRecord.BPCode;
 			oInvoice.Comments = this.oModel.getData().EditRecord.Remarks;
-			oInvoice.AttachmentEntry = this.FileKey;
 			oInvoice.DocumentLines = [];
 			oGoodsReceipt.Comments = this.oModel.getData().EditRecord.Remarks;
-			oGoodsReceipt.AttachmentEntry = this.FileKey;
 			// oGoodsReceipt.U_APP_GR_TransType = "BU";
-			oGoodsReceipt.U_APP_BU_TransNum = transno;
 			oGoodsReceipt.DocumentLines = [];
 			///LOOP FOR THE DETAILS
 			var d;
@@ -1298,23 +1295,25 @@ sap.ui.define([
 			var batchArray = [
 				//directly insert data if data is single row per table
 				{
-					"tableName": "PurchaseInvoices",
-					"data": oInvoice
+				  // "tableName": "PurchaseInvoices",
+				  // "data": oInvoice
+				  "tableName": "InventoryGenEntries",
+				  "data": oGoodsReceipt
 				}
-			];
+			  ];
 
-			batchArray.push(JSON.parse(JSON.stringify(({
-				"tableName": "InventoryGenEntries",
-				"data": oGoodsReceipt
-			}))));
+			// batchArray.push(JSON.parse(JSON.stringify(({
+			// 	"tableName": "InventoryGenEntries",
+			// 	"data": oGoodsReceipt
+			// }))));
 
-			var sBodyRequest = this.fprepareBatchRequestBody(batchArray);
+			// var sBodyRequest = this.fprepareBatchRequestBody(batchArray);
 			//ajax call to SL
 			$.ajax({
-				url: "https://18.136.35.41:50000/b1s/v1/$batch",
+				url: "https://18.136.35.41:50000/b1s/v1/InventoryGenEntries",
 				type: "POST",
 				contentType: "multipart/mixed;boundary=a",
-				data: sBodyRequest, //If batch, body data should not be JSON.stringified
+				data: JSON.stringify(oGoodsReceipt), //If batch, body data should not be JSON.stringified
 				xhrFields: {
 					withCredentials: true
 				},
@@ -1641,6 +1640,8 @@ sap.ui.define([
 			oBusiness_Unit.U_APP_AttachmentKey = this.FileKey;
 			oBusiness_Unit.U_APP_Status = ostatus;
 			oBusiness_Unit.U_APP_DocType = oDocType;
+			var sRole = this.oModel.getData().EditRecord.UserRole;
+      		oBusiness_Unit.U_APP_UserRole = sRole;
 			///HEADER BATCH
 			var BatchHeader =
 				//directly insert data if data is single row per table
