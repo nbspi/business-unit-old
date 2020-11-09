@@ -47,6 +47,7 @@ sap.ui.define([
 			// Get DateToday
 			this.getView().byId("transactiondate").setDateValue(new Date());
 			this.getView().byId("dpickerpostingdate").setDateValue(new Date());
+			
 
 			//BLANK JSONMODEL FOR ALL ITEMS FOR TEMPLATE
 			this.oMdlAllItems = new JSONModel();
@@ -55,6 +56,8 @@ sap.ui.define([
 			//BIND TO MAIN MODEL
 			this.oModel = new JSONModel("model/request.json");
 			this.getView().setModel(this.oModel);
+
+			//this.getView().byId("inputremarks").setValue("Test");
 
 			///INITIALIZE FOR MARKETPRICE
 			this.MarketPrice = "";
@@ -67,7 +70,7 @@ sap.ui.define([
 
 			//GET ALL WAREHOUSE
 			$.ajax({
-			url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getallwarehouses&value1&value2&value3&value4",
+			url: "https://18.141.110.57:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getallwarehouses&value1&value2&value3&value4",
 			type: "GET",
 			datatype:"json",
 			beforeSend: function (xhr) {
@@ -183,7 +186,7 @@ sap.ui.define([
 			var sInputValue = this.byId("inputbpcode").getValue();
 				//GET ALL BP
 				$.ajax({
-					url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getallbp&value1="+ customertype +"&value2&value3&value4",
+					url: "https://18.141.110.57:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getallbp&value1="+ customertype +"&value2&value3&value4",
 					type: "GET",
 					datatype:"json",
 				beforeSend: function(xhr){
@@ -291,7 +294,7 @@ sap.ui.define([
 			if (this.oModel.getData().AllItems.length <= 1) {
 				//GET ALL ITEMS
 				$.ajax({
-					url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getallitems&value1&value2&value3&value4",
+					url: "https://18.141.110.57:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getallitems&value1&value2&value3&value4",
 					type: "GET",
 					datatype:"json",
 				beforeSend: function(xhr){
@@ -431,7 +434,7 @@ sap.ui.define([
 		f_getMarketPrice: function (ItemCode) {
 			var iReturnMarketPrice = 0;
 			$.ajax({
-				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getMarketPrice&value1=" + ItemCode +
+				url: "https://18.141.110.57:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getMarketPrice&value1=" + ItemCode +
 					"&value2=7&value3&value4",
 				type: "GET",
 				async: false,
@@ -460,7 +463,7 @@ sap.ui.define([
 		f_getAveragePrice: function (ItemCode,WareHouse) {
 			var iReturnAveragePrice = 0;
 			$.ajax({
-				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getAveragePrice&value1=" + ItemCode +
+				url: "https://18.141.110.57:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getAveragePrice&value1=" + ItemCode +
 					"&value2=" + WareHouse + "&value3&value4",
 				type: "GET",
 				async: false,
@@ -642,7 +645,7 @@ sap.ui.define([
 			var sGeneratedTransNo = "";
 			var TransType = this.oModel.getData().EditRecord.TransType;
 			$.ajax({
-				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getTransactionNumber&value1&value2&value3&value4",
+				url: "https://18.141.110.57:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getTransactionNumber&value1&value2&value3&value4",
 				type: "GET",
 				async: false,
 				datatype:"json",
@@ -718,7 +721,7 @@ sap.ui.define([
 			var sBodyRequest = AppUI5.prepareBatchRequestBody(batchArray);
 		////BATCH POSTING FOR DRAFT
 			$.ajax({
-				url: "https://18.136.35.41:50000/b1s/v1/$batch",
+				url: "https://18.141.110.57:50000/b1s/v1/$batch",
 				type: "POST",
 				contentType: "multipart/mixed;boundary=a",
 				data: sBodyRequest,
@@ -762,7 +765,7 @@ sap.ui.define([
 			var sGeneratedTransNo = "";
 			var TransType = this.oModel.getData().EditRecord.TransType;
 			$.ajax({
-				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getTransactionNumber&value1&value2&value3&value4",
+				url: "https://18.141.110.57:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getTransactionNumber&value1&value2&value3&value4",
 				type: "GET",
 				async: false,
 				datatype:"json",
@@ -839,7 +842,7 @@ sap.ui.define([
 			var sBodyRequest = AppUI5.prepareBatchRequestBody(batchArray);
 		////BATCH POSTING FOR DRAFT
 			$.ajax({
-				url: "https://18.136.35.41:50000/b1s/v1/$batch",
+				url: "https://18.141.110.57:50000/b1s/v1/$batch",
 				type: "POST",
 				contentType: "multipart/mixed;boundary=a",
 				data: sBodyRequest,
@@ -895,7 +898,7 @@ sap.ui.define([
 			form.append("",this.currentFile,FileName);
 			//Postinf Attachment in SAP
 			$.ajax({
-				url: "https://18.136.35.41:50000/b1s/v1/Attachments2",
+				url: "https://18.141.110.57:50000/b1s/v1/Attachments2",
 				data: form,
 				type: "POST",
 				processData:false,

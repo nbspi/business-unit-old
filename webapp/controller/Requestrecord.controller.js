@@ -185,7 +185,7 @@ sap.ui.define([
       var value2 = oTransTatus;
       var aReturnResult = [];
       $.ajax({
-        url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&QUERYTAG=getAllFilteredRequest&VALUE1="+ value1 +"&VALUE2="+ value2 +"&VALUE3=&VALUE4=",
+        url: "https://18.141.110.57:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&QUERYTAG=getAllFilteredRequest&VALUE1="+ value1 +"&VALUE2="+ value2 +"&VALUE3=&VALUE4=",
         type: "GET",
         async: false,
         datatype:"json",
@@ -239,7 +239,7 @@ sap.ui.define([
     fgetHeader: function (dbName, procName, queryTag, value1, value2, value3, value4) {
       //get all open AP base on parameters
       $.ajax({
-        url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=" + dbName + "&procName=spAppBusinessUnit&QUERYTAG=" + queryTag + "&VALUE1=" + value1 +
+        url: "https://18.141.110.57:4300/app_xsjs/ExecQuery.xsjs?dbName=" + dbName + "&procName=spAppBusinessUnit&QUERYTAG=" + queryTag + "&VALUE1=" + value1 +
           "&VALUE2=" + value2 + "&VALUE3=" + value3 + "&VALUE4=",
         type: "GET",
         datatype:"json",
@@ -294,7 +294,7 @@ sap.ui.define([
     ///GETTING DETAILS BASED ON HEADER
     fgetDetails: function (dbName, procName, queryTag, value1, value2, value3, value4) {
       $.ajax({
-        url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=" + dbName + "&procName=spAppBusinessUnit&QUERYTAG=" + queryTag + "&VALUE1=" + value1 +
+        url: "https://18.141.110.57:4300/app_xsjs/ExecQuery.xsjs?dbName=" + dbName + "&procName=spAppBusinessUnit&QUERYTAG=" + queryTag + "&VALUE1=" + value1 +
           "&VALUE2=" + value2 + "&VALUE3=" + value3 + "&VALUE4=",
         type: "GET",
         datatype:"json",
@@ -369,7 +369,7 @@ sap.ui.define([
 				};
 			var sBodyRequest = this.fprepareUpdatePostedRequestBody(BatchHeader, getcode);
 			$.ajax({
-				url: "https://18.136.35.41:50000/b1s/v1/$batch",
+				url: "https://18.141.110.57:50000/b1s/v1/$batch",
 				type: "POST",
 				contentType: "multipart/mixed;boundary=a",
 				data: sBodyRequest,
@@ -437,7 +437,7 @@ sap.ui.define([
 				};
 			var sBodyRequest = this.fprepareUpdatePostedRequestBody(BatchHeader, getcode);
 			$.ajax({
-				url: "https://18.136.35.41:50000/b1s/v1/$batch",
+				url: "https://18.141.110.57:50000/b1s/v1/$batch",
 				type: "POST",
 				contentType: "multipart/mixed;boundary=a",
 				data: sBodyRequest,

@@ -61,7 +61,7 @@ sap.ui.define([
             oLoginCredentials.UserName = username;//"manager";
             oLoginCredentials.Password = password;//"1234";
             $.ajax({
-                url: "https://18.136.35.41:50000/b1s/v1/Login",
+                url: "https://18.141.110.57:50000/b1s/v1/Login",
                 data: JSON.stringify(oLoginCredentials),
                 type: "POST",
                 crossDomain: true,
@@ -101,7 +101,7 @@ sap.ui.define([
         fGetAllRecords: function(queryTag){
 			// var aReturnResult = [];
 			$.ajax({
-				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=SBODEMOAU_SL&procName=spAppBusinessUnit&QUERYTAG="+ queryTag +"&value1=&value2=&value3=&value4=",
+				url: "https://18.141.110.57:4300/app_xsjs/ExecQuery.xsjs?dbName=SBODEMOAU_SL&procName=spAppBusinessUnit&QUERYTAG="+ queryTag +"&value1=&value2=&value3=&value4=",
 				type: "GET",
 				dataType: "json",
 				beforeSend: function (xhr) {
@@ -151,7 +151,7 @@ sap.ui.define([
         	// AppUI5.createField("APP_AttachmentKey", "Attechment Key", "@APP_OINT", "db_Alpha", "", 50);
             // AppUI5.createField("APP_IsPostedGI", "Posted Goods Issue", "@APP_OINT", "db_Alpha", "", 10);
             // AppUI5.createField("APP_IsPostedGR", "Posted Goods Receipt", "@APP_OINT", "db_Alpha", "", 10);
-            // AppUI5.createField("APP_UserRole", "User Role", "@APP_OINT", "db_Alpha", "", 10);
+            //AppUI5.createField("APP_UserRole", "User Role", "@APP_OINT", "db_Alpha", "", 10);
 
 			// //Business Unit Details
 			// AppUI5.createField("APP_ItemNum", "Item Number", "@APP_INT1", "db_Alpha", "", 50);
