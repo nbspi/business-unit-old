@@ -72,7 +72,7 @@ sap.ui.define([
 			this.oTableDetails = this.getView().byId("tblDetails");
 			//GET ALL WAREHOUSE
 			$.ajax({
-				url: "https://18.141.110.57:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getallwarehouses&value1&value2&value3&value4",
+				url: "https://xs.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getallwarehouses&value1&value2&value3&value4",
 				type: "GET",
 				datatype:"json",
 				beforeSend: function (xhr) {
@@ -329,7 +329,7 @@ sap.ui.define([
 			var sBodyRequest = AppUI5.prepareBatchRequestBody(batchArray);
 		////BATCH POSTING FOR DRAFT
 			$.ajax({
-				url: "https://18.141.110.57:50000/b1s/v1/$batch",
+				url: "https://sl.biotechfarms.net/b1s/v1/$batch",
 				type: "POST",
 				contentType: "multipart/mixed;boundary=a",
 				data: sBodyRequest,
@@ -526,7 +526,7 @@ sap.ui.define([
 			var sInputValue = this.byId("inputbpcode").getValue();
 			//GET ALL BP
 			$.ajax({
-				url: "https://18.141.110.57:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getallbp&value1="+ customertype +"&value2&value3&value4",
+				url: "https://xs.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getallbp&value1="+ customertype +"&value2&value3&value4",
 				type: "GET",
 				datatype:"json",
 			beforeSend: function(xhr){
@@ -575,7 +575,7 @@ sap.ui.define([
 			if (this.oModel.getData().AllItems.length <= 1) {
 				//GET ALL ITEMS
 				$.ajax({
-					url: "https://18.141.110.57:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getallitems&value1&value2&value3&value4",
+					url: "https://xs.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getallitems&value1&value2&value3&value4",
 					type: "GET",
 					datatype:"json",
 				beforeSend: function(xhr){
@@ -751,7 +751,7 @@ sap.ui.define([
 			//GET MARKET PRICE
 			var iReturnMarketPrice = 0;
 			$.ajax({
-				url: "https://18.141.110.57:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getMarketPrice&value1=" + ItemCode +
+				url: "https://xs.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getMarketPrice&value1=" + ItemCode +
 					"&value2=1&value3&value4",
 				type: "GET",
 				async: false,
@@ -781,7 +781,7 @@ sap.ui.define([
 			//GET MARKET PRICE
 			var iReturnAveragePrice = 0;
 			$.ajax({
-				url: "https://18.141.110.57:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getAveragePrice&value1=" + ItemCode +
+				url: "https://xs.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getAveragePrice&value1=" + ItemCode +
 					"&value2=" + WareHouse + "&value3&value4",
 				type: "GET",
 				async: false,
@@ -859,7 +859,7 @@ sap.ui.define([
 			}
 
 			$.ajax({
-				url: "https://18.141.110.57:50000/b1s/v1/InventoryGenExits",
+				url: "https://sl.biotechfarms.net/b1s/v1/InventoryGenExits",
 				type: "POST",
 				data: JSON.stringify(oGoodsIssue),
 				xhrFields: {
@@ -913,7 +913,7 @@ sap.ui.define([
 				oGoodsIssue.DocumentLines.push(JSON.parse(JSON.stringify(oGoodsIssueHeader)));
 			}
 			$.ajax({
-				url: "https://18.141.110.57:50000/b1s/v1/InventoryGenExits",
+				url: "https://sl.biotechfarms.net/b1s/v1/InventoryGenExits",
 				type: "POST",
 				data: JSON.stringify(oGoodsIssue),
 				crossDomain: true,
@@ -948,7 +948,7 @@ sap.ui.define([
 					oInvoice.DocumentLines.push(JSON.parse(JSON.stringify(oInvoiceHeader)));
 
 					$.ajax({
-						url: "https://18.141.110.57:50000/b1s/v1/Invoices",
+						url: "https://sl.biotechfarms.net/b1s/v1/Invoices",
 						type: "POST",
 						data: JSON.stringify(oInvoice),
 						crossDomain: true,
@@ -987,7 +987,7 @@ sap.ui.define([
 							oIncomingPayment.PaymentInvoices.push(JSON.parse(JSON.stringify(oIncomingPaymentHeader)));
 							//ajax call to SL
 							$.ajax({
-								url: "https://18.141.110.57:50000/b1s/v1/IncomingPayments",
+								url: "https://sl.biotechfarms.net/b1s/v1/IncomingPayments",
 								type: "POST",
 								data: JSON.stringify(oIncomingPayment),
 								async: false,
@@ -1041,7 +1041,7 @@ sap.ui.define([
 				oGoodsIssue.DocumentLines.push(JSON.parse(JSON.stringify(oGoodsIssueHeader)));
 			}
 			$.ajax({
-				url: "https://18.141.110.57:50000/b1s/v1/InventoryGenExits",
+				url: "https://sl.biotechfarms.net/b1s/v1/InventoryGenExits",
 				type: "POST",
 				data: JSON.stringify(oGoodsIssue),
 				crossDomain: true,
@@ -1074,7 +1074,7 @@ sap.ui.define([
 					oInvoiceHeader.LineTotal =results.DocTotal;
 					oInvoice.DocumentLines.push(JSON.parse(JSON.stringify(oInvoiceHeader)));
 					$.ajax({
-						url: "https://18.141.110.57:50000/b1s/v1/Invoices",
+						url: "https://sl.biotechfarms.net/b1s/v1/Invoices",
 						type: "POST",
 						data: JSON.stringify(oInvoice),
 						crossDomain: true,
@@ -1131,7 +1131,7 @@ sap.ui.define([
 
 			$.ajax({
 
-				url: "https://18.141.110.57:50000/b1s/v1/InventoryGenExits",
+				url: "https://sl.biotechfarms.net/b1s/v1/InventoryGenExits",
 				type: "POST",
 				data: JSON.stringify(oGoodsIssue),
 				xhrFields: {
@@ -1185,7 +1185,7 @@ sap.ui.define([
 				oGoodsIssue.DocumentLines.push(JSON.parse(JSON.stringify(oGoodsIssueHeader)));
 			}
 			$.ajax({
-				url: "https://18.141.110.57:50000/b1s/v1/InventoryGenExits",
+				url: "https://sl.biotechfarms.net/b1s/v1/InventoryGenExits",
 				type: "POST",
 				data: JSON.stringify(oGoodsIssue),
 				crossDomain: true,
@@ -1218,7 +1218,7 @@ sap.ui.define([
 					oInvoice.DocumentLines.push(JSON.parse(JSON.stringify(oInvoiceHeader)));
 
 					$.ajax({
-						url: "https://18.141.110.57:50000/b1s/v1/Invoices",
+						url: "https://sl.biotechfarms.net/b1s/v1/Invoices",
 						type: "POST",
 						data: JSON.stringify(oInvoice),
 						crossDomain: true,
@@ -1310,7 +1310,7 @@ sap.ui.define([
 			// var sBodyRequest = this.fprepareBatchRequestBody(batchArray);
 			//ajax call to SL
 			$.ajax({
-				url: "https://18.141.110.57:50000/b1s/v1/InventoryGenEntries",
+				url: "https://sl.biotechfarms.net/b1s/v1/InventoryGenEntries",
 				type: "POST",
 				contentType: "multipart/mixed;boundary=a",
 				data: JSON.stringify(oGoodsReceipt), //If batch, body data should not be JSON.stringified
@@ -1371,7 +1371,7 @@ sap.ui.define([
 			}
 
 			$.ajax({
-				url: "https://18.141.110.57:50000/b1s/v1/InventoryGenExits",
+				url: "https://sl.biotechfarms.net/b1s/v1/InventoryGenExits",
 				type: "POST",
 				data: JSON.stringify(oGoodsIssue),
 				xhrFields: {
@@ -1481,7 +1481,7 @@ sap.ui.define([
 			var TransNo = this.oModel.getData().EditRecord.TransNo;
 			var TransType = this.oModel.getData().EditRecord.TransType;
 			$.ajax({
-				url: "https://18.141.110.57:4300/app_xsjs/ExecQuery.xsjs?dbName=SBODEMOAU_SL&procName=spAppBusinessUnit&queryTag=deleteDraftDetails&value1=" +
+				url: "https://xs.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName=SBODEMOAU_SL&procName=spAppBusinessUnit&queryTag=deleteDraftDetails&value1=" +
 					TransNo + "&value2=" + TransType + "&value3&value4",
 				type: "POST",
 				contentType: "application/json",
@@ -1558,7 +1558,7 @@ sap.ui.define([
 			}
 			var sBodyRequest = this.fprepareUpdateBatchRequestBody(BatchHeader, batchArray, getcode);
 			$.ajax({
-				url: "https://18.141.110.57:50000/b1s/v1/$batch",
+				url: "https://sl.biotechfarms.net/b1s/v1/$batch",
 				type: "POST",
 				contentType: "multipart/mixed;boundary=a",
 				data: sBodyRequest,
@@ -1651,7 +1651,7 @@ sap.ui.define([
 				};
 			var sBodyRequest = this.fprepareUpdatePostedRequestBody(BatchHeader, getcode);
 			$.ajax({
-				url: "https://18.141.110.57:50000/b1s/v1/$batch",
+				url: "https://sl.biotechfarms.net/b1s/v1/$batch",
 				type: "POST",
 				contentType: "multipart/mixed;boundary=a",
 				data: sBodyRequest,
@@ -1709,7 +1709,7 @@ sap.ui.define([
 
 			//Postinf Attachment in SAP
 			$.ajax({
-				url: "https://18.141.110.57:50000/b1s/v1/Attachments2",
+				url: "https://sl.biotechfarms.net/b1s/v1/Attachments2",
 				data: form,
 				type: "POST",
 				processData:false,
@@ -1735,7 +1735,7 @@ sap.ui.define([
 		},
 		gGetUserRoles: function(){
 			$.ajax({
-				url: "https://18.141.110.57:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getUserRoles&value1="+this.sUserCode+"&value2&value3&value4",
+				url: "https://xs.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getUserRoles&value1="+this.sUserCode+"&value2&value3&value4",
 				type: "GET",
 				datatype:"json",
 				beforeSend: function (xhr) {
@@ -1757,7 +1757,7 @@ sap.ui.define([
 		},
 		gGetDefaultRole: function(){
 			$.ajax({
-				url: "https://18.141.110.57:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getDefaultRole&value1="+ this.sUserCode +"&value2&value3&value4",
+				url: "https://xs.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getDefaultRole&value1="+ this.sUserCode +"&value2&value3&value4",
 				type: "GET",
 				datatype:"json",
 				beforeSend: function (xhr) {
