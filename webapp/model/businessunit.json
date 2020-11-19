@@ -49,7 +49,7 @@
 
 	"AllTransactionTypes": [{
 			"key": "1",
-			"value": "1 - INTRA-ORG-TRANSFER"
+			"value": "1 - Intra Org - Transfer"
 		}, {
 			"key": "2",
 			"value": "2 - Inter Affiliates - Issue"

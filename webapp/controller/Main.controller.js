@@ -18,6 +18,11 @@ sap.ui.define([
 			this.sDataBase = jQuery.sap.storage.Storage.get("dataBase");
 			this.sUserCode = jQuery.sap.storage.Storage.get("userCode");
 
+			if(this.sUserCode === "" || this.sUserCode === undefined || this.sUserCode === null){
+				window.location.replace("/index.html");
+				return;
+			}
+
 			this._oRouter = sap.ui.core.UIComponent.getRouterFor(this);
     		this._oRouter.attachRouteMatched(this.handleRouteMatched, this);
 
@@ -144,8 +149,8 @@ sap.ui.define([
 				success: function (json) {
 					sap.m.MessageToast.show("Session End");
 					jQuery.sap.storage.Storage.clear();
-					sap.ui.core.UIComponent.getRouterFor(this).navTo("Login", null, true);
-
+					// sap.ui.core.UIComponent.getRouterFor(this).navTo("Login", null, true);
+					window.location.replace("/index.html");
 				}
 			});
 		}

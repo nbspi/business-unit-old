@@ -596,6 +596,7 @@ sap.ui.define([
 
 		},
 		onCancelReceipt: function (oEvent) {
+			AppUI5.showBusyIndicator(10000);
 			var oTransType = this.oModel.getData().EditRecord.TransType;
 			var transno = this.oModel.getData().EditRecord.TransNo;
 			var oCardCode = this.oModel.getData().EditRecord.BPCode;
@@ -611,6 +612,7 @@ sap.ui.define([
 				this.fAddReceipt(oTransType,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails);
 				sap.m.MessageToast.show("Transaction Cancelled!");
 			}
+			AppUI5.hideBusyIndicator();
 		},
 		//GETTING DATE NOW
 		fgetTodaysDate: function () {
