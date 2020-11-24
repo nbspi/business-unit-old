@@ -228,7 +228,7 @@
 													</t:template>
 												</t:Column>
 												<t:Column width="15rem">
-													<Label text="Item Description"/>
+													<Label text="Item Description"/> 
 													<t:template>
 														<Input value="{Description}"  textAlign="End" fieldWidth="80%" width="100%" enabled="{DescriptionEnable}"/>
 														<!--<Text text="{oMdlAP>DocNum}"/>-->

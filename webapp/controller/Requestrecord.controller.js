@@ -38,7 +38,8 @@ sap.ui.define([
 			this.iSelectedRow = 0;
 			//BLANK JSONMODEL FOR ALL ITEMS FOR TEMPLATE
 			this.oMdlAllItems = new JSONModel();
-			this.oMdlAllItems.getData().allitems = [];
+      this.oMdlAllItems.getData().allitems = [];
+
 				// Get DateToday
 			this.getView().byId("transactiondate").setDateValue(new Date());
       this.getView().byId("dpickerpostingdate").setDateValue(new Date());
@@ -76,6 +77,77 @@ sap.ui.define([
       this.fprepareTable("",0);
       this.oMdlAllRecord.refresh();
     },
+    // ADD ROWS ON TABLE
+		onAddRow: function (oEvent) {
+			var oitemdetails = {};
+			oitemdetails.ItemNum = "";
+			oitemdetails.Description = "";
+			oitemdetails.Quantity = "";
+			oitemdetails.Uom = "";
+			oitemdetails.CostProd = "";
+			oitemdetails.MarkupPrice = ""; 
+			oitemdetails.TransferPrice = "";
+			oitemdetails.MarketPrice = "";
+			var transtype = this.getView().byId("TransID").getSelectedKey();
+			var issueBU = this.oModel.getData().EditRecord.IssueBU;
+			if (transtype === "0") {
+				sap.m.MessageToast.show("Please Select Transaction Type.");
+			} else {
+				if (transtype === "1") {
+					oitemdetails.DescriptionEnable = false;
+					oitemdetails.CostProdEnable = false;
+					oitemdetails.MarkupPriceEnable = false;
+					oitemdetails.TransferPriceEnable = false;
+					oitemdetails.MarketPriceEnable = false;
+					oitemdetails.UomEnable = false;
+					this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
+					this.oModel.refresh();
+				} else if (transtype === "2") {
+					oitemdetails.DescriptionEnable = false;
+					oitemdetails.CostProdEnable = false;
+					oitemdetails.MarkupPriceEnable = true;
+					oitemdetails.TransferPriceEnable = false;
+					oitemdetails.MarketPriceEnable = false;
+					oitemdetails.UomEnable = false;
+					this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
+					this.oModel.refresh();
+				} else if (transtype === "3") {
+					oitemdetails.DescriptionEnable = false;
+					oitemdetails.CostProdEnable = true;
+					oitemdetails.MarkupPriceEnable = true;
+					oitemdetails.TransferPriceEnable = false;
+					oitemdetails.MarketPriceEnable = false;
+					oitemdetails.UomEnable = false;
+					this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
+					this.oModel.refresh();
+				} else if (transtype === "4") {
+					oitemdetails.DescriptionEnable = false;
+					oitemdetails.CostProdEnable = false;
+					oitemdetails.MarkupPriceEnable = false;
+					oitemdetails.TransferPriceEnable = false;
+					oitemdetails.MarketPriceEnable = false;
+					oitemdetails.UomEnable = false;
+					this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
+					this.oModel.refresh();
+				}
+			}
+		},
+		////REMOVE ROW ON TABLE
+		onRemoveRow: function (oEvent) {
+			var oTable = this.oTableDetails;
+			var selectedIndeices = oTable.getSelectedIndices();
+			//ROW COUNT VARIABLE
+			var row;
+			var count = 1;
+			for (var i = 0; i < selectedIndeices.length; i++) {
+				row = selectedIndeices[i];
+				this.oModel.getData().EditRecord.DocumentLines.splice(row, 1);
+				count = count + 1;
+			}
+			//Clearing Table Selection
+			oTable.clearSelection();
+			this.oModel.refresh();
+		},
     ///On Clear Fields Function
     fClearField: function () {
       try {
@@ -230,6 +302,17 @@ sap.ui.define([
       value2 = TransType;
       this.fgetHeader(dbName, "spAppBusinessUnit", "getDraftHeader", value1, value2, value3, value4);
       this.fgetDetails(dbName, "spAppBusinessUnit", "getDraftDetails", value1, value2, value3, value4);
+      var oitemdetails = {};
+      if(TransType === "3"){
+        //this.getView().byId("ItemNum").setEnabled(true);
+        oitemdetails.IsItemNumEnabled = true;
+        oitemdetails.IsQuantityEnabled = true;
+      }else{
+        oitemdetails.IsItemNumEnabled = false;
+        oitemdetails.IsQuantityEnabled = false;
+      }
+      this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
+			this.oModel.refresh();
 
     /// this.getView().byId("idIconTabBarInlineMode").getItems()[1].setText("Transaction No: " + TransNo + " [EDIT]");
       var tab = this.getView().byId("idIconTabBarInlineMode");
@@ -471,7 +554,118 @@ sap.ui.define([
 				}
 				
 			});
-    }
+    },
+    //ALL ITEM LIST FROM FRAGMENT
+		handleValueitemdetails: function (oEvent) {
+			this.iSelectedRow = oEvent.getSource().getBindingContext().sPath.match(/\d+/g)[0];
+
+			if (!this._oValueHelpDialogsItem) {
+				Fragment.load({
+					name: "com.apptech.bfi-businessunit.view.fragments.ItemDialogFragment",
+					controller: this
+				}).then(function (oValueHelpDialogs) {
+					this._oValueHelpDialogsItem = oValueHelpDialogs;
+					this.getView().addDependent(this._oValueHelpDialogsItem);
+					this.f_configValueHelpDialogsItems();
+					this._oValueHelpDialogsItem.open();
+				}.bind(this));
+			} else {
+				this.f_configValueHelpDialogsItems();
+				this._oValueHelpDialogsItem.open();
+			}
+    },
+    ///GETTING ALL ITEMS CONFIGURATION FROM UDT
+		f_configValueHelpDialogsItems: function () {
+			// var sInputValue = this.byId("inputitemnum").getValue();
+		//	if (this.oModel.getData().AllItems.length <= 1) {
+				//GET ALL ITEMS
+				$.ajax({
+					url: "https://xs.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getallitems&value1&value2&value3&value4",
+					type: "GET",
+					datatype:"json",
+				beforeSend: function(xhr){
+					xhr.setRequestHeader("Authorization","Basic " + btoa("SYSTEM:P@ssw0rd805~"));
+				},
+					error: function (xhr, status, error) {
+					var Message = xhr.responseJSON["error"].message.value;
+					console.error(JSON.stringify(Message));
+					sap.m.MessageToast.show(Message);
+					},
+					success: function (json) {},
+					context: this
+				}).done(function (results) {
+					if (results) {
+						this.oModel.getData().AllItems.length = 0;
+						this.oModel.getData().AllItems = JSON.parse(JSON.stringify(results));
+						this.oModel.refresh();
+					}
+				});
+		//	}
+
+			var aList = this.oMdlAllItems.getProperty("/allitems");
+			aList.forEach(function (oRecord) {
+			});
+    },
+    ///Search on Item
+		handleSearchItem: function (oEvent) {
+			var sValue = oEvent.getParameter("value");
+			var oFilters = new Filter([
+				new Filter("ItemName", FilterOperator.Contains, sValue),
+				new Filter("ItemCode", FilterOperator.Contains, sValue)
+				], false);
+			var oBinding = oEvent.getSource().getBinding("items");
+			oBinding.filter(oFilters);
+    },
+    //Closing selection on Item
+		handleValueHelpCloseItem: function (oEvent) {
+			var transtype = this.oModel.getData().EditRecord.TransType;
+			var issuebu = this.oIssueBu;
+			var receivebu = this.oReceiveBu;
+			var aContexts = oEvent.getParameter("selectedContexts");
+			var ItemDetails = {};
+			if (aContexts && aContexts.length) {
+				ItemDetails = aContexts.map(function (oContext) {
+					var oItem = {};
+					oItem.ItemCode = oContext.getObject().ItemCode;
+					oItem.ItemName = oContext.getObject().ItemName;
+					oItem.InventoryUom = oContext.getObject().InvntryUom;
+					oItem.UomEntry = oContext.getObject().UomEntry;
+					return oItem;
+				});
+			}
+			oEvent.getSource().getBinding("items").filter([]);
+			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].ItemNum = ItemDetails[0].ItemCode;
+			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].Description = ItemDetails[0].ItemName;
+			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].Uom = ItemDetails[0].InventoryUom;
+			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].UomEntry = ItemDetails[0].UomEntry;
+			// if(transtype === "4"){
+			// 	var oCostToProduce =this.f_getAveragePrice(ItemDetails[0].ItemCode,receivebu);
+			// 	this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].CostProd = this.f_getAveragePrice(ItemDetails[0].ItemCode,receivebu);
+			// }else{
+			// 	var oCostToProduce =this.f_getAveragePrice(ItemDetails[0].ItemCode,issuebu);
+			// 	this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].CostProd = this.f_getAveragePrice(ItemDetails[0].ItemCode,issuebu);
+			// }
+			// // this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].MarketPrice = this.f_getMarketPrice(ItemDetails[0].ItemCode);
+			// var oMarketPrice = this.f_getMarketPrice(ItemDetails[0].ItemCode);
+
+			// if (transtype === "1") {
+			// 	this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].MarketPrice = this.f_getMarketPrice(ItemDetails[0].ItemCode);
+			// 	if(oCostToProduce <= oMarketPrice){
+			// 		this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice = oCostToProduce;
+			// 	}else{
+			// 		this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice=oMarketPrice;
+			// 	}
+			// } else if (transtype === "2") {
+			// 	this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice = oCostToProduce;
+			// }else if (transtype === "3") {
+			// 	///for revise
+			// 	this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice = oCostToProduce;
+			// }else if (transtype === "4") {
+			// 	///for revise
+			// 	this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice = oCostToProduce;
+			// }
+			this.oModel.refresh();
+		},
   
   
   });

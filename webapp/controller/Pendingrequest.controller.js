@@ -68,7 +68,7 @@ sap.ui.define([
       this.aColsDetails = [];
       this.columnData = [];
       this.columnDataDetail = [];
-      this.oEditRecord = {};
+      this.oEditRecord = {}; 
       this.iRecordCount = 0;
       this.oIconTab = this.getView().byId("tab1");
       this.oMdlAllRecord = new JSONModel();
@@ -289,6 +289,10 @@ sap.ui.define([
     // this.getView().byId("idIconTabBarInlineMode").getItems()[1].setText("Transaction No: " + TransNo + " [EDIT]");
       var tab = this.getView().byId("idIconTabBarInlineMode");
       tab.setSelectedKey("tab2");
+
+      if(TransType ==="2" || TransType ==="3"){
+        this.getView().byId("inputmarkuptype").setEnabled(true);
+      }
 
       this.gGetUserRoles();
     },
@@ -1479,8 +1483,21 @@ sap.ui.define([
 					this.oModel.refresh();
 				}
 			});
+		},
+    //GET MARKUP FORMULA
+		fgetmarkup: function (oEvent) {
+			var oMarkupType = this.getView().byId("inputmarkuptype").getSelectedKey();
+			var oMarkPrice = oEvent.mParameters.value;
+			var oCostToProduce = this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].CostProd;
+			if(oMarkupType==="1"){
+				var oTransferPrice = ((Number([oMarkPrice] * 0.01) * Number([oCostToProduce])) + Number([oCostToProduce]));
+			}else if(oMarkupType==="2"){
+				var oTransferPrice = Number([oMarkPrice]) + Number([oCostToProduce]);
+			}
+			this.getView().byId("transferprice").setValue(oTransferPrice);
+			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice=oTransferPrice;
+			this.oModel.refresh();
 		}
-    
 
   });
 });

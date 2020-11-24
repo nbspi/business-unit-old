@@ -192,7 +192,7 @@ sap.ui.define([
 			oitemdetails.Quantity = "";
 			oitemdetails.Uom = "";
 			oitemdetails.CostProd = "";
-			oitemdetails.MarkupPrice = "";
+			oitemdetails.MarkupPrice = ""; 
 			oitemdetails.TransferPrice = "";
 			oitemdetails.MarketPrice = "";
 			var transtype = this.getView().byId("TransID").getSelectedKey();
@@ -248,7 +248,7 @@ sap.ui.define([
 			var count = 1;
 			for (var i = 0; i < selectedIndeices.length; i++) {
 				row = selectedIndeices[i];
-				this.oModel.getData().EditRecord.DocumentLines.splice(selectedIndeices, 1);
+				this.oModel.getData().EditRecord.DocumentLines.splice(row, 1);
 				count = count + 1;
 			}
 			//Clearing Table Selection

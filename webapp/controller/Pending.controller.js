@@ -471,7 +471,7 @@ sap.ui.define([
 				}else{
 					oGoodsReceiptHeader.UnitPrice = oTransferPrice;
 				}
-				oGoodsReceiptHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
+				//oGoodsReceiptHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
 				oGoodsReceipt.DocumentLines.push(JSON.parse(JSON.stringify(oGoodsReceiptHeader)));
 			}
 

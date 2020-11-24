@@ -18,8 +18,7 @@
         "BPNameDisabled": true,
         "ReceiveBUDisabled": true,
         "DocumentLines": [{
-            "ItemNum": "",
-            "Description": "",
+           
             "Quantity": 0,
             "CostProd": 0,
             "MarkupPrice": 0,
@@ -35,15 +34,22 @@
 },
 "AllTransactionTypes": [{
         "key": "1",
-        "value": "1 - INTRA-ORG-TRANSFER"
+        "value": "1 - Intra Org - Transfer"
     }, {
         "key": "2",
         "value": "2 - Inter Affiliates - Issue"
     }, {
         "key": "3",
         "value": "3 - Inter Affiliates - Receipt"
+    }, {
+        "key": "4",
+        "value": "4 - RE - Electricity Transfer"
     }
 ],
+"AllItems": [{
+    "ItemCode": "",
+    "ItemDescription": ""
+}],
 "SelectedTransType": {
     "TransactionType": "1"
 },

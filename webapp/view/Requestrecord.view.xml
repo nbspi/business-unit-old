@@ -215,8 +215,8 @@
 											<t:extension>
 												<Toolbar>
 													<content>
-														<!-- <Button icon="sap-icon://add" text="Add" tooltip="Add" press="onAddRow" enabled="true"/>
-														<Button icon="sap-icon://delete" type="Reject" text="Remove" press="onRemoveRow" tooltip="Remove Row" enabled="true" /> -->
+														<Button icon="sap-icon://add" text="Add" tooltip="Add" press="onAddRow" enabled="true"/>
+														<Button icon="sap-icon://delete" type="Reject" text="Remove" press="onRemoveRow" tooltip="Remove Row" enabled="true" />
 													</content>
 												</Toolbar>
 											</t:extension>
@@ -224,7 +224,7 @@
 												<t:Column width="10rem">
 													<Label text="ITEM #"/>
 													<t:template>
-														<Input value="{ItemNum}"  showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueitemdetails" enabled="false"/>
+														<Input id="ItemNum" value="{ItemNum}"  showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueitemdetails" enabled="{IsItemNumEnabled}"/>
 														<!--<Text text=""/>-->
 													</t:template>
 												</t:Column>
@@ -238,7 +238,7 @@
 												<t:Column width="7rem">
 													<Label text="Quantity"/>
 													<t:template>
-														<Input value="{Quantity}" type="Number" placeholder="0" textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
+														<Input value="{Quantity}" type="Number" placeholder="0" textAlign="End" fieldWidth="80%" width="100%" enabled="{IsQuantityEnabled}"/>
 														<!--<Text text="{oMdlAP>DocDate}"/>-->
 													</t:template>
 												</t:Column>

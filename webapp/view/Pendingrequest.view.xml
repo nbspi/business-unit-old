@@ -164,7 +164,7 @@
 													<l:GridData span="L3 M2 S12"/>
 												</layoutData>
 											</Label>
-											<Select forceSelection="false" selectedKey="{/EditRecord/MarkupType}" items="{/AllMarkupTypes}" editable="false">
+											<Select id="inputmarkuptype" forceSelection="false" selectedKey="{/EditRecord/MarkupType}" items="{/AllMarkupTypes}">
 												<core:Item key="{key}" text="{value}"/>
 												<layoutData>
 													<l:GridData span="L3 M4 S12"/>
@@ -274,14 +274,14 @@
 												<t:Column width="6rem">
 													<Label text="Mark Up"/>
 													<t:template>
-														<Input value="{MarkUp}" type="Number" id="markupprice" placeholder="0.00" textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
+														<Input value="{MarkUp}" type="Number" id="markupprice" placeholder="0.00" textAlign="End" fieldWidth="80%"  liveChange="fgetmarkup" width="100%" enabled="true"/>
 														<!--<Text text="{oMdlAP>NumAtCard}"/>-->
 													</t:template>
 												</t:Column>
 												<t:Column width="9rem">
 													<Label text="Transfer Price"/>
 													<t:template>
-														<Input value="{TransferPrice}" type="Number" placeholder="0.00" textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
+														<Input id="transferprice" value="{TransferPrice}" type="Number" placeholder="0.00" textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
 														<!--<Text text="{oMdlAP>Comments}"/>-->
 													</t:template>
 												</t:Column>
