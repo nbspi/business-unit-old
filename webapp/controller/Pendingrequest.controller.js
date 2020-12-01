@@ -481,6 +481,10 @@ sap.ui.define([
         //   sap.m.MessageToast.show("Please choose receiving whs!");
         }else if(transtype === "1"){
           /////Call BU to BU AND DRAFT transaction Function
+          if(oIssueBU==="" ||oReceiveBU==="" || oIssueBU ===null||oReceiveBU===null){
+            sap.m.MessageToast.show("Please Select Warehouses.");
+            return;
+          }
           this.fBuToBu(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey);
         }else if(transtype === "2"){
           /////Call Bu to Inter Org - ISSUE and Draft
@@ -489,6 +493,10 @@ sap.ui.define([
           /////Call Bu to Inter Org - Receipt and Draft
           this.fBuToInterOrgReceipt(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey);
         }else if (transtype === "4") {
+          if(oIssueBU==="" ||oReceiveBU==="" || oIssueBU ===null||oReceiveBU===null){
+            sap.m.MessageToast.show("Please Select Warehouses.");
+            return;
+          }
           /////Call Renewable Energy Transfer Function
           this.fRenewableEnergyTransfer(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey);
         }
