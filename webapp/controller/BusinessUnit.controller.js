@@ -718,15 +718,18 @@ sap.ui.define([
 			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].Description = ItemDetails[0].ItemName;
 			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].Uom = ItemDetails[0].InventoryUom;
 			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].UomEntry = ItemDetails[0].UomEntry;
+			var oMarketPrice = this.f_getMarketPrice(ItemDetails[0].ItemCode);
 			if(transtype === "4"){
 				var oCostToProduce =this.f_getAveragePrice(ItemDetails[0].ItemCode,receivebu);
 				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].CostProd = this.f_getAveragePrice(ItemDetails[0].ItemCode,receivebu);
+				oMarketPrice = this.f_getAveragePrice(ItemDetails[0].ItemCode,receivebu);
 			}else{
 				var oCostToProduce =this.f_getAveragePrice(ItemDetails[0].ItemCode,issuebu);
 				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].CostProd = this.f_getAveragePrice(ItemDetails[0].ItemCode,issuebu);
+				oMarketPrice = this.f_getAveragePrice(ItemDetails[0].ItemCode,receivebu);
 			}
 			// this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].MarketPrice = this.f_getMarketPrice(ItemDetails[0].ItemCode);
-			var oMarketPrice = this.f_getMarketPrice(ItemDetails[0].ItemCode);
+			//var oMarketPrice = this.f_getMarketPrice(ItemDetails[0].ItemCode);
 
 			if (transtype === "1") {
 				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].MarketPrice = this.f_getMarketPrice(ItemDetails[0].ItemCode);

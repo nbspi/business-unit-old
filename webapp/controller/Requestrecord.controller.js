@@ -78,76 +78,76 @@ sap.ui.define([
       this.oMdlAllRecord.refresh();
     },
     // ADD ROWS ON TABLE
-		onAddRow: function (oEvent) {
-			var oitemdetails = {};
-			oitemdetails.ItemNum = "";
-			oitemdetails.Description = "";
-			oitemdetails.Quantity = "";
-			oitemdetails.Uom = "";
-			oitemdetails.CostProd = "";
-			oitemdetails.MarkupPrice = ""; 
-			oitemdetails.TransferPrice = "";
-			oitemdetails.MarketPrice = "";
-			var transtype = this.getView().byId("TransID").getSelectedKey();
-			var issueBU = this.oModel.getData().EditRecord.IssueBU;
-			if (transtype === "0") {
-				sap.m.MessageToast.show("Please Select Transaction Type.");
-			} else {
-				if (transtype === "1") {
-					oitemdetails.DescriptionEnable = false;
-					oitemdetails.CostProdEnable = false;
-					oitemdetails.MarkupPriceEnable = false;
-					oitemdetails.TransferPriceEnable = false;
-					oitemdetails.MarketPriceEnable = false;
-					oitemdetails.UomEnable = false;
-					this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
-					this.oModel.refresh();
-				} else if (transtype === "2") {
-					oitemdetails.DescriptionEnable = false;
-					oitemdetails.CostProdEnable = false;
-					oitemdetails.MarkupPriceEnable = true;
-					oitemdetails.TransferPriceEnable = false;
-					oitemdetails.MarketPriceEnable = false;
-					oitemdetails.UomEnable = false;
-					this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
-					this.oModel.refresh();
-				} else if (transtype === "3") {
-					oitemdetails.DescriptionEnable = false;
-					oitemdetails.CostProdEnable = true;
-					oitemdetails.MarkupPriceEnable = true;
-					oitemdetails.TransferPriceEnable = false;
-					oitemdetails.MarketPriceEnable = false;
-					oitemdetails.UomEnable = false;
-					this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
-					this.oModel.refresh();
-				} else if (transtype === "4") {
-					oitemdetails.DescriptionEnable = false;
-					oitemdetails.CostProdEnable = false;
-					oitemdetails.MarkupPriceEnable = false;
-					oitemdetails.TransferPriceEnable = false;
-					oitemdetails.MarketPriceEnable = false;
-					oitemdetails.UomEnable = false;
-					this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
-					this.oModel.refresh();
-				}
+	onAddRow: function (oEvent) {
+		var oitemdetails = {};
+		oitemdetails.ItemNum = "";
+		oitemdetails.Description = "";
+		oitemdetails.Quantity = "";
+		oitemdetails.Uom = "";
+		oitemdetails.CostProd = "";
+		oitemdetails.MarkupPrice = ""; 
+		oitemdetails.TransferPrice = "";
+		oitemdetails.MarketPrice = "";
+		var transtype = this.getView().byId("TransID").getSelectedKey();
+		var issueBU = this.oModel.getData().EditRecord.IssueBU;
+		if (transtype === "0") {
+			sap.m.MessageToast.show("Please Select Transaction Type.");
+		} else {
+			if (transtype === "1") {
+				oitemdetails.DescriptionEnable = false;
+				oitemdetails.CostProdEnable = false;
+				oitemdetails.MarkupPriceEnable = false;
+				oitemdetails.TransferPriceEnable = false;
+				oitemdetails.MarketPriceEnable = false;
+				oitemdetails.UomEnable = false;
+				this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
+				this.oModel.refresh();
+			} else if (transtype === "2") {
+				oitemdetails.DescriptionEnable = false;
+				oitemdetails.CostProdEnable = false;
+				oitemdetails.MarkupPriceEnable = true;
+				oitemdetails.TransferPriceEnable = false;
+				oitemdetails.MarketPriceEnable = false;
+				oitemdetails.UomEnable = false;
+				this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
+				this.oModel.refresh();
+			} else if (transtype === "3") {
+				oitemdetails.DescriptionEnable = false;
+				oitemdetails.CostProdEnable = true;
+				oitemdetails.MarkupPriceEnable = true;
+				oitemdetails.TransferPriceEnable = false;
+				oitemdetails.MarketPriceEnable = false;
+				oitemdetails.UomEnable = false;
+				this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
+				this.oModel.refresh();
+			} else if (transtype === "4") {
+				oitemdetails.DescriptionEnable = false;
+				oitemdetails.CostProdEnable = false;
+				oitemdetails.MarkupPriceEnable = false;
+				oitemdetails.TransferPriceEnable = false;
+				oitemdetails.MarketPriceEnable = false;
+				oitemdetails.UomEnable = false;
+				this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
+				this.oModel.refresh();
 			}
-		},
-		////REMOVE ROW ON TABLE
-		onRemoveRow: function (oEvent) {
-			var oTable = this.oTableDetails;
-			var selectedIndeices = oTable.getSelectedIndices();
-			//ROW COUNT VARIABLE
-			var row;
-			var count = 1;
-			for (var i = 0; i < selectedIndeices.length; i++) {
-				row = selectedIndeices[i];
-				this.oModel.getData().EditRecord.DocumentLines.splice(row, 1);
-				count = count + 1;
-			}
-			//Clearing Table Selection
-			oTable.clearSelection();
-			this.oModel.refresh();
-		},
+		}
+	},
+	////REMOVE ROW ON TABLE
+	onRemoveRow: function (oEvent) {
+		var oTable = this.oTableDetails;
+		var selectedIndeices = oTable.getSelectedIndices();
+		//ROW COUNT VARIABLE
+		var row;
+		var count = 1;
+		for (var i = 0; i < selectedIndeices.length; i++) {
+			row = selectedIndeices[i];
+			this.oModel.getData().EditRecord.DocumentLines.splice(row, 1);
+			count = count + 1;
+		}
+		//Clearing Table Selection
+		oTable.clearSelection();
+		this.oModel.refresh();
+	},
     ///On Clear Fields Function
     fClearField: function () {
       try {
@@ -283,40 +283,40 @@ sap.ui.define([
 
     },///ON VIEW SHOWING ALL DATA AND CHANGING NAME INTO EDIT
     onView: function (oEvent) {
-      var iIndex = this.oTable.getSelectedIndex();
-      var TransNo = "";
-      var TransType = "";
-      if (iIndex !== -1) {
-        var oRowSelected = this.oTable.getBinding().getModel().getData().rows[this.oTable.getBinding().aIndices[iIndex]];
-        TransNo = oRowSelected.U_APP_TransNo;
-        TransType = oRowSelected.U_APP_TransType;
-      }
+		var iIndex = this.oTable.getSelectedIndex();
+		var TransNo = "";
+		var TransType = "";
+		if (iIndex !== -1) {
+			var oRowSelected = this.oTable.getBinding().getModel().getData().rows[this.oTable.getBinding().aIndices[iIndex]];
+			TransNo = oRowSelected.U_APP_TransNo;
+			TransType = oRowSelected.U_APP_TransType;
+		}
       /////INITIALIZED HEADER AND DETAILS DATA FOR ONVIEW
-      var queryTag = "",
+      	var queryTag = "",
         value1 = "",
         value2 = "",
         value3 = "",
         value4 = "",
         dbName = this.sDataBase;
-      value1 = TransNo;
-      value2 = TransType;
-      this.fgetHeader(dbName, "spAppBusinessUnit", "getDraftHeader", value1, value2, value3, value4);
-      this.fgetDetails(dbName, "spAppBusinessUnit", "getDraftDetails", value1, value2, value3, value4);
-      var oitemdetails = {};
-      if(TransType === "3"){
-        //this.getView().byId("ItemNum").setEnabled(true);
-        oitemdetails.IsItemNumEnabled = true;
-        oitemdetails.IsQuantityEnabled = true;
-      }else{
-        oitemdetails.IsItemNumEnabled = false;
-        oitemdetails.IsQuantityEnabled = false;
-      }
-      this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
-			this.oModel.refresh();
+		value1 = TransNo;
+		value2 = TransType;
+		this.fgetHeader(dbName, "spAppBusinessUnit", "getDraftHeader", value1, value2, value3, value4);
+		this.fgetDetails(dbName, "spAppBusinessUnit", "getDraftDetails", value1, value2, value3, value4);
+		var oitemdetails = {};
+		if(TransType === "3"){
+			//this.getView().byId("ItemNum").setEnabled(true);
+			oitemdetails.IsItemNumEnabled = true;
+			oitemdetails.IsQuantityEnabled = true;
+		}else{
+			oitemdetails.IsItemNumEnabled = false;
+			oitemdetails.IsQuantityEnabled = false;
+		}
+      	this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
+		this.oModel.refresh();
 
     /// this.getView().byId("idIconTabBarInlineMode").getItems()[1].setText("Transaction No: " + TransNo + " [EDIT]");
-      var tab = this.getView().byId("idIconTabBarInlineMode");
-      tab.setSelectedKey("tab2");
+		var tab = this.getView().byId("idIconTabBarInlineMode");
+		tab.setSelectedKey("tab2");
     },
     //Generic selecting of data
     fgetHeader: function (dbName, procName, queryTag, value1, value2, value3, value4) {
@@ -348,20 +348,19 @@ sap.ui.define([
           this.oModel.getData().EditRecord.MarkupType = results[0].MarkupType;
           this.oModel.getData().EditRecord.IssueBU = results[0].IssueBU;
           this.oModel.getData().EditRecord.ReceiveBU = results[0].ReceiveBU;
-          this.oModel.getData().EditRecord.Remarks = results[0].Remarks;
+		  this.oModel.getData().EditRecord.Remarks = results[0].Remarks;
+		  var isPostedGI = (results[0].IsPostedGI === "Y" ? false:true)
           var oDocStatus=results[0].Status;
           this.oModel.getData().EditRecord.ReceivedBy = this.sUserCode;
           // Disable Add Button if Status is Posted/Cancelled
           if(oDocStatus==="4" || oDocStatus==="5"){
             this.getView().byId("btnCancel").setEnabled(false);
             this.getView().byId("btnSendToRequest").setEnabled(false);
-          }else if(oDocStatus==="3"){
-            this.getView().byId("btnCancel").setEnabled(true);
-            this.getView().byId("btnSendToRequest").setEnabled(true);
           }else{
             this.getView().byId("btnCancel").setEnabled(true);
             this.getView().byId("btnSendToRequest").setEnabled(true);
-          }
+		  }
+		  this.getView().byId("btnCancel").setEnabled(isPostedGI)
 
           //disable textfield depends on transaction type
           var transtype = this.oModel.getData().EditRecord.TransType = results[0].TransType;
@@ -420,140 +419,145 @@ sap.ui.define([
 
     },
   	////CANCELL  POSTED
-		onCancel: function () {
-      var ostatus ="5";
-      var oDocType ="Cancelled";
-			var TransNo = this.oModel.getData().EditRecord.TransNo;
-			var TransType = this.oModel.getData().EditRecord.TransType;
-			//INITIALIZE FOR UPDATE
-			var getcode = this.code;
-			var oBusiness_Unit = {};
-			oBusiness_Unit.Code = getcode;
-			oBusiness_Unit.Name = getcode;
-			oBusiness_Unit.U_APP_TransType = TransType;
-			oBusiness_Unit.U_APP_TransNo = TransNo;
-			oBusiness_Unit.U_APP_TransDate = this.fgetTodaysDate();
-			oBusiness_Unit.U_APP_CardCode = this.oModel.getData().EditRecord.BPCode;
-			oBusiness_Unit.U_APP_CustomerName = this.oModel.getData().EditRecord.BPName;
-			oBusiness_Unit.U_APP_PostingDate = this.oModel.getData().EditRecord.PostingDate;
-			oBusiness_Unit.U_APP_MarkupType = this.oModel.getData().EditRecord.MarkupType;
-			oBusiness_Unit.U_APP_IssueBU = this.oModel.getData().EditRecord.IssueBU;
-			oBusiness_Unit.U_APP_ReceivingBU = this.oModel.getData().EditRecord.ReceiveBU;
-			oBusiness_Unit.U_APP_Remarks = this.oModel.getData().EditRecord.Remarks;
-      oBusiness_Unit.U_APP_Status = ostatus;
-      oBusiness_Unit.U_APP_DocType = oDocType;
-			oBusiness_Unit.U_APP_ReceivedBy = this.sUserCode;
+	onCancel: function () {
+		AppUI5.showBusyIndicator(10000);
+		var ostatus ="5";
+		var oDocType ="Cancelled";
+		var TransNo = this.oModel.getData().EditRecord.TransNo;
+		var TransType = this.oModel.getData().EditRecord.TransType;
+		//INITIALIZE FOR UPDATE
+		var getcode = this.code;
+		var oBusiness_Unit = {};
+		oBusiness_Unit.Code = getcode;
+		oBusiness_Unit.Name = getcode;
+		oBusiness_Unit.U_APP_TransType = TransType;
+		oBusiness_Unit.U_APP_TransNo = TransNo;
+		oBusiness_Unit.U_APP_TransDate = this.fgetTodaysDate();
+		oBusiness_Unit.U_APP_CardCode = this.oModel.getData().EditRecord.BPCode;
+		oBusiness_Unit.U_APP_CustomerName = this.oModel.getData().EditRecord.BPName;
+		oBusiness_Unit.U_APP_PostingDate = this.oModel.getData().EditRecord.PostingDate;
+		oBusiness_Unit.U_APP_MarkupType = this.oModel.getData().EditRecord.MarkupType;
+		oBusiness_Unit.U_APP_IssueBU = this.oModel.getData().EditRecord.IssueBU;
+		oBusiness_Unit.U_APP_ReceivingBU = this.oModel.getData().EditRecord.ReceiveBU;
+		oBusiness_Unit.U_APP_Remarks = this.oModel.getData().EditRecord.Remarks;
+		oBusiness_Unit.U_APP_Status = ostatus;
+		oBusiness_Unit.U_APP_DocType = oDocType;
+		oBusiness_Unit.U_APP_ReceivedBy = this.sUserCode;
 			///HEADER BATCH
-			var BatchHeader =
-				//directly insert data if data is single row per table 
-				{
-					"tableName": "U_APP_OINT",
-					"data": oBusiness_Unit
-				};
-			var sBodyRequest = this.fprepareUpdatePostedRequestBody(BatchHeader, getcode);
-			$.ajax({
-				url: "https://sl.biotechfarms.net/b1s/v1/$batch",
-				type: "POST",
-				contentType: "multipart/mixed;boundary=a",
-				data: sBodyRequest,
-				xhrFields: {
-					withCredentials: true
-				},
-				error: function (xhr, status, error) {
-          var Message = xhr.responseJSON["error"].message.value;
-          console.error(JSON.stringify(Message));
-					sap.m.MessageToast.show(Message);
-				},
-				success: function (json) {
-				
-				},
-				context: this
-			}).done(function (results) {
-				if(JSON.stringify(results).search("400 Bad") !== -1) {
-					var oStartIndex = results.search("value") + 10;
-					var oEndIndex = results.indexOf("}") - 8;
-					var oMessage = results.substring(oStartIndex,oEndIndex);
-					AppUI5.fErrorLogs("U_APP_OINT/U_APP_INT1","Update",TransNo,"null",oMessage,"Update",this.sUserCode,"null",sBodyRequest);
-					sap.m.MessageToast.show(oMessage);
-				}else{
-					if (results) {
-						sap.m.MessageToast.show("Request Has Been Cancelled!");
-						this.fprepareTable(false,"");
-						this.fClearField();
-						this.oModel.refresh();
-					
-					}
+		var BatchHeader =
+		//directly insert data if data is single row per table 
+		{
+			"tableName": "U_APP_OINT",
+			"data": oBusiness_Unit
+		};
+		var sBodyRequest = this.fprepareUpdatePostedRequestBody(BatchHeader, getcode);
+		$.ajax({
+			url: "https://sl.biotechfarms.net/b1s/v1/$batch",
+			type: "POST",
+			contentType: "multipart/mixed;boundary=a",
+			data: sBodyRequest,
+			xhrFields: {
+				withCredentials: true
+			},
+			error: function (xhr, status, error) {
+			var Message = xhr.responseJSON["error"].message.value;
+			console.error(JSON.stringify(Message));
+			sap.m.MessageToast.show(Message);
+			AppUI5.hideBusyIndicator();
+			},
+			success: function (json) {
+			
+			},
+			context: this
+		}).done(function (results) {
+			if(JSON.stringify(results).search("400 Bad") !== -1) {
+				var oStartIndex = results.search("value") + 10;
+				var oEndIndex = results.indexOf("}") - 8;
+				var oMessage = results.substring(oStartIndex,oEndIndex);
+				AppUI5.fErrorLogs("U_APP_OINT/U_APP_INT1","Update",TransNo,"null",oMessage,"Update",this.sUserCode,"null",sBodyRequest);
+				sap.m.MessageToast.show(oMessage);
+				AppUI5.hideBusyIndicator();
+			}else{
+				if (results) {
+					sap.m.MessageToast.show("Request Has Been Cancelled!");
+					this.fprepareTable(false,"");
+					this.fClearField();
+					this.oModel.refresh();
+					AppUI5.hideBusyIndicator();
 				}
-				
-			});
+			}
+		});
     },
     ////UPDATE  POSTED
-		onSendToRequest: function () {
-      var ostatus ="4";
-      var oDocType ="Request";
-			var TransNo = this.oModel.getData().EditRecord.TransNo;
-			var TransType = this.oModel.getData().EditRecord.TransType;
-			//INITIALIZE FOR UPDATE
-			var getcode = this.code;
-			var oBusiness_Unit = {};
-			oBusiness_Unit.Code = getcode;
-			oBusiness_Unit.Name = getcode;
-			oBusiness_Unit.U_APP_TransType = TransType;
-			oBusiness_Unit.U_APP_TransNo = TransNo;
-			oBusiness_Unit.U_APP_TransDate = this.fgetTodaysDate();
-			oBusiness_Unit.U_APP_CardCode = this.oModel.getData().EditRecord.BPCode;
-			oBusiness_Unit.U_APP_CustomerName = this.oModel.getData().EditRecord.BPName;
-			oBusiness_Unit.U_APP_PostingDate = this.oModel.getData().EditRecord.PostingDate;
-			oBusiness_Unit.U_APP_MarkupType = this.oModel.getData().EditRecord.MarkupType;
-			oBusiness_Unit.U_APP_IssueBU = this.oModel.getData().EditRecord.IssueBU;
-			oBusiness_Unit.U_APP_ReceivingBU = this.oModel.getData().EditRecord.ReceiveBU;
-			oBusiness_Unit.U_APP_Remarks = this.oModel.getData().EditRecord.Remarks;
-      oBusiness_Unit.U_APP_Status = ostatus;
-      oBusiness_Unit.U_APP_DocType = oDocType;
-			oBusiness_Unit.U_APP_ReceivedBy = this.sUserCode;
-			///HEADER BATCH
-			var BatchHeader =
-				//directly insert data if data is single row per table 
-				{
-					"tableName": "U_APP_OINT",
-					"data": oBusiness_Unit
-				};
-			var sBodyRequest = this.fprepareUpdatePostedRequestBody(BatchHeader, getcode);
-			$.ajax({
-				url: "https://sl.biotechfarms.net/b1s/v1/$batch",
-				type: "POST",
-				contentType: "multipart/mixed;boundary=a",
-				data: sBodyRequest,
-				xhrFields: {
-					withCredentials: true
-				},
-				error: function (xhr, status, error) {
-          var Message = xhr.responseJSON["error"].message.value;
-          console.error(JSON.stringify(Message));
-					sap.m.MessageToast.show(Message);
-				},
-				success: function (json) {
-				
-				},
-				context: this
-			}).done(function (results) {
-				if(JSON.stringify(results).search("400 Bad") !== -1) {
-					var oStartIndex = results.search("value") + 10;
-					var oEndIndex = results.indexOf("}") - 8;
-					var oMessage = results.substring(oStartIndex,oEndIndex);
-					AppUI5.fErrorLogs("U_APP_OINT/U_APP_INT1","Update",TransNo,"null",oMessage,"Update",this.sUserCode,"null",sBodyRequest);
-					sap.m.MessageToast.show(oMessage);
-				}else{
-					if (results) {
-						sap.m.MessageToast.show("Request Has Been Sent!");
-						this.fprepareTable(false,"");
-						this.fClearField();
-						this.oModel.refresh();
-					
-					}
+	onSendToRequest: function () {
+		AppUI5.showBusyIndicator(10000);
+		var ostatus ="4";
+		var oDocType ="Request";
+		var TransNo = this.oModel.getData().EditRecord.TransNo;
+		var TransType = this.oModel.getData().EditRecord.TransType;
+		//INITIALIZE FOR UPDATE
+		var getcode = this.code;
+		var oBusiness_Unit = {};
+		oBusiness_Unit.Code = getcode;
+		oBusiness_Unit.Name = getcode;
+		oBusiness_Unit.U_APP_TransType = TransType;
+		oBusiness_Unit.U_APP_TransNo = TransNo;
+		oBusiness_Unit.U_APP_TransDate = this.fgetTodaysDate();
+		oBusiness_Unit.U_APP_CardCode = this.oModel.getData().EditRecord.BPCode;
+		oBusiness_Unit.U_APP_CustomerName = this.oModel.getData().EditRecord.BPName;
+		oBusiness_Unit.U_APP_PostingDate = this.oModel.getData().EditRecord.PostingDate;
+		oBusiness_Unit.U_APP_MarkupType = this.oModel.getData().EditRecord.MarkupType;
+		oBusiness_Unit.U_APP_IssueBU = this.oModel.getData().EditRecord.IssueBU;
+		oBusiness_Unit.U_APP_ReceivingBU = this.oModel.getData().EditRecord.ReceiveBU;
+		oBusiness_Unit.U_APP_Remarks = this.oModel.getData().EditRecord.Remarks;
+		oBusiness_Unit.U_APP_Status = ostatus;
+		oBusiness_Unit.U_APP_DocType = oDocType;
+		oBusiness_Unit.U_APP_ReceivedBy = this.sUserCode;
+		///HEADER BATCH
+		var BatchHeader =
+			//directly insert data if data is single row per table 
+			{
+				"tableName": "U_APP_OINT",
+				"data": oBusiness_Unit
+			};
+		var sBodyRequest = this.fprepareUpdatePostedRequestBody(BatchHeader, getcode);
+		$.ajax({
+			url: "https://sl.biotechfarms.net/b1s/v1/$batch",
+			type: "POST",
+			contentType: "multipart/mixed;boundary=a",
+			data: sBodyRequest,
+			xhrFields: {
+				withCredentials: true
+			},
+			error: function (xhr, status, error) {
+		var Message = xhr.responseJSON["error"].message.value;
+		console.error(JSON.stringify(Message));
+				sap.m.MessageToast.show(Message);
+				AppUI5.hideBusyIndicator();
+			},
+			success: function (json) {
+			
+			},
+			context: this
+		}).done(function (results) {
+			if(JSON.stringify(results).search("400 Bad") !== -1) {
+				var oStartIndex = results.search("value") + 10;
+				var oEndIndex = results.indexOf("}") - 8;
+				var oMessage = results.substring(oStartIndex,oEndIndex);
+				AppUI5.fErrorLogs("U_APP_OINT/U_APP_INT1","Update",TransNo,"null",oMessage,"Update",this.sUserCode,"null",sBodyRequest);
+				sap.m.MessageToast.show(oMessage);
+				AppUI5.hideBusyIndicator();
+			}else{
+				if (results) {
+					sap.m.MessageToast.show("Request Has Been Sent!");
+					this.fprepareTable(false,"");
+					this.fClearField();
+					this.oModel.refresh();
+					AppUI5.hideBusyIndicator();
 				}
-				
-			});
+			}
+			
+		});
     },
     //ALL ITEM LIST FROM FRAGMENT
 		handleValueitemdetails: function (oEvent) {

@@ -409,13 +409,14 @@ sap.ui.define([
 			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].Uom = ItemDetails[0].InventoryUom;
 			if(transtype === "3"){
 				var oCostToProduce =this.f_getAveragePrice(ItemDetails[0].ItemCode,receivebu);
-				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].CostProd = this.f_getAveragePrice(ItemDetails[0].ItemCode,receivebu);
+				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].CostProd = oCostToProduce;
 			}else{
 				var oCostToProduce =this.f_getAveragePrice(ItemDetails[0].ItemCode,issuebu);
-				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].CostProd = this.f_getAveragePrice(ItemDetails[0].ItemCode,issuebu);
+				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].CostProd = oCostToProduce;
 			}
-			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].MarketPrice = this.f_getMarketPrice(ItemDetails[0].ItemCode);
 			var oMarketPrice = this.f_getMarketPrice(ItemDetails[0].ItemCode);
+			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].MarketPrice = oMarketPrice;
+			
 
 			if (transtype === "1") {
 				if(oCostToProduce <= oMarketPrice){
@@ -617,6 +618,7 @@ sap.ui.define([
 			}
 		},
 		onAddRequest: function (oEvent){
+			//AppUI5.showBusyIndicator(10000);
 			var oIssueBu = this.getView().byId("inputwhsissue").getValue();
 			var oRequestBu = this.getView().byId("inputwhsreceive").getValue();
 			var oPostingDate = this.getView().byId("dpickerpostingdate").getValue();
@@ -634,6 +636,7 @@ sap.ui.define([
 			}else{
 				this.fAddRequest();
 			}
+			//AppUI5.hideBusyIndicator();
 
 		},
 		////ADD REQUEST Function POSTING ON UDT
@@ -760,7 +763,7 @@ sap.ui.define([
 		fAddRequest: function (oEvent) {
 			var ostatus ="4";
 			var oDocType = "Request";
-			AppUI5.showBusyIndicator(4000);
+			AppUI5.showBusyIndicator(10000);
 			//GET TRANSACTION NUMBER
 			var sGeneratedTransNo = "";
 			var TransType = this.oModel.getData().EditRecord.TransType;
@@ -854,6 +857,7 @@ sap.ui.define([
 					console.error(JSON.stringify(Message));
 					sap.m.MessageToast.show(Message);
 					sap.m.MessageToast.show(xhr.responseText);
+					AppUI5.hideBusyIndicator();
 				},
 				success: function (json) {
 
@@ -866,6 +870,7 @@ sap.ui.define([
 					var oMessage = results.substring(oStartIndex,oEndIndex);
 					AppUI5.fErrorLogs("U_APP_OINT/U_APP_INT1","Add Draft","1","1",oMessage,"Insert",this.sUserCode,"1");
 					sap.m.MessageToast.show(oMessage);
+					AppUI5.hideBusyIndicator();
 				}else{
 					if (results) {
 						sap.m.MessageToast.show("Request Has Been Sent");

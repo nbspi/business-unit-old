@@ -110,6 +110,7 @@ sap.ui.define([
       doc.text(166, 59, oPostingDate);
 
       doc.setFontSize(12)
+      doc.text(20, 70, 'Transaction #: '+ transno +'');
       doc.text(20, 80, 'REQUESTOR: '+ oIssueBU +'');
       doc.text(20, 90, 'PURPOSE: '+ oRemarks +'');
 
@@ -153,7 +154,9 @@ sap.ui.define([
         this.oModel.getData().EditRecord.IssueBU = "";
         this.oModel.getData().EditRecord.ReceiveBU = "";
         this.oModel.getData().EditRecord.Remarks = "";
+        this.oModel.getData().EditRecord.MarkupType = "";
         this.oModel.getData().EditRecord.DocumentLines.length = 0;
+       //this.getView().byId("inputmarkuptype").setSelectedKey(null);
         this.oIssueBu = "";
         this.oReceiveBu= "";
         this.oModel.refresh();
@@ -266,6 +269,7 @@ sap.ui.define([
 
     },///ON VIEW SHOWING ALL DATA AND CHANGING NAME INTO EDIT
     onView: function (oEvent) {
+      this.fClearField();
       var iIndex = this.oTable.getSelectedIndex();
       var TransNo = "";
       var TransType = "";
@@ -1434,13 +1438,13 @@ sap.ui.define([
       for (var d = 0; d < this.oModel.getData().EditRecord.DocumentLines.length; d++) {
         if(transtype === "3"){
           var oCostToProduce =this.f_getAveragePrice(this.oModel.getData().EditRecord.DocumentLines[d].ItemNum,this.oReceiveBu);
-          this.oModel.getData().EditRecord.DocumentLines[d].CostProd = this.f_getAveragePrice(this.oModel.getData().EditRecord.DocumentLines[d].ItemNum,this.oReceiveBu);
+          this.oModel.getData().EditRecord.DocumentLines[d].CostProd = oCostToProduce;
         }else{
           var oCostToProduce =this.f_getAveragePrice(this.oModel.getData().EditRecord.DocumentLines[d].ItemNum,this.oIssueBu);
-          this.oModel.getData().EditRecord.DocumentLines[d].CostProd = this.f_getAveragePrice(this.oModel.getData().EditRecord.DocumentLines[d].ItemNum,this.oIssueBu);
+          this.oModel.getData().EditRecord.DocumentLines[d].CostProd = oCostToProduce;
         }
-        this.oModel.getData().EditRecord.DocumentLines[d].MarketPrice = this.f_getMarketPrice(this.oModel.getData().EditRecord.DocumentLines[d].ItemNum);
         var oMarketPrice = this.f_getMarketPrice(this.oModel.getData().EditRecord.DocumentLines[d].ItemNum);
+        this.oModel.getData().EditRecord.DocumentLines[d].MarketPrice = oMarketPrice;
   
         if (transtype === "1") {
           if(oCostToProduce <= oMarketPrice){
@@ -1493,7 +1497,9 @@ sap.ui.define([
 				var oTransferPrice = ((Number([oMarkPrice] * 0.01) * Number([oCostToProduce])) + Number([oCostToProduce]));
 			}else if(oMarkupType==="2"){
 				var oTransferPrice = Number([oMarkPrice]) + Number([oCostToProduce]);
-			}
+			}else{
+        sap.m.MessageToast.show("Please Choose WareHouse/Markup Type!");
+      }
 			this.getView().byId("transferprice").setValue(oTransferPrice);
 			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice=oTransferPrice;
 			this.oModel.refresh();
