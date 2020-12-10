@@ -1303,90 +1303,102 @@ sap.ui.define([
 		},
 		///POSTING ON BU TO INTER ORG ISSUE
 		fBuToInterOrgReceipt: function (transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey) {
-		  AppUI5.showBusyIndicator(10000);
-		  //Initialize Variables
-		  var ostatus="2";
-		  var oDocType ="Goods Receipt/Purchase Invoices";
-		  var oInvoice = {};
-		  var oGoodsReceipt= {};
-		  var oInvoiceHeader = {};
-		  var oGoodsReceiptHeader = {};
-		  oInvoice.CardCode = this.oModel.getData().EditRecord.BPCode;
-		  oInvoice.Comments = this.oModel.getData().EditRecord.Remarks;
-		  oInvoice.DocumentLines = [];
-		  oGoodsReceipt.Comments = this.oModel.getData().EditRecord.Remarks;
-		  // oGoodsReceipt.U_APP_GR_TransType = "BU";
-		  oGoodsReceipt.DocumentLines = [];
-		  ///LOOP FOR THE DETAILS
-		  var d;
-		  for (d = 0; d < this.oModel.getData().EditRecord.DocumentLines.length; d++) {
-			///Goods Receipt Details
-			oInvoiceHeader.WarehouseCode = this.oReceiveBu;
-			oInvoiceHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
-			oInvoiceHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
-			oInvoiceHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice; //adjustment
+			AppUI5.showBusyIndicator(15000);
+			//Initialize Variables
+			var ostatus="1"; //NDC change status from 2 to 1
+			var oDocType ="Goods Receipt"; ///Purchase Invoices
+			var oInvoice = {};
+			var oGoodsReceipt= {};
+			var oInvoiceHeader = {};
+			var oGoodsReceiptHeader = {};
+			oInvoice.CardCode = this.oModel.getData().EditRecord.BPCode;
+			oInvoice.Comments = this.oModel.getData().EditRecord.Remarks;
+			oInvoice.DocumentLines = [];
+			oGoodsReceipt.Comments = this.oModel.getData().EditRecord.Remarks;
+			// oGoodsReceipt.U_APP_GR_TransType = "BU";
+			oGoodsReceipt.DocumentLines = [];
+			///LOOP FOR THE DETAILS
+			var d;
+			for (d = 0; d < this.oModel.getData().EditRecord.DocumentLines.length; d++) {
+				///Goods Receipt Details
+				oInvoiceHeader.WarehouseCode = this.oReceiveBu;
+				oInvoiceHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
+				oInvoiceHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
+				var oTransferPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
+				var oCostToProduce = this.oModel.getData().EditRecord.DocumentLines[d].CostProd;
+				if(oTransferPrice==="0" || oTransferPrice===0 || oTransferPrice===""){
+					oInvoiceHeader.UnitPrice = oCostToProduce;
+				}else{
+					oInvoiceHeader.UnitPrice = oTransferPrice;
+				}
+				oInvoiceHeader.UoMEntry = this.oModel.getData().EditRecord.DocumentLines[d].UomEntry;
+				oInvoiceHeader.VatGroup = "IVAT-E";
+				///Goods Issue Details
+				oGoodsReceiptHeader.WarehouseCode = this.oReceiveBu;
+				oGoodsReceiptHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
+				oGoodsReceiptHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
+				oGoodsReceiptHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
+				oGoodsReceiptHeader.UoMEntry = this.oModel.getData().EditRecord.DocumentLines[d].UomEntry;
 
-			///Goods Issue Details
-			oGoodsReceiptHeader.WarehouseCode = this.oReceiveBu;
-			oGoodsReceiptHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
-			oGoodsReceiptHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
-			oGoodsReceiptHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
-
-			oInvoice.DocumentLines.push(JSON.parse(JSON.stringify(oInvoiceHeader)));
-			oGoodsReceipt.DocumentLines.push(JSON.parse(JSON.stringify(oGoodsReceiptHeader)));
-		  }
-		  var batchArray = [
-			//directly insert data if data is single row per table
-			{
-			  "tableName": "PurchaseInvoices",
-			  "data": oInvoice
+				oInvoice.DocumentLines.push(JSON.parse(JSON.stringify(oInvoiceHeader)));
+				oGoodsReceipt.DocumentLines.push(JSON.parse(JSON.stringify(oGoodsReceiptHeader)));
 			}
-		  ];
+			var batchArray = [
+				//directly insert data if data is single row per table
+				{
+				  // "tableName": "PurchaseInvoices",
+				  // "data": oInvoice
+				  "tableName": "InventoryGenEntries",
+				  "data": oGoodsReceipt
+				}
+			  ];
 
-		  batchArray.push(JSON.parse(JSON.stringify(({
-			"tableName": "InventoryGenEntries",
-			"data": oGoodsReceipt
-		  }))));
+			// batchArray.push(JSON.parse(JSON.stringify(({
+			// 	"tableName": "InventoryGenEntries",
+			// 	"data": oGoodsReceipt
+			// }))));
 
-		  var sBodyRequest = this.fprepareBatchRequestBody(batchArray);
-		  //ajax call to SL
-		  $.ajax({
-			url: "https://sl.biotechfarms.net/b1s/v1/$batch",
-			type: "POST",
-			contentType: "multipart/mixed;boundary=a",
-			data: sBodyRequest, //If batch, body data should not be JSON.stringified
-			xhrFields: {
-			  withCredentials: true
-			},
-			error: function (xhr, status, error) {
-			  var Message = xhr.responseJSON["error"].message.value;
-			  console.error(JSON.stringify(Message));
-			  sap.m.MessageToast.show(Message);
-			  AppUI5.hideBusyIndicator();
-			},
-			success: function (json) {
-			  AppUI5.hideBusyIndicator();
-			},
-			context: this
+			// var sBodyRequest = this.fprepareBatchRequestBody(batchArray);
+			//ajax call to SL
+			$.ajax({
+				url: "https://sl.biotechfarms.net/b1s/v1/InventoryGenEntries",
+				type: "POST",
+				contentType: "multipart/mixed;boundary=a",
+				data: JSON.stringify(oGoodsReceipt), //If batch, body data should not be JSON.stringified
+				xhrFields: {
+					withCredentials: true
+				},
+				error: function (xhr, status, error) {
+					var Message = xhr.responseJSON["error"].message.value;
+					console.error(JSON.stringify(Message));
+					sap.m.MessageToast.show(Message);
+					AppUI5.hideBusyIndicator();
+				},
+				success: function (json) {
+					AppUI5.hideBusyIndicator();
+				},
+				context: this
 
-		  }).done(function (results) {
-			if(JSON.stringify(results).search("400 Bad") !== -1) {
-			  var oStartIndex = results.search("value") + 10;
-			  var oEndIndex = results.indexOf("}") - 8;
-			  var oMessage = results.substring(oStartIndex,oEndIndex);
-			  AppUI5.fErrorLogs("OIGE/OPCH","Insert","null","null",oMessage,"Insert",this.sUserCode,"null",sBodyRequest);
-			  sap.m.MessageToast.show(oMessage);
-			}else{
-			  if (results) {
-			   //UPDATE RECORDS ON UDT
-			   this.fUpdatePending(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
-				sap.m.MessageToast.show("Transaction Type "+ TransType +" Draft Has Been Created!");
-				this.fClearField();
-				this.oModel.refresh();
-				AppUI5.hideBusyIndicator();
-			  }
-			}
-		  });
+			}).done(function (results) {
+				if(JSON.stringify(results).search("400 Bad") !== -1) {
+					var oStartIndex = results.search("value") + 10;
+					var oEndIndex = results.indexOf("}") - 8;
+					var oMessage = results.substring(oStartIndex,oEndIndex);
+					AppUI5.fErrorLogs("OIGE/OPCH","Insert","null","null",oMessage,"Insert",this.sUserCode,"null",sBodyRequest);
+					sap.m.MessageToast.show(oMessage);
+				}else{
+					if (results) {
+						////this.fAddDraftFunction(transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
+						//UPDATE RECORDS ON UDT
+					    this.fUpdatePending(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
+						AppUI5.fprintGoodsReceipt(this.sUserCode,transtype,this.iTranNum,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails);
+						sap.m.MessageToast.show("Transaction Type "+ transtype +" Draft Has Been Created!");
+						this.fClearField();
+						this.oModel.refresh();
+						AppUI5.hideBusyIndicator();
+					}
+				}
+			});
 		},
 		////POSTING Renewable Energy Transfer BUSINESS TYPE
 		fRenewableEnergyTransfer: function (transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey) {
@@ -1468,13 +1480,11 @@ sap.ui.define([
 			var oRemarks = this.oModel.getData().EditRecord.Remarks;
 			var oDetails = this.oModel.getData().EditRecord.DocumentLines;
 			var oCountDetails = this.oModel.getData().EditRecord.DocumentLines.length;
-			var sAttachment = this.getView().byId("fileUploader").getValue();
+			//var sAttachment = this.getView().byId("fileUploader").getValue();
 			var oAttachment = this.Attachment;
 			var oAttachmentKey = this.FileKey;
 			if (transtype === "" || transno === "") {
 				sap.m.MessageToast.show("Please Select Transaction.");
-			}else if(sAttachment===""){
-				sap.m.MessageToast.show("Please attach a document");
 			}else if(oCountDetails===0){
 				sap.m.MessageToast.show("Please Select Transaction.");
 			}else if(transtype === "1"){

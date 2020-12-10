@@ -36,10 +36,7 @@
 "AllTransactionTypes": [{
     "key": "1",
     "value": "1 - Intra Org - Transfer"
-    }, {
-        "key": "3",
-        "value": "3 - Inter Affiliates - Receipt"
-    }, {
+    },{
         "key": "4",
         "value": "4 - RE - Electricity Transfer"
     }

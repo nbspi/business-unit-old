@@ -122,7 +122,7 @@ sap.ui.define([
                 data[i]=[oModel[i].ItemNum,oModel[i].Quantity,oModel[i].Uom,oModel[i].Description];
             }
       doc.autoTable(columns,data,{startY:100});
-      doc.text(20, 170, 'REQUESTED BY:____________________');
+      doc.text(20, 170, 'REQUESTED BY:'+ this.sUserCode +'');
       doc.text(20, 180, 'APPROVED BY:____________________');
       doc.text(20, 190, 'RECEIVED BY:____________________');
       doc.text(120, 170, 'PREPARED BY:____________________');
@@ -296,6 +296,8 @@ sap.ui.define([
 
       if(TransType ==="2" || TransType ==="3"){
         this.getView().byId("inputmarkuptype").setEnabled(true);
+      }else if(TransType ==="1"){
+        this.getView().byId("inputmarkuptype").setEnabled(false);
       }
 
       this.gGetUserRoles();
@@ -509,6 +511,7 @@ sap.ui.define([
       var oDocType ="Goods Issue";
       var oGoodsIssue = {};
       var oGoodsIssueHeader = {};
+      // oGoodsIssue.AuthorizationStatus="dasWithout";
       oGoodsIssue.Comments = this.oModel.getData().EditRecord.Remarks;
       oGoodsIssue.AttachmentEntry = oAttachmentKey;
       oGoodsIssue.U_APP_GI_TransType = "BU";
@@ -531,6 +534,7 @@ sap.ui.define([
         xhrFields: {
           withCredentials: true
         },
+        
         error: function (xhr, status, error) {
           var Message = xhr.responseJSON["error"].message.value;
           AppUI5.fErrorLogs("OIGE","Insert","null","null",Message,"Bu to Bu",this.sUserCode,"null",JSON.stringify(oGoodsIssue));
@@ -539,6 +543,7 @@ sap.ui.define([
           AppUI5.hideBusyIndicator();
         },
         success: function (json) {
+        
           //ADD UDT RECORDS
           this.fUpdatePending(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
           this.fprintGoodsIssue(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);

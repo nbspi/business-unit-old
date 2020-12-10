@@ -491,7 +491,7 @@ sap.ui.define([
 		},
 		//NDC 07/08/2020
 		//Goods Receipt
-		fprintGoodsReceipt: function(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails){
+		fprintGoodsReceipt: function(oUserCode,transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails){
 			try {
 				//doc.text(20, 20, 'Biotech Farms Inc.(BFI)');
 			doc.setFontSize(12)
@@ -512,7 +512,7 @@ sap.ui.define([
 	
 			doc.setFontSize(12)
 			doc.text(20, 70, 'Transaction #: '+ transno +'');
-			doc.text(20, 80, 'REQUESTOR: '+ oIssueBU +'');
+			doc.text(20, 80, 'REQUESTOR: '+ oReceiveBU +'');
 			doc.text(20, 90, 'PURPOSE: '+ oRemarks +'');
 	
 			var oModel  = oDetails;
@@ -523,7 +523,7 @@ sap.ui.define([
 						data[i]=[oModel[i].ItemNum,oModel[i].Quantity,oModel[i].Uom,oModel[i].Description];
 				}
 			doc.autoTable(columns,data,{startY:100});
-			doc.text(20, 170, 'REQUESTED BY:____________________');
+			doc.text(20, 170, 'REQUESTED BY:'+ oUserCode +'');
 			doc.text(20, 180, 'APPROVED BY:____________________');
 			doc.text(20, 190, 'RECEIVED BY:____________________');
 			doc.text(120, 170, 'PREPARED BY:____________________');

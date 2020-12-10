@@ -104,7 +104,7 @@ sap.ui.define([
 					data[i]=[oModel[i].ItemNum,oModel[i].Quantity,oModel[i].Uom,oModel[i].Description];
 				}
 			doc.autoTable(columns,data,{startY:100});
-			doc.text(20, 170, 'REQUESTED BY:____________________');
+			doc.text(20, 170, 'REQUESTED BY:'+ this.sUserCode +'');
 			doc.text(20, 180, 'APPROVED BY:____________________');
 			doc.text(20, 190, 'RECEIVED BY:____________________');
 			doc.text(120, 170, 'PREPARED BY:____________________');

@@ -151,7 +151,7 @@ sap.ui.define([
 								data[i]=[oModel[i].ItemNum,oModel[i].Quantity,oModel[i].Uom,oModel[i].Description];
 						}
 			doc.autoTable(columns,data,{startY:100});
-			doc.text(20, 170, 'REQUESTED BY:____________________');
+			doc.text(20, 170, 'REQUESTED BY:'+ this.sUserCode +'');
 			doc.text(20, 180, 'APPROVED BY:____________________');
 			doc.text(20, 190, 'RECEIVED BY:____________________');
 			doc.text(120, 170, 'PREPARED BY:____________________');
@@ -719,7 +719,7 @@ sap.ui.define([
 			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].Uom = ItemDetails[0].InventoryUom;
 			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].UomEntry = ItemDetails[0].UomEntry;
 			var oMarketPrice = this.f_getMarketPrice(ItemDetails[0].ItemCode);
-			if(transtype === "4"){
+			if(transtype === "3"){
 				var oCostToProduce =this.f_getAveragePrice(ItemDetails[0].ItemCode,receivebu);
 				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].CostProd = this.f_getAveragePrice(ItemDetails[0].ItemCode,receivebu);
 				oMarketPrice = this.f_getAveragePrice(ItemDetails[0].ItemCode,receivebu);
@@ -1340,7 +1340,7 @@ sap.ui.define([
 					sap.m.MessageToast.show(oMessage);
 				}else{
 					if (results) {
-						this.fAddDraftFunction(transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
+						this.fAddDraftFunction(this.sUserCode,transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
 						AppUI5.fprintGoodsReceipt(transtype,this.iTranNum,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails);
 						sap.m.MessageToast.show("Transaction Type "+ transtype +" Draft Has Been Created!");
 						this.fClearField();
