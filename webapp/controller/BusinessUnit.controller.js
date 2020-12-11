@@ -1208,6 +1208,13 @@ sap.ui.define([
 			}).done(function (results) {
 				if (results) {
 					//POSTING OF INVOICE
+					var oAccountCode="";
+					if(this.sDataBase==="PROD_RCI"){
+						var oAccountCode="_SYS00000000985";
+					}else{
+						var oAccountCode="_SYS00000000942";
+					}
+
 					var oInvoice = {};
 					var oInvoiceHeader = {};
 					oInvoice.CardCode = ocardcode;
@@ -1216,7 +1223,7 @@ sap.ui.define([
 					oInvoice.DocumentLines = [];
 					///HARD CODED ACCOUNT CODE FOR TESTING
 					oInvoiceHeader.ItemDescription = oDescription;
-					oInvoiceHeader.AccountCode ="_SYS00000000942"; //4110101101//_SYS00000000942//4110101101-000-000-000-000-000
+					oInvoiceHeader.AccountCode =oAccountCode; //4110101101//_SYS00000000942//4110101101-000-000-000-000-000
 					oInvoiceHeader.LineTotal =results.DocTotal;
 					oInvoice.DocumentLines.push(JSON.parse(JSON.stringify(oInvoiceHeader)));
 
@@ -1254,6 +1261,7 @@ sap.ui.define([
 			}); ////GOODS ISSUE END
 		},
 		///POSTING ON BU TO INTER ORG ISSUE
+		
 		fBuToInterOrgReceipt: function (transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey,transno) {
 			AppUI5.showBusyIndicator(15000);
 			//Initialize Variables
@@ -1340,8 +1348,8 @@ sap.ui.define([
 					sap.m.MessageToast.show(oMessage);
 				}else{
 					if (results) {
-						this.fAddDraftFunction(this.sUserCode,transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
-						AppUI5.fprintGoodsReceipt(transtype,this.iTranNum,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails);
+						this.fAddDraftFunction(transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
+						AppUI5.fprintGoodsReceipt(this.sUserCode,transtype,this.iTranNum,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails);
 						sap.m.MessageToast.show("Transaction Type "+ transtype +" Draft Has Been Created!");
 						this.fClearField();
 						this.oModel.refresh();

@@ -1233,6 +1233,13 @@ sap.ui.define([
 			}).done(function (results) {
 				if (results) {
 				//POSTING OF INVOICE
+				//POSTING OF INVOICE
+				var oAccountCode="";
+				if(this.sDataBase==="PROD_RCI"){
+					var oAccountCode="_SYS00000000985";
+				}else{
+					var oAccountCode="_SYS00000000942";
+				}
 				var oInvoice = {};
 				var oInvoiceHeader = {};
 				oInvoice.CardCode = ocardcode;
@@ -1241,7 +1248,7 @@ sap.ui.define([
 				oInvoice.DocumentLines = [];
 				///HARD CODED ACCOUNT CODE FOR TESTING
 				oInvoiceHeader.ItemDescription = oDescription;
-				oInvoiceHeader.AccountCode ="4110101101-000-000-000-000-000";
+				oInvoiceHeader.AccountCode = oAccountCode;
 				oInvoiceHeader.LineTotal =results.DocTotal;
 				oInvoice.DocumentLines.push(JSON.parse(JSON.stringify(oInvoiceHeader)));
 
