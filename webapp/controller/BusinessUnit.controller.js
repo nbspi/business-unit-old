@@ -893,7 +893,7 @@ sap.ui.define([
 			});
 		},
 
-		fBuToCashSales: function (transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey) {
+		fBuToCashSales: function (transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey,transno) {
 			//Initialize Variables
 			AppUI5.showBusyIndicator(4000);
 			var ostatus="2";
@@ -1021,7 +1021,7 @@ sap.ui.define([
 			}); ////GOODS ISSUE END
 		},
 		////POSTING ON BU TO VALE
-		fBuToVale: function (transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey) {
+		fBuToVale: function (transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey,transno) {
 			//Initialize Variables
 			AppUI5.showBusyIndicator(4000);
 			var ostatus="2";
@@ -1111,7 +1111,7 @@ sap.ui.define([
 			}); ////GOODS ISSUE END
 		},
 		////POSTING ON BU TO CHARGE TO EXPENSE
-		fBUtoChargetoExpense: function (transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey) {
+		fBUtoChargetoExpense: function (transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey,transno) {
 			AppUI5.showBusyIndicator(10000);
 			//Initialize Variables
 			var ostatus="2";

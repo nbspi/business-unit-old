@@ -110,6 +110,8 @@ sap.ui.define([
 			this.Attachment = "";
 			//For Attachment File Key
 			this.FileKey = null;
+
+			this.iTranNum=0;
 		},
 			//GETTING DATE NOW
 		fgetTodaysDate: function () {
@@ -683,6 +685,14 @@ sap.ui.define([
 			}else{
 				this.getView().byId("btnCancelRecords").setVisible(true);
 			}
+
+			if(TransType ==="2"){
+				this.getView().byId("inputwhsreceive").setEnabled(false);
+				this.getView().byId("inputwhsissue").setEnabled(true);
+			  }else if(TransType ==="3"){
+				this.getView().byId("inputwhsreceive").setEnabled(true);
+				this.getView().byId("inputwhsissue").setEnabled(false);
+			}
 		},
 		//Generic selecting of data
 		fgetHeader: function (dbName, procName, queryTag, value1, value2, value3, value4) {
@@ -722,6 +732,8 @@ sap.ui.define([
 					this.Attachment = results[0].Attachment;
 					this.FileKey = results[0].Attachmentkey;
 					var oDocStatus=results[0].Status;
+
+					this.iTranNum = results[0].TransNo;
 					// Disable Add Button if Status is Posted/Cancelled
 					if(oDocStatus==="2" || oDocStatus==="5"){
 						this.getView().byId("btnAddRecords").setEnabled(false);
@@ -897,7 +909,7 @@ sap.ui.define([
 			},
 			success: function (json) {
 				//ADD UDT RECORDS
-				this.fUpdatePending(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
+				this.fUpdatePending(transtype,this.iTranNum,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
 				sap.m.MessageToast.show("Added Successfully");
 				this.fClearField();
 				this.oModel.refresh();
@@ -1269,7 +1281,7 @@ sap.ui.define([
 					},
 					success: function (json) {
 					//UPDATE RECORDS ON UDT
-					this.fUpdatePending(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
+					this.fUpdatePending(transtype,this.iTranNum,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
 					sap.m.MessageToast.show("Posting of Goods Issue is Successful");
 					this.fClearField();
 					this.oModel.refresh();
@@ -1312,7 +1324,7 @@ sap.ui.define([
 		fBuToInterOrgReceipt: function (transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey) {
 			AppUI5.showBusyIndicator(15000);
 			//Initialize Variables
-			var ostatus="1"; //NDC change status from 2 to 1
+			var ostatus="2"; //NDC change status from 2 to 1
 			var oDocType ="Goods Receipt"; ///Purchase Invoices
 			var oInvoice = {};
 			var oGoodsReceipt= {};
@@ -1397,7 +1409,7 @@ sap.ui.define([
 					if (results) {
 						////this.fAddDraftFunction(transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
 						//UPDATE RECORDS ON UDT
-					    this.fUpdatePending(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
+					    this.fUpdatePending(transtype,this.iTranNum,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
 						AppUI5.fprintGoodsReceipt(this.sUserCode,transtype,this.iTranNum,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails);
 						sap.m.MessageToast.show("Transaction Type "+ transtype +" Draft Has Been Created!");
 						this.fClearField();
@@ -1445,7 +1457,7 @@ sap.ui.define([
 				},
 				success: function (json) {
 					//UPDATE RECORDS ON UDT
-					this.fUpdatePending(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
+					this.fUpdatePending(transtype,this.iTranNum,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
 					sap.m.MessageToast.show("Added Successfully");
 					this.fClearField();
 					this.oModel.refresh();
@@ -1478,7 +1490,7 @@ sap.ui.define([
 		onAddRecords: function (oEvent) {
 			//INITIALIZE VARIABLES
 			var transtype = this.oModel.getData().EditRecord.TransType;
-			var transno = this.oModel.getData().EditRecord.TransNo;
+			var transno = this.iTranNum;
 			var oCardCode = this.oModel.getData().EditRecord.BPCode;
 			var oPostingDate = this.getView().byId("dpickerpostingdate").getValue();
 			var oMarkupType = this.oModel.getData().EditRecord.MarkupType;
