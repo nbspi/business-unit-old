@@ -1380,7 +1380,8 @@ sap.ui.define([
 			oInvoice.Comments = this.oModel.getData().EditRecord.Remarks;
 			oInvoice.DocumentLines = [];
 			oGoodsReceipt.Comments = this.oModel.getData().EditRecord.Remarks;
-			// oGoodsReceipt.U_APP_GR_TransType = "BU";
+			oGoodsReceipt.U_APP_GR_TransType = "BU";
+			oGoodsReceipt.U_APP_BU_TransNum = transno;
 			oGoodsReceipt.DocumentLines = [];
 			///LOOP FOR THE DETAILS
 			var d;

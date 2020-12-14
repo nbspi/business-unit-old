@@ -1275,7 +1275,8 @@ sap.ui.define([
 			oInvoice.Comments = this.oModel.getData().EditRecord.Remarks;
 			oInvoice.DocumentLines = [];
 			oGoodsReceipt.Comments = this.oModel.getData().EditRecord.Remarks;
-			// oGoodsReceipt.U_APP_GR_TransType = "BU";
+			oGoodsReceipt.U_APP_BU_TransNum = transno;
+			oGoodsReceipt.U_APP_GR_TransType = "BU";
 			oGoodsReceipt.DocumentLines = [];
 			///LOOP FOR THE DETAILS
 			var d;
@@ -1299,6 +1300,7 @@ sap.ui.define([
 				oGoodsReceiptHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
 				oGoodsReceiptHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
 				oGoodsReceiptHeader.UoMEntry = this.oModel.getData().EditRecord.DocumentLines[d].UomEntry;
+				
 
 				oInvoice.DocumentLines.push(JSON.parse(JSON.stringify(oInvoiceHeader)));
 				oGoodsReceipt.DocumentLines.push(JSON.parse(JSON.stringify(oGoodsReceiptHeader)));
