@@ -1260,7 +1260,7 @@ sap.ui.define([
 				}  /////POSTING A/R INVOICE END
 			}); ////GOODS ISSUE END
 		},
-		///POSTING ON BU TO INTER ORG ISSUE
+		///POSTING ON BU TO INTER ORG RECEIPT
 		
 		fBuToInterOrgReceipt: function (transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey,transno) {
 			AppUI5.showBusyIndicator(15000);
@@ -1306,25 +1306,25 @@ sap.ui.define([
 			var batchArray = [
 				//directly insert data if data is single row per table
 				{
-				  // "tableName": "PurchaseInvoices",
-				  // "data": oInvoice
-				  "tableName": "InventoryGenEntries",
-				  "data": oGoodsReceipt
+				  "tableName": "PurchaseInvoices",
+				  "data": oInvoice
+				//   "tableName": "InventoryGenEntries",
+				//   "data": oGoodsReceipt
 				}
 			  ];
 
-			// batchArray.push(JSON.parse(JSON.stringify(({
-			// 	"tableName": "InventoryGenEntries",
-			// 	"data": oGoodsReceipt
-			// }))));
+			batchArray.push(JSON.parse(JSON.stringify(({
+				"tableName": "InventoryGenEntries",
+				"data": oGoodsReceipt
+			}))));
 
-			// var sBodyRequest = this.fprepareBatchRequestBody(batchArray);
+			var sBodyRequest = this.fprepareBatchRequestBody(batchArray);
 			//ajax call to SL
 			$.ajax({
-				url: "https://sl.biotechfarms.net/b1s/v1/InventoryGenEntries",
+				url: "https://sl.biotechfarms.net/b1s/v1/$batch",
 				type: "POST",
 				contentType: "multipart/mixed;boundary=a",
-				data: JSON.stringify(oGoodsReceipt), //If batch, body data should not be JSON.stringified
+				data: sBodyRequest, //If batch, body data should not be JSON.stringified
 				xhrFields: {
 					withCredentials: true
 				},
