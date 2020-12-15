@@ -617,6 +617,8 @@ sap.ui.define([
 				this.fAddRequestDraft();
 			}
 		},
+
+		
 		onAddRequest: function (oEvent){
 			//AppUI5.showBusyIndicator(10000);
 			var oIssueBu = this.getView().byId("inputwhsissue").getValue();
