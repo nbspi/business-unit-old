@@ -587,11 +587,11 @@ sap.ui.define([
 			var selectedIndeices = oTable.getSelectedIndices();
 			//ROW COUNT VARIABLE
 			var row;
-			var count = 1;
+			var count = 0;
 			for (var i = 0; i < selectedIndeices.length; i++) {
 				row = selectedIndeices[i];
-				this.oModel.getData().EditRecord.DocumentLines.splice(selectedIndeices, 1);
-				count = count + 1;
+				 this.oModel.getData().EditRecord.DocumentLines.splice(row -count,1);
+				 count = count + 1;
 			}
 			//Clearing Table Selection
 			oTable.clearSelection();
@@ -750,7 +750,7 @@ sap.ui.define([
 					sap.m.MessageToast.show(oMessage);
 				}else{
 					if (results) {
-						sap.m.MessageToast.show("Request Draft Has Been Created");
+						sap.m.MessageToast.show("Document "+ sGeneratedTransNo +" Request Draft Has Been Created");
 						//this.fprepareTable(false,"");
 						this.fClearField();
 						this.oModel.refresh();
@@ -836,6 +836,13 @@ sap.ui.define([
 				oBusiness_Unit_Details.U_APP_TransNo = sGeneratedTransNo;
 				oBusiness_Unit_Details.U_APP_TransType = TransType;
 				oBusiness_Unit_Details.U_APP_Uom = this.oModel.getData().EditRecord.DocumentLines[d].Uom;
+				if(this.oModel.getData().EditRecord.DocumentLines[d].Quantity <= 0){
+					AppUI5.hideBusyIndicator();
+					sap.m.MessageToast.show("Quantity must be greater than zero!");
+					return;
+				}
+
+
 				batchArray.push(JSON.parse(JSON.stringify(({
 					"tableName": "U_APP_INT1",
 					"data": oBusiness_Unit_Details //this.generateUDTCode();

@@ -245,11 +245,11 @@ sap.ui.define([
 			var selectedIndeices = oTable.getSelectedIndices();
 			//ROW COUNT VARIABLE
 			var row;
-			var count = 1;
+			var count = 0;
 			for (var i = 0; i < selectedIndeices.length; i++) {
 				row = selectedIndeices[i];
-				this.oModel.getData().EditRecord.DocumentLines.splice(row, 1);
-				count = count + 1;
+				 this.oModel.getData().EditRecord.DocumentLines.splice(row -count,1);
+				 count = count + 1;
 			}
 			//Clearing Table Selection
 			oTable.clearSelection();
@@ -320,6 +320,12 @@ sap.ui.define([
 				oBusiness_Unit_Details.U_APP_TransNo = sGeneratedTransNo;
 				oBusiness_Unit_Details.U_APP_TransType = transtype;
 				oBusiness_Unit_Details.U_APP_Uom = oDetails[d].Uom;
+
+				if(oDetails[d].Quantity <= 0){
+					AppUI5.hideBusyIndicator();
+					sap.m.MessageToast.show("Quantity must be greater than zero!");
+					return;
+				}
 				batchArray.push(JSON.parse(JSON.stringify(({
 					"tableName": "U_APP_INT1",
 					"data": oBusiness_Unit_Details //this.generateUDTCode();
@@ -356,7 +362,7 @@ sap.ui.define([
 				}else{
 					if (results) {
 						if(this.isDraft){
-							sap.m.MessageToast.show("Added Successfully");
+							sap.m.MessageToast.show(""+ sGeneratedTransNo +" Added Successfully");
 						}
 						this.fClearField();
 						this.oModel.refresh();
