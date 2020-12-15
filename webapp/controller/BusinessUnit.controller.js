@@ -363,6 +363,7 @@ sap.ui.define([
 						AppUI5.hideBusyIndicator();
 					}
 				}
+				
 			});
 		},
 		onAddDraft: function (oEvent) {
