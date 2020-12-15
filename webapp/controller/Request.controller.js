@@ -110,6 +110,8 @@ sap.ui.define([
 			var oRequestor =this.sUserCode;
 			this.getView().byId("inputrequestor").setValue(oRequestor);
 			AppUI5.hideBusyIndicator();
+
+			this.gGetBusinessUnit();
 		},
 		//GETTING DATE NOW
 		getTodaysDate: function () {
@@ -935,6 +937,29 @@ sap.ui.define([
 					this.FileKey = oResult.AbsoluteEntry;
 				}
 			});
-		}
+		},
+		
+		gGetBusinessUnit: function(){
+			$.ajax({
+				url: "https://xs.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getUserRoles&value1="+this.sUserCode+"&value2&value3&value4",
+				type: "GET",
+				datatype:"json",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
+			  	},
+				error: function (xhr, status, error) {
+					var Message = xhr.responseJSON["error"].message.value;
+					console.error(JSON.stringify(Message));
+					sap.m.MessageToast.show(Message);
+				},
+				success: function (json) {},
+				context: this
+			}).done(function (results) {
+				if (results) {
+					this.oModel.getData().UserRoles = results;
+					this.oModel.refresh();
+				}
+			});
+		},
   	});
 });
