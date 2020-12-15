@@ -616,6 +616,9 @@ sap.ui.define([
 			}else{
 				this.fAddRequestDraft();
 			}
+
+
+			
 		},
 		onAddRequest: function (oEvent){
 			//AppUI5.showBusyIndicator(10000);
