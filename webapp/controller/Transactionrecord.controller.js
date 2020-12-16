@@ -673,13 +673,12 @@ sap.ui.define([
 
 		},
 
-		f_getAveragePrice: function (ItemCode) {
+		f_getAveragePrice: function (ItemCode,WareHouse) {
 			//GET MARKET PRICE
-			var issuebu = this.oModel.getData().EditRecord.IssueBU;
 			var iReturnAveragePrice = 0;
 			$.ajax({
 				url: "https://xs.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getAveragePrice&value1=" + ItemCode +
-					"&value2=" + issuebu + "&value3&value4",
+					"&value2=" + WareHouse + "&value3&value4",
 				type: "GET",
 				async: false,
 				datatype:"json",
@@ -1252,7 +1251,7 @@ sap.ui.define([
 
 		////POSTING ON BU TO INTER ORG ISSUE
 		fBuToInterOrgIssue: function (transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey) {
-			if(this.oModel.getData().ARaccounts[0].Value==="" || this.oModel.getData().ARaccounts[0].Value=== null || this.oModel.getData().ARaccounts[0].Value===0){
+			if(this.oModel.getData().ARaccounts.length===0){
 				sap.m.MessageToast.show("No Account Code on Chart of Accounts has been Setup.");
 				return;
 			}
@@ -1299,19 +1298,43 @@ sap.ui.define([
 			}).done(function (results) {
 				if (results) {
 					//POSTING OF INVOICE
-
+					var oInvoiceData = results.DocumentLines;
+					///LOOP FOR DATA
+					var  oquantity=0;
+					var  oprice=0;
+					var  oTotal=0;
+					var  oFinalTotal=0;
+					var  Doctotal = results.DocTotal;
+					var oBasePrice=0;
+					var d;
+					for (d = 0; d < oInvoiceData.length; d++) {
+						oBasePrice = this.f_getAveragePrice(oInvoiceData[d].ItemCode,this.oIssueBu);
+						oquantity = oInvoiceData[d].Quantity;
+						oprice = oBasePrice;
+						oTotal = oquantity * oprice;
+						oFinalTotal= oFinalTotal + oTotal;
+						oTotal=0;
+					}
+					var oOtherIncome = Doctotal - oFinalTotal;
 					var oInvoice = {};
 					var oInvoiceHeader = {};
+					var oInvoiceHeader2 = {};
 					oInvoice.CardCode = ocardcode;
 					oInvoice.DocType ="dDocument_Service";
-					// oInvoice.AttachmentEntry = this.FileKey;
+					///oInvoice.AttachmentEntry = this.FileKey;
+					oInvoice.U_APP_GI_TransType = "BU";
+					oInvoice.U_APP_BU_TransNum = transno;
+
 					oInvoice.DocumentLines = [];
-					///HARD CODED ACCOUNT CODE FOR TESTING
 					oInvoiceHeader.ItemDescription = oDescription;
 					oInvoiceHeader.AccountCode =this.oModel.getData().ARaccounts[0].Value;
-					oInvoiceHeader.LineTotal =results.DocTotal;
+					oInvoiceHeader.LineTotal = results.DocTotal;
 					oInvoice.DocumentLines.push(JSON.parse(JSON.stringify(oInvoiceHeader)));
-
+					//2nd LINE
+					oInvoiceHeader2.ItemDescription = oDescription;
+					oInvoiceHeader2.AccountCode =this.oModel.getData().ARaccounts[1].Value;
+					oInvoiceHeader2.LineTotal = oOtherIncome;
+					oInvoice.DocumentLines.push(JSON.parse(JSON.stringify(oInvoiceHeader2)));
 					$.ajax({
 						url: "https://sl.biotechfarms.net/b1s/v1/Invoices",
 						type: "POST",
@@ -1371,7 +1394,7 @@ sap.ui.define([
 		///POSTING ON BU TO INTER ORG RECEIPT
 		
 		fBuToInterOrgReceipt: function (transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey) {
-			if(this.oModel.getData().APaccounts[0].Value==="" || this.oModel.getData().APaccounts[0].Value=== null || this.oModel.getData().APaccounts[0].Value===0){
+			if(this.oModel.getData().APaccounts.length===0){
 				sap.m.MessageToast.show("No Account Code on Chart of Accounts has been Setup.");
 				return;
 			}

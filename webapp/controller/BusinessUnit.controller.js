@@ -1230,19 +1230,43 @@ sap.ui.define([
 					// }else{
 					// 	var oAccountCode="_SYS00000000942";
 					// }
-
+					var oInvoiceData = results.DocumentLines;
+					///LOOP FOR DATA
+					var  oquantity=0;
+					var  oprice=0;
+					var  oTotal=0;
+					var  oFinalTotal=0;
+					var  Doctotal = results.DocTotal;
+					var oBasePrice=0;
+					var d;
+					for (d = 0; d < oInvoiceData.length; d++) {
+						oBasePrice = this.f_getAveragePrice(oInvoiceData[d].ItemCode,this.oIssueBu);
+						oquantity = oInvoiceData[d].Quantity;
+						oprice = oBasePrice;
+						oTotal = oquantity * oprice;
+						oFinalTotal= oFinalTotal + oTotal;
+						oTotal=0;
+					}
+					var oOtherIncome = Doctotal - oFinalTotal;
 					var oInvoice = {};
 					var oInvoiceHeader = {};
+					var oInvoiceHeader2 = {};
 					oInvoice.CardCode = ocardcode;
 					oInvoice.DocType ="dDocument_Service";
 					oInvoice.AttachmentEntry = this.FileKey;
+					oInvoice.U_APP_GI_TransType = "BU";
+					oInvoice.U_APP_BU_TransNum = transno;
+
 					oInvoice.DocumentLines = [];
-					///HARD CODED ACCOUNT CODE FOR TESTING
 					oInvoiceHeader.ItemDescription = oDescription;
 					oInvoiceHeader.AccountCode =this.oModel.getData().ARaccounts[0].Value;
-					oInvoiceHeader.LineTotal =results.DocTotal;
+					oInvoiceHeader.LineTotal = results.DocTotal;
 					oInvoice.DocumentLines.push(JSON.parse(JSON.stringify(oInvoiceHeader)));
-
+					//2nd LINE
+					oInvoiceHeader2.ItemDescription = oDescription;
+					oInvoiceHeader2.AccountCode =this.oModel.getData().ARaccounts[1].Value;
+					oInvoiceHeader2.LineTotal = oOtherIncome;
+					oInvoice.DocumentLines.push(JSON.parse(JSON.stringify(oInvoiceHeader2)));
 					$.ajax({
 						url: "https://sl.biotechfarms.net/b1s/v1/Invoices",
 						type: "POST",
@@ -1369,6 +1393,8 @@ sap.ui.define([
 					oInvoice.CardCode = oCardCode;
 					oInvoice.DocType ="dDocument_Service";
 					oInvoice.AttachmentEntry = this.FileKey;
+					oInvoice.U_APP_GI_TransType = "BU";
+					oInvoice.U_APP_BU_TransNum = transno;
 					oInvoice.DocumentLines = [];
 					///HARD CODED ACCOUNT CODE FOR TESTING
 					oInvoiceHeader.ItemDescription = oRemarks;
