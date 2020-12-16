@@ -243,7 +243,7 @@ sap.ui.define([
       var value1 = transtypefilter;
       var aReturnResult = [];
       $.ajax({
-        url: "https://xs.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&QUERYTAG=getAllPendingRequest&VALUE1="+ value1 +"&VALUE2=1&VALUE3=&VALUE4=",
+        url: "https://xs.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&QUERYTAG=getAllPendingRequest&VALUE1="+ value1 +"&VALUE2="+ this.sUserCode +"&VALUE3&VALUE4=",
         type: "GET",
         async: false,
         datatype:"json",
