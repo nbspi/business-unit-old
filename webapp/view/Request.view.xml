@@ -166,6 +166,19 @@
 													<l:GridData span="L3 M4 S12"/>
 												</layoutData>
 											</Input>
+
+											<!-- BU REQUESTED -->
+											<Label text="Request to Business Unit:" width="100%">
+												<layoutData>
+													<l:GridData span="L3 M2 S12"/>
+												</layoutData>
+											</Label>
+											<Select id="userRole" forceSelection="false" selectedKey="{/EditRecord/UserRole}" items="{/UserRoles}">
+												<core:Item key="{UserRole}" text="{UserRole}"/>
+												<layoutData>
+													<l:GridData span="L3 M4 S12"/>
+												</layoutData>
+											</Select>
 											<!--ATTACHMENT UPLOADING -->
 											<u:FileUploader id="fileUploader" name="myFileUpload" tooltip="Upload your file to the local server"
 											uploadComplete="onHandleUploadComplete"
@@ -202,7 +215,7 @@
 												<t:Column width="7rem">
 													<Label text="Quantity"/>
 													<t:template>
-														<Input value="{Quantity}" type="Number" placeholder="0" textAlign="End" fieldWidth="80%" width="100%" enabled="true"/>
+														<Input  value="{ path:'Quantity' , type: 'sap.ui.model.type.Float', formatOptions: {maxFractionDigits: 2, minFractionDigits: 2}}" type="Number" placeholder="0" textAlign="End" fieldWidth="80%" width="100%" enabled="true"/>
 														<!--<Text text="{oMdlAP>DocDate}"/>-->
 													</t:template>
 												</t:Column>
