@@ -1521,6 +1521,7 @@ sap.ui.define([
 			var getcode = this.code;
 			var oBusiness_Unit = {};
 			var oBusiness_Unit_Details = {};
+			
 
 			oBusiness_Unit.Code = getcode;
 			oBusiness_Unit.Name = getcode;
