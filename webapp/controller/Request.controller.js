@@ -941,7 +941,7 @@ sap.ui.define([
 		
 		gGetBusinessUnit: function(){
 			$.ajax({
-				url: "https://xs.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getUserRoles&value1="+this.sUserCode+"&value2&value3&value4",
+				url: "https://xs.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getBusinessUnit&value1="+this.sUserCode+"&value2&value3&value4",
 				type: "GET",
 				datatype:"json",
 				beforeSend: function (xhr) {
@@ -956,7 +956,7 @@ sap.ui.define([
 				context: this
 			}).done(function (results) {
 				if (results) {
-					this.oModel.getData().UserRoles = results;
+					this.oModel.getData().BusinessUnit = results;
 					this.oModel.refresh();
 				}
 			});
