@@ -110,6 +110,8 @@ sap.ui.define([
 			var oRequestor =this.sUserCode;
 			this.getView().byId("inputrequestor").setValue(oRequestor);
 			AppUI5.hideBusyIndicator();
+
+			this.gGetBusinessUnit();
 		},
 		//GETTING DATE NOW
 		getTodaysDate: function () {
@@ -587,11 +589,11 @@ sap.ui.define([
 			var selectedIndeices = oTable.getSelectedIndices();
 			//ROW COUNT VARIABLE
 			var row;
-			var count = 1;
+			var count = 0;
 			for (var i = 0; i < selectedIndeices.length; i++) {
 				row = selectedIndeices[i];
-				this.oModel.getData().EditRecord.DocumentLines.splice(selectedIndeices, 1);
-				count = count + 1;
+				 this.oModel.getData().EditRecord.DocumentLines.splice(row -count,1);
+				 count = count + 1;
 			}
 			//Clearing Table Selection
 			oTable.clearSelection();
@@ -752,7 +754,7 @@ sap.ui.define([
 					sap.m.MessageToast.show(oMessage);
 				}else{
 					if (results) {
-						sap.m.MessageToast.show("Request Draft Has Been Created");
+						sap.m.MessageToast.show("Document "+ sGeneratedTransNo +" Request Draft Has Been Created");
 						//this.fprepareTable(false,"");
 						this.fClearField();
 						this.oModel.refresh();
@@ -838,6 +840,13 @@ sap.ui.define([
 				oBusiness_Unit_Details.U_APP_TransNo = sGeneratedTransNo;
 				oBusiness_Unit_Details.U_APP_TransType = TransType;
 				oBusiness_Unit_Details.U_APP_Uom = this.oModel.getData().EditRecord.DocumentLines[d].Uom;
+				if(this.oModel.getData().EditRecord.DocumentLines[d].Quantity <= 0){
+					AppUI5.hideBusyIndicator();
+					sap.m.MessageToast.show("Quantity must be greater than zero!");
+					return;
+				}
+
+
 				batchArray.push(JSON.parse(JSON.stringify(({
 					"tableName": "U_APP_INT1",
 					"data": oBusiness_Unit_Details //this.generateUDTCode();
@@ -928,6 +937,29 @@ sap.ui.define([
 					this.FileKey = oResult.AbsoluteEntry;
 				}
 			});
-		}
+		},
+		
+		gGetBusinessUnit: function(){
+			$.ajax({
+				url: "https://xs.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getUserRoles&value1="+this.sUserCode+"&value2&value3&value4",
+				type: "GET",
+				datatype:"json",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
+			  	},
+				error: function (xhr, status, error) {
+					var Message = xhr.responseJSON["error"].message.value;
+					console.error(JSON.stringify(Message));
+					sap.m.MessageToast.show(Message);
+				},
+				success: function (json) {},
+				context: this
+			}).done(function (results) {
+				if (results) {
+					this.oModel.getData().UserRoles = results;
+					this.oModel.refresh();
+				}
+			});
+		},
   	});
 });
