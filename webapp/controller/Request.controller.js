@@ -131,6 +131,7 @@ sap.ui.define([
 				this.oModel.getData().EditRecord.ReceiveBU = "";
 				this.oModel.getData().EditRecord.Remarks = "";
 				this.oModel.getData().EditRecord.DocumentLines.length = 0;
+				this.oModel.getData().EditRecord.BusinessUnit = "";
 				this.oIssueBu = "";
 				this.oReceiveBu= "";
 				this.getView().byId("fileUploader").setValue("");
@@ -605,12 +606,17 @@ sap.ui.define([
 			var oPostingDate = this.getView().byId("dpickerpostingdate").getValue();
 			var oRemarks = this.getView().byId("inputremarks").getValue();
 			var oDetails = this.oModel.getData().EditRecord.DocumentLines.length;
+			var oRequesttoBusinessUnit=this.oModel.getData().EditRecord.BusinessUnit;
 			// if(oIssueBu===""){
 			// 	sap.m.MessageToast.show("Please Select Issueing BU");
 			// }else if(oRequestBu===""){
 			// 	sap.m.MessageToast.show("Please Select Requesting BU");
 			// }else if(oPostingDate===""){
 			// 	sap.m.MessageToast.show("Please Select Posting Date");
+			if(oRequesttoBusinessUnit==="" || oRequesttoBusinessUnit===null ||oRequesttoBusinessUnit===undefined){
+				sap.m.MessageToast.show("Please Choose Request Business Unit!");
+				return;
+			}
 			if(oRemarks===""){
 				sap.m.MessageToast.show("Please Enter Remarks");
 			}else if(oDetails===0){
@@ -694,6 +700,7 @@ sap.ui.define([
 			oBusiness_Unit.U_APP_DocType = oDocType;
 			oBusiness_Unit.U_APP_Attachment = this.getView().byId("fileUploader").getValue();
 			oBusiness_Unit.U_APP_AttachmentKey = this.FileKey;
+			oBusiness_Unit.U_APP_RequestToBusinessUnit = this.oModel.getData().EditRecord.BusinessUnit;
 			///HEADER BATCH Array
 			var batchArray = [
 				//directly insert data if data is single row per table
@@ -814,6 +821,7 @@ sap.ui.define([
 			oBusiness_Unit.U_APP_DocType = oDocType;
 			oBusiness_Unit.U_APP_Attachment = this.getView().byId("fileUploader").getValue();
 			oBusiness_Unit.U_APP_AttachmentKey = this.FileKey;
+			oBusiness_Unit.U_APP_RequestToBusinessUnit = this.oModel.getData().EditRecord.BusinessUnit;
 			//oBusiness_Unit.U_APP_IsPostedGI = ""
 			///HEADER BATCH Array
 			var batchArray = [

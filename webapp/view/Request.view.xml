@@ -173,7 +173,7 @@
 													<l:GridData span="L3 M2 S12"/>
 												</layoutData>
 											</Label>
-											<Select id="businessunit" forceSelection="false" selectedKey="{/EditRecord/UserRole}" items="{/BusinessUnit}">
+											<Select id="businessunit" forceSelection="false" selectedKey="{/EditRecord/BusinessUnit}" items="{/BusinessUnit}">
 												<core:Item key="{Name}" text="{Name}"/>
 												<layoutData>
 													<l:GridData span="L3 M4 S12"/>
