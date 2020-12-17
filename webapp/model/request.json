@@ -17,7 +17,8 @@
 		"BPCodeDisabled": true,
 		"BPNameDisabled": true,
 		"ReceiveBUDisabled": true,
-		"DocumentLines":[]
+		"DocumentLines":[],
+		"BusinessUnit":""
 	},
 	"AllItems": [{
 		"ItemCode": "",
