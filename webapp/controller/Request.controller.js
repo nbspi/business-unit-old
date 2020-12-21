@@ -631,10 +631,16 @@ sap.ui.define([
 			//AppUI5.showBusyIndicator(10000);
 			var oIssueBu = this.getView().byId("inputwhsissue").getValue();
 			var oRequestBu = this.getView().byId("inputwhsreceive").getValue();
+			var oBusinessUnit = this.oModel.getData().EditRecord.BusinessUnit;
 			var oPostingDate = this.getView().byId("dpickerpostingdate").getValue();
 			var oRemarks = this.getView().byId("inputremarks").getValue();
 			var oDetails = this.oModel.getData().EditRecord.DocumentLines.length;
 			var oFile = this.getView().byId("fileUploader").getValue();
+			if(oBusinessUnit==="" || oBusinessUnit=== undefined || oBusinessUnit === null){
+				sap.m.MessageToast.show("Please Choose Request Business Unit!");
+				return;
+			}
+
 			if(oPostingDate===""){
 				sap.m.MessageToast.show("Please Select Posting Date");
 			}else if(oRemarks===""){
