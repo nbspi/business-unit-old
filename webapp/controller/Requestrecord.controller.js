@@ -349,6 +349,7 @@ sap.ui.define([
           this.oModel.getData().EditRecord.IssueBU = results[0].IssueBU;
           this.oModel.getData().EditRecord.ReceiveBU = results[0].ReceiveBU;
 		  this.oModel.getData().EditRecord.Remarks = results[0].Remarks;
+		  this.oModel.getData().EditRecord.BusinessUnit = results[0].BusinessUnit;
 		  var isPostedGI = (results[0].IsPostedGI === "Y" ? false:true)
           var oDocStatus=results[0].Status;
           this.oModel.getData().EditRecord.ReceivedBy = this.sUserCode;
@@ -513,6 +514,7 @@ sap.ui.define([
 		oBusiness_Unit.U_APP_Status = ostatus;
 		oBusiness_Unit.U_APP_DocType = oDocType;
 		oBusiness_Unit.U_APP_ReceivedBy = this.sUserCode;
+		oBusiness_Unit.U_APP_RequestToBusinessUnit = this.oModel.getData().EditRecord.BusinessUnit;
 		///HEADER BATCH
 		var BatchHeader =
 			//directly insert data if data is single row per table 
