@@ -513,13 +513,15 @@ sap.ui.define([
 			});
 		},
 		///CREATE JOURNAL ENTRY
-		fCreateJE: function () {
+		fCreateJE: function (oTransType,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails) {
 			AppUI5.showBusyIndicator(10000);
 			var oDocType = "Journal Entry";
 			//Initialize Variables
 			var oJournalEnty = {};
 			var oJournalEntyHeaderCredit = {};
 			var oJournalEntyHeaderDebit = {};
+			oJournalEnty.Memo = this.oModel.getData().EditRecord.Remarks;
+			oJournalEnty.Reference = transno;
 			oJournalEnty.JournalEntryLines = [];
 			var d;
 			var oQuantity ="";
@@ -586,7 +588,7 @@ sap.ui.define([
 			var oDetails = this.oModel.getData().EditRecord.DocumentLines;
 			var oCountDetails = this.oModel.getData().EditRecord.DocumentLines.length; 
 			if(oTransType === "4"){
-				this.fCreateJE();
+				this.fCreateJE(oTransType,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails);
 			}	else if(oTransType === "3"){
 				this.fPostAP(transno);
 			}else{

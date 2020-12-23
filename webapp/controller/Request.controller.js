@@ -523,6 +523,16 @@ sap.ui.define([
 				this.getView().byId("inputmarkuptype").setEnabled(false);
 				this.oModel.getData().EditRecord.DocumentLines.length = 0;
 				this.oModel.refresh();
+			}else if (transtype === "4") {
+				this.getView().byId("inputbpcode").setValue("");
+				this.getView().byId("inputwhsreceive").setValue("");
+				this.getView().byId("inputbpcode").setEnabled(false);
+				this.getView().byId("inputwhsissue").setEnabled(true);
+				this.getView().byId("inputwhsreceive").setEnabled(true);
+				this.getView().byId("inputmarkuptype").setEnabled(false);
+				this.getView().byId("inputmarkuptype").setValue("");
+				this.oModel.getData().EditRecord.DocumentLines.length = 0;
+				this.oModel.refresh();
 			} else {
 				this.getView().byId("inputbpcode").setEnabled(true);
 				this.getView().byId("inputwhsreceive").setEnabled(true);
