@@ -1399,8 +1399,9 @@ sap.ui.define([
 					///HARD CODED ACCOUNT CODE FOR TESTING
 					oInvoiceHeader.ItemDescription = oRemarks;
 					oInvoiceHeader.AccountCode =this.oModel.getData().APaccounts[0].Value;
+					oInvoiceHeader.LineTotal = results.DocTotal;
 					oInvoice.DocumentLines.push(JSON.parse(JSON.stringify(oInvoiceHeader)));
-
+					
 					$.ajax({
 						url: "https://18.138.78.210:50000/b1s/v1/PurchaseInvoices",
 						type: "POST",
