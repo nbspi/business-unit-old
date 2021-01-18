@@ -455,7 +455,8 @@ sap.ui.define([
 			//oGoodsReceipt.CardCode = this.oModel.getData().EditRecord.BPCode;
 			oGoodsReceipt.Comments = this.oModel.getData().EditRecord.Remarks;
 			oGoodsReceipt.U_APP_BU_TransNum = transno;
-			// oGoodsReceipt.U_APP_GR_TransType = "BU";
+			oGoodsReceipt.U_APP_GR_TransType = "BU";
+			oGoodsReceipt.U_APP_InterGroupTranstype = this.oModel.getData().EditRecord.TransType;
 			oGoodsReceipt.DocumentLines = [];
 			///LOOP FOR THE DETAILS
 			var d;

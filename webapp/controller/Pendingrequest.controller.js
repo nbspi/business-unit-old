@@ -515,6 +515,7 @@ sap.ui.define([
       oGoodsIssue.Comments = this.oModel.getData().EditRecord.Remarks;
       oGoodsIssue.AttachmentEntry = oAttachmentKey;
       oGoodsIssue.U_APP_GI_TransType = "BU";
+      oGoodsIssue.U_APP_InterGroupTranstype = transtype;
       oGoodsIssue.U_APP_BU_TransNum = this.oModel.getData().EditRecord.TransNo;
       oGoodsIssue.DocumentLines = [];
       ///LOOP FOR THE DETAILS
@@ -1054,7 +1055,8 @@ sap.ui.define([
       var oGoodsIssueHeader = {};
       oGoodsIssue.Comments = this.oModel.getData().EditRecord.Remarks;
       oGoodsIssue.U_APP_GI_TransType = "BU";
-      oGoodsIssue.U_APP_BU_TransNum = this.oModel.getData().EditRecord.TransNo;
+      oGoodsIssue.U_APP_InterGroupTranstype = transtype;
+      oGoodsIssue.U_APP_BU_TransNum = this.oModel.getData().EditRecord.TransType;
       oGoodsIssue.AttachmentEntry = oAttachmentKey;
       oGoodsIssue.DocumentLines = [];
       ///LOOP FOR THE DETAILS
