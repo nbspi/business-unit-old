@@ -590,7 +590,7 @@ sap.ui.define([
 			var oCountDetails = this.oModel.getData().EditRecord.DocumentLines.length; 
 			if(oTransType === "4"){
 				this.fCreateJE(oTransType,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails);
-			}	else if(oTransType === "3"){
+			}else if(oTransType === "3"){
 				this.fPostAP(transno);
 			}else{
 				this.fAddReceipt(oTransType,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails);

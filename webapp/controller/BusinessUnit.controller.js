@@ -1423,7 +1423,7 @@ sap.ui.define([
 						success: function (json) {
 							this.fAddDraftFunction(transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey);
 							AppUI5.fprintGoodsReceipt(this.sUserCode,transtype,this.iTranNum,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails);
-							sap.m.MessageToast.show("Posting of Goods Issue is Successful");
+							sap.m.MessageToast.show("Posting of "+ oDocType +" is Successful");
 							this.fClearField();
 							this.oModel.refresh();
 							AppUI5.hideBusyIndicator();
