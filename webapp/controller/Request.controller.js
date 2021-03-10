@@ -142,24 +142,7 @@ sap.ui.define([
 				//console.log(err.message);
 			}
 		},
-		//ALL ITEM LIST FROM FRAGMENT
-		handleValueitemdetails: function (oEvent) {
-			this.iSelectedRow = oEvent.getSource().getBindingContext().sPath.match(/\d+/g)[0];
-			if (!this._oValueHelpDialogsItem) {
-				Fragment.load({
-					name: "com.apptech.bfi-businessunit.view.fragments.ItemDialogFragment",
-					controller: this
-				}).then(function (oValueHelpDialogs) {
-					this._oValueHelpDialogsItem = oValueHelpDialogs;
-					this.getView().addDependent(this._oValueHelpDialogsItem);
-					this.f_configValueHelpDialogsItems();
-					this._oValueHelpDialogsItem.open();
-				}.bind(this));
-			} else {
-				this.f_configValueHelpDialogsItems();
-				this._oValueHelpDialogsItem.open();
-			}
-		},
+		
 		///BP LIST FROM FRAGMENT
 		handleValueHelpBPCode: function () {
 			var TransType = this.getView().byId("TransID").getSelectedKey();
@@ -292,38 +275,7 @@ sap.ui.define([
 				oRecord.selected = (oRecord.WhsCode === sInputValuereceive);
 			});
 		},
-		///GETTING ALL ITEMS CONFIGURATION FROM UDT
-		f_configValueHelpDialogsItems: function () {
-			if (this.oModel.getData().AllItems.length <= 1) {
-				//GET ALL ITEMS
-				$.ajax({
-					url: "https://xsjs.biotechfarms.net/app-xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getallitems&value1&value2&value3&value4",
-					type: "GET",
-					datatype:"json",
-				beforeSend: function(xhr){
-					xhr.setRequestHeader("Authorization","Basic " + btoa("SYSTEM:Qwerty0987$"));
-				},
-					error: function (xhr, status, error) {
-						var Message = xhr.responseJSON["error"].message.value;
-						console.error(JSON.stringify(Message));
-						sap.m.MessageToast.show(Message);
-					},
-					success: function (json) {},
-					context: this
-				}).done(function (results) {
-					if (results) {
-						this.oModel.getData().AllItems.length = 0;
-						this.oModel.getData().AllItems = JSON.parse(JSON.stringify(results));
-						this.oModel.refresh();
-					}
-				});
-			}
-
-			var aList = this.oMdlAllItems.getProperty("/allitems");
-			aList.forEach(function (oRecord) {
-				//	oRecord.selected = (oRecord.ItemCode === sInputValue);
-			});
-		},
+	
 		///Search on Issuing Whs
 		handleSearchWhs: function (oEvent) {
 			var sValue = oEvent.getParameter("value");
@@ -344,16 +296,7 @@ sap.ui.define([
 			var oBinding = oEvent.getSource().getBinding("items");
 			oBinding.filter(oFilters);
 		},
-		///Search on Item
-		handleSearchItem: function (oEvent) {
-			var sValue = oEvent.getParameter("value");
-			var oFilters = new Filter([
-				new Filter("ItemName", FilterOperator.Contains, sValue),
-				new Filter("ItemCode", FilterOperator.Contains, sValue)
-				], false);
-			var oBinding = oEvent.getSource().getBinding("items");
-			oBinding.filter(oFilters);
-		},
+	
 		//Closing selection on Issuing Whs
 		handleValueHelpCloseWhs: function (oEvent) {
 			var aContexts = oEvent.getParameter("selectedContexts");
@@ -388,6 +331,66 @@ sap.ui.define([
 			this.getView().byId("inputwhsreceive").setValue(CardDetails[0].WhsName);
 			this.oReceiveBu=CardDetails[0].WhsCode;
 			this.oModel.refresh();
+		},
+		//ALL ITEM LIST FROM FRAGMENT
+		handleValueitemdetails: function (oEvent) {
+			this.iSelectedRow = oEvent.getSource().getBindingContext().sPath.match(/\d+/g)[0];
+			if (!this._oValueHelpDialogsItem) {
+				Fragment.load({
+					name: "com.apptech.bfi-businessunit.view.fragments.ItemDialogFragment",
+					controller: this
+				}).then(function (oValueHelpDialogs) {
+					this._oValueHelpDialogsItem = oValueHelpDialogs;
+					this.getView().addDependent(this._oValueHelpDialogsItem);
+					this.f_configValueHelpDialogsItems();
+					this._oValueHelpDialogsItem.open();
+				}.bind(this));
+			} else {
+				this.f_configValueHelpDialogsItems();
+				this._oValueHelpDialogsItem.open();
+			}
+		},
+		///GETTING ALL ITEMS CONFIGURATION FROM UDT
+		f_configValueHelpDialogsItems: function () {
+			if (this.oModel.getData().AllItems.length <= 1) {
+				//GET ALL ITEMS
+				$.ajax({
+					url: "https://xsjs.biotechfarms.net/app-xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getallitems&value1&value2&value3&value4",
+					type: "GET",
+					datatype:"json",
+				beforeSend: function(xhr){
+					xhr.setRequestHeader("Authorization","Basic " + btoa("SYSTEM:Qwerty0987$"));
+				},
+					error: function (xhr, status, error) {
+						var Message = xhr.responseJSON["error"].message.value;
+						console.error(JSON.stringify(Message));
+						sap.m.MessageToast.show(Message);
+					},
+					success: function (json) {},
+					context: this
+				}).done(function (results) {
+					if (results) {
+						this.oModel.getData().AllItems.length = 0;
+						this.oModel.getData().AllItems = JSON.parse(JSON.stringify(results));
+						this.oModel.refresh();
+					}
+				});
+			}
+
+			var aList = this.oMdlAllItems.getProperty("/allitems");
+			aList.forEach(function (oRecord) {
+				//	oRecord.selected = (oRecord.ItemCode === sInputValue);
+			});
+		},
+		///Search on Item
+		handleSearchItem: function (oEvent) {
+			var sValue = oEvent.getParameter("value");
+			var oFilters = new Filter([
+				new Filter("ItemName", FilterOperator.Contains, sValue),
+				new Filter("ItemCode", FilterOperator.Contains, sValue)
+				], false);
+			var oBinding = oEvent.getSource().getBinding("items");
+			oBinding.filter(oFilters);
 		},
 		//Closing selection on Item
 		handleValueHelpCloseItem: function (oEvent) {

@@ -83,7 +83,7 @@ sap.ui.define([
       this.Attachment = "";
       //For Attachment File Key
       this.FileKey = null;
-
+      this.gGetBusinessUnit();
     },
     fprintGoodsIssue: function(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey){
 
@@ -405,6 +405,7 @@ sap.ui.define([
           this.oReceiveBu=results[0].ReceiveBUCode;
           this.oModel.getData().EditRecord.Remarks = results[0].Remarks;
           this.oModel.getData().EditRecord.ReceivedBy = this.sUserCode;
+          this.oModel.getData().EditRecord.BusinessUnit = results[0].BusinessUnit;
           // this.getView().byId("fileUploader").setValue(results[0].Attachment);
           this.Attachment = results[0].Attachment;
           var oFileKey = results[0].Attachmentkey;
@@ -1518,6 +1519,28 @@ sap.ui.define([
 			this.getView().byId("transferprice").setValue(oTransferPrice);
 			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice=oTransferPrice;
 			this.oModel.refresh();
+		},
+    gGetBusinessUnit: function(){
+			$.ajax({
+				url: "https://xsjs.biotechfarms.net/app-xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getBusinessUnit&value1="+this.sUserCode+"&value2&value3&value4",
+				type: "GET",
+				datatype:"json",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:Qwerty0987$"));
+			  	},
+				error: function (xhr, status, error) {
+					var Message = xhr.responseJSON["error"].message.value;
+					console.error(JSON.stringify(Message));
+					sap.m.MessageToast.show(Message);
+				},
+				success: function (json) {},
+				context: this
+			}).done(function (results) {
+				if (results) {
+					this.oModel.getData().BusinessUnit = results;
+					this.oModel.refresh();
+				}
+			});
 		}
 
   });
