@@ -61,7 +61,7 @@ sap.ui.define([
             oLoginCredentials.UserName = username;//"manager";
             oLoginCredentials.Password = password;//"1234";
             $.ajax({
-                url: "https://18.136.35.41:50000/b1s/v1/Login",
+                url: "https://18.138.78.210:50000/b1s/v1/Login",
                 data: JSON.stringify(oLoginCredentials),
                 type: "POST",
                 crossDomain: true,
@@ -101,11 +101,11 @@ sap.ui.define([
         fGetAllRecords: function(queryTag){
 			// var aReturnResult = [];
 			$.ajax({
-				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=SBODEMOAU_SL&procName=spAppBusinessUnit&QUERYTAG="+ queryTag +"&value1=&value2=&value3=&value4=",
+				url: "https://xsjs.biotechfarms.net/app-xsjs/ExecQuery.xsjs?dbName=PROD_BIOTECH&procName=spAppBusinessUnit&QUERYTAG="+ queryTag +"&value1=&value2=&value3=&value4=",
 				type: "GET",
 				dataType: "json",
 				beforeSend: function (xhr) {
-					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
+					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:Qwerty0987$"));
 			  	},
 				error: function (xhr, status, error) {
                     var Message = xhr.responseJSON["error"].message.value;
@@ -135,7 +135,7 @@ sap.ui.define([
 			// AppUI5.createField("APP_TransNo", "Transaction Number", "@APP_OINT", "db_Alpha", "", 50);
 			// AppUI5.createField("APP_TransDate", "Transaction Date", "@APP_OINT", "db_Alpha", "", 50);
 			// AppUI5.createField("APP_CardCode", "Customer No", "@APP_OINT", "db_Alpha", "", 50);
-			// AppUI5.createField("APP_CustomerName", "Customer Name", "@APP_OINT", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_CustomerName", "Customer Name", "@APP_OINT", "db_Alpha", "", 200);
 			// AppUI5.createField("APP_MarkupType", "Markup Type", "@APP_OINT", "db_Alpha", "", 50);
 			// AppUI5.createField("APP_IssueBU", "Issuing BU", "@APP_OINT", "db_Alpha", "", 50);
 			// AppUI5.createField("APP_ReceivingBU", "Receiving BU", "@APP_OINT", "db_Alpha", "", 50);
@@ -151,11 +151,12 @@ sap.ui.define([
         	// AppUI5.createField("APP_AttachmentKey", "Attechment Key", "@APP_OINT", "db_Alpha", "", 50);
             // AppUI5.createField("APP_IsPostedGI", "Posted Goods Issue", "@APP_OINT", "db_Alpha", "", 10);
             // AppUI5.createField("APP_IsPostedGR", "Posted Goods Receipt", "@APP_OINT", "db_Alpha", "", 10);
-            // AppUI5.createField("APP_UserRole", "User Role", "@APP_OINT", "db_Alpha", "", 10);
+            // AppUI5.createField("APP_UserRole", "User Role", "@APP_OINT", "db_Alpha", "", 50);
+            // AppUI5.createField("APP_RequestToBusinessUnit", "Request to Business Unit", "@APP_OINT", "db_Alpha", "", 50);
 
 			// //Business Unit Details
 			// AppUI5.createField("APP_ItemNum", "Item Number", "@APP_INT1", "db_Alpha", "", 50);
-			// AppUI5.createField("APP_Description", "Description", "@APP_INT1", "db_Alpha", "", 50);
+			// AppUI5.createField("APP_Description", "Description", "@APP_INT1", "db_Alpha", "", 200);
 			// AppUI5.createField("APP_Quantity", "Quantity", "@APP_INT1", "db_Alpha", "", 50);
 			// AppUI5.createField("APP_CostProd", "Cost to Produce", "@APP_INT1", "db_Alpha", "", 50);
 			// AppUI5.createField("APP_MarkUp", "Mark Up", "@APP_INT1", "db_Alpha", "", 50);
@@ -167,8 +168,8 @@ sap.ui.define([
         
             // //NDC add udf in OIGE
             // AppUI5.createField("APP_BU_TransNum", "BU TransNum", "OIGE", "db_Alpha", "", 30);
-            ////User TAble
-            // AppUI5.createField("APP_UserRole", "User Role", "OUSR", "db_Alpha", "", 10);
+            // //User TAble
+            // AppUI5.createField("APP_UserRole", "User Role", "OUSR", "db_Alpha", "", 50);
             
 		}
     });

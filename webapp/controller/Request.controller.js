@@ -47,6 +47,7 @@ sap.ui.define([
 			// Get DateToday
 			this.getView().byId("transactiondate").setDateValue(new Date());
 			this.getView().byId("dpickerpostingdate").setDateValue(new Date());
+			
 
 			//BLANK JSONMODEL FOR ALL ITEMS FOR TEMPLATE
 			this.oMdlAllItems = new JSONModel();
@@ -55,6 +56,8 @@ sap.ui.define([
 			//BIND TO MAIN MODEL
 			this.oModel = new JSONModel("model/request.json");
 			this.getView().setModel(this.oModel);
+
+			//this.getView().byId("inputremarks").setValue("Test");
 
 			///INITIALIZE FOR MARKETPRICE
 			this.MarketPrice = "";
@@ -67,11 +70,11 @@ sap.ui.define([
 
 			//GET ALL WAREHOUSE
 			$.ajax({
-			url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getallwarehouses&value1&value2&value3&value4",
+			url: "https://xsjs.biotechfarms.net/app-xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getallwarehouses&value1&value2&value3&value4",
 			type: "GET",
 			datatype:"json",
 			beforeSend: function (xhr) {
-				xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
+				xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:Qwerty0987$"));
 			},
 			error: function (xhr, status, error) {
 				var Message = xhr.responseJSON["error"].message.value;
@@ -107,6 +110,8 @@ sap.ui.define([
 			var oRequestor =this.sUserCode;
 			this.getView().byId("inputrequestor").setValue(oRequestor);
 			AppUI5.hideBusyIndicator();
+
+			this.gGetBusinessUnit();
 		},
 		//GETTING DATE NOW
 		getTodaysDate: function () {
@@ -126,6 +131,7 @@ sap.ui.define([
 				this.oModel.getData().EditRecord.ReceiveBU = "";
 				this.oModel.getData().EditRecord.Remarks = "";
 				this.oModel.getData().EditRecord.DocumentLines.length = 0;
+				this.oModel.getData().EditRecord.BusinessUnit = "";
 				this.oIssueBu = "";
 				this.oReceiveBu= "";
 				this.getView().byId("fileUploader").setValue("");
@@ -136,24 +142,7 @@ sap.ui.define([
 				//console.log(err.message);
 			}
 		},
-		//ALL ITEM LIST FROM FRAGMENT
-		handleValueitemdetails: function (oEvent) {
-			this.iSelectedRow = oEvent.getSource().getBindingContext().sPath.match(/\d+/g)[0];
-			if (!this._oValueHelpDialogsItem) {
-				Fragment.load({
-					name: "com.apptech.bfi-businessunit.view.fragments.ItemDialogFragment",
-					controller: this
-				}).then(function (oValueHelpDialogs) {
-					this._oValueHelpDialogsItem = oValueHelpDialogs;
-					this.getView().addDependent(this._oValueHelpDialogsItem);
-					this.f_configValueHelpDialogsItems();
-					this._oValueHelpDialogsItem.open();
-				}.bind(this));
-			} else {
-				this.f_configValueHelpDialogsItems();
-				this._oValueHelpDialogsItem.open();
-			}
-		},
+		
 		///BP LIST FROM FRAGMENT
 		handleValueHelpBPCode: function () {
 			var TransType = this.getView().byId("TransID").getSelectedKey();
@@ -183,11 +172,11 @@ sap.ui.define([
 			var sInputValue = this.byId("inputbpcode").getValue();
 				//GET ALL BP
 				$.ajax({
-					url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getallbp&value1="+ customertype +"&value2&value3&value4",
+					url: "https://xsjs.biotechfarms.net/app-xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getallbp&value1="+ customertype +"&value2&value3&value4",
 					type: "GET",
 					datatype:"json",
 				beforeSend: function(xhr){
-					xhr.setRequestHeader("Authorization","Basic " + btoa("SYSTEM:P@ssw0rd805~"));
+					xhr.setRequestHeader("Authorization","Basic " + btoa("SYSTEM:Qwerty0987$"));
 				},
 					error: function (xhr, status, error) {
 					var Message = xhr.responseJSON["error"].message.value;
@@ -286,38 +275,7 @@ sap.ui.define([
 				oRecord.selected = (oRecord.WhsCode === sInputValuereceive);
 			});
 		},
-		///GETTING ALL ITEMS CONFIGURATION FROM UDT
-		f_configValueHelpDialogsItems: function () {
-			if (this.oModel.getData().AllItems.length <= 1) {
-				//GET ALL ITEMS
-				$.ajax({
-					url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getallitems&value1&value2&value3&value4",
-					type: "GET",
-					datatype:"json",
-				beforeSend: function(xhr){
-					xhr.setRequestHeader("Authorization","Basic " + btoa("SYSTEM:P@ssw0rd805~"));
-				},
-					error: function (xhr, status, error) {
-						var Message = xhr.responseJSON["error"].message.value;
-						console.error(JSON.stringify(Message));
-						sap.m.MessageToast.show(Message);
-					},
-					success: function (json) {},
-					context: this
-				}).done(function (results) {
-					if (results) {
-						this.oModel.getData().AllItems.length = 0;
-						this.oModel.getData().AllItems = JSON.parse(JSON.stringify(results));
-						this.oModel.refresh();
-					}
-				});
-			}
-
-			var aList = this.oMdlAllItems.getProperty("/allitems");
-			aList.forEach(function (oRecord) {
-				//	oRecord.selected = (oRecord.ItemCode === sInputValue);
-			});
-		},
+	
 		///Search on Issuing Whs
 		handleSearchWhs: function (oEvent) {
 			var sValue = oEvent.getParameter("value");
@@ -338,16 +296,7 @@ sap.ui.define([
 			var oBinding = oEvent.getSource().getBinding("items");
 			oBinding.filter(oFilters);
 		},
-		///Search on Item
-		handleSearchItem: function (oEvent) {
-			var sValue = oEvent.getParameter("value");
-			var oFilters = new Filter([
-				new Filter("ItemName", FilterOperator.Contains, sValue),
-				new Filter("ItemCode", FilterOperator.Contains, sValue)
-				], false);
-			var oBinding = oEvent.getSource().getBinding("items");
-			oBinding.filter(oFilters);
-		},
+	
 		//Closing selection on Issuing Whs
 		handleValueHelpCloseWhs: function (oEvent) {
 			var aContexts = oEvent.getParameter("selectedContexts");
@@ -383,6 +332,66 @@ sap.ui.define([
 			this.oReceiveBu=CardDetails[0].WhsCode;
 			this.oModel.refresh();
 		},
+		//ALL ITEM LIST FROM FRAGMENT
+		handleValueitemdetails: function (oEvent) {
+			this.iSelectedRow = oEvent.getSource().getBindingContext().sPath.match(/\d+/g)[0];
+			if (!this._oValueHelpDialogsItem) {
+				Fragment.load({
+					name: "com.apptech.bfi-businessunit.view.fragments.ItemDialogFragment",
+					controller: this
+				}).then(function (oValueHelpDialogs) {
+					this._oValueHelpDialogsItem = oValueHelpDialogs;
+					this.getView().addDependent(this._oValueHelpDialogsItem);
+					this.f_configValueHelpDialogsItems();
+					this._oValueHelpDialogsItem.open();
+				}.bind(this));
+			} else {
+				this.f_configValueHelpDialogsItems();
+				this._oValueHelpDialogsItem.open();
+			}
+		},
+		///GETTING ALL ITEMS CONFIGURATION FROM UDT
+		f_configValueHelpDialogsItems: function () {
+			if (this.oModel.getData().AllItems.length <= 1) {
+				//GET ALL ITEMS
+				$.ajax({
+					url: "https://xsjs.biotechfarms.net/app-xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getallitems&value1&value2&value3&value4",
+					type: "GET",
+					datatype:"json",
+				beforeSend: function(xhr){
+					xhr.setRequestHeader("Authorization","Basic " + btoa("SYSTEM:Qwerty0987$"));
+				},
+					error: function (xhr, status, error) {
+						var Message = xhr.responseJSON["error"].message.value;
+						console.error(JSON.stringify(Message));
+						sap.m.MessageToast.show(Message);
+					},
+					success: function (json) {},
+					context: this
+				}).done(function (results) {
+					if (results) {
+						this.oModel.getData().AllItems.length = 0;
+						this.oModel.getData().AllItems = JSON.parse(JSON.stringify(results));
+						this.oModel.refresh();
+					}
+				});
+			}
+
+			var aList = this.oMdlAllItems.getProperty("/allitems");
+			aList.forEach(function (oRecord) {
+				//	oRecord.selected = (oRecord.ItemCode === sInputValue);
+			});
+		},
+		///Search on Item
+		handleSearchItem: function (oEvent) {
+			var sValue = oEvent.getParameter("value");
+			var oFilters = new Filter([
+				new Filter("ItemName", FilterOperator.Contains, sValue),
+				new Filter("ItemCode", FilterOperator.Contains, sValue)
+				], false);
+			var oBinding = oEvent.getSource().getBinding("items");
+			oBinding.filter(oFilters);
+		},
 		//Closing selection on Item
 		handleValueHelpCloseItem: function (oEvent) {
 			var transtype = this.oModel.getData().EditRecord.TransType;
@@ -406,13 +415,14 @@ sap.ui.define([
 			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].Uom = ItemDetails[0].InventoryUom;
 			if(transtype === "3"){
 				var oCostToProduce =this.f_getAveragePrice(ItemDetails[0].ItemCode,receivebu);
-				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].CostProd = this.f_getAveragePrice(ItemDetails[0].ItemCode,receivebu);
+				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].CostProd = oCostToProduce;
 			}else{
 				var oCostToProduce =this.f_getAveragePrice(ItemDetails[0].ItemCode,issuebu);
-				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].CostProd = this.f_getAveragePrice(ItemDetails[0].ItemCode,issuebu);
+				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].CostProd = oCostToProduce;
 			}
-			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].MarketPrice = this.f_getMarketPrice(ItemDetails[0].ItemCode);
 			var oMarketPrice = this.f_getMarketPrice(ItemDetails[0].ItemCode);
+			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].MarketPrice = oMarketPrice;
+			
 
 			if (transtype === "1") {
 				if(oCostToProduce <= oMarketPrice){
@@ -431,13 +441,13 @@ sap.ui.define([
 		f_getMarketPrice: function (ItemCode) {
 			var iReturnMarketPrice = 0;
 			$.ajax({
-				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getMarketPrice&value1=" + ItemCode +
+				url: "https://xsjs.biotechfarms.net/app-xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getMarketPrice&value1=" + ItemCode +
 					"&value2=7&value3&value4",
 				type: "GET",
 				async: false,
 				datatype:"json",
 				beforeSend: function(xhr){
-					xhr.setRequestHeader("Authorization","Basic " + btoa("SYSTEM:P@ssw0rd805~"));
+					xhr.setRequestHeader("Authorization","Basic " + btoa("SYSTEM:Qwerty0987$"));
 				},
 				error: function (xhr, status, error) {
 					var Message = xhr.responseJSON["error"].message.value;
@@ -460,13 +470,13 @@ sap.ui.define([
 		f_getAveragePrice: function (ItemCode,WareHouse) {
 			var iReturnAveragePrice = 0;
 			$.ajax({
-				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getAveragePrice&value1=" + ItemCode +
+				url: "https://xsjs.biotechfarms.net/app-xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getAveragePrice&value1=" + ItemCode +
 					"&value2=" + WareHouse + "&value3&value4",
 				type: "GET",
 				async: false,
 				datatype:"json",
 				beforeSend: function(xhr){
-					xhr.setRequestHeader("Authorization","Basic " + btoa("SYSTEM:P@ssw0rd805~"));
+					xhr.setRequestHeader("Authorization","Basic " + btoa("SYSTEM:Qwerty0987$"));
 				},
 				error: function (xhr, status, error) {
 					var Message = xhr.responseJSON["error"].message.value;
@@ -514,6 +524,16 @@ sap.ui.define([
 				this.getView().byId("inputwhsissue").setEnabled(true);
 				this.getView().byId("inputwhsreceive").setEnabled(true);
 				this.getView().byId("inputmarkuptype").setEnabled(false);
+				this.oModel.getData().EditRecord.DocumentLines.length = 0;
+				this.oModel.refresh();
+			}else if (transtype === "4") {
+				this.getView().byId("inputbpcode").setValue("");
+				this.getView().byId("inputwhsreceive").setValue("");
+				this.getView().byId("inputbpcode").setEnabled(false);
+				this.getView().byId("inputwhsissue").setEnabled(true);
+				this.getView().byId("inputwhsreceive").setEnabled(true);
+				this.getView().byId("inputmarkuptype").setEnabled(false);
+				this.getView().byId("inputmarkuptype").setValue("");
 				this.oModel.getData().EditRecord.DocumentLines.length = 0;
 				this.oModel.refresh();
 			} else {
@@ -583,11 +603,11 @@ sap.ui.define([
 			var selectedIndeices = oTable.getSelectedIndices();
 			//ROW COUNT VARIABLE
 			var row;
-			var count = 1;
+			var count = 0;
 			for (var i = 0; i < selectedIndeices.length; i++) {
 				row = selectedIndeices[i];
-				this.oModel.getData().EditRecord.DocumentLines.splice(selectedIndeices, 1);
-				count = count + 1;
+				 this.oModel.getData().EditRecord.DocumentLines.splice(row -count,1);
+				 count = count + 1;
 			}
 			//Clearing Table Selection
 			oTable.clearSelection();
@@ -599,12 +619,17 @@ sap.ui.define([
 			var oPostingDate = this.getView().byId("dpickerpostingdate").getValue();
 			var oRemarks = this.getView().byId("inputremarks").getValue();
 			var oDetails = this.oModel.getData().EditRecord.DocumentLines.length;
+			var oRequesttoBusinessUnit=this.oModel.getData().EditRecord.BusinessUnit;
 			// if(oIssueBu===""){
 			// 	sap.m.MessageToast.show("Please Select Issueing BU");
 			// }else if(oRequestBu===""){
 			// 	sap.m.MessageToast.show("Please Select Requesting BU");
 			// }else if(oPostingDate===""){
 			// 	sap.m.MessageToast.show("Please Select Posting Date");
+			if(oRequesttoBusinessUnit==="" || oRequesttoBusinessUnit===null ||oRequesttoBusinessUnit===undefined){
+				sap.m.MessageToast.show("Please Choose Request Business Unit!");
+				return;
+			}
 			if(oRemarks===""){
 				sap.m.MessageToast.show("Please Enter Remarks");
 			}else if(oDetails===0){
@@ -613,13 +638,22 @@ sap.ui.define([
 				this.fAddRequestDraft();
 			}
 		},
+
+		
 		onAddRequest: function (oEvent){
+			//AppUI5.showBusyIndicator(10000);
 			var oIssueBu = this.getView().byId("inputwhsissue").getValue();
 			var oRequestBu = this.getView().byId("inputwhsreceive").getValue();
+			var oBusinessUnit = this.oModel.getData().EditRecord.BusinessUnit;
 			var oPostingDate = this.getView().byId("dpickerpostingdate").getValue();
 			var oRemarks = this.getView().byId("inputremarks").getValue();
 			var oDetails = this.oModel.getData().EditRecord.DocumentLines.length;
 			var oFile = this.getView().byId("fileUploader").getValue();
+			if(oBusinessUnit==="" || oBusinessUnit=== undefined || oBusinessUnit === null){
+				sap.m.MessageToast.show("Please Choose Request Business Unit!");
+				return;
+			}
+
 			if(oPostingDate===""){
 				sap.m.MessageToast.show("Please Select Posting Date");
 			}else if(oRemarks===""){
@@ -631,6 +665,7 @@ sap.ui.define([
 			}else{
 				this.fAddRequest();
 			}
+			//AppUI5.hideBusyIndicator();
 
 		},
 		////ADD REQUEST Function POSTING ON UDT
@@ -642,12 +677,12 @@ sap.ui.define([
 			var sGeneratedTransNo = "";
 			var TransType = this.oModel.getData().EditRecord.TransType;
 			$.ajax({
-				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getTransactionNumber&value1&value2&value3&value4",
+				url: "https://xsjs.biotechfarms.net/app-xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getTransactionNumber&value1&value2&value3&value4",
 				type: "GET",
 				async: false,
 				datatype:"json",
 				beforeSend: function (xhr) {
-					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
+					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:Qwerty0987$"));
 				},
 				error: function (xhr, status, error) {
 					var Message = xhr.responseJSON["error"].message.value;
@@ -675,7 +710,7 @@ sap.ui.define([
 			oBusiness_Unit.U_APP_TransNo = sGeneratedTransNo;
 			oBusiness_Unit.U_APP_TransDate = this.getTodaysDate();
 			oBusiness_Unit.U_APP_CardCode = this.oModel.getData().EditRecord.BPCode;
-			oBusiness_Unit.U_APP_PostingDate = this.oModel.getData().EditRecord.PostingDate;
+			oBusiness_Unit.U_APP_PostingDate = this.getTodaysDate();
 			oBusiness_Unit.U_APP_MarkupType = this.oModel.getData().EditRecord.MarkupType;
 			oBusiness_Unit.U_APP_IssueBU = this.oIssueBu;
 			oBusiness_Unit.U_APP_ReceivingBU = this.oReceiveBu;
@@ -684,6 +719,7 @@ sap.ui.define([
 			oBusiness_Unit.U_APP_DocType = oDocType;
 			oBusiness_Unit.U_APP_Attachment = this.getView().byId("fileUploader").getValue();
 			oBusiness_Unit.U_APP_AttachmentKey = this.FileKey;
+			oBusiness_Unit.U_APP_RequestToBusinessUnit = this.oModel.getData().EditRecord.BusinessUnit;
 			///HEADER BATCH Array
 			var batchArray = [
 				//directly insert data if data is single row per table
@@ -718,7 +754,7 @@ sap.ui.define([
 			var sBodyRequest = AppUI5.prepareBatchRequestBody(batchArray);
 		////BATCH POSTING FOR DRAFT
 			$.ajax({
-				url: "https://18.136.35.41:50000/b1s/v1/$batch",
+				url: "https://18.138.78.210:50000/b1s/v1/$batch",
 				type: "POST",
 				contentType: "multipart/mixed;boundary=a",
 				data: sBodyRequest,
@@ -744,7 +780,7 @@ sap.ui.define([
 					sap.m.MessageToast.show(oMessage);
 				}else{
 					if (results) {
-						sap.m.MessageToast.show("Request Draft Has Been Created");
+						sap.m.MessageToast.show("Document "+ sGeneratedTransNo +" Request Draft Has Been Created");
 						//this.fprepareTable(false,"");
 						this.fClearField();
 						this.oModel.refresh();
@@ -757,17 +793,17 @@ sap.ui.define([
 		fAddRequest: function (oEvent) {
 			var ostatus ="4";
 			var oDocType = "Request";
-			AppUI5.showBusyIndicator(4000);
+			AppUI5.showBusyIndicator(10000);
 			//GET TRANSACTION NUMBER
 			var sGeneratedTransNo = "";
 			var TransType = this.oModel.getData().EditRecord.TransType;
 			$.ajax({
-				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getTransactionNumber&value1&value2&value3&value4",
+				url: "https://xsjs.biotechfarms.net/app-xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getTransactionNumber&value1&value2&value3&value4",
 				type: "GET",
 				async: false,
 				datatype:"json",
 				beforeSend: function (xhr) {
-					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
+					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:Qwerty0987$"));
 				},
 				error: function (xhr, status, error) {
 					var Message = xhr.responseJSON["error"].message.value;
@@ -804,6 +840,7 @@ sap.ui.define([
 			oBusiness_Unit.U_APP_DocType = oDocType;
 			oBusiness_Unit.U_APP_Attachment = this.getView().byId("fileUploader").getValue();
 			oBusiness_Unit.U_APP_AttachmentKey = this.FileKey;
+			oBusiness_Unit.U_APP_RequestToBusinessUnit = this.oModel.getData().EditRecord.BusinessUnit;
 			//oBusiness_Unit.U_APP_IsPostedGI = ""
 			///HEADER BATCH Array
 			var batchArray = [
@@ -830,6 +867,13 @@ sap.ui.define([
 				oBusiness_Unit_Details.U_APP_TransNo = sGeneratedTransNo;
 				oBusiness_Unit_Details.U_APP_TransType = TransType;
 				oBusiness_Unit_Details.U_APP_Uom = this.oModel.getData().EditRecord.DocumentLines[d].Uom;
+				if(this.oModel.getData().EditRecord.DocumentLines[d].Quantity <= 0){
+					AppUI5.hideBusyIndicator();
+					sap.m.MessageToast.show("Quantity must be greater than zero!");
+					return;
+				}
+
+
 				batchArray.push(JSON.parse(JSON.stringify(({
 					"tableName": "U_APP_INT1",
 					"data": oBusiness_Unit_Details //this.generateUDTCode();
@@ -839,7 +883,7 @@ sap.ui.define([
 			var sBodyRequest = AppUI5.prepareBatchRequestBody(batchArray);
 		////BATCH POSTING FOR DRAFT
 			$.ajax({
-				url: "https://18.136.35.41:50000/b1s/v1/$batch",
+				url: "https://18.138.78.210:50000/b1s/v1/$batch",
 				type: "POST",
 				contentType: "multipart/mixed;boundary=a",
 				data: sBodyRequest,
@@ -851,6 +895,7 @@ sap.ui.define([
 					console.error(JSON.stringify(Message));
 					sap.m.MessageToast.show(Message);
 					sap.m.MessageToast.show(xhr.responseText);
+					AppUI5.hideBusyIndicator();
 				},
 				success: function (json) {
 
@@ -863,6 +908,7 @@ sap.ui.define([
 					var oMessage = results.substring(oStartIndex,oEndIndex);
 					AppUI5.fErrorLogs("U_APP_OINT/U_APP_INT1","Add Draft","1","1",oMessage,"Insert",this.sUserCode,"1");
 					sap.m.MessageToast.show(oMessage);
+					AppUI5.hideBusyIndicator();
 				}else{
 					if (results) {
 						sap.m.MessageToast.show("Request Has Been Sent");
@@ -895,7 +941,7 @@ sap.ui.define([
 			form.append("",this.currentFile,FileName);
 			//Postinf Attachment in SAP
 			$.ajax({
-				url: "https://18.136.35.41:50000/b1s/v1/Attachments2",
+				url: "https://18.138.78.210:50000/b1s/v1/Attachments2",
 				data: form,
 				type: "POST",
 				processData:false,
@@ -918,6 +964,31 @@ sap.ui.define([
 					this.FileKey = oResult.AbsoluteEntry;
 				}
 			});
-		}
+		},
+		
+		gGetBusinessUnit: function(){
+			$.ajax({
+				url: "https://xsjs.biotechfarms.net/app-xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getBusinessUnit&value1="+this.sUserCode+"&value2&value3&value4",
+				type: "GET",
+				datatype:"json",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:Qwerty0987$"));
+			  	},
+				error: function (xhr, status, error) {
+					var Message = xhr.responseJSON["error"].message.value;
+					console.error(JSON.stringify(Message));
+					sap.m.MessageToast.show(Message);
+				},
+				success: function (json) {},
+				context: this
+			}).done(function (results) {
+				if (results) {
+					this.oModel.getData().BusinessUnit = results;
+					this.oModel.refresh();
+				}
+			});
+		},
+
+		
   	});
 });

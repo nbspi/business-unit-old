@@ -18,6 +18,11 @@ sap.ui.define([
 			this.sDataBase = jQuery.sap.storage.Storage.get("dataBase");
 			this.sUserCode = jQuery.sap.storage.Storage.get("userCode");
 
+			if(this.sUserCode === "" || this.sUserCode === undefined || this.sUserCode === null){
+				window.location.replace("/index.html");
+				return;
+			}
+
 			this._oRouter = sap.ui.core.UIComponent.getRouterFor(this);
     		this._oRouter.attachRouteMatched(this.handleRouteMatched, this);
 
@@ -35,13 +40,13 @@ sap.ui.define([
 
 		fGetAllMenu: function(sDataBase){
 			$.ajax({
-				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ sDataBase +"&procName=spAppBusinessUnit&QUERYTAG=getAllMenu" +
+				url: "https://xsjs.biotechfarms.net/app-xsjs/ExecQuery.xsjs?dbName="+ sDataBase +"&procName=spAppBusinessUnit&QUERYTAG=getAllMenu" +
 				"&VALUE1="+ this.sUserCode +"&VALUE2=&VALUE3=&VALUE4=",
 				type: "GET",
 				async: false,
 				dataType: "json",
 				beforeSend: function (xhr) {
-					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
+					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:Qwerty0987$"));
 				},
 				error: function (xhr, status, error) {
 					///var Message = xhr.responseJSON["error"].message.value;
@@ -134,7 +139,7 @@ sap.ui.define([
 		},
 		onLogout: function (){
 			$.ajax({
-				url: "https://18.136.35.41:50000/b1s/v1/Logout",
+				url: "https://18.138.78.210:50000/b1s/v1/Logout",
 				type: "POST",
 				error: function (xhr, status, error) {
 				  var Message = xhr.responseJSON["error"].message.value;
@@ -144,8 +149,8 @@ sap.ui.define([
 				success: function (json) {
 					sap.m.MessageToast.show("Session End");
 					jQuery.sap.storage.Storage.clear();
-					sap.ui.core.UIComponent.getRouterFor(this).navTo("Login", null, true);
-
+					// sap.ui.core.UIComponent.getRouterFor(this).navTo("Login", null, true);
+					window.location.replace("/index.html");
 				}
 			});
 		}

@@ -20,7 +20,7 @@ sap.ui.define([
 		  route.attachPatternMatched(this.onRoutePatternMatched,this);
 			//USER DATA
 			this.sDataBase = jQuery.sap.storage.Storage.get("dataBase");
-      this.sUserCode = jQuery.sap.storage.Storage.get("userCode");
+            this.sUserCode = jQuery.sap.storage.Storage.get("userCode");
       //getButtons
 			this.oMdlButtons = new JSONModel();
 			this.oResults = AppUI5.fGetButtons(this.sDataBase,this.sUserCode,"Requestrecord");
@@ -38,10 +38,11 @@ sap.ui.define([
 			this.iSelectedRow = 0;
 			//BLANK JSONMODEL FOR ALL ITEMS FOR TEMPLATE
 			this.oMdlAllItems = new JSONModel();
-			this.oMdlAllItems.getData().allitems = [];
+            this.oMdlAllItems.getData().allitems = [];
+
 				// Get DateToday
 			this.getView().byId("transactiondate").setDateValue(new Date());
-      this.getView().byId("dpickerpostingdate").setDateValue(new Date());
+     	    this.getView().byId("dpickerpostingdate").setDateValue(new Date());
 
 			///Initialize model
 			this.oModel = new JSONModel("model/requestrecord.json");
@@ -55,6 +56,8 @@ sap.ui.define([
 			this.oEditRecord = {};
 			this.iRecordCount = 0;
 			this.oIconTab = this.getView().byId("tab1");
+			///Table ID
+			this.oTableDetails = this.getView().byId("tblDetails");
 			this.oMdlAllRecord = new JSONModel();
 			this.tableId = "tblRecords";
 			this.fprepareTable(true,"");
@@ -76,6 +79,77 @@ sap.ui.define([
       this.fprepareTable("",0);
       this.oMdlAllRecord.refresh();
     },
+    // ADD ROWS ON TABLE
+	onAddRow: function (oEvent) {
+		var oitemdetails = {};
+		oitemdetails.ItemNum = "";
+		oitemdetails.Description = "";
+		oitemdetails.Quantity = "";
+		oitemdetails.Uom = "";
+		oitemdetails.CostProd = "";
+		oitemdetails.MarkupPrice = ""; 
+		oitemdetails.TransferPrice = "";
+		oitemdetails.MarketPrice = "";
+		var transtype = this.getView().byId("TransID").getSelectedKey();
+		var issueBU = this.oModel.getData().EditRecord.IssueBU;
+		if (transtype === "0") {
+			sap.m.MessageToast.show("Please Select Transaction Type.");
+		} else {
+			if (transtype === "1") {
+				oitemdetails.DescriptionEnable = false;
+				oitemdetails.CostProdEnable = false;
+				oitemdetails.MarkupPriceEnable = false;
+				oitemdetails.TransferPriceEnable = false;
+				oitemdetails.MarketPriceEnable = false;
+				oitemdetails.UomEnable = false;
+				this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
+				this.oModel.refresh();
+			} else if (transtype === "2") {
+				oitemdetails.DescriptionEnable = false;
+				oitemdetails.CostProdEnable = false;
+				oitemdetails.MarkupPriceEnable = true;
+				oitemdetails.TransferPriceEnable = false;
+				oitemdetails.MarketPriceEnable = false;
+				oitemdetails.UomEnable = false;
+				this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
+				this.oModel.refresh();
+			} else if (transtype === "3") {
+				oitemdetails.DescriptionEnable = false;
+				oitemdetails.CostProdEnable = true;
+				oitemdetails.MarkupPriceEnable = true;
+				oitemdetails.TransferPriceEnable = false;
+				oitemdetails.MarketPriceEnable = false;
+				oitemdetails.UomEnable = false;
+				this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
+				this.oModel.refresh();
+			} else if (transtype === "4") {
+				oitemdetails.DescriptionEnable = false;
+				oitemdetails.CostProdEnable = false;
+				oitemdetails.MarkupPriceEnable = false;
+				oitemdetails.TransferPriceEnable = false;
+				oitemdetails.MarketPriceEnable = false;
+				oitemdetails.UomEnable = false;
+				this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
+				this.oModel.refresh();
+			}
+		}
+	},
+	////REMOVE ROW ON TABLE
+	onRemoveRow: function (oEvent) {
+		var oTable = this.oTableDetails;
+		var selectedIndeices = oTable.getSelectedIndices();
+		//ROW COUNT VARIABLE
+		var row;
+		var count = 1;
+		for (var i = 0; i < selectedIndeices.length; i++) {
+			row = selectedIndeices[i];
+			this.oModel.getData().EditRecord.DocumentLines.splice(row, 1);
+			count = count + 1;
+		}
+		//Clearing Table Selection
+		oTable.clearSelection();
+		this.oModel.refresh();
+	},
     ///On Clear Fields Function
     fClearField: function () {
       try {
@@ -185,12 +259,12 @@ sap.ui.define([
       var value2 = oTransTatus;
       var aReturnResult = [];
       $.ajax({
-        url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&QUERYTAG=getAllFilteredRequest&VALUE1="+ value1 +"&VALUE2="+ value2 +"&VALUE3=&VALUE4=",
+        url: "https://xsjs.biotechfarms.net/app-xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&QUERYTAG=getAllFilteredRequest&VALUE1="+ value1 +"&VALUE2="+ value2 +"&VALUE3=&VALUE4=",
         type: "GET",
         async: false,
         datatype:"json",
         beforeSend: function (xhr) {
-          xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
+          xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:Qwerty0987$"));
           },
         error: function (xhr, status, error) {
           aReturnResult = [];
@@ -211,40 +285,60 @@ sap.ui.define([
 
     },///ON VIEW SHOWING ALL DATA AND CHANGING NAME INTO EDIT
     onView: function (oEvent) {
-      var iIndex = this.oTable.getSelectedIndex();
-      var TransNo = "";
-      var TransType = "";
-      if (iIndex !== -1) {
-        var oRowSelected = this.oTable.getBinding().getModel().getData().rows[this.oTable.getBinding().aIndices[iIndex]];
-        TransNo = oRowSelected.U_APP_TransNo;
-        TransType = oRowSelected.U_APP_TransType;
-      }
+		var iIndex = this.oTable.getSelectedIndex();
+		var TransNo = "";
+		var TransType = "";
+		var oDocStatus = "";
+		if (iIndex !== -1) {
+			var oRowSelected = this.oTable.getBinding().getModel().getData().rows[this.oTable.getBinding().aIndices[iIndex]];
+			TransNo = oRowSelected.U_APP_TransNo;
+			TransType = oRowSelected.U_APP_TransType;
+			oDocStatus = oRowSelected.U_APP_DocType;
+		}
       /////INITIALIZED HEADER AND DETAILS DATA FOR ONVIEW
-      var queryTag = "",
+      	var queryTag = "",
         value1 = "",
         value2 = "",
         value3 = "",
         value4 = "",
         dbName = this.sDataBase;
-      value1 = TransNo;
-      value2 = TransType;
-      this.fgetHeader(dbName, "spAppBusinessUnit", "getDraftHeader", value1, value2, value3, value4);
-      this.fgetDetails(dbName, "spAppBusinessUnit", "getDraftDetails", value1, value2, value3, value4);
+		value1 = TransNo;
+		value2 = TransType;
+		this.fgetHeader(dbName, "spAppBusinessUnit", "getDraftHeader", value1, value2, value3, value4);
+		this.fgetDetails(dbName, "spAppBusinessUnit", "getDraftDetails", value1, value2, value3, value4);
+		var oitemdetails = {};
+		if(TransType === "3"){
+			//this.getView().byId("ItemNum").setEnabled(true);
+			oitemdetails.IsItemNumEnabled = true;
+			oitemdetails.IsQuantityEnabled = true;
+		}else{
+			oitemdetails.IsItemNumEnabled = false;
+			oitemdetails.IsQuantityEnabled = false;
+		}
+
+		if(oDocStatus==="Cancelled"){
+			this.getView().byId("btnCancel").setEnabled(false);
+		}else{
+			this.getView().byId("btnCancel").setEnabled(true);
+		}
+      	this.oModel.getData().EditRecord.DocumentLines.push(oitemdetails);
+		this.oModel.refresh();
+		
 
     /// this.getView().byId("idIconTabBarInlineMode").getItems()[1].setText("Transaction No: " + TransNo + " [EDIT]");
-      var tab = this.getView().byId("idIconTabBarInlineMode");
-      tab.setSelectedKey("tab2");
+		var tab = this.getView().byId("idIconTabBarInlineMode");
+		tab.setSelectedKey("tab2");
     },
     //Generic selecting of data
     fgetHeader: function (dbName, procName, queryTag, value1, value2, value3, value4) {
       //get all open AP base on parameters
       $.ajax({
-        url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=" + dbName + "&procName=spAppBusinessUnit&QUERYTAG=" + queryTag + "&VALUE1=" + value1 +
+        url: "https://xsjs.biotechfarms.net/app-xsjs/ExecQuery.xsjs?dbName=" + dbName + "&procName=spAppBusinessUnit&QUERYTAG=" + queryTag + "&VALUE1=" + value1 +
           "&VALUE2=" + value2 + "&VALUE3=" + value3 + "&VALUE4=",
         type: "GET",
         datatype:"json",
         beforeSend: function(xhr){
-          xhr.setRequestHeader("Authorization","Basic " + btoa("SYSTEM:P@ssw0rd805~"));
+          xhr.setRequestHeader("Authorization","Basic " + btoa("SYSTEM:Qwerty0987$"));
         },
         error: function (xhr, status, error) {
           console.error(JSON.stringify(xhr));
@@ -265,20 +359,20 @@ sap.ui.define([
           this.oModel.getData().EditRecord.MarkupType = results[0].MarkupType;
           this.oModel.getData().EditRecord.IssueBU = results[0].IssueBU;
           this.oModel.getData().EditRecord.ReceiveBU = results[0].ReceiveBU;
-          this.oModel.getData().EditRecord.Remarks = results[0].Remarks;
+		  this.oModel.getData().EditRecord.Remarks = results[0].Remarks;
+		  this.oModel.getData().EditRecord.BusinessUnit = results[0].BusinessUnit;
+		  var isPostedGI = (results[0].IsPostedGI === "Y" ? false:true)
           var oDocStatus=results[0].Status;
           this.oModel.getData().EditRecord.ReceivedBy = this.sUserCode;
           // Disable Add Button if Status is Posted/Cancelled
           if(oDocStatus==="4" || oDocStatus==="5"){
             this.getView().byId("btnCancel").setEnabled(false);
             this.getView().byId("btnSendToRequest").setEnabled(false);
-          }else if(oDocStatus==="3"){
-            this.getView().byId("btnCancel").setEnabled(true);
-            this.getView().byId("btnSendToRequest").setEnabled(true);
           }else{
             this.getView().byId("btnCancel").setEnabled(true);
             this.getView().byId("btnSendToRequest").setEnabled(true);
-          }
+		  }
+		//   this.getView().byId("btnCancel").setEnabled(isPostedGI)
 
           //disable textfield depends on transaction type
           var transtype = this.oModel.getData().EditRecord.TransType = results[0].TransType;
@@ -294,12 +388,12 @@ sap.ui.define([
     ///GETTING DETAILS BASED ON HEADER
     fgetDetails: function (dbName, procName, queryTag, value1, value2, value3, value4) {
       $.ajax({
-        url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=" + dbName + "&procName=spAppBusinessUnit&QUERYTAG=" + queryTag + "&VALUE1=" + value1 +
+        url: "https://xsjs.biotechfarms.net/app-xsjs/ExecQuery.xsjs?dbName=" + dbName + "&procName=spAppBusinessUnit&QUERYTAG=" + queryTag + "&VALUE1=" + value1 +
           "&VALUE2=" + value2 + "&VALUE3=" + value3 + "&VALUE4=",
         type: "GET",
         datatype:"json",
         beforeSend: function(xhr){
-          xhr.setRequestHeader("Authorization","Basic " + btoa("SYSTEM:P@ssw0rd805~"));
+          xhr.setRequestHeader("Authorization","Basic " + btoa("SYSTEM:Qwerty0987$"));
         },
         error: function (xhr, status, error) {
           var Message = xhr.responseJSON["error"].message.value;
@@ -337,142 +431,314 @@ sap.ui.define([
 
     },
   	////CANCELL  POSTED
-		onCancel: function () {
-      var ostatus ="5";
-      var oDocType ="Cancelled";
-			var TransNo = this.oModel.getData().EditRecord.TransNo;
-			var TransType = this.oModel.getData().EditRecord.TransType;
-			//INITIALIZE FOR UPDATE
-			var getcode = this.code;
-			var oBusiness_Unit = {};
-			oBusiness_Unit.Code = getcode;
-			oBusiness_Unit.Name = getcode;
-			oBusiness_Unit.U_APP_TransType = TransType;
-			oBusiness_Unit.U_APP_TransNo = TransNo;
-			oBusiness_Unit.U_APP_TransDate = this.fgetTodaysDate();
-			oBusiness_Unit.U_APP_CardCode = this.oModel.getData().EditRecord.BPCode;
-			oBusiness_Unit.U_APP_CustomerName = this.oModel.getData().EditRecord.BPName;
-			oBusiness_Unit.U_APP_PostingDate = this.oModel.getData().EditRecord.PostingDate;
-			oBusiness_Unit.U_APP_MarkupType = this.oModel.getData().EditRecord.MarkupType;
-			oBusiness_Unit.U_APP_IssueBU = this.oModel.getData().EditRecord.IssueBU;
-			oBusiness_Unit.U_APP_ReceivingBU = this.oModel.getData().EditRecord.ReceiveBU;
-			oBusiness_Unit.U_APP_Remarks = this.oModel.getData().EditRecord.Remarks;
-      oBusiness_Unit.U_APP_Status = ostatus;
-      oBusiness_Unit.U_APP_DocType = oDocType;
-			oBusiness_Unit.U_APP_ReceivedBy = this.sUserCode;
+	onCancel: function () {
+		AppUI5.showBusyIndicator(10000);
+		var ostatus ="5";
+		var oDocType ="Cancelled";
+		var TransNo = this.oModel.getData().EditRecord.TransNo;
+		var TransType = this.oModel.getData().EditRecord.TransType;
+		//INITIALIZE FOR UPDATE
+		var getcode = this.code;
+		var oBusiness_Unit = {};
+		oBusiness_Unit.Code = getcode;
+		oBusiness_Unit.Name = getcode;
+		oBusiness_Unit.U_APP_TransType = TransType;
+		oBusiness_Unit.U_APP_TransNo = TransNo;
+		oBusiness_Unit.U_APP_TransDate = this.fgetTodaysDate();
+		oBusiness_Unit.U_APP_CardCode = this.oModel.getData().EditRecord.BPCode;
+		oBusiness_Unit.U_APP_CustomerName = this.oModel.getData().EditRecord.BPName;
+		oBusiness_Unit.U_APP_PostingDate = this.oModel.getData().EditRecord.PostingDate;
+		oBusiness_Unit.U_APP_MarkupType = this.oModel.getData().EditRecord.MarkupType;
+		oBusiness_Unit.U_APP_IssueBU = this.oModel.getData().EditRecord.IssueBU;
+		oBusiness_Unit.U_APP_ReceivingBU = this.oModel.getData().EditRecord.ReceiveBU;
+		oBusiness_Unit.U_APP_Remarks = this.oModel.getData().EditRecord.Remarks;
+		oBusiness_Unit.U_APP_Status = ostatus;
+		oBusiness_Unit.U_APP_DocType = oDocType;
+		oBusiness_Unit.U_APP_ReceivedBy = this.sUserCode;
 			///HEADER BATCH
-			var BatchHeader =
-				//directly insert data if data is single row per table 
-				{
-					"tableName": "U_APP_OINT",
-					"data": oBusiness_Unit
-				};
-			var sBodyRequest = this.fprepareUpdatePostedRequestBody(BatchHeader, getcode);
-			$.ajax({
-				url: "https://18.136.35.41:50000/b1s/v1/$batch",
-				type: "POST",
-				contentType: "multipart/mixed;boundary=a",
-				data: sBodyRequest,
-				xhrFields: {
-					withCredentials: true
-				},
-				error: function (xhr, status, error) {
-          var Message = xhr.responseJSON["error"].message.value;
-          console.error(JSON.stringify(Message));
-					sap.m.MessageToast.show(Message);
-				},
-				success: function (json) {
-				
-				},
-				context: this
-			}).done(function (results) {
-				if(JSON.stringify(results).search("400 Bad") !== -1) {
-					var oStartIndex = results.search("value") + 10;
-					var oEndIndex = results.indexOf("}") - 8;
-					var oMessage = results.substring(oStartIndex,oEndIndex);
-					AppUI5.fErrorLogs("U_APP_OINT/U_APP_INT1","Update",TransNo,"null",oMessage,"Update",this.sUserCode,"null",sBodyRequest);
-					sap.m.MessageToast.show(oMessage);
-				}else{
-					if (results) {
-						sap.m.MessageToast.show("Request Has Been Cancelled!");
-						this.fprepareTable(false,"");
-						this.fClearField();
-						this.oModel.refresh();
-					
-					}
+		var BatchHeader =
+		//directly insert data if data is single row per table 
+		{
+			"tableName": "U_APP_OINT",
+			"data": oBusiness_Unit
+		};
+		var sBodyRequest = this.fprepareUpdatePostedRequestBody(BatchHeader, getcode);
+		$.ajax({
+			url: "https://18.138.78.210:50000/b1s/v1/$batch",
+			type: "POST",
+			contentType: "multipart/mixed;boundary=a",
+			data: sBodyRequest,
+			xhrFields: {
+				withCredentials: true
+			},
+			error: function (xhr, status, error) {
+			var Message = xhr.responseJSON["error"].message.value;
+			console.error(JSON.stringify(Message));
+			sap.m.MessageToast.show(Message);
+			AppUI5.hideBusyIndicator();
+			},
+			success: function (json) {
+			
+			},
+			context: this
+		}).done(function (results) {
+			if(JSON.stringify(results).search("400 Bad") !== -1) {
+				var oStartIndex = results.search("value") + 10;
+				var oEndIndex = results.indexOf("}") - 8;
+				var oMessage = results.substring(oStartIndex,oEndIndex);
+				AppUI5.fErrorLogs("U_APP_OINT/U_APP_INT1","Update",TransNo,"null",oMessage,"Update",this.sUserCode,"null",sBodyRequest);
+				sap.m.MessageToast.show(oMessage);
+				AppUI5.hideBusyIndicator();
+			}else{
+				if (results) {
+					sap.m.MessageToast.show("Request Has Been Cancelled!");
+					this.fprepareTable(false,"");
+					this.fClearField();
+					this.oModel.refresh();
+					AppUI5.hideBusyIndicator();
 				}
-				
-			});
+			}
+		});
     },
     ////UPDATE  POSTED
-		onSendToRequest: function () {
-      var ostatus ="4";
-      var oDocType ="Request";
-			var TransNo = this.oModel.getData().EditRecord.TransNo;
-			var TransType = this.oModel.getData().EditRecord.TransType;
-			//INITIALIZE FOR UPDATE
-			var getcode = this.code;
-			var oBusiness_Unit = {};
-			oBusiness_Unit.Code = getcode;
-			oBusiness_Unit.Name = getcode;
-			oBusiness_Unit.U_APP_TransType = TransType;
-			oBusiness_Unit.U_APP_TransNo = TransNo;
-			oBusiness_Unit.U_APP_TransDate = this.fgetTodaysDate();
-			oBusiness_Unit.U_APP_CardCode = this.oModel.getData().EditRecord.BPCode;
-			oBusiness_Unit.U_APP_CustomerName = this.oModel.getData().EditRecord.BPName;
-			oBusiness_Unit.U_APP_PostingDate = this.oModel.getData().EditRecord.PostingDate;
-			oBusiness_Unit.U_APP_MarkupType = this.oModel.getData().EditRecord.MarkupType;
-			oBusiness_Unit.U_APP_IssueBU = this.oModel.getData().EditRecord.IssueBU;
-			oBusiness_Unit.U_APP_ReceivingBU = this.oModel.getData().EditRecord.ReceiveBU;
-			oBusiness_Unit.U_APP_Remarks = this.oModel.getData().EditRecord.Remarks;
-      oBusiness_Unit.U_APP_Status = ostatus;
-      oBusiness_Unit.U_APP_DocType = oDocType;
-			oBusiness_Unit.U_APP_ReceivedBy = this.sUserCode;
-			///HEADER BATCH
-			var BatchHeader =
-				//directly insert data if data is single row per table 
-				{
-					"tableName": "U_APP_OINT",
-					"data": oBusiness_Unit
-				};
-			var sBodyRequest = this.fprepareUpdatePostedRequestBody(BatchHeader, getcode);
+	onSendToRequest: function () {
+		AppUI5.showBusyIndicator(10000);
+		var ostatus ="4";
+		var oDocType ="Request";
+		var TransNo = this.oModel.getData().EditRecord.TransNo;
+		var TransType = this.oModel.getData().EditRecord.TransType;
+		//INITIALIZE FOR UPDATE
+		var getcode = this.code;
+		var oBusiness_Unit = {};
+		oBusiness_Unit.Code = getcode;
+		oBusiness_Unit.Name = getcode;
+		oBusiness_Unit.U_APP_TransType = TransType;
+		oBusiness_Unit.U_APP_TransNo = TransNo;
+		oBusiness_Unit.U_APP_TransDate = this.fgetTodaysDate();
+		oBusiness_Unit.U_APP_CardCode = this.oModel.getData().EditRecord.BPCode;
+		oBusiness_Unit.U_APP_CustomerName = this.oModel.getData().EditRecord.BPName;
+		oBusiness_Unit.U_APP_PostingDate = this.oModel.getData().EditRecord.PostingDate;
+		oBusiness_Unit.U_APP_MarkupType = this.oModel.getData().EditRecord.MarkupType;
+		oBusiness_Unit.U_APP_IssueBU = this.oModel.getData().EditRecord.IssueBU;
+		oBusiness_Unit.U_APP_ReceivingBU = this.oModel.getData().EditRecord.ReceiveBU;
+		oBusiness_Unit.U_APP_Remarks = this.oModel.getData().EditRecord.Remarks;
+		oBusiness_Unit.U_APP_Status = ostatus;
+		oBusiness_Unit.U_APP_DocType = oDocType;
+		oBusiness_Unit.U_APP_ReceivedBy = this.sUserCode;
+		oBusiness_Unit.U_APP_RequestToBusinessUnit = this.oModel.getData().EditRecord.BusinessUnit;
+		///HEADER BATCH
+		var BatchHeader =
+			//directly insert data if data is single row per table 
+			{
+				"tableName": "U_APP_OINT",
+				"data": oBusiness_Unit
+			};
+		var sBodyRequest = this.fprepareUpdatePostedRequestBody(BatchHeader, getcode);
+		$.ajax({
+			url: "https://18.138.78.210:50000/b1s/v1/$batch",
+			type: "POST",
+			contentType: "multipart/mixed;boundary=a",
+			data: sBodyRequest,
+			xhrFields: {
+				withCredentials: true
+			},
+			error: function (xhr, status, error) {
+		var Message = xhr.responseJSON["error"].message.value;
+		console.error(JSON.stringify(Message));
+				sap.m.MessageToast.show(Message);
+				AppUI5.hideBusyIndicator();
+			},
+			success: function (json) {
+			
+			},
+			context: this
+		}).done(function (results) {
+			if(JSON.stringify(results).search("400 Bad") !== -1) {
+				var oStartIndex = results.search("value") + 10;
+				var oEndIndex = results.indexOf("}") - 8;
+				var oMessage = results.substring(oStartIndex,oEndIndex);
+				AppUI5.fErrorLogs("U_APP_OINT/U_APP_INT1","Update",TransNo,"null",oMessage,"Update",this.sUserCode,"null",sBodyRequest);
+				sap.m.MessageToast.show(oMessage);
+				AppUI5.hideBusyIndicator();
+			}else{
+				if (results) {
+					sap.m.MessageToast.show("Request Has Been Sent!");
+					this.fprepareTable(false,"");
+					this.fClearField();
+					this.oModel.refresh();
+					AppUI5.hideBusyIndicator();
+				}
+			}
+			
+		});
+    },
+    //ALL ITEM LIST FROM FRAGMENT
+		handleValueitemdetails: function (oEvent) {
+			this.iSelectedRow = oEvent.getSource().getBindingContext().sPath.match(/\d+/g)[0];
+
+			if (!this._oValueHelpDialogsItem) {
+				Fragment.load({
+					name: "com.apptech.bfi-businessunit.view.fragments.ItemDialogFragment",
+					controller: this
+				}).then(function (oValueHelpDialogs) {
+					this._oValueHelpDialogsItem = oValueHelpDialogs;
+					this.getView().addDependent(this._oValueHelpDialogsItem);
+					this.f_configValueHelpDialogsItems();
+					this._oValueHelpDialogsItem.open();
+				}.bind(this));
+			} else {
+				this.f_configValueHelpDialogsItems();
+				this._oValueHelpDialogsItem.open();
+			}
+    },
+    ///GETTING ALL ITEMS CONFIGURATION FROM UDT
+		f_configValueHelpDialogsItems: function () {
+			// var sInputValue = this.byId("inputitemnum").getValue();
+		//	if (this.oModel.getData().AllItems.length <= 1) {
+				//GET ALL ITEMS
+				$.ajax({
+					url: "https://xsjs.biotechfarms.net/app-xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getallitems&value1&value2&value3&value4",
+					type: "GET",
+					datatype:"json",
+				beforeSend: function(xhr){
+					xhr.setRequestHeader("Authorization","Basic " + btoa("SYSTEM:Qwerty0987$"));
+				},
+					error: function (xhr, status, error) {
+					var Message = xhr.responseJSON["error"].message.value;
+					console.error(JSON.stringify(Message));
+					sap.m.MessageToast.show(Message);
+					},
+					success: function (json) {},
+					context: this
+				}).done(function (results) {
+					if (results) {
+						this.oModel.getData().AllItems.length = 0;
+						this.oModel.getData().AllItems = JSON.parse(JSON.stringify(results));
+						this.oModel.refresh();
+					}
+				});
+		//	}
+
+			var aList = this.oMdlAllItems.getProperty("/allitems");
+			aList.forEach(function (oRecord) {
+			});
+    },
+    ///Search on Item
+		handleSearchItem: function (oEvent) {
+			var sValue = oEvent.getParameter("value");
+			var oFilters = new Filter([
+				new Filter("ItemName", FilterOperator.Contains, sValue),
+				new Filter("ItemCode", FilterOperator.Contains, sValue)
+				], false);
+			var oBinding = oEvent.getSource().getBinding("items");
+			oBinding.filter(oFilters);
+    },
+    //Closing selection on Item
+		handleValueHelpCloseItem: function (oEvent) {
+			var transtype = this.oModel.getData().EditRecord.TransType;
+			var issuebu = this.oIssueBu;
+			var receivebu = this.oReceiveBu;
+			var aContexts = oEvent.getParameter("selectedContexts");
+			var ItemDetails = {};
+			if (aContexts && aContexts.length) {
+				ItemDetails = aContexts.map(function (oContext) {
+					var oItem = {};
+					oItem.ItemCode = oContext.getObject().ItemCode;
+					oItem.ItemName = oContext.getObject().ItemName;
+					oItem.InventoryUom = oContext.getObject().InvntryUom;
+					oItem.UomEntry = oContext.getObject().UomEntry;
+					return oItem;
+				});
+			}
+			oEvent.getSource().getBinding("items").filter([]);
+			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].ItemNum = ItemDetails[0].ItemCode;
+			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].Description = ItemDetails[0].ItemName;
+			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].Uom = ItemDetails[0].InventoryUom;
+			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].UomEntry = ItemDetails[0].UomEntry;
+			if(transtype === "4"){
+				var oCostToProduce =this.f_getAveragePrice(ItemDetails[0].ItemCode,receivebu);
+				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].CostProd = this.f_getAveragePrice(ItemDetails[0].ItemCode,receivebu);
+			}else{
+				var oCostToProduce =this.f_getAveragePrice(ItemDetails[0].ItemCode,issuebu);
+				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].CostProd = this.f_getAveragePrice(ItemDetails[0].ItemCode,issuebu);
+			}
+			// this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].MarketPrice = this.f_getMarketPrice(ItemDetails[0].ItemCode);
+			var oMarketPrice = this.f_getMarketPrice(ItemDetails[0].ItemCode);
+
+			if (transtype === "1") {
+				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].MarketPrice = this.f_getMarketPrice(ItemDetails[0].ItemCode);
+				if(oCostToProduce <= oMarketPrice){
+					this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice = oCostToProduce;
+				}else{
+					this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice=oMarketPrice;
+				}
+			} else if (transtype === "2") {
+				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice = oCostToProduce;
+			}else if (transtype === "3") {
+				///for revise
+				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice = oCostToProduce;
+			}else if (transtype === "4") {
+				///for revise
+				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice = oCostToProduce;
+			}
+			this.oModel.refresh();
+		},
+  
+		  ///GET Market Type
+		f_getMarketPrice: function (ItemCode) {
+			var iReturnMarketPrice = 0;
 			$.ajax({
-				url: "https://18.136.35.41:50000/b1s/v1/$batch",
-				type: "POST",
-				contentType: "multipart/mixed;boundary=a",
-				data: sBodyRequest,
-				xhrFields: {
-					withCredentials: true
+				url: "https://xsjs.biotechfarms.net/app-xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getMarketPrice&value1=" + ItemCode +
+					"&value2=7&value3&value4",
+				type: "GET",
+				async: false,
+				datatype:"json",
+				beforeSend: function(xhr){
+					xhr.setRequestHeader("Authorization","Basic " + btoa("SYSTEM:Qwerty0987$"));
 				},
 				error: function (xhr, status, error) {
-          var Message = xhr.responseJSON["error"].message.value;
-          console.error(JSON.stringify(Message));
+					var Message = xhr.responseJSON["error"].message.value;
+					console.error(JSON.stringify(Message));
 					sap.m.MessageToast.show(Message);
+
 				},
-				success: function (json) {
-				
-				},
+				success: function (json) {},
 				context: this
 			}).done(function (results) {
-				if(JSON.stringify(results).search("400 Bad") !== -1) {
-					var oStartIndex = results.search("value") + 10;
-					var oEndIndex = results.indexOf("}") - 8;
-					var oMessage = results.substring(oStartIndex,oEndIndex);
-					AppUI5.fErrorLogs("U_APP_OINT/U_APP_INT1","Update",TransNo,"null",oMessage,"Update",this.sUserCode,"null",sBodyRequest);
-					sap.m.MessageToast.show(oMessage);
-				}else{
-					if (results) {
-						sap.m.MessageToast.show("Request Has Been Sent!");
-						this.fprepareTable(false,"");
-						this.fClearField();
-						this.oModel.refresh();
-					
-					}
+				if (results.length > 0) {
+					iReturnMarketPrice = results[0].Price;
 				}
-				
+
 			});
-    }
-  
-  
+			return iReturnMarketPrice;
+
+		},
+		f_getAveragePrice: function (ItemCode,WareHouse) {
+			var iReturnAveragePrice = 0;
+			$.ajax({
+				url: "https://xsjs.biotechfarms.net/app-xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getAveragePrice&value1=" + ItemCode +
+					"&value2=" + WareHouse + "&value3&value4",
+				type: "GET",
+				async: false,
+				datatype:"json",
+				beforeSend: function(xhr){
+					xhr.setRequestHeader("Authorization","Basic " + btoa("SYSTEM:Qwerty0987$"));
+				},
+				error: function (xhr, status, error) {
+					var Message = xhr.responseJSON["error"].message.value;
+					console.error(JSON.stringify(Message));
+					sap.m.MessageToast.show(Message);
+				},
+				success: function (json) {},
+				context: this
+			}).done(function (results) {
+				if (results.length > 0) {
+					iReturnAveragePrice = results[0].AvgPrice;
+				}
+
+			});
+			return iReturnAveragePrice;
+
+		},
   });
 });

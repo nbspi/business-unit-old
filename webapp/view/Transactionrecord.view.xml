@@ -192,7 +192,7 @@
 												<t:Column width="7rem">
 													<Label text="Quantity"/>
 													<t:template>
-														<Input value="{Quantity}" type="Number" placeholder="0" textAlign="End" fieldWidth="80%" width="100%" enabled="true"/>
+														<Input value="{ path:'Quantity' , type: 'sap.ui.model.type.Float', formatOptions: {maxFractionDigits: 2, minFractionDigits: 2}}" type="Number" placeholder="0" textAlign="End" fieldWidth="80%" width="100%" enabled="true"/>
 														<!--<Text text="{oMdlAP>DocDate}"/>-->
 													</t:template>
 												</t:Column>

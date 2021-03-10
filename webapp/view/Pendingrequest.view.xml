@@ -164,7 +164,7 @@
 													<l:GridData span="L3 M2 S12"/>
 												</layoutData>
 											</Label>
-											<Select forceSelection="false" selectedKey="{/EditRecord/MarkupType}" items="{/AllMarkupTypes}" editable="false">
+											<Select id="inputmarkuptype" forceSelection="false" selectedKey="{/EditRecord/MarkupType}" items="{/AllMarkupTypes}" change="fgetmarkup"> 
 												<core:Item key="{key}" text="{value}"/>
 												<layoutData>
 													<l:GridData span="L3 M4 S12"/>
@@ -203,8 +203,20 @@
 													<l:GridData span="L3 M2 S12"/>
 												</layoutData>
 											</Label>
-											<Select id="userRole" forceSelection="false" selectedKey="{/EditRecord/UserRole}" items="{/UserRoles}" editable="false">
-												<core:Item key="{Code}" text="{Name}"/>
+											<!-- <Input width="100%" id="userRole" value="{/EditRecord/UserRole}" editable="false">
+												<layoutData>
+													<l:GridData span="L3 M4 S12"/>
+												</layoutData>
+											</Input> -->
+											<!-- <Select id="userRole" forceSelection="false" selectedKey="{/EditRecord/BusinessUnit}" items="{/UserRoles}">
+												<core:Item key="{UserRole}" text="{UserRole}"/>
+												<layoutData>
+													<l:GridData span="L3 M4 S12"/>
+												</layoutData>
+											</Select> -->
+
+											<Select id="businessunit" editable="false" forceSelection="false" selectedKey="{/EditRecord/BusinessUnit}" items="{/BusinessUnit}">
+												<core:Item key="{Name}" text="{Name}"/>
 												<layoutData>
 													<l:GridData span="L3 M4 S12"/>
 												</layoutData>
@@ -246,7 +258,7 @@
 												<t:Column width="7rem">
 													<Label text="Quantity"/>
 													<t:template>
-														<Input value="{Quantity}" type="Number" placeholder="0" textAlign="End" fieldWidth="80%" width="100%" enabled="true"/>
+														<Input value="{ path:'Quantity' , type: 'sap.ui.model.type.Float', formatOptions: {maxFractionDigits: 2, minFractionDigits: 2}}" type="Number" placeholder="0" textAlign="End" fieldWidth="80%" width="100%" enabled="true"/>
 														<!--<Text text="{oMdlAP>DocDate}"/>-->
 													</t:template>
 												</t:Column>
@@ -269,14 +281,14 @@
 												<t:Column width="6rem">
 													<Label text="Mark Up"/>
 													<t:template>
-														<Input value="{MarkUp}" type="Number" id="markupprice" placeholder="0.00" textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
+														<Input value="{MarkUp}" type="Number" id="markupprice" placeholder="0.00" textAlign="End" fieldWidth="80%"  liveChange="fgetmarkup" width="100%" enabled="true"/>
 														<!--<Text text="{oMdlAP>NumAtCard}"/>-->
 													</t:template>
 												</t:Column>
 												<t:Column width="9rem">
 													<Label text="Transfer Price"/>
 													<t:template>
-														<Input value="{TransferPrice}" type="Number" placeholder="0.00" textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
+														<Input id="transferprice" value="{TransferPrice}" type="Number" placeholder="0.00" textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
 														<!--<Text text="{oMdlAP>Comments}"/>-->
 													</t:template>
 												</t:Column>
