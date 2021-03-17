@@ -46,6 +46,8 @@ sap.ui.define([
         // Get DateToday
       this.getView().byId("transactiondate").setDateValue(new Date());
       this.getView().byId("dpickerpostingdate").setDateValue(new Date());
+      // this.getView().byId("dpickermanufacdate").setDateValue(new Date());
+      // this.getView().byId("dpickerexpdate").setDateValue(new Date());
 
       ///Initialize model
       this.oModel = new JSONModel("model/pendingrequest.json");
@@ -155,6 +157,10 @@ sap.ui.define([
         this.oModel.getData().EditRecord.ReceiveBU = "";
         this.oModel.getData().EditRecord.Remarks = "";
         this.oModel.getData().EditRecord.MarkupType = "";
+        this.oModel.getData().EditRecord.BatchNumber = "";
+        this.oModel.getData().EditRecord.LotNumber = "";
+        this.oModel.getData().EditRecord.ExpDate = "";
+        this.oModel.getData().EditRecord.ManufacturingDate = "";
         this.oModel.getData().EditRecord.DocumentLines.length = 0;
        //this.getView().byId("inputmarkuptype").setSelectedKey(null);
         this.oIssueBu = "";
@@ -518,6 +524,8 @@ sap.ui.define([
       oGoodsIssue.U_APP_GI_TransType = "BU";
       oGoodsIssue.U_APP_InterGroupTranstype = this.oModel.getData().EditRecord.TransType;
       oGoodsIssue.U_APP_BU_TransNum = this.oModel.getData().EditRecord.TransNo;
+      //NDC 03/17/2021 added BatchNum
+      oGoodsIssue.U_App_BatchNum = this.oModel.getData().EditRecord.BatchNumber;
       oGoodsIssue.DocumentLines = [];
       ///LOOP FOR THE DETAILS
       var d;
@@ -526,6 +534,10 @@ sap.ui.define([
         oGoodsIssueHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
         oGoodsIssueHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
         oGoodsIssueHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
+         //NDC 03/17/2021 aded LotNum,ExpDate & ManuDate
+        oGoodsIssueHeader.U_APP_ExpiryDate = this.oModel.getData().EditRecord.ExpDate;
+        oGoodsIssueHeader.U_APP_MfngDate = this.oModel.getData().EditRecord.ManufacturingDate;
+        oGoodsIssueHeader.U_APP_LotNo = this.oModel.getData().EditRecord.LotNumber;
         oGoodsIssue.DocumentLines.push(JSON.parse(JSON.stringify(oGoodsIssueHeader)));
       }
 
@@ -853,6 +865,8 @@ sap.ui.define([
       oGoodsIssue.AttachmentEntry = oAttachmentKey;
       oGoodsIssue.U_APP_GI_TransType = "BU";
       oGoodsIssue.U_APP_BU_TransNum = this.oModel.getData().EditRecord.TransNo;
+      //NDC 03/17/2021 added BatchNum
+      oGoodsIssue.U_App_BatchNum = this.oModel.getData().EditRecord.BatchNumber;
       oGoodsIssue.DocumentLines = [];
       ///LOOP FOR THE DETAILS
       var d;
@@ -861,6 +875,10 @@ sap.ui.define([
         oGoodsIssueHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
         oGoodsIssueHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
         oGoodsIssueHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
+        //NDC 03/17/2021 aded LotNum,ExpDate & ManuDate
+        oGoodsIssueHeader.U_APP_ExpiryDate = this.oModel.getData().EditRecord.ExpDate;
+        oGoodsIssueHeader.U_APP_MfngDate = this.oModel.getData().EditRecord.ManufacturingDate;
+        oGoodsIssueHeader.U_APP_LotNo = this.oModel.getData().EditRecord.LotNumber;
         oGoodsIssue.DocumentLines.push(JSON.parse(JSON.stringify(oGoodsIssueHeader)));
       }
       $.ajax({
@@ -961,34 +979,41 @@ sap.ui.define([
       //Initialize Variables
       var ostatus="1"; //NDC change status from 2 to 1
       var oDocType ="Goods Receipt"; ///Purchase Invoices
-      var oInvoice = {};
+      // var oInvoice = {};
       var oGoodsReceipt= {};
-      var oInvoiceHeader = {};
+      // var oInvoiceHeader = {};
       var oGoodsReceiptHeader = {};
-      oInvoice.CardCode = this.oModel.getData().EditRecord.BPCode;
-      oInvoice.Comments = this.oModel.getData().EditRecord.Remarks;
-      oInvoice.DocumentLines = [];
+      // oInvoice.CardCode = this.oModel.getData().EditRecord.BPCode;
+      // oInvoice.Comments = this.oModel.getData().EditRecord.Remarks;
+      // oInvoice.DocumentLines = [];
       oGoodsReceipt.Comments = this.oModel.getData().EditRecord.Remarks;
+       //NDC 03/17/2021 added BatchNum
+      oGoodsReceipt.U_App_BatchNum = this.oModel.getData().EditRecord.BatchNumber; 
+
       // oGoodsReceipt.U_APP_GR_TransType = "BU";
       oGoodsReceipt.DocumentLines = [];
       ///LOOP FOR THE DETAILS
       var d;
       for (d = 0; d < this.oModel.getData().EditRecord.DocumentLines.length; d++) {
         ///Goods Receipt Details
-        oInvoiceHeader.WarehouseCode = this.oReceiveBu;
-        oInvoiceHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
-        oInvoiceHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
-        oInvoiceHeader.UoMEntry = this.oModel.getData().EditRecord.DocumentLines[d].UomEntry;
-				oInvoiceHeader.VatGroup = "IVAT-E";
-        oInvoiceHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice; //adjustment
+        // oInvoiceHeader.WarehouseCode = this.oReceiveBu;
+        // oInvoiceHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
+        // oInvoiceHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
+        // oInvoiceHeader.UoMEntry = this.oModel.getData().EditRecord.DocumentLines[d].UomEntry;
+				// oInvoiceHeader.VatGroup = "IVAT-E";
+        // oInvoiceHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice; //adjustment
 
         ///Goods Issue Details
         oGoodsReceiptHeader.WarehouseCode = this.oReceiveBu;
         oGoodsReceiptHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
         oGoodsReceiptHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
         oGoodsReceiptHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
+        //NDC 03/17/2021 aded LotNum,ExpDate & ManuDate
+        oGoodsReceiptHeader.U_APP_ExpiryDate = this.oModel.getData().EditRecord.ExpDate;
+        oGoodsReceiptHeader.U_APP_MfngDate = this.oModel.getData().EditRecord.ManufacturingDate;
+        oGoodsReceiptHeader.U_APP_LotNo = this.oModel.getData().EditRecord.LotNumber;
 
-        oInvoice.DocumentLines.push(JSON.parse(JSON.stringify(oInvoiceHeader)));
+        // oInvoice.DocumentLines.push(JSON.parse(JSON.stringify(oInvoiceHeader)));
         oGoodsReceipt.DocumentLines.push(JSON.parse(JSON.stringify(oGoodsReceiptHeader)));
       }
       var batchArray = [
@@ -1058,6 +1083,8 @@ sap.ui.define([
       oGoodsIssue.U_APP_GI_TransType = "BU";
       oGoodsIssue.U_APP_InterGroupTranstype = this.oModel.getData().EditRecord.TransType;
       oGoodsIssue.U_APP_BU_TransNum = this.oModel.getData().EditRecord.TransNo;
+      //NDC 03/17/2021 added BatchNum
+      oGoodsIssue.U_App_BatchNum = this.oModel.getData().EditRecord.BatchNumber; 
       oGoodsIssue.AttachmentEntry = oAttachmentKey;
       oGoodsIssue.DocumentLines = [];
       ///LOOP FOR THE DETAILS
@@ -1067,6 +1094,10 @@ sap.ui.define([
         oGoodsIssueHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
         oGoodsIssueHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
         oGoodsIssueHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
+        //NDC 03/17/2021 aded LotNum,ExpDate & ManuDate
+        oGoodsIssueHeader.U_APP_ExpiryDate = this.oModel.getData().EditRecord.ExpDate;
+        oGoodsIssueHeader.U_APP_MfngDate = this.oModel.getData().EditRecord.ManufacturingDate;
+        oGoodsIssueHeader.U_APP_LotNo = this.oModel.getData().EditRecord.LotNumber;
         oGoodsIssue.DocumentLines.push(JSON.parse(JSON.stringify(oGoodsIssueHeader)));
       }
 
@@ -1178,6 +1209,13 @@ sap.ui.define([
       oBusiness_Unit.U_APP_Status = ostatus;
       var sRole = this.oModel.getData().EditRecord.UserRole;
       oBusiness_Unit.U_APP_UserRole = sRole;
+
+      //NDC 03/17/2021
+      oBusiness_Unit.U_App_BatchNum = this.oModel.getData().EditRecord.BatchNumber;
+      oBusiness_Unit.U_APP_ExpiryDate = this.oModel.getData().EditRecord.ExpDate;
+      oBusiness_Unit.U_APP_MfngDate = this.oModel.getData().EditRecord.ManufacturingDate;
+      oBusiness_Unit.U_APP_LotNo = this.oModel.getData().EditRecord.LotNumber;
+
       //oBusiness_Unit.U_APP_DocType = oDocType;
       // oBusiness_Unit.U_APP_Attachment = oAttachment;
       // oBusiness_Unit.U_APP_AttachmentKey = oAttachmentKey;

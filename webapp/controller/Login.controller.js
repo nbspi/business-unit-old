@@ -153,6 +153,10 @@ sap.ui.define([
             // AppUI5.createField("APP_IsPostedGR", "Posted Goods Receipt", "@APP_OINT", "db_Alpha", "", 10);
             // AppUI5.createField("APP_UserRole", "User Role", "@APP_OINT", "db_Alpha", "", 50);
             // AppUI5.createField("APP_RequestToBusinessUnit", "Request to Business Unit", "@APP_OINT", "db_Alpha", "", 50);
+            // AppUI5.createField("App_BatchNum", "Batch Number", "@APP_OINT", "db_Alpha", "", 50);
+            // AppUI5.createField("APP_ExpiryDate", "Expiry Date", "@APP_OINT", "db_Alpha", "", 50);
+            // AppUI5.createField("APP_MfngDate", "Manufacturing Date", "@APP_OINT", "db_Alpha", "", 50);
+            // AppUI5.createField("APP_LotNo", "Lot Number", "@APP_OINT", "db_Alpha", "", 50);
 
 			// //Business Unit Details
 			// AppUI5.createField("APP_ItemNum", "Item Number", "@APP_INT1", "db_Alpha", "", 50);

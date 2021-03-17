@@ -305,6 +305,11 @@ sap.ui.define([
 					this.oModel.getData().EditRecord.Remarks = results[0].Remarks;
 					this.oModel.getData().EditRecord.ReceivedBy = this.sUserCode;
 					// this.oModel.setJSON("{\"EditRecord\" : " + oResult + "}");
+					//NDC 03/17/2021
+					this.oModel.getData().EditRecord.BatchNumber = results[0].BatchNumber;
+					this.oModel.getData().EditRecord.ExpDate = results[0].ExpDate;
+					this.oModel.getData().EditRecord.ManufacturingDate = results[0].ManufacturingDate;
+					this.oModel.getData().EditRecord.LotNumber = results[0].LotNumber;
 
 					var transtype = this.oModel.getData().EditRecord.TransType = results[0].TransType;
 					if (transtype === "1") {
@@ -457,6 +462,8 @@ sap.ui.define([
 			oGoodsReceipt.U_APP_BU_TransNum = transno;
 			oGoodsReceipt.U_APP_GR_TransType = "BU";
 			oGoodsReceipt.U_APP_InterGroupTranstype = this.oModel.getData().EditRecord.TransType;
+			 //NDC 03/17/2021 added BatchNum
+			oGoodsReceipt.U_App_BatchNum = this.oModel.getData().EditRecord.BatchNumber; 
 			oGoodsReceipt.DocumentLines = [];
 			///LOOP FOR THE DETAILS
 			var d;
@@ -473,6 +480,10 @@ sap.ui.define([
 					oGoodsReceiptHeader.UnitPrice = oTransferPrice;
 				}
 				//oGoodsReceiptHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
+				//NDC 03/17/2021 aded LotNum,ExpDate & ManuDate
+				oGoodsReceiptHeader.U_APP_ExpiryDate = this.oModel.getData().EditRecord.ExpDate;
+				oGoodsReceiptHeader.U_APP_MfngDate = this.oModel.getData().EditRecord.ManufacturingDate;
+				oGoodsReceiptHeader.U_APP_LotNo = this.oModel.getData().EditRecord.LotNumber;
 				oGoodsReceipt.DocumentLines.push(JSON.parse(JSON.stringify(oGoodsReceiptHeader)));
 			}
 
