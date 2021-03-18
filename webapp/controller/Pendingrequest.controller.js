@@ -341,7 +341,7 @@ sap.ui.define([
 				};
 			var sBodyRequest = this.fprepareUpdatePostedRequestBody(BatchHeader,"", getcode,false);
 			$.ajax({
-				url: "https://18.138.78.210:50000/b1s/v1/$batch",
+				url: "https://sl-eut.biotechfarms.net/b1s/v1/$batch",
 				type: "POST",
 				contentType: "multipart/mixed;boundary=a",
 				data: sBodyRequest,
@@ -542,7 +542,7 @@ sap.ui.define([
       }
 
       $.ajax({
-        url: "https://18.138.78.210:50000/b1s/v1/InventoryGenExits",
+        url: "https://sl-eut.biotechfarms.net/b1s/v1/InventoryGenExits",
         type: "POST",
         data: JSON.stringify(oGoodsIssue),
         xhrFields: {
@@ -597,7 +597,7 @@ sap.ui.define([
         oGoodsIssue.DocumentLines.push(JSON.parse(JSON.stringify(oGoodsIssueHeader)));
       }
       $.ajax({
-        url: "https://18.138.78.210:50000/b1s/v1/InventoryGenExits",
+        url: "https://sl-eut.biotechfarms.net/b1s/v1/InventoryGenExits",
         type: "POST",
         data: JSON.stringify(oGoodsIssue),
         crossDomain: true,
@@ -632,7 +632,7 @@ sap.ui.define([
           oInvoice.DocumentLines.push(JSON.parse(JSON.stringify(oInvoiceHeader)));
 
           $.ajax({
-            url: "https://18.138.78.210:50000/b1s/v1/Invoices",
+            url: "https://sl-eut.biotechfarms.net/b1s/v1/Invoices",
             type: "POST",
             data: JSON.stringify(oInvoice),
             crossDomain: true,
@@ -672,7 +672,7 @@ sap.ui.define([
                 oIncomingPayment.PaymentInvoices.push(JSON.parse(JSON.stringify(oIncomingPaymentHeader)));
                 //ajax call to SL
                 $.ajax({
-                  url: "https://18.138.78.210:50000/b1s/v1/IncomingPayments",
+                  url: "https://sl-eut.biotechfarms.net/b1s/v1/IncomingPayments",
                   type: "POST",
                   data: JSON.stringify(oIncomingPayment),
                   async: false,
@@ -728,7 +728,7 @@ sap.ui.define([
         oGoodsIssue.DocumentLines.push(JSON.parse(JSON.stringify(oGoodsIssueHeader)));
       }
       $.ajax({
-        url: "https://18.138.78.210:50000/b1s/v1/InventoryGenExits",
+        url: "https://sl-eut.biotechfarms.net/b1s/v1/InventoryGenExits",
         type: "POST",
         data: JSON.stringify(oGoodsIssue),
         crossDomain: true,
@@ -761,7 +761,7 @@ sap.ui.define([
           oInvoiceHeader.LineTotal =results.DocTotal;
           oInvoice.DocumentLines.push(JSON.parse(JSON.stringify(oInvoiceHeader)));
           $.ajax({
-            url: "https://18.138.78.210:50000/b1s/v1/Invoices",
+            url: "https://sl-eut.biotechfarms.net/b1s/v1/Invoices",
             type: "POST",
             data: JSON.stringify(oInvoice),
             crossDomain: true,
@@ -820,7 +820,7 @@ sap.ui.define([
 
       $.ajax({
 
-        url: "https://18.138.78.210:50000/b1s/v1/InventoryGenExits",
+        url: "https://sl-eut.biotechfarms.net/b1s/v1/InventoryGenExits",
         type: "POST",
         data: JSON.stringify(oGoodsIssue),
         xhrFields: {
@@ -882,7 +882,7 @@ sap.ui.define([
         oGoodsIssue.DocumentLines.push(JSON.parse(JSON.stringify(oGoodsIssueHeader)));
       }
       $.ajax({
-        url: "https://18.138.78.210:50000/b1s/v1/InventoryGenExits",
+        url: "https://sl-eut.biotechfarms.net/b1s/v1/InventoryGenExits",
         type: "POST",
         data: JSON.stringify(oGoodsIssue),
         crossDomain: true,
@@ -916,7 +916,7 @@ sap.ui.define([
           oInvoice.DocumentLines.push(JSON.parse(JSON.stringify(oInvoiceHeader)));
 
           $.ajax({
-            url: "https://18.138.78.210:50000/b1s/v1/Invoices",
+            url: "https://sl-eut.biotechfarms.net/b1s/v1/Invoices",
             type: "POST",
             data: JSON.stringify(oInvoice),
             crossDomain: true,
@@ -1034,7 +1034,7 @@ sap.ui.define([
       // var sBodyRequest = this.fprepareBatchRequestBody(batchArray);
       //ajax call to SL
       $.ajax({
-        url: "https://18.138.78.210:50000/b1s/v1/InventoryGenEntries",
+        url: "https://sl-eut.biotechfarms.net/b1s/v1/InventoryGenEntries",
         type: "POST",
         contentType: "multipart/mixed;boundary=a",
         data: JSON.stringify(oGoodsReceipt),//sBodyRequest, //If batch, body data should not be JSON.stringified
@@ -1102,7 +1102,7 @@ sap.ui.define([
       }
 
       $.ajax({
-        url: "https://18.138.78.210:50000/b1s/v1/InventoryGenExits",
+        url: "https://sl-eut.biotechfarms.net/b1s/v1/InventoryGenExits",
         type: "POST",
         data: JSON.stringify(oGoodsIssue),
         xhrFields: {
@@ -1258,7 +1258,7 @@ sap.ui.define([
     }
       var sBodyRequest = this.fprepareUpdatePostedRequestBody(BatchHeader,batchArray, getcode);
       $.ajax({
-        url: "https://18.138.78.210:50000/b1s/v1/$batch",
+        url: "https://sl-eut.biotechfarms.net/b1s/v1/$batch",
         type: "POST",
         contentType: "multipart/mixed;boundary=a",
         data: sBodyRequest,
