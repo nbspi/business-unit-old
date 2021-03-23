@@ -132,6 +132,12 @@ sap.ui.define([
 				this.oModel.getData().EditRecord.Remarks = "";
 				this.oModel.getData().EditRecord.DocumentLines.length = 0;
 				this.oModel.getData().EditRecord.BusinessUnit = "";
+
+			    this.oModel.getData().EditRecord.ExpDate= "";
+				this.oModel.getData().EditRecord.ManufacturingDate= "";
+				this.oModel.getData().EditRecord.LotNumber= "";
+			    this.oModel.getData().EditRecord.BatchNumber= "";
+
 				this.oIssueBu = "";
 				this.oReceiveBu= "";
 				this.getView().byId("fileUploader").setValue("");
@@ -721,6 +727,11 @@ sap.ui.define([
 			oBusiness_Unit.U_APP_AttachmentKey = this.FileKey;
 			oBusiness_Unit.U_APP_RequestToBusinessUnit = this.oModel.getData().EditRecord.BusinessUnit;
 			///HEADER BATCH Array
+			 //QPV 03/23/2021 aded LotNum,ExpDate & ManuDate & Batch Num
+			 oBusiness_Unit.U_APP_ExpiryDate = this.oModel.getData().EditRecord.ExpDate;
+			 oBusiness_Unit.U_APP_MfngDate = this.oModel.getData().EditRecord.ManufacturingDate;
+			 oBusiness_Unit.U_APP_LotNo = this.oModel.getData().EditRecord.LotNumber;
+			 oBusiness_Unit.U_App_BatchNum = this.oModel.getData().EditRecord.BatchNumber;
 			var batchArray = [
 				//directly insert data if data is single row per table
 				{
@@ -841,6 +852,11 @@ sap.ui.define([
 			oBusiness_Unit.U_APP_Attachment = this.getView().byId("fileUploader").getValue();
 			oBusiness_Unit.U_APP_AttachmentKey = this.FileKey;
 			oBusiness_Unit.U_APP_RequestToBusinessUnit = this.oModel.getData().EditRecord.BusinessUnit;
+			 //QPV 03/23/2021 aded LotNum,ExpDate & ManuDate & Batch Num
+			oBusiness_Unit.U_APP_ExpiryDate = this.oModel.getData().EditRecord.ExpDate;
+			oBusiness_Unit.U_APP_MfngDate = this.oModel.getData().EditRecord.ManufacturingDate;
+			oBusiness_Unit.U_APP_LotNo = this.oModel.getData().EditRecord.LotNumber;
+			oBusiness_Unit.U_App_BatchNum = this.oModel.getData().EditRecord.BatchNumber;
 			//oBusiness_Unit.U_APP_IsPostedGI = ""
 			///HEADER BATCH Array
 			var batchArray = [

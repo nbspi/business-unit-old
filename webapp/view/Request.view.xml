@@ -179,6 +179,55 @@
 													<l:GridData span="L3 M4 S12"/>
 												</layoutData>
 											</Select>
+
+
+											<Label text="Lot Number" width="100%">
+												<layoutData>
+													<l:GridData span="L3 M2 S12"/>
+												</layoutData>
+											</Label>
+											<Input width="100%" id="LotNumber" value="{/EditRecord/LotNumber}" >
+												<layoutData>
+													<l:GridData span="L3 M4 S12"/>
+												</layoutData>
+											</Input>
+											<Label text="Batch Number" width="100%">
+												<layoutData>
+													<l:GridData span="L3 M2 S12"/>
+												</layoutData>
+											</Label>
+											<Input width="100%" id="BatchNumber" value="{/EditRecord/BatchNumber}" >
+												<layoutData>
+													<l:GridData span="L3 M4 S12"/>
+												</layoutData>
+											</Input>
+											<Label text="Manufacturing Date" width="100%">
+												<layoutData>
+													<l:GridData span="L3 M2 S12"/>
+												</layoutData>
+											</Label>
+											<!-- <DatePicker id="dpickermanufacdate" valueFormat="" displayFormat="yyyy-MM-dd" change="handleChange" editable="false"> -->
+											<DatePicker id="dpickermanufacdate" value="{/EditRecord/ManufacturingDate}" valueFormat="yyyy-MM-dd" displayFormat="yyyy-MM-dd" change="handleChange">
+												<layoutData>
+													<l:GridData span="L3 M4 S12"/>
+												</layoutData>
+											</DatePicker>
+
+											<Label text="Expiry Date" width="100%">
+												<layoutData>
+													<l:GridData span="L3 M2 S12"/>
+												</layoutData>
+											</Label>
+											<!-- <DatePicker id="dpickerexpdate" valueFormat="" displayFormat="yyyy-MM-dd" change="handleChange" editable="false"> -->
+											<DatePicker id="dpickerexpdate" value="{/EditRecord/ExpDate}" valueFormat="yyyy-MM-dd" displayFormat="yyyy-MM-dd" change="handleChange">
+												<layoutData>
+													<l:GridData span="L3 M4 S12"/>
+												</layoutData>
+											</DatePicker>
+
+
+
+
 											<!--ATTACHMENT UPLOADING -->
 											<u:FileUploader id="fileUploader" name="myFileUpload" tooltip="Upload your file to the local server"
 											uploadComplete="onHandleUploadComplete"

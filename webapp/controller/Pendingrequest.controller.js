@@ -413,6 +413,12 @@ sap.ui.define([
           this.oModel.getData().EditRecord.ReceivedBy = this.sUserCode;
           this.oModel.getData().EditRecord.BusinessUnit = results[0].BusinessUnit;
           // this.getView().byId("fileUploader").setValue(results[0].Attachment);
+
+          //QPV 03/23/2021
+					this.oModel.getData().EditRecord.BatchNumber = results[0].BatchNumber;
+					this.oModel.getData().EditRecord.ExpDate = results[0].ExpDate;
+					this.oModel.getData().EditRecord.ManufacturingDate = results[0].ManufacturingDate;
+					this.oModel.getData().EditRecord.LotNumber = results[0].LotNumber;
           this.Attachment = results[0].Attachment;
           var oFileKey = results[0].Attachmentkey;
           if(oFileKey===""){

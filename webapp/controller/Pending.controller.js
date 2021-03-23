@@ -129,6 +129,10 @@ sap.ui.define([
 				this.oModel.getData().EditRecord.DocumentLines.length = 0;
 				this.oIssueBu = "";
 				this.oReceiveBu= "";
+				this.oModel.getData().EditRecord.BatchNumber = "";
+				this.oModel.getData().EditRecord.LotNumber = "";
+				this.oModel.getData().EditRecord.ExpDate = "";
+				this.oModel.getData().EditRecord.ManufacturingDate = "";
 				this.oModel.refresh();
 			} catch (err) {
 				//console.log(err.message);
