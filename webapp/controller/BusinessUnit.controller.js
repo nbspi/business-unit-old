@@ -327,7 +327,8 @@ sap.ui.define([
 				oBusiness_Unit_Details.U_APP_MarketPrice = oDetails[d].MarketPrice;
 				oBusiness_Unit_Details.U_APP_TransNo = sGeneratedTransNo;
 				oBusiness_Unit_Details.U_APP_TransType = transtype;
-				oBusiness_Unit_Details.U_APP_Uom = oDetails[d].Uom;
+				oBusiness_Unit_Details.U_APP_Uom = oDetails[d].UomCode;
+				oBusiness_Unit_Details.U_APP_UomEntry = oDetails[d].UomEntry;
 
 				if(oDetails[d].Quantity <= 0){
 					AppUI5.hideBusyIndicator();

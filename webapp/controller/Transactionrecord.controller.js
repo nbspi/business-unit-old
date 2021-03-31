@@ -56,6 +56,10 @@ sap.ui.define([
 			this.oMdlAllItems = new JSONModel();
 			this.oMdlAllItems.getData().allitems = [];
 
+			 //QPV 03-31-2021 BLANK JSONMODEL FOR ALL UOM FOR TEMPLATE 
+			 this.oMdlAllUom = new JSONModel();
+			 this.oMdlAllUom.getData().alluom = [];
+
 			//BIND TO MAIN MODEL
 			this.oModel = new JSONModel("model/transactionrecord.json");
 			this.getView().setModel(this.oModel);
@@ -933,6 +937,7 @@ sap.ui.define([
 				oGoodsIssueHeader.WarehouseCode = oIssueBU;
 				oGoodsIssueHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
 				oGoodsIssueHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
+				oGoodsIssueHeader.UoMEntry = this.oModel.getData().EditRecord.DocumentLines[d].UomEntry;
 				var oTransferPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
 				var oCostToProduce = this.oModel.getData().EditRecord.DocumentLines[d].CostProd;
 				if(oTransferPrice==="0" || oTransferPrice===0 || oTransferPrice===""){
@@ -1277,6 +1282,7 @@ sap.ui.define([
 				oGoodsIssueHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
 				oGoodsIssueHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
 				oGoodsIssueHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
+				oGoodsIssueHeader.UoMEntry = this.oModel.getData().EditRecord.DocumentLines[d].UomEntry;
 				oGoodsIssue.DocumentLines.push(JSON.parse(JSON.stringify(oGoodsIssueHeader)));
 			}
 			$.ajax({
@@ -1394,7 +1400,6 @@ sap.ui.define([
 
 		},
 		///POSTING ON BU TO INTER ORG RECEIPT
-		
 		fBuToInterOrgReceipt: function (transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey) {
 			if(this.oModel.getData().APaccounts.length===0){
 				sap.m.MessageToast.show("No Account Code on Chart of Accounts has been Setup.");
@@ -1546,7 +1551,6 @@ sap.ui.define([
 				//}
 			});
 		},
-		
 		////POSTING Renewable Energy Transfer BUSINESS TYPE
 		fRenewableEnergyTransfer: function (transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,oDetails,oAttachment,oAttachmentKey) {
 			AppUI5.showBusyIndicator(4000);
@@ -1566,6 +1570,7 @@ sap.ui.define([
 				oGoodsIssueHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
 				oGoodsIssueHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
 				oGoodsIssueHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
+				oGoodsIssueHeader.UoMEntry = this.oModel.getData().EditRecord.DocumentLines[d].UomEntry;
 				oGoodsIssue.DocumentLines.push(JSON.parse(JSON.stringify(oGoodsIssueHeader)));
 			}
 
@@ -1951,5 +1956,86 @@ sap.ui.define([
 				}
 			});
 		},
+
+		////////UOMS/////////
+		handleValueUom: function (oEvent) {
+		this.iSelectedRow=oEvent.getSource().getParent().getIndex();
+		console.log(this.iSelectedRow);
+		if(this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].ItemNum === undefined){
+			MessageToast.show("Select Item to proceed.");
+			return;
+		}
+		if (!this._oValueHelpDialogUom) {
+			Fragment.load({
+			name: "com.apptech.bfi-businessunit.view.fragments.UomsDialogFragment",
+			controller: this
+			}).then(function (oValueHelpDialog) {
+			this._oValueHelpDialogUom = oValueHelpDialog;
+			this.getView().addDependent(this._oValueHelpDialogUom);
+			
+			this._configValueHelpDialogUom();
+			this._oValueHelpDialogUom.open();
+			}.bind(this));
+		} else {
+	
+			this._configValueHelpDialogUom();
+			this._oValueHelpDialogUom.open();
+		}
+		},
+		_configValueHelpDialogUom: function () {
+	var v1 = this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].ItemNum;
+	//GET ALL UOM
+	$.ajax({
+		url: "https://xsjs.biotechfarms.net/app-xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getalluom&value1="+ v1 +"&value2&value3&value4",
+		type: "GET",
+		datatype:"json",
+	beforeSend: function(xhr){
+		xhr.setRequestHeader("Authorization","Basic " + btoa("SYSTEM:Qwerty0987$"));
+	},
+		error: function (xhr, status, error) {
+		var Message = xhr.responseJSON["error"].message.value;
+		console.error(JSON.stringify(Message));
+		sap.m.MessageToast.show(Message);
+		},
+		success: function (json) {},
+		context: this
+	}).done(function (results) {
+		if (results) {
+		// this.oModel.getData().allUom.length = 0;
+		this.oModel.getData().allUom = JSON.parse(JSON.stringify(results));
+		this.oModel.refresh();
+		}
+	});
+	var aList = this.oMdlAllUom.getProperty("/alluom");
+	aList.forEach(function (oRecord) {
+	});
+		},
+		handleValueCloseUom: function (oEvent) {
+		var aContexts = oEvent.getParameter("selectedContexts");
+		var Details = {};
+		if (aContexts && aContexts.length) {
+			Details = aContexts.map(function (oContext) {
+			var oDetails = {};
+			oDetails.UomCode = oContext.getObject().UomCode;
+			oDetails.UomEntry = oContext.getObject().UomEntry;
+			return oDetails;
+			});
+		}
+		oEvent.getSource().getBinding("items").filter([]);
+		// console.log(Details[0].UomCode);
+			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].UomCode = Details[0].UomCode;
+			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].UomEntry = Details[0].UomEntry;
+		this.oModel.refresh();
+		},
+		handleSearchUoms: function(oEvent) {
+		var sValue = oEvent.getParameter("value");
+		var oFilter = new Filter([
+			new Filter("UomCode", FilterOperator.Contains, sValue),
+			new Filter("UomName", FilterOperator.Contains, sValue)
+		], false);
+		
+			var oBinding = oEvent.getSource().getBinding("items");
+			oBinding.filter(oFilter);
+		}
   	});
 });

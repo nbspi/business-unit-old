@@ -47,6 +47,12 @@ sap.ui.define([
 			///Initialize model
 			this.oModel = new JSONModel("model/requestrecord.json");
 			this.getView().setModel(this.oModel);
+
+			//QPV 03-31-2021 BLANK JSONMODEL FOR ALL UOM FOR TEMPLATE 
+			this.oMdlAllUom = new JSONModel();
+			this.oMdlAllUom.getData().alluom = [];
+
+			
 			//// INITIALIZE Variables FOR TABLE
 			this.isClickedIssue = true;
 			this.aCols = [];
