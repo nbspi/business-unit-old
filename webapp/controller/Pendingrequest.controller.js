@@ -78,6 +78,10 @@ sap.ui.define([
       this.oIssueBu = "";
       this.oReceiveBu= "";
       this.fprepareTable(true,"");
+       
+      //QPV 03-31-2021 BLANK JSONMODEL FOR ALL UOM FOR TEMPLATE 
+			this.oMdlAllUom = new JSONModel();
+			this.oMdlAllUom.getData().alluom = [];
 
       //CPA
       this.currentFile = {}; //File Object
@@ -540,6 +544,7 @@ sap.ui.define([
         oGoodsIssueHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
         oGoodsIssueHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
         oGoodsIssueHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
+        oGoodsIssueHeader.UoMEntry = this.oModel.getData().EditRecord.DocumentLines[d].UomEntry;
          //NDC 03/17/2021 aded LotNum,ExpDate & ManuDate
         oGoodsIssueHeader.U_APP_ExpiryDate = this.oModel.getData().EditRecord.ExpDate;
         oGoodsIssueHeader.U_APP_MfngDate = this.oModel.getData().EditRecord.ManufacturingDate;
@@ -1100,6 +1105,7 @@ sap.ui.define([
         oGoodsIssueHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
         oGoodsIssueHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
         oGoodsIssueHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
+        oGoodsIssueHeader.UoMEntry = this.oModel.getData().EditRecord.DocumentLines[d].UomEntry;
         //NDC 03/17/2021 aded LotNum,ExpDate & ManuDate
         oGoodsIssueHeader.U_APP_ExpiryDate = this.oModel.getData().EditRecord.ExpDate;
         oGoodsIssueHeader.U_APP_MfngDate = this.oModel.getData().EditRecord.ManufacturingDate;
@@ -1254,7 +1260,8 @@ sap.ui.define([
       oBusiness_Unit_Details.U_APP_MarketPrice = this.oModel.getData().EditRecord.DocumentLines[d].MarketPrice;
       oBusiness_Unit_Details.U_APP_TransNo = TransNo;
       oBusiness_Unit_Details.U_APP_TransType = TransType;
-      oBusiness_Unit_Details.U_APP_Uom = this.oModel.getData().EditRecord.DocumentLines[d].Uom;
+      oBusiness_Unit_Details.U_APP_Uom = this.oModel.getData().EditRecord.DocumentLines[d].UomCode;
+			oBusiness_Unit_Details.U_APP_UomEntry = this.oModel.getData().EditRecord.DocumentLines[d].UomEntry;
       //	oBusiness_Unit_Details.APP_TransNo = this.getView().byId("TransNo").getValue();
       batchArray.push(JSON.parse(JSON.stringify(({
         "tableName": "U_APP_INT1",
@@ -1585,7 +1592,89 @@ sap.ui.define([
 					this.oModel.refresh();
 				}
 			});
-		}
+		},
+    ////////UOMS/////////
+    handleValueUom: function (oEvent) {
+      this.iSelectedRow=oEvent.getSource().getParent().getIndex();
+      console.log(this.iSelectedRow);
+      if(this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].ItemNum === undefined){
+        MessageToast.show("Select Item to proceed.");
+        return;
+      }
+      if (!this._oValueHelpDialogUom) {
+        Fragment.load({
+          name: "com.apptech.bfi-businessunit.view.fragments.UomsDialogFragment",
+          controller: this
+        }).then(function (oValueHelpDialog) {
+          this._oValueHelpDialogUom = oValueHelpDialog;
+          this.getView().addDependent(this._oValueHelpDialogUom);
+        
+          this._configValueHelpDialogUom();
+          this._oValueHelpDialogUom.open();
+        }.bind(this));
+      } else {
+  
+        this._configValueHelpDialogUom();
+        this._oValueHelpDialogUom.open();
+      }
+    },
+    _configValueHelpDialogUom: function () {
+  var v1 = this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].ItemNum;
+  //GET ALL UOM
+  $.ajax({
+    url: "https://xsjs.biotechfarms.net/app-xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getalluom&value1="+ v1 +"&value2&value3&value4",
+    type: "GET",
+    datatype:"json",
+  beforeSend: function(xhr){
+    xhr.setRequestHeader("Authorization","Basic " + btoa("SYSTEM:Qwerty0987$"));
+  },
+    error: function (xhr, status, error) {
+    var Message = xhr.responseJSON["error"].message.value;
+    console.error(JSON.stringify(Message));
+    sap.m.MessageToast.show(Message);
+    },
+    success: function (json) {},
+    context: this
+  }).done(function (results) {
+    if (results) {
+      // this.oModel.getData().allUom.length = 0;
+      this.oModel.getData().allUom = JSON.parse(JSON.stringify(results));
+      this.oModel.refresh();
+    }
+  });
+  var aList = this.oMdlAllUom.getProperty("/alluom");
+  aList.forEach(function (oRecord) {
+  });
+    },
+    handleValueCloseUom: function (oEvent) {
+      var aContexts = oEvent.getParameter("selectedContexts");
+      var Details = {};
+      if (aContexts && aContexts.length) {
+        Details = aContexts.map(function (oContext) {
+          var oDetails = {};
+          oDetails.UomCode = oContext.getObject().UomCode;
+          oDetails.UomEntry = oContext.getObject().UomEntry;
+        return oDetails;
+        });
+      }
+      oEvent.getSource().getBinding("items").filter([]);
+      // console.log(Details[0].UomCode);
+        this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].UomCode = Details[0].UomCode;
+        this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].UomEntry = Details[0].UomEntry;
+      this.oModel.refresh();
+    },
+    handleSearchUoms: function(oEvent) {
+      var sValue = oEvent.getParameter("value");
+      var oFilter = new Filter([
+        new Filter("UomCode", FilterOperator.Contains, sValue),
+        new Filter("UomName", FilterOperator.Contains, sValue)
+      ], false);
+    
+          var oBinding = oEvent.getSource().getBinding("items");
+          oBinding.filter(oFilter);
+    }
+
+    
 
   });
 });

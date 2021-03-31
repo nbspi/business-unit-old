@@ -242,18 +242,35 @@
 													</t:template>
 												</t:Column>
 
-												<t:Column width="7rem">
+												<!-- <t:Column width="7rem">
 													<Label text="UOM"/>
 													<t:template>
 														<Input value="{Uom}"  textAlign="End" fieldWidth="80%" width="100%" enabled="{UomEnable}"/>
-														<!--<Text text="{oMdlAP>DocNum}"/>-->
+														
 													</t:template>
+												</t:Column> -->
+												
+												<t:Column width="12rem">
+														<Label text="UOM"/>
+													<t:template>
+													<Input 
+													required="true"  
+													width="100%" 
+													type="Text"  
+													value="{UomCode}" 
+													textAlign="Left"
+													placeholder="UOM" 
+													showValueHelp="true" 
+													valueHelpOnly="true" 
+													valueHelpRequest="handleValueUom"/>
+														</t:template>
 												</t:Column>
-												<t:Column width="7rem" visible="false">
+
+												<t:Column width="7rem" visible="true">
 													<Label text="UOMEntry"/>
 													<t:template>
-														<Input value="{UomEntry}"  textAlign="End" fieldWidth="80%" width="100%" visible="false"/>
-														<!--<Text text="{oMdlAP>DocNum}"/>-->
+														<Input value="{UomEntry}"  textAlign="End" fieldWidth="80%" width="100%" visible="true"/>
+													
 													</t:template>
 												</t:Column>
 
@@ -262,7 +279,7 @@
 													<Label text="Cost to Produce"/>
 													<t:template>
 														<Input placeholder="0.00" textAlign="End" fieldWidth="80%" width="100%" enabled="{CostProdEnable}" value="{ path:'CostProd' , type: 'sap.ui.model.type.Float', formatOptions: {maxFractionDigits: 2, minFractionDigits: 2}}"/>
-														<!--<Text text="{oMdlAP>DocDueDate}"/>-->
+													
 													</t:template>
 												</t:Column>
 												<t:Column width="6rem">

@@ -53,6 +53,10 @@ sap.ui.define([
 			this.oMdlAllItems = new JSONModel();
 			this.oMdlAllItems.getData().allitems = [];
 
+			//BLANK JSONMODEL FOR ALL UOM FOR TEMPLATE
+			this.oMdlAllUom = new JSONModel();
+			this.oMdlAllUom.getData().alluom = [];
+
 			//BIND TO MAIN MODEL
 			this.oModel = new JSONModel("model/request.json");
 			this.getView().setModel(this.oModel);
@@ -412,13 +416,15 @@ sap.ui.define([
 					oItem.ItemCode = oContext.getObject().ItemCode;
 					oItem.ItemName = oContext.getObject().ItemName;
 					oItem.InventoryUom = oContext.getObject().InvntryUom;
+					oItem.UomEntry = oContext.getObject().UomEntry;
 					return oItem;
 				});
 			}
 			oEvent.getSource().getBinding("items").filter([]);
 			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].ItemNum = ItemDetails[0].ItemCode;
 			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].Description = ItemDetails[0].ItemName;
-			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].Uom = ItemDetails[0].InventoryUom;
+			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].UomCode = ItemDetails[0].InventoryUom;
+			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].UomEntry = ItemDetails[0].UomEntry;
 			if(transtype === "3"){
 				var oCostToProduce =this.f_getAveragePrice(ItemDetails[0].ItemCode,receivebu);
 				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].CostProd = oCostToProduce;
@@ -644,8 +650,6 @@ sap.ui.define([
 				this.fAddRequestDraft();
 			}
 		},
-
-		
 		onAddRequest: function (oEvent){
 			//AppUI5.showBusyIndicator(10000);
 			var oIssueBu = this.getView().byId("inputwhsissue").getValue();
@@ -754,7 +758,8 @@ sap.ui.define([
 				oBusiness_Unit_Details.U_APP_MarketPrice = this.oModel.getData().EditRecord.DocumentLines[d].MarketPrice;
 				oBusiness_Unit_Details.U_APP_TransNo = sGeneratedTransNo;
 				oBusiness_Unit_Details.U_APP_TransType = TransType;
-				oBusiness_Unit_Details.U_APP_Uom = this.oModel.getData().EditRecord.DocumentLines[d].Uom;
+				oBusiness_Unit_Details.U_APP_Uom = this.oModel.getData().EditRecord.DocumentLines[d].UomCode;
+				oBusiness_Unit_Details.U_APP_UomEntry = this.oModel.getData().EditRecord.DocumentLines[d].UomEntry;
 				//oBusiness_Unit_Details.APP_TransNo = this.getView().byId("TransNo").getValue();
 				batchArray.push(JSON.parse(JSON.stringify(({
 					"tableName": "U_APP_INT1",
@@ -882,7 +887,9 @@ sap.ui.define([
 				oBusiness_Unit_Details.U_APP_MarketPrice = this.oModel.getData().EditRecord.DocumentLines[d].MarketPrice;
 				oBusiness_Unit_Details.U_APP_TransNo = sGeneratedTransNo;
 				oBusiness_Unit_Details.U_APP_TransType = TransType;
-				oBusiness_Unit_Details.U_APP_Uom = this.oModel.getData().EditRecord.DocumentLines[d].Uom;
+				oBusiness_Unit_Details.U_APP_Uom = this.oModel.getData().EditRecord.DocumentLines[d].UomCode;
+				oBusiness_Unit_Details.U_APP_UomEntry = this.oModel.getData().EditRecord.DocumentLines[d].UomEntry;
+				
 				if(this.oModel.getData().EditRecord.DocumentLines[d].Quantity <= 0){
 					AppUI5.hideBusyIndicator();
 					sap.m.MessageToast.show("Quantity must be greater than zero!");
@@ -1005,6 +1012,85 @@ sap.ui.define([
 			});
 		},
 
+		 ////////UOMS/////////
+		handleValueUom: function (oEvent) {
+		this.iSelectedRow=oEvent.getSource().getParent().getIndex();
+		console.log(this.iSelectedRow);
+		if(this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].ItemNum === undefined){
+			MessageToast.show("Select Item to proceed.");
+			return;
+		}
+		if (!this._oValueHelpDialogUom) {
+			Fragment.load({
+			name: "com.apptech.bfi-businessunit.view.fragments.UomsDialogFragment",
+			controller: this
+			}).then(function (oValueHelpDialog) {
+			this._oValueHelpDialogUom = oValueHelpDialog;
+			this.getView().addDependent(this._oValueHelpDialogUom);
+			
+			this._configValueHelpDialogUom();
+			this._oValueHelpDialogUom.open();
+			}.bind(this));
+		} else {
+
+			this._configValueHelpDialogUom();
+			this._oValueHelpDialogUom.open();
+		}
+		},
+		_configValueHelpDialogUom: function () {
+			var v1 = this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].ItemNum;
+			//GET ALL UOM
+			$.ajax({
+				url: "https://xsjs.biotechfarms.net/app-xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getalluom&value1="+ v1 +"&value2&value3&value4",
+				type: "GET",
+				datatype:"json",
+			beforeSend: function(xhr){
+				xhr.setRequestHeader("Authorization","Basic " + btoa("SYSTEM:Qwerty0987$"));
+			},
+				error: function (xhr, status, error) {
+				var Message = xhr.responseJSON["error"].message.value;
+				console.error(JSON.stringify(Message));
+				sap.m.MessageToast.show(Message);
+				},
+				success: function (json) {},
+				context: this
+			}).done(function (results) {
+				if (results) {
+					// this.oModel.getData().allUom.length = 0;
+					this.oModel.getData().allUom = JSON.parse(JSON.stringify(results));
+					this.oModel.refresh();
+				}
+			});
+			var aList = this.oMdlAllUom.getProperty("/alluom");
+			aList.forEach(function (oRecord) {
+			});
+		},
+		handleValueCloseUom: function (oEvent) {
+		var aContexts = oEvent.getParameter("selectedContexts");
+		var Details = {};
+		if (aContexts && aContexts.length) {
+			Details = aContexts.map(function (oContext) {
+			var oDetails = {};
+			oDetails.UomCode = oContext.getObject().UomCode;
+			oDetails.UomEntry = oContext.getObject().UomEntry;
+			return oDetails;
+			});
+		}
+		oEvent.getSource().getBinding("items").filter([]);
+		// console.log(Details[0].UomCode);
+		this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].UomCode = Details[0].UomCode;
+		this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].UomEntry = Details[0].UomEntry;
+		this.oModel.refresh();
+		},
+		handleSearchUoms: function(oEvent) {
+		var sValue = oEvent.getParameter("value");
+		var oFilter = new Filter([
+			new Filter("UomCode", FilterOperator.Contains, sValue),
+			new Filter("UomName", FilterOperator.Contains, sValue)
+		], false);
 		
+			var oBinding = oEvent.getSource().getBinding("items");
+			oBinding.filter(oFilter);
+		}
   	});
 });
