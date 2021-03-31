@@ -1849,7 +1849,8 @@ sap.ui.define([
 				oBusiness_Unit_Details.U_APP_MarketPrice = this.oModel.getData().EditRecord.DocumentLines[d].MarketPrice;
 				oBusiness_Unit_Details.U_APP_TransNo = TransNo;
 				oBusiness_Unit_Details.U_APP_TransType = TransType;
-				oBusiness_Unit_Details.U_APP_Uom = this.oModel.getData().EditRecord.DocumentLines[d].Uom;
+				oBusiness_Unit_Details.U_APP_Uom = this.oModel.getData().EditRecord.DocumentLines[d].UomCode;
+				oBusiness_Unit_Details.U_APP_UomEntry = this.oModel.getData().EditRecord.DocumentLines[d].UomEntry;
 				//	oBusiness_Unit_Details.APP_TransNo = this.getView().byId("TransNo").getValue();
 				batchArray.push(JSON.parse(JSON.stringify(({
 					"tableName": "U_APP_INT1",
