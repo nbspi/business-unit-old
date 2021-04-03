@@ -1497,6 +1497,7 @@ sap.ui.define([
 					// oInvoice.AttachmentEntry = this.FileKey;
 					oInvoice.U_APP_GI_TransType = "BU";
 					oInvoice.U_APP_BU_TransNum = transno;
+					oInvoiceHeader.LineTotal = results.DocTotal;
 					oInvoice.DocumentLines = [];
 					///HARD CODED ACCOUNT CODE FOR TESTING
 					oInvoiceHeader.ItemDescription = oRemarks;
