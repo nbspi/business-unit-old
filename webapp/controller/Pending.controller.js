@@ -478,6 +478,7 @@ sap.ui.define([
 			var d;
 			for (d = 0; d < this.oModel.getData().EditRecord.DocumentLines.length; d++) {
 				// oGoodsIssueHeader.WarehouseCode = this.oModel.getData().EditRecord.IssueBU;
+				oGoodsReceiptHeader.UseBaseUnits = "tNO";
 				oGoodsReceiptHeader.WarehouseCode = (this.bCancel ? this.oIssueBu : this.oReceiveBu);
 				oGoodsReceiptHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
 				oGoodsReceiptHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;

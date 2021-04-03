@@ -152,7 +152,7 @@ sap.ui.define([
 				var data = [];
 						for(var i=0;i<oModel.length;i++)
 						{
-								data[i]=[oModel[i].ItemNum,oModel[i].Quantity,oModel[i].Uom,oModel[i].Description];
+								data[i]=[oModel[i].ItemNum,oModel[i].Quantity,oModel[i].UomCode,oModel[i].Description];
 						}
 			doc.autoTable(columns,data,{startY:100});
 			doc.text(20, 170, 'REQUESTED BY:'+ this.sUserCode +'');
@@ -934,6 +934,7 @@ sap.ui.define([
 			///LOOP FOR THE DETAILS
 			var d;
 			for (d = 0; d < this.oModel.getData().EditRecord.DocumentLines.length; d++) {
+				oGoodsIssueHeader.UseBaseUnits = "tNO";
 				oGoodsIssueHeader.WarehouseCode = oIssueBU;
 				oGoodsIssueHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
 				oGoodsIssueHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
@@ -1278,6 +1279,7 @@ sap.ui.define([
 			///LOOP FOR THE DETAILS
 			var d;
 			for (d = 0; d < this.oModel.getData().EditRecord.DocumentLines.length; d++) {
+				oGoodsIssueHeader.UseBaseUnits = "tNO";
 				oGoodsIssueHeader.WarehouseCode = this.oIssueBu;
 				oGoodsIssueHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
 				oGoodsIssueHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
@@ -1438,6 +1440,7 @@ sap.ui.define([
 				// oInvoiceHeader.UoMEntry = this.oModel.getData().EditRecord.DocumentLines[d].UomEntry;
 				// oInvoiceHeader.VatGroup = "IVAT-E";
 				///Goods Issue Details
+				oGoodsReceiptHeader.UseBaseUnits = "tNO";
 				oGoodsReceiptHeader.WarehouseCode = oReceiveBU;
 				oGoodsReceiptHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
 				oGoodsReceiptHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
@@ -1568,6 +1571,7 @@ sap.ui.define([
 			///LOOP FOR THE DETAILS
 			var d;
 			for (d = 0; d < this.oModel.getData().EditRecord.DocumentLines.length; d++) {
+				oGoodsIssueHeader.UseBaseUnits = "tNO";
 				oGoodsIssueHeader.WarehouseCode = this.oIssueBu;
 				oGoodsIssueHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
 				oGoodsIssueHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;

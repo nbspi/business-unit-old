@@ -320,10 +320,10 @@
 														</t:template>
 												</t:Column>
 
-												<t:Column width="7rem" visible="true">
+												<t:Column width="7rem" visible="false">
 													<Label text="UOMEntry"/>
 													<t:template>
-														<Input value="{UomEntry}"  textAlign="End" fieldWidth="80%" width="100%" visible="true"/>
+														<Input value="{UomEntry}"  textAlign="End" fieldWidth="80%" width="100%" visible="false"/>
 													
 													</t:template>
 												</t:Column>
