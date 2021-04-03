@@ -1502,6 +1502,7 @@ sap.ui.define([
 					///HARD CODED ACCOUNT CODE FOR TESTING
 					oInvoiceHeader.ItemDescription = oRemarks;
 					oInvoiceHeader.AccountCode =this.oModel.getData().APaccounts[0].Value;
+					oInvoiceHeader.LineTotal = results.DocTotal;
 					oInvoice.DocumentLines.push(JSON.parse(JSON.stringify(oInvoiceHeader)));
 
 					$.ajax({
