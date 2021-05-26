@@ -40,7 +40,7 @@ sap.ui.define([
 
 		fGetAllMenu: function(sDataBase){
 			$.ajax({
-				url: "https://xs.biotechfarms.net/app-xsjs/ExecQuery.xsjs?dbName="+ sDataBase +"&procName=spAppBusinessUnit&QUERYTAG=getAllMenu" +
+				url: "https://xs.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName="+ sDataBase +"&procName=spAppBusinessUnit&QUERYTAG=getAllMenu" +
 				"&VALUE1="+ this.sUserCode +"&VALUE2=&VALUE3=&VALUE4=",
 				type: "GET",
 				async: false,
