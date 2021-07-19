@@ -110,7 +110,7 @@
 													<l:GridData span="L3 M2 S12"/>
 												</layoutData>
 											</Label>
-											<DatePicker id="dpickerpostingdate" valueFormat=""  displayFormat="yyyy-MM-dd" change="handleChange" editable="false">
+											<DatePicker id="dpickerpostingdate" valueFormat=""  displayFormat="yyyy-MM-dd" change="handleChange" editable="true">
 											<!-- <DatePicker id="dpickerpostingdate" value="{/EditRecord/PostingDate}" valueFormat="yyyy-MM-dd" displayFormat="yyyy-MM-dd" change="handleChange" editable="false"> -->
 												<layoutData>
 													<l:GridData span="L3 M4 S12"/>
