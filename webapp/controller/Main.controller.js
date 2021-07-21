@@ -40,7 +40,7 @@ sap.ui.define([
 
 		fGetAllMenu: function(sDataBase){
 			$.ajax({
-				url: "https://xs.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName="+ sDataBase +"&procName=spAppBusinessUnit&QUERYTAG=getAllMenu" +
+				url: "https://xsjs.biotechfarms.net/app-xsjs/ExecQuery.xsjs?dbName="+ sDataBase +"&procName=spAppBusinessUnit&QUERYTAG=getAllMenu" +
 				"&VALUE1="+ this.sUserCode +"&VALUE2=&VALUE3=&VALUE4=",
 				type: "GET",
 				async: false,
@@ -139,7 +139,7 @@ sap.ui.define([
 		},
 		onLogout: function (){
 			$.ajax({
-				url: "https://18.141.110.57:50000/b1s/v1/Logout",
+				url: "https://sl-eut.biotechfarms.net/b1s/v1/Logout",
 				type: "POST",
 				error: function (xhr, status, error) {
 				  var Message = xhr.responseJSON["error"].message.value;
