@@ -101,11 +101,11 @@ sap.ui.define([
         fGetAllRecords: function(queryTag){
 			// var aReturnResult = [];
 			$.ajax({
-				url: "https://xsjs.biotechfarms.net/app-xsjs/ExecQuery.xsjs?dbName=051021_TEST_DEV_PROD_BIOTECH&procName=spAppBusinessUnit&QUERYTAG="+ queryTag +"&value1=&value2=&value3=&value4=",
+				url: "https://xsjs.biotechfarms.net/app-xsjs/ExecQuery.xsjs?dbName=PROD_BIOTECH&procName=spAppBusinessUnit&QUERYTAG="+ queryTag +"&value1=&value2=&value3=&value4=",
 				type: "GET",
 				dataType: "json",
 				beforeSend: function (xhr) {
-					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
+					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:Qwerty0987$"));
 			  	},
 				error: function (xhr, status, error) {
                     var Message = xhr.responseJSON["error"].message.value;
