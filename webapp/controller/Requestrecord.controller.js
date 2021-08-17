@@ -470,7 +470,7 @@ sap.ui.define([
 		};
 		var sBodyRequest = this.fprepareUpdatePostedRequestBody(BatchHeader, getcode);
 		$.ajax({
-			url: "https://18.141.110.57:50000/b1s/v1/$batch",
+			url: "https://sl-test.biotechfarms.net/b1s/v1/$batch",
 			type: "POST",
 			contentType: "multipart/mixed;boundary=a",
 			data: sBodyRequest,
@@ -541,7 +541,7 @@ sap.ui.define([
 			};
 		var sBodyRequest = this.fprepareUpdatePostedRequestBody(BatchHeader, getcode);
 		$.ajax({
-			url: "https://18.141.110.57:50000/b1s/v1/$batch",
+			url: "https://sl-test.biotechfarms.net/b1s/v1/$batch",
 			type: "POST",
 			contentType: "multipart/mixed;boundary=a",
 			data: sBodyRequest,

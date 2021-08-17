@@ -770,7 +770,7 @@ sap.ui.define([
 			var sBodyRequest = AppUI5.prepareBatchRequestBody(batchArray);
 		////BATCH POSTING FOR DRAFT
 			$.ajax({
-				url: "https://18.141.110.57:50000/b1s/v1/$batch",
+				url: "https://sl-test.biotechfarms.net/b1s/v1/$batch",
 				type: "POST",
 				contentType: "multipart/mixed;boundary=a",
 				data: sBodyRequest,
@@ -906,7 +906,7 @@ sap.ui.define([
 			var sBodyRequest = AppUI5.prepareBatchRequestBody(batchArray);
 		////BATCH POSTING FOR DRAFT
 			$.ajax({
-				url: "https://18.141.110.57:50000/b1s/v1/$batch",
+				url: "https://sl-test.biotechfarms.net/b1s/v1/$batch",
 				type: "POST",
 				contentType: "multipart/mixed;boundary=a",
 				data: sBodyRequest,
@@ -964,7 +964,7 @@ sap.ui.define([
 			form.append("",this.currentFile,FileName);
 			//Postinf Attachment in SAP
 			$.ajax({
-				url: "https://18.141.110.57:50000/b1s/v1/Attachments2",
+				url: "https://sl-test.biotechfarms.net/b1s/v1/Attachments2",
 				data: form,
 				type: "POST",
 				processData:false,
