@@ -538,6 +538,7 @@ sap.ui.define([
       oGoodsIssue.U_App_BatchNum = this.oModel.getData().EditRecord.BatchNumber;
       // QPV 08/17/2021
       oGoodsIssue.DocDate = oPostingDate;
+      
       oGoodsIssue.DocumentLines = [];
       ///LOOP FOR THE DETAILS
       var d;
