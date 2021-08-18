@@ -485,6 +485,7 @@ sap.ui.define([
 				var oTransferPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
 				var oCostToProduce = this.oModel.getData().EditRecord.DocumentLines[d].CostProd;
 				oGoodsReceiptHeader.UoMEntry = this.oModel.getData().EditRecord.DocumentLines[d].UomEntry;
+				
 				if(oTransferPrice==="0" || oTransferPrice===0 || oTransferPrice===""){
 					oGoodsReceiptHeader.UnitPrice = oCostToProduce;
 				}else{
