@@ -481,7 +481,7 @@ sap.ui.define([
         var transtype = this.oModel.getData().EditRecord.TransType;
         var transno = this.oModel.getData().EditRecord.TransNo;
         var oCardCode = this.oModel.getData().EditRecord.BPCode;
-        var oPostingDate = this.getView().byId("dpickerpostingdate").getValue();
+        var oPostingDate = this.oModel.getData().EditRecord.PostingDate;
         var oMarkupType = this.oModel.getData().EditRecord.MarkupType;
         var oIssueBU = this.oIssueBu;
         var oReceiveBU = this.oReceiveBu;
