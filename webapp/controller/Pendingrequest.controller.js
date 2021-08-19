@@ -536,6 +536,9 @@ sap.ui.define([
       oGoodsIssue.U_APP_BU_TransNum = this.oModel.getData().EditRecord.TransNo;
       //NDC 03/17/2021 added BatchNum
       oGoodsIssue.U_App_BatchNum = this.oModel.getData().EditRecord.BatchNumber;
+      // QPV 08/17/2021
+      oGoodsIssue.DocDate = oPostingDate;
+      
       oGoodsIssue.DocumentLines = [];
       ///LOOP FOR THE DETAILS
       var d;
@@ -598,6 +601,8 @@ sap.ui.define([
       oGoodsIssue.Comments = this.oModel.getData().EditRecord.Remarks;
       oGoodsIssue.AttachmentEntry = oAttachmentKey;
       oGoodsIssue.U_APP_GI_TransType = "BU";
+       // QPV 08/17/2021
+      oGoodsIssue.DocDate = oPostingDate;
       oGoodsIssue.DocumentLines = [];
       ///LOOP FOR THE DETAILS
       var d;
@@ -879,6 +884,8 @@ sap.ui.define([
       oGoodsIssue.U_APP_BU_TransNum = this.oModel.getData().EditRecord.TransNo;
       //NDC 03/17/2021 added BatchNum
       oGoodsIssue.U_App_BatchNum = this.oModel.getData().EditRecord.BatchNumber;
+       // QPV 08/17/2021
+      oGoodsIssue.DocDate = oPostingDate;
       oGoodsIssue.DocumentLines = [];
       ///LOOP FOR THE DETAILS
       var d;
@@ -1002,7 +1009,8 @@ sap.ui.define([
       oGoodsReceipt.Comments = this.oModel.getData().EditRecord.Remarks;
        //NDC 03/17/2021 added BatchNum
       oGoodsReceipt.U_App_BatchNum = this.oModel.getData().EditRecord.BatchNumber; 
-
+       // QPV 08/17/2021
+       oGoodsReceipt.DocDate = oPostingDate;
       // oGoodsReceipt.U_APP_GR_TransType = "BU";
       oGoodsReceipt.DocumentLines = [];
       ///LOOP FOR THE DETAILS
@@ -1100,6 +1108,8 @@ sap.ui.define([
       //NDC 03/17/2021 added BatchNum
       oGoodsIssue.U_App_BatchNum = this.oModel.getData().EditRecord.BatchNumber; 
       oGoodsIssue.AttachmentEntry = oAttachmentKey;
+       // QPV 08/17/2021
+       oGoodsIssue.DocDate = oPostingDate;
       oGoodsIssue.DocumentLines = [];
       ///LOOP FOR THE DETAILS
       var d;

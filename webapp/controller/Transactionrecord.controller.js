@@ -930,6 +930,8 @@ sap.ui.define([
 			oGoodsIssue.U_APP_GI_TransType = "BU";
 			oGoodsIssue.U_APP_BU_TransNum = transno;
 			oGoodsIssue.U_APP_InterGroupTranstype = this.oModel.getData().EditRecord.TransType;
+			 // QPV 08/17/2021
+			 oGoodsIssue.DocDate = oPostingDate;
 			oGoodsIssue.DocumentLines = [];
 			///LOOP FOR THE DETAILS
 			var d;
@@ -1275,6 +1277,8 @@ sap.ui.define([
 			oGoodsIssue.U_APP_GI_TransType = "BU";
 			oGoodsIssue.U_APP_BU_TransNum = transno;
 			oGoodsIssue.U_APP_InterGroupTranstype = this.oModel.getData().EditRecord.TransType;
+			// QPV 08/17/2021
+			oGoodsIssue.DocDate = oPostingDate;
 			oGoodsIssue.DocumentLines = [];
 			///LOOP FOR THE DETAILS
 			var d;
@@ -1422,6 +1426,8 @@ sap.ui.define([
 			oGoodsReceipt.U_APP_GR_TransType = "BU";
 			oGoodsReceipt.U_APP_BU_TransNum = transno;
 			oGoodsReceipt.U_APP_InterGroupTranstype = this.oModel.getData().EditRecord.TransType;
+			// QPV 08/17/2021
+			oGoodsReceipt.DocDate = oPostingDate;
 			oGoodsReceipt.DocumentLines = [];
 			///LOOP FOR THE DETAILS
 			var d;
@@ -1569,6 +1575,8 @@ sap.ui.define([
 			oGoodsIssue.Comments = this.oModel.getData().EditRecord.Remarks;
 			oGoodsIssue.U_APP_GI_TransType = "BU";
 			oGoodsIssue.AttachmentEntry = oAttachmentKey;
+			// QPV 08/17/2021
+			oGoodsIssue.DocDate = oPostingDate;
 			oGoodsIssue.DocumentLines = [];
 			///LOOP FOR THE DETAILS
 			var d;

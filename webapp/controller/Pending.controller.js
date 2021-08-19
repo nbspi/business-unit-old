@@ -473,6 +473,8 @@ sap.ui.define([
 			oGoodsReceipt.U_APP_InterGroupTranstype = this.oModel.getData().EditRecord.TransType;
 			 //NDC 03/17/2021 added BatchNum
 			oGoodsReceipt.U_App_BatchNum = this.oModel.getData().EditRecord.BatchNumber; 
+			// QPV 08/17/2021
+			oGoodsReceipt.DocDate = oPostingDate;
 			oGoodsReceipt.DocumentLines = [];
 			///LOOP FOR THE DETAILS
 			var d;
@@ -484,6 +486,8 @@ sap.ui.define([
 				oGoodsReceiptHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
 				var oTransferPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
 				var oCostToProduce = this.oModel.getData().EditRecord.DocumentLines[d].CostProd;
+				oGoodsReceiptHeader.UoMEntry = this.oModel.getData().EditRecord.DocumentLines[d].UomEntry;
+				
 				if(oTransferPrice==="0" || oTransferPrice===0 || oTransferPrice===""){
 					oGoodsReceiptHeader.UnitPrice = oCostToProduce;
 				}else{
