@@ -847,7 +847,7 @@ sap.ui.define([
 			oBusiness_Unit.U_APP_TransNo = sGeneratedTransNo;
 			oBusiness_Unit.U_APP_TransDate = this.getTodaysDate();
 			oBusiness_Unit.U_APP_CardCode = this.oModel.getData().EditRecord.BPCode;
-			oBusiness_Unit.U_APP_PostingDate = this.getTodaysDate();//.oModel.getData().EditRecord.PostingDate;
+			oBusiness_Unit.U_APP_PostingDate = this.getView().byId("dpickerpostingdate").getValue();
 			oBusiness_Unit.U_APP_MarkupType = this.oModel.getData().EditRecord.MarkupType;
 			oBusiness_Unit.U_APP_IssueBU = this.oIssueBu;
 			oBusiness_Unit.U_APP_ReceivingBU = this.oReceiveBu;
