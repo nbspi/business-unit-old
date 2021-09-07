@@ -70,6 +70,7 @@ sap.ui.define([
 			this.oIssueBu = "";
 			this.oReceiveBu= "";
 			this.fprepareTable(true,"");
+			this.gGetInventoryTransactionType();
 
 		},
 
@@ -319,7 +320,8 @@ sap.ui.define([
 					this.oModel.getData().EditRecord.ExpDate = results[0].ExpDate;
 					this.oModel.getData().EditRecord.ManufacturingDate = results[0].ManufacturingDate;
 					this.oModel.getData().EditRecord.LotNumber = results[0].LotNumber;
-
+					 //QPV 09-07-2021
+					this.oModel.getData().EditRecord.InventoryTransactionType = results[0].InventoryTransactionType;
 					var transtype = this.oModel.getData().EditRecord.TransType = results[0].TransType;
 					if (transtype === "1") {
 						this.getView().byId("inputwhsreceive").setEnabled(true);
@@ -470,7 +472,8 @@ sap.ui.define([
 			oGoodsReceipt.Comments = this.oModel.getData().EditRecord.Remarks;
 			oGoodsReceipt.U_APP_BU_TransNum = transno;
 			oGoodsReceipt.U_APP_GR_TransType = "BU";
-			oGoodsReceipt.U_APP_InterGroupTranstype = this.oModel.getData().EditRecord.TransType;
+			//QPV 09-07-2021
+			oGoodsReceipt.U_APP_InterGroupTranstype = this.oModel.getData().EditRecord.InventoryTransactionType;
 			 //NDC 03/17/2021 added BatchNum
 			oGoodsReceipt.U_App_BatchNum = this.oModel.getData().EditRecord.BatchNumber; 
 			// QPV 08/17/2021
@@ -968,6 +971,31 @@ sap.ui.define([
 			}).done(function (results) {
 				if (results) {
 					sap.m.MessageToast.show("Transaction posted successfully!");
+				}
+			});
+		},
+
+		//QPV 09-07-2021
+		gGetInventoryTransactionType: function(){
+			$.ajax({
+				url: "https://xs.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getInventoryTransactionType&value1&value2&value3&value4",
+				type: "GET",
+				datatype:"json",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
+			  	},
+				error: function (xhr, status, error) {
+					var Message = xhr.responseJSON["error"].message.value;
+					console.error(JSON.stringify(Message));
+					sap.m.MessageToast.show(Message);
+				},
+				success: function (json) {},
+				context: this
+			}).done(function (results) {
+				if (results) {
+					this.oModel.getData().InventoryTransactionType = results;
+         		    this.oModel.getData().InventoryTransactionType.setSizeLimit(9999999);
+					this.oModel.refresh();
 				}
 			});
 		},

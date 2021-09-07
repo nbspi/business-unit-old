@@ -11,6 +11,7 @@ sap.ui.define([
 
             //get all databse
             this.oMdlDatabase = new JSONModel("model/databases.json");
+            this.oMdlDatabase.setSizeLimit(500);
             this.oMdlLogin = new JSONModel("model/login.json");
             this.getView().setModel(this.oMdlLogin);
             this.fGetAllRecords("getAllDB");

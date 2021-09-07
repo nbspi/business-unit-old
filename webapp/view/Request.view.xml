@@ -47,6 +47,19 @@
 												</layoutData>
 											</Input>
 
+											<!--QPV 09-07-2021 Inventory Transaction Type -->
+											<Label text="Inventory Transaction Type" width="100%">
+												<layoutData>
+													<l:GridData span="L3 M2 S12"/>
+												</layoutData>
+											</Label>
+											<Select id="InventoryTransactionType" forceSelection="false" selectedKey="{/EditRecord/InventoryTransactionType}" items="{/InventoryTransactionType}">
+												<core:Item key="{Code}" text="{Code}-{Name}"/>
+												<layoutData>
+													<l:GridData span="L3 M4 S12"/>
+												</layoutData>
+											</Select>
+
 												<!--Account Code -->
 											<Label text="Customer/Vendor" width="100%">
 												<layoutData>

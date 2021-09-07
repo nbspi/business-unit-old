@@ -67,6 +67,7 @@ sap.ui.define([
 			this.oMdlAllRecord = new JSONModel();
 			this.tableId = "tblRecords";
 			this.fprepareTable(true,"");
+			this.gGetInventoryTransactionType();
 
     },
     //GETTING DATE NOW
@@ -367,6 +368,8 @@ sap.ui.define([
           this.oModel.getData().EditRecord.ReceiveBU = results[0].ReceiveBU;
 		  this.oModel.getData().EditRecord.Remarks = results[0].Remarks;
 		  this.oModel.getData().EditRecord.BusinessUnit = results[0].BusinessUnit;
+		  //QPV 09-07-2021
+          this.oModel.getData().EditRecord.InventoryTransactionType = results[0].InventoryTransactionType;
 		  var isPostedGI = (results[0].IsPostedGI === "Y" ? false:true)
           var oDocStatus=results[0].Status;
           this.oModel.getData().EditRecord.ReceivedBy = this.sUserCode;
@@ -532,6 +535,8 @@ sap.ui.define([
 		oBusiness_Unit.U_APP_DocType = oDocType;
 		oBusiness_Unit.U_APP_ReceivedBy = this.sUserCode;
 		oBusiness_Unit.U_APP_RequestToBusinessUnit = this.oModel.getData().EditRecord.BusinessUnit;
+		//QPV 09-07-2021
+		oBusiness_Unit.U_APP_InventoryTransactionType = this.oModel.getData().EditRecord.InventoryTransactionType;
 		///HEADER BATCH
 		var BatchHeader =
 			//directly insert data if data is single row per table 
@@ -579,7 +584,7 @@ sap.ui.define([
 		});
     },
     //ALL ITEM LIST FROM FRAGMENT
-		handleValueitemdetails: function (oEvent) {
+	handleValueitemdetails: function (oEvent) {
 			this.iSelectedRow = oEvent.getSource().getBindingContext().sPath.match(/\d+/g)[0];
 
 			if (!this._oValueHelpDialogsItem) {
@@ -598,7 +603,7 @@ sap.ui.define([
 			}
     },
     ///GETTING ALL ITEMS CONFIGURATION FROM UDT
-		f_configValueHelpDialogsItems: function () {
+	f_configValueHelpDialogsItems: function () {
 			// var sInputValue = this.byId("inputitemnum").getValue();
 		//	if (this.oModel.getData().AllItems.length <= 1) {
 				//GET ALL ITEMS
@@ -630,7 +635,7 @@ sap.ui.define([
 			});
     },
     ///Search on Item
-		handleSearchItem: function (oEvent) {
+	handleSearchItem: function (oEvent) {
 			var sValue = oEvent.getParameter("value");
 			var oFilters = new Filter([
 				new Filter("ItemName", FilterOperator.Contains, sValue),
@@ -640,111 +645,136 @@ sap.ui.define([
 			oBinding.filter(oFilters);
     },
     //Closing selection on Item
-		handleValueHelpCloseItem: function (oEvent) {
-			var transtype = this.oModel.getData().EditRecord.TransType;
-			var issuebu = this.oIssueBu;
-			var receivebu = this.oReceiveBu;
-			var aContexts = oEvent.getParameter("selectedContexts");
-			var ItemDetails = {};
-			if (aContexts && aContexts.length) {
-				ItemDetails = aContexts.map(function (oContext) {
-					var oItem = {};
-					oItem.ItemCode = oContext.getObject().ItemCode;
-					oItem.ItemName = oContext.getObject().ItemName;
-					oItem.InventoryUom = oContext.getObject().InvntryUom;
-					oItem.UomEntry = oContext.getObject().UomEntry;
-					return oItem;
-				});
-			}
-			oEvent.getSource().getBinding("items").filter([]);
-			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].ItemNum = ItemDetails[0].ItemCode;
-			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].Description = ItemDetails[0].ItemName;
-			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].Uom = ItemDetails[0].InventoryUom;
-			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].UomEntry = ItemDetails[0].UomEntry;
-			if(transtype === "4"){
-				var oCostToProduce =this.f_getAveragePrice(ItemDetails[0].ItemCode,receivebu);
-				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].CostProd = this.f_getAveragePrice(ItemDetails[0].ItemCode,receivebu);
+	handleValueHelpCloseItem: function (oEvent) {
+		var transtype = this.oModel.getData().EditRecord.TransType;
+		var issuebu = this.oIssueBu;
+		var receivebu = this.oReceiveBu;
+		var aContexts = oEvent.getParameter("selectedContexts");
+		var ItemDetails = {};
+		if (aContexts && aContexts.length) {
+			ItemDetails = aContexts.map(function (oContext) {
+				var oItem = {};
+				oItem.ItemCode = oContext.getObject().ItemCode;
+				oItem.ItemName = oContext.getObject().ItemName;
+				oItem.InventoryUom = oContext.getObject().InvntryUom;
+				oItem.UomEntry = oContext.getObject().UomEntry;
+				return oItem;
+			});
+		}
+		oEvent.getSource().getBinding("items").filter([]);
+		this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].ItemNum = ItemDetails[0].ItemCode;
+		this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].Description = ItemDetails[0].ItemName;
+		this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].Uom = ItemDetails[0].InventoryUom;
+		this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].UomEntry = ItemDetails[0].UomEntry;
+		if(transtype === "4"){
+			var oCostToProduce =this.f_getAveragePrice(ItemDetails[0].ItemCode,receivebu);
+			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].CostProd = this.f_getAveragePrice(ItemDetails[0].ItemCode,receivebu);
+		}else{
+			var oCostToProduce =this.f_getAveragePrice(ItemDetails[0].ItemCode,issuebu);
+			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].CostProd = this.f_getAveragePrice(ItemDetails[0].ItemCode,issuebu);
+		}
+		// this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].MarketPrice = this.f_getMarketPrice(ItemDetails[0].ItemCode);
+		var oMarketPrice = this.f_getMarketPrice(ItemDetails[0].ItemCode);
+
+		if (transtype === "1") {
+			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].MarketPrice = this.f_getMarketPrice(ItemDetails[0].ItemCode);
+			if(oCostToProduce <= oMarketPrice){
+				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice = oCostToProduce;
 			}else{
-				var oCostToProduce =this.f_getAveragePrice(ItemDetails[0].ItemCode,issuebu);
-				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].CostProd = this.f_getAveragePrice(ItemDetails[0].ItemCode,issuebu);
+				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice=oMarketPrice;
 			}
-			// this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].MarketPrice = this.f_getMarketPrice(ItemDetails[0].ItemCode);
-			var oMarketPrice = this.f_getMarketPrice(ItemDetails[0].ItemCode);
+		} else if (transtype === "2") {
+			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice = oCostToProduce;
+		}else if (transtype === "3") {
+			///for revise
+			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice = oCostToProduce;
+		}else if (transtype === "4") {
+			///for revise
+			this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice = oCostToProduce;
+		}
+		this.oModel.refresh();
+	},
 
-			if (transtype === "1") {
-				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].MarketPrice = this.f_getMarketPrice(ItemDetails[0].ItemCode);
-				if(oCostToProduce <= oMarketPrice){
-					this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice = oCostToProduce;
-				}else{
-					this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice=oMarketPrice;
-				}
-			} else if (transtype === "2") {
-				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice = oCostToProduce;
-			}else if (transtype === "3") {
-				///for revise
-				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice = oCostToProduce;
-			}else if (transtype === "4") {
-				///for revise
-				this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].TransferPrice = oCostToProduce;
+		///GET Market Type
+	f_getMarketPrice: function (ItemCode) {
+		var iReturnMarketPrice = 0;
+		$.ajax({
+			url: "https://xs.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getMarketPrice&value1=" + ItemCode +
+				"&value2=7&value3&value4",
+			type: "GET",
+			async: false,
+			datatype:"json",
+			beforeSend: function(xhr){
+				xhr.setRequestHeader("Authorization","Basic " + btoa("SYSTEM:P@ssw0rd805~"));
+			},
+			error: function (xhr, status, error) {
+				var Message = xhr.responseJSON["error"].message.value;
+				console.error(JSON.stringify(Message));
+				sap.m.MessageToast.show(Message);
+
+			},
+			success: function (json) {},
+			context: this
+		}).done(function (results) {
+			if (results.length > 0) {
+				iReturnMarketPrice = results[0].Price;
 			}
-			this.oModel.refresh();
-		},
-  
-		  ///GET Market Type
-		f_getMarketPrice: function (ItemCode) {
-			var iReturnMarketPrice = 0;
-			$.ajax({
-				url: "https://xs.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getMarketPrice&value1=" + ItemCode +
-					"&value2=7&value3&value4",
-				type: "GET",
-				async: false,
-				datatype:"json",
-				beforeSend: function(xhr){
-					xhr.setRequestHeader("Authorization","Basic " + btoa("SYSTEM:P@ssw0rd805~"));
-				},
-				error: function (xhr, status, error) {
-					var Message = xhr.responseJSON["error"].message.value;
-					console.error(JSON.stringify(Message));
-					sap.m.MessageToast.show(Message);
 
-				},
-				success: function (json) {},
-				context: this
-			}).done(function (results) {
-				if (results.length > 0) {
-					iReturnMarketPrice = results[0].Price;
-				}
+		});
+		return iReturnMarketPrice;
 
-			});
-			return iReturnMarketPrice;
+	},
+	f_getAveragePrice: function (ItemCode,WareHouse) {
+		var iReturnAveragePrice = 0;
+		$.ajax({
+			url: "https://xs.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getAveragePrice&value1=" + ItemCode +
+				"&value2=" + WareHouse + "&value3&value4",
+			type: "GET",
+			async: false,
+			datatype:"json",
+			beforeSend: function(xhr){
+				xhr.setRequestHeader("Authorization","Basic " + btoa("SYSTEM:P@ssw0rd805~"));
+			},
+			error: function (xhr, status, error) {
+				var Message = xhr.responseJSON["error"].message.value;
+				console.error(JSON.stringify(Message));
+				sap.m.MessageToast.show(Message);
+			},
+			success: function (json) {},
+			context: this
+		}).done(function (results) {
+			if (results.length > 0) {
+				iReturnAveragePrice = results[0].AvgPrice;
+			}
 
-		},
-		f_getAveragePrice: function (ItemCode,WareHouse) {
-			var iReturnAveragePrice = 0;
-			$.ajax({
-				url: "https://xs.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getAveragePrice&value1=" + ItemCode +
-					"&value2=" + WareHouse + "&value3&value4",
-				type: "GET",
-				async: false,
-				datatype:"json",
-				beforeSend: function(xhr){
-					xhr.setRequestHeader("Authorization","Basic " + btoa("SYSTEM:P@ssw0rd805~"));
-				},
-				error: function (xhr, status, error) {
-					var Message = xhr.responseJSON["error"].message.value;
-					console.error(JSON.stringify(Message));
-					sap.m.MessageToast.show(Message);
-				},
-				success: function (json) {},
-				context: this
-			}).done(function (results) {
-				if (results.length > 0) {
-					iReturnAveragePrice = results[0].AvgPrice;
-				}
+		});
+		return iReturnAveragePrice;
 
-			});
-			return iReturnAveragePrice;
+	},
 
-		},
+	//QPV 09-07-2021
+	gGetInventoryTransactionType: function(){
+		$.ajax({
+			url: "https://xs.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getInventoryTransactionType&value1&value2&value3&value4",
+			type: "GET",
+			datatype:"json",
+			beforeSend: function (xhr) {
+				xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
+			  },
+			error: function (xhr, status, error) {
+				var Message = xhr.responseJSON["error"].message.value;
+				console.error(JSON.stringify(Message));
+				sap.m.MessageToast.show(Message);
+			},
+			success: function (json) {},
+			context: this
+		}).done(function (results) {
+			if (results) {
+				this.oModel.getData().InventoryTransactionType = results;
+				 this.oModel.getData().InventoryTransactionType.setSizeLimit(9999999);
+				this.oModel.refresh();
+			}
+		});
+	},
   });
 });
