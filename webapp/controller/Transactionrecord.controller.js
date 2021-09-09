@@ -42,10 +42,12 @@ sap.ui.define([
 
 			//BLANK JSONMODEL FOR ALL BP FOR TEMPLATE
 			this.oMdlAllBP = new JSONModel();
+			this.oMdlAllBP.setSizeLimit(9999999);
 			this.oMdlAllBP.getData().allbp = [];
 
 			//BLANK JSONMODEL FOR ALL BP FOR TEMPLATE
 			this.oMdlAllWhs = new JSONModel();
+			this.oMdlAllWhs.setSizeLimit(9999999);
 			this.oMdlAllWhs.getData().allwhs = [];
 
 			// Get DateToday
@@ -54,14 +56,17 @@ sap.ui.define([
 
 			//BLANK JSONMODEL FOR ALL ITEMS FOR TEMPLATE
 			this.oMdlAllItems = new JSONModel();
+			this.oMdlAllItems.setSizeLimit(9999999);
 			this.oMdlAllItems.getData().allitems = [];
 
 			 //QPV 03-31-2021 BLANK JSONMODEL FOR ALL UOM FOR TEMPLATE 
 			 this.oMdlAllUom = new JSONModel();
+			 this.oMdlAllUom.setSizeLimit(9999999);
 			 this.oMdlAllUom.getData().alluom = [];
 
 			//BIND TO MAIN MODEL
 			this.oModel = new JSONModel("model/transactionrecord.json");
+			this.oModel.setSizeLimit(9999999);
 			this.getView().setModel(this.oModel);
 			///INITIALIZE FOR MARKETPRICE
 			this.MarketPrice = "";

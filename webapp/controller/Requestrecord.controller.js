@@ -38,6 +38,7 @@ sap.ui.define([
 			this.iSelectedRow = 0;
 			//BLANK JSONMODEL FOR ALL ITEMS FOR TEMPLATE
 			this.oMdlAllItems = new JSONModel();
+			this.oMdlAllItems.setSizeLimit(9999999);
             this.oMdlAllItems.getData().allitems = [];
 
 				// Get DateToday
@@ -46,10 +47,12 @@ sap.ui.define([
 
 			///Initialize model
 			this.oModel = new JSONModel("model/requestrecord.json");
+			this.oModel.setSizeLimit(9999999);
 			this.getView().setModel(this.oModel);
 
 			//QPV 03-31-2021 BLANK JSONMODEL FOR ALL UOM FOR TEMPLATE 
 			this.oMdlAllUom = new JSONModel();
+			this.oMdlAllUom.setSizeLimit(9999999);
 			this.oMdlAllUom.getData().alluom = [];
 
 			
@@ -771,7 +774,6 @@ sap.ui.define([
 		}).done(function (results) {
 			if (results) {
 				this.oModel.getData().InventoryTransactionType = results;
-				 this.oModel.getData().InventoryTransactionType.setSizeLimit(9999999);
 				this.oModel.refresh();
 			}
 		});

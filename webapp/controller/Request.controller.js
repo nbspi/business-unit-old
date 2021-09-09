@@ -38,10 +38,12 @@ sap.ui.define([
 
 			//BLANK JSONMODEL FOR ALL BP FOR TEMPLATE
 			this.oMdlAllBP = new JSONModel();
+			this.oMdlAllBP.setSizeLimit(100000);
 			this.oMdlAllBP.getData().allbp = [];
 
 			//BLANK JSONMODEL FOR ALL BP FOR TEMPLATE
 			this.oMdlAllWhs = new JSONModel();
+			this.oMdlAllWhs.setSizeLimit(100000);
 			this.oMdlAllWhs.getData().allwhs = [];
 
 			// Get DateToday
@@ -51,14 +53,17 @@ sap.ui.define([
 
 			//BLANK JSONMODEL FOR ALL ITEMS FOR TEMPLATE
 			this.oMdlAllItems = new JSONModel();
+			this.oMdlAllItems.setSizeLimit(100000);
 			this.oMdlAllItems.getData().allitems = [];
 
 			//BLANK JSONMODEL FOR ALL UOM FOR TEMPLATE
 			this.oMdlAllUom = new JSONModel();
+			this.oMdlAllUom.setSizeLimit(100000);
 			this.oMdlAllUom.getData().alluom = [];
 
 			//BIND TO MAIN MODEL
 			this.oModel = new JSONModel("model/request.json");
+			this.oModel.setSizeLimit(100000);
 			this.getView().setModel(this.oModel);
 
 			//this.getView().byId("inputremarks").setValue("Test");
@@ -677,8 +682,6 @@ sap.ui.define([
 				sap.m.MessageToast.show("Please Enter Item Details");
 			}else if(oFile === ""){
 				sap.m.MessageToast.show("Please attach a document");
-			}else if(oInventoryTransactionType === "" || oInventoryTransactionType===undefined || oInventoryTransactionType===null){
-				sap.m.MessageToast.show("Please Select Inventory Transaction Type");
 			}else{
 				this.fAddRequest();
 			}
@@ -1041,8 +1044,7 @@ sap.ui.define([
 				context: this
 			}).done(function (results) {
 				if (results) {
-					this.oModel.getData().InventoryTransactionType = results;
-          this.oModel.getData().InventoryTransactionType.setSizeLimit(9999999);
+         		    this.oModel.getData().InventoryTransactionType=results;
 					this.oModel.refresh();
 				}
 			});

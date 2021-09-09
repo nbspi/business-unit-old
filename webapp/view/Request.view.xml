@@ -48,7 +48,7 @@
 											</Input>
 
 											<!--QPV 09-07-2021 Inventory Transaction Type -->
-											<Label text="Inventory Transaction Type" width="100%">
+											<!-- <Label text="Inventory Transaction Type" width="100%">
 												<layoutData>
 													<l:GridData span="L3 M2 S12"/>
 												</layoutData>
@@ -58,7 +58,7 @@
 												<layoutData>
 													<l:GridData span="L3 M4 S12"/>
 												</layoutData>
-											</Select>
+											</Select> -->
 
 												<!--Account Code -->
 											<Label text="Customer/Vendor" width="100%">

@@ -44,6 +44,7 @@ sap.ui.define([
 
 			//BLANK JSONMODEL FOR ALL BP FOR TEMPLATE
 			this.oMdlAllBP = new JSONModel();
+			this.oMdlAllBP.setSizeLimit(100000);
 			this.oMdlAllBP.getData().allbp = [];
 
 			//BLANK JSONMODEL FOR ALL BP FOR TEMPLATE
@@ -56,14 +57,17 @@ sap.ui.define([
 
 			//BLANK JSONMODEL FOR ALL ITEMS FOR TEMPLATE
 			this.oMdlAllItems = new JSONModel();
+			this.oMdlAllItems.setSizeLimit(100000);
 			this.oMdlAllItems.getData().allitems = [];
 
 			//BLANK JSONMODEL FOR ALL UOM FOR TEMPLATE
 			this.oMdlAllUom = new JSONModel();
+			this.oMdlAllUom.setSizeLimit(100000);
 			this.oMdlAllUom.getData().alluom = [];
 
 			//BIND TO MAIN MODEL
 			this.oModel = new JSONModel("model/businessunit.json");
+			this.oModel.setSizeLimit(1000000);
 			this.getView().setModel(this.oModel);
 
 			///INITIALIZE FOR MARKETPRICE
