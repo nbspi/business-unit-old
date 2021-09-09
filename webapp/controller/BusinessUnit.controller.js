@@ -44,6 +44,7 @@ sap.ui.define([
 
 			//BLANK JSONMODEL FOR ALL BP FOR TEMPLATE
 			this.oMdlAllBP = new JSONModel();
+			this.oMdlAllBP.setSizeLimit(100000);
 			this.oMdlAllBP.getData().allbp = [];
 
 			//BLANK JSONMODEL FOR ALL BP FOR TEMPLATE
@@ -56,14 +57,17 @@ sap.ui.define([
 
 			//BLANK JSONMODEL FOR ALL ITEMS FOR TEMPLATE
 			this.oMdlAllItems = new JSONModel();
+			this.oMdlAllItems.setSizeLimit(100000);
 			this.oMdlAllItems.getData().allitems = [];
 
 			//BLANK JSONMODEL FOR ALL UOM FOR TEMPLATE
 			this.oMdlAllUom = new JSONModel();
+			this.oMdlAllUom.setSizeLimit(100000);
 			this.oMdlAllUom.getData().alluom = [];
 
 			//BIND TO MAIN MODEL
 			this.oModel = new JSONModel("model/businessunit.json");
+			this.oModel.setSizeLimit(1000000);
 			this.getView().setModel(this.oModel);
 
 			///INITIALIZE FOR MARKETPRICE
@@ -126,6 +130,7 @@ sap.ui.define([
 			this.gGetARAccounts();
 			//QPV 12/15/2929 A/P Invoice accounts for Posting
 			this.gGetAPAccounts();
+			this.gGetInventoryTransactionType();
 		},
 		fprintGoodsIssue: function(transtype,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey){
 			//doc.text(20, 20, 'Biotech Farms Inc.(BFI)');
@@ -181,6 +186,7 @@ sap.ui.define([
 				this.oModel.getData().EditRecord.ReceiveBU = "";
 				this.oModel.getData().EditRecord.Remarks = "";
 				this.oModel.getData().EditRecord.UserRole = "";
+				this.oModel.getData().EditRecord.InventoryTransactionType = "";
 				this.oModel.getData().EditRecord.DocumentLines.length = 0;
 				this.oIssueBu = "";
 				this.oReceiveBu= "";
@@ -296,6 +302,9 @@ sap.ui.define([
 			oBusiness_Unit.U_APP_Attachment = oAttachment;
 			oBusiness_Unit.U_APP_AttachmentKey = oAttachmentKey;
 			oBusiness_Unit.U_APP_UserRole = this.oModel.getData().EditRecord.UserRole;
+			 //QPV 09/07/2021
+			 oBusiness_Unit.U_APP_InventoryTransactionType = this.oModel.getData().EditRecord.InventoryTransactionType;
+			
 			if(!this.isDraft){
 				if(transtype === "3") {
 					oBusiness_Unit.U_APP_IsPostedGR = "Y";
@@ -1201,7 +1210,7 @@ sap.ui.define([
 			oGoodsIssue.Comments = this.oModel.getData().EditRecord.Remarks;
 			oGoodsIssue.AttachmentEntry = this.FileKey;
 			oGoodsIssue.U_APP_GI_TransType = "BU";
-			oGoodsIssue.U_APP_InterGroupTranstype = transtype;
+			oGoodsIssue.U_APP_InterGroupTranstype = this.oModel.getData().EditRecord.InventoryTransactionType;
 			oGoodsIssue.U_APP_BU_TransNum = transno;
 			 // QPV 08/17/2021
 			oGoodsIssue.DocDate = oPostingDate;
@@ -1335,7 +1344,7 @@ sap.ui.define([
 			oGoodsReceipt.Comments = this.oModel.getData().EditRecord.Remarks;
 			oGoodsReceipt.U_APP_BU_TransNum = transno;
 			oGoodsReceipt.U_APP_GR_TransType = "BU";
-			oGoodsReceipt.U_APP_InterGroupTranstype = transtype;
+			oGoodsReceipt.U_APP_InterGroupTranstype = this.oModel.getData().EditRecord.InventoryTransactionType;
 			 // QPV 08/17/2021
 			oGoodsReceipt.DocDate = oPostingDate;
 			oGoodsReceipt.DocumentLines = [];
@@ -1547,10 +1556,16 @@ sap.ui.define([
 			var oCountDetails = this.oModel.getData().EditRecord.DocumentLines.length;
 			var oAttachment = this.getView().byId("fileUploader").getValue();
 			var oAttachmentKey = this.FileKey;
+			var oInventoryTransactionType = this.oModel.getData().EditRecord.InventoryTransactionType;
 			if(oRemarks==="" || oRemarks=== null){
 			  sap.m.MessageToast.show("Fill up remarks.");
 			  return;
 			}
+
+			if(oInventoryTransactionType === "" || oInventoryTransactionType===undefined || oInventoryTransactionType===null){
+				sap.m.MessageToast.show("Please Select Inventory Transaction Type");
+				return;
+			  }
 			if (transno === ""){
 				var transno = AppUI5.fGenerateTransNum(this.sDataBase);
 			}
@@ -1956,6 +1971,29 @@ sap.ui.define([
 			}).done(function (results) {
 				if (results) {
 					this.oModel.getData().APaccounts = results;
+					this.oModel.refresh();
+				}
+			});
+		},
+		//QPV 09-07-2021
+		gGetInventoryTransactionType: function(){
+			$.ajax({
+				url: "https://xs.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getInventoryTransactionType&value1&value2&value3&value4",
+				type: "GET",
+				datatype:"json",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
+			  	},
+				error: function (xhr, status, error) {
+					var Message = xhr.responseJSON["error"].message.value;
+					console.error(JSON.stringify(Message));
+					sap.m.MessageToast.show(Message);
+				},
+				success: function (json) {},
+				context: this
+			}).done(function (results) {
+				if (results) {
+					this.oModel.getData().InventoryTransactionType = results;
 					this.oModel.refresh();
 				}
 			});

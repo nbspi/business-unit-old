@@ -42,6 +42,7 @@ sap.ui.define([
       this.iSelectedRow = 0;
       //BLANK JSONMODEL FOR ALL ITEMS FOR TEMPLATE
       this.oMdlAllItems = new JSONModel();
+      this.oMdlAllItems.setSizeLimit(100000);
       this.oMdlAllItems.getData().allitems = [];
         // Get DateToday
       this.getView().byId("transactiondate").setDateValue(new Date());
@@ -51,6 +52,7 @@ sap.ui.define([
 
       ///Initialize model
       this.oModel = new JSONModel("model/pendingrequest.json");
+      this.oModel.setSizeLimit(100000);
       this.getView().setModel(this.oModel);
 
       ////get warehouse
@@ -90,6 +92,7 @@ sap.ui.define([
       //For Attachment File Key
       this.FileKey = null;
       this.gGetBusinessUnit();
+      this.gGetInventoryTransactionType();
     },
     fprintGoodsIssue: function(transtype,transno,oCardCode,oPostingDate,oMarkupType,oIssueBU,oReceiveBU,oRemarks,ostatus,oDocType,oDetails,oAttachment,oAttachmentKey){
 
@@ -416,6 +419,8 @@ sap.ui.define([
           this.oModel.getData().EditRecord.Remarks = results[0].Remarks;
           this.oModel.getData().EditRecord.ReceivedBy = this.sUserCode;
           this.oModel.getData().EditRecord.BusinessUnit = results[0].BusinessUnit;
+          //QPV 09-07-2021
+          this.oModel.getData().EditRecord.InventoryTransactionType = results[0].InventoryTransactionType;
           // this.getView().byId("fileUploader").setValue(results[0].Attachment);
 
           //QPV 03/23/2021
@@ -490,6 +495,12 @@ sap.ui.define([
         var oCountDetails = this.oModel.getData().EditRecord.DocumentLines.length;
         var oAttachment = this.Attachment;
         var oAttachmentKey = this.FileKey;
+        var oInventoryTransactionType = this.oModel.getData().EditRecord.InventoryTransactionType;
+
+        if(oInventoryTransactionType === "" || oInventoryTransactionType === null || oInventoryTransactionType===undefined){
+          sap.m.MessageToast.show("Please Select Inventory Transaction Type.");
+          return;
+        }
         if (transtype === "" || transno === "") {
           sap.m.MessageToast.show("Please Select Transaction.");
         }else if(oCountDetails===0){
@@ -532,7 +543,8 @@ sap.ui.define([
       oGoodsIssue.Comments = this.oModel.getData().EditRecord.Remarks;
       oGoodsIssue.AttachmentEntry = oAttachmentKey;
       oGoodsIssue.U_APP_GI_TransType = "BU";
-      oGoodsIssue.U_APP_InterGroupTranstype = this.oModel.getData().EditRecord.TransType;
+      //QPV 09-07-2021
+      oGoodsIssue.U_APP_InterGroupTranstype = this.oModel.getData().EditRecord.InventoryTransactionType;
       oGoodsIssue.U_APP_BU_TransNum = this.oModel.getData().EditRecord.TransNo;
       //NDC 03/17/2021 added BatchNum
       oGoodsIssue.U_App_BatchNum = this.oModel.getData().EditRecord.BatchNumber;
@@ -1241,7 +1253,8 @@ sap.ui.define([
       oBusiness_Unit.U_APP_ExpiryDate = this.oModel.getData().EditRecord.ExpDate;
       oBusiness_Unit.U_APP_MfngDate = this.oModel.getData().EditRecord.ManufacturingDate;
       oBusiness_Unit.U_APP_LotNo = this.oModel.getData().EditRecord.LotNumber;
-
+      //QPV 09/07/2021
+			oBusiness_Unit.U_APP_InventoryTransactionType = this.oModel.getData().EditRecord.InventoryTransactionType;
       //oBusiness_Unit.U_APP_DocType = oDocType;
       // oBusiness_Unit.U_APP_Attachment = oAttachment;
       // oBusiness_Unit.U_APP_AttachmentKey = oAttachmentKey;
@@ -1603,6 +1616,30 @@ sap.ui.define([
 			}).done(function (results) {
 				if (results) {
 					this.oModel.getData().BusinessUnit = results;
+					this.oModel.refresh();
+				}
+			});
+		},
+
+    //QPV 09-07-2021
+		gGetInventoryTransactionType: function(){
+			$.ajax({
+				url: "https://xs.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getInventoryTransactionType&value1&value2&value3&value4",
+				type: "GET",
+				datatype:"json",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
+			  	},
+				error: function (xhr, status, error) {
+					var Message = xhr.responseJSON["error"].message.value;
+					console.error(JSON.stringify(Message));
+					sap.m.MessageToast.show(Message);
+				},
+				success: function (json) {},
+				context: this
+			}).done(function (results) {
+				if (results) {
+					this.oModel.getData().InventoryTransactionType = results;
 					this.oModel.refresh();
 				}
 			});

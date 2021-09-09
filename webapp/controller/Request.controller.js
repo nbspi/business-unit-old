@@ -38,10 +38,12 @@ sap.ui.define([
 
 			//BLANK JSONMODEL FOR ALL BP FOR TEMPLATE
 			this.oMdlAllBP = new JSONModel();
+			this.oMdlAllBP.setSizeLimit(100000);
 			this.oMdlAllBP.getData().allbp = [];
 
 			//BLANK JSONMODEL FOR ALL BP FOR TEMPLATE
 			this.oMdlAllWhs = new JSONModel();
+			this.oMdlAllWhs.setSizeLimit(100000);
 			this.oMdlAllWhs.getData().allwhs = [];
 
 			// Get DateToday
@@ -51,14 +53,17 @@ sap.ui.define([
 
 			//BLANK JSONMODEL FOR ALL ITEMS FOR TEMPLATE
 			this.oMdlAllItems = new JSONModel();
+			this.oMdlAllItems.setSizeLimit(100000);
 			this.oMdlAllItems.getData().allitems = [];
 
 			//BLANK JSONMODEL FOR ALL UOM FOR TEMPLATE
 			this.oMdlAllUom = new JSONModel();
+			this.oMdlAllUom.setSizeLimit(100000);
 			this.oMdlAllUom.getData().alluom = [];
 
 			//BIND TO MAIN MODEL
 			this.oModel = new JSONModel("model/request.json");
+			this.oModel.setSizeLimit(100000);
 			this.getView().setModel(this.oModel);
 
 			//this.getView().byId("inputremarks").setValue("Test");
@@ -116,6 +121,7 @@ sap.ui.define([
 			AppUI5.hideBusyIndicator();
 
 			this.gGetBusinessUnit();
+			this.gGetInventoryTransactionType();
 		},
 		//GETTING DATE NOW
 		getTodaysDate: function () {
@@ -127,6 +133,7 @@ sap.ui.define([
 		fClearField: function () {
 			try {
 				this.oModel.getData().EditRecord.TransType = "";
+				this.oModel.getData().EditRecord.InventoryTransactionType = "";
 				this.oModel.getData().EditRecord.TransNo = "";
 				this.oModel.getData().EditRecord.BPCode = "";
 				this.oModel.getData().EditRecord.BPName = "";
@@ -659,6 +666,9 @@ sap.ui.define([
 			var oRemarks = this.getView().byId("inputremarks").getValue();
 			var oDetails = this.oModel.getData().EditRecord.DocumentLines.length;
 			var oFile = this.getView().byId("fileUploader").getValue();
+
+			var oInventoryTransactionType = this.oModel.getData().EditRecord.InventoryTransactionType;
+
 			if(oBusinessUnit==="" || oBusinessUnit=== undefined || oBusinessUnit === null){
 				sap.m.MessageToast.show("Please Choose Request Business Unit!");
 				return;
@@ -736,6 +746,8 @@ sap.ui.define([
 			 oBusiness_Unit.U_APP_MfngDate = this.oModel.getData().EditRecord.ManufacturingDate;
 			 oBusiness_Unit.U_APP_LotNo = this.oModel.getData().EditRecord.LotNumber;
 			 oBusiness_Unit.U_App_BatchNum = this.oModel.getData().EditRecord.BatchNumber;
+			 //QPV 09/07/2021
+			oBusiness_Unit.U_APP_InventoryTransactionType = this.oModel.getData().EditRecord.InventoryTransactionType;
 			var batchArray = [
 				//directly insert data if data is single row per table
 				{
@@ -862,6 +874,9 @@ sap.ui.define([
 			oBusiness_Unit.U_APP_MfngDate = this.oModel.getData().EditRecord.ManufacturingDate;
 			oBusiness_Unit.U_APP_LotNo = this.oModel.getData().EditRecord.LotNumber;
 			oBusiness_Unit.U_App_BatchNum = this.oModel.getData().EditRecord.BatchNumber;
+
+			//QPV 09/07/2021
+			oBusiness_Unit.U_APP_InventoryTransactionType = this.oModel.getData().EditRecord.InventoryTransactionType;
 			//oBusiness_Unit.U_APP_IsPostedGI = ""
 			///HEADER BATCH Array
 			var batchArray = [
@@ -1007,6 +1022,29 @@ sap.ui.define([
 			}).done(function (results) {
 				if (results) {
 					this.oModel.getData().BusinessUnit = results;
+					this.oModel.refresh();
+				}
+			});
+		},
+		//QPV 09-07-2021
+		gGetInventoryTransactionType: function(){
+			$.ajax({
+				url: "https://xs.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getInventoryTransactionType&value1&value2&value3&value4",
+				type: "GET",
+				datatype:"json",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
+			  	},
+				error: function (xhr, status, error) {
+					var Message = xhr.responseJSON["error"].message.value;
+					console.error(JSON.stringify(Message));
+					sap.m.MessageToast.show(Message);
+				},
+				success: function (json) {},
+				context: this
+			}).done(function (results) {
+				if (results) {
+         		    this.oModel.getData().InventoryTransactionType=results;
 					this.oModel.refresh();
 				}
 			});
