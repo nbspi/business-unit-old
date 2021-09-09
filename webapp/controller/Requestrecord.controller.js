@@ -755,6 +755,8 @@ sap.ui.define([
 
 	},
 
+
+	
 	//QPV 09-07-2021
 	gGetInventoryTransactionType: function(){
 		$.ajax({
