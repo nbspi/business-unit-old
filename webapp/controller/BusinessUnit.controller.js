@@ -1222,7 +1222,7 @@ sap.ui.define([
 				oGoodsIssueHeader.WarehouseCode = this.oIssueBu;
 				oGoodsIssueHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
 				oGoodsIssueHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
-				oGoodsIssueHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
+				oGoodsIssueHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].CostProd;
 				oGoodsIssueHeader.UoMEntry = this.oModel.getData().EditRecord.DocumentLines[d].UomEntry;
 				oGoodsIssue.DocumentLines.push(JSON.parse(JSON.stringify(oGoodsIssueHeader)));
 			}
@@ -1283,7 +1283,8 @@ sap.ui.define([
 					oInvoice.DocumentLines = [];
 					oInvoiceHeader.ItemDescription = oDescription;
 					oInvoiceHeader.AccountCode =this.oModel.getData().ARaccounts[0].Value;
-					oInvoiceHeader.LineTotal = results.DocTotal;
+					// oInvoiceHeader.LineTotal = Doctotal-oOtherIncome;
+				    oInvoiceHeader.LineTotal = results.DocTotal;
 					oInvoice.DocumentLines.push(JSON.parse(JSON.stringify(oInvoiceHeader)));
 					//2nd LINE
 					oInvoiceHeader2.ItemDescription = oDescription;
@@ -1370,7 +1371,7 @@ sap.ui.define([
 				oGoodsReceiptHeader.WarehouseCode = this.oReceiveBu;
 				oGoodsReceiptHeader.ItemCode = this.oModel.getData().EditRecord.DocumentLines[d].ItemNum;
 				oGoodsReceiptHeader.Quantity = this.oModel.getData().EditRecord.DocumentLines[d].Quantity;
-				oGoodsReceiptHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].TransferPrice;
+				oGoodsReceiptHeader.UnitPrice = this.oModel.getData().EditRecord.DocumentLines[d].CostProd;
 				oGoodsReceiptHeader.UoMEntry = this.oModel.getData().EditRecord.DocumentLines[d].UomEntry;
 				//oInvoice.DocumentLines.push(JSON.parse(JSON.stringify(oInvoiceHeader)));
 				oGoodsReceipt.DocumentLines.push(JSON.parse(JSON.stringify(oGoodsReceiptHeader)));
