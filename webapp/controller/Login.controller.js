@@ -11,6 +11,7 @@ sap.ui.define([
 
             //get all databse
             this.oMdlDatabase = new JSONModel("model/databases.json");
+            this.oMdlDatabase.setSizeLimit(500);
             this.oMdlLogin = new JSONModel("model/login.json");
             this.getView().setModel(this.oMdlLogin);
             this.fGetAllRecords("getAllDB");
@@ -61,7 +62,7 @@ sap.ui.define([
             oLoginCredentials.UserName = username;//"manager";
             oLoginCredentials.Password = password;//"1234";
             $.ajax({
-                url: "https://18.138.78.210:50000/b1s/v1/Login",
+                url: "https://sl-test.biotechfarms.net/b1s/v1/Login",
                 data: JSON.stringify(oLoginCredentials),
                 type: "POST",
                 crossDomain: true,
@@ -101,11 +102,11 @@ sap.ui.define([
         fGetAllRecords: function(queryTag){
 			// var aReturnResult = [];
 			$.ajax({
-				url: "https://xsjs.biotechfarms.net/app-xsjs/ExecQuery.xsjs?dbName=PROD_BIOTECH&procName=spAppBusinessUnit&QUERYTAG="+ queryTag +"&value1=&value2=&value3=&value4=",
+				url: "https://xs.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName=051021_TEST_DEV_PROD_BIOTECH&procName=spAppBusinessUnit&QUERYTAG="+ queryTag +"&value1=&value2=&value3=&value4=",
 				type: "GET",
 				dataType: "json",
 				beforeSend: function (xhr) {
-					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:Qwerty0987$"));
+					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
 			  	},
 				error: function (xhr, status, error) {
                     var Message = xhr.responseJSON["error"].message.value;
@@ -169,6 +170,7 @@ sap.ui.define([
 			// AppUI5.createField("APP_TransNo", "Transaction Number", "@APP_INT1", "db_Alpha", "", 50);
 			// AppUI5.createField("APP_TransType", "Transaction Type", "@APP_INT1", "db_Alpha", "", 50);
         	// AppUI5.createField("APP_Uom", "UOM", "@APP_INT1", "db_Alpha", "", 50);
+            //  AppUI5.createField("APP_UomEntry", "UOM ENTRY", "@APP_INT1", "db_Alpha", "", 50);
         
             // //NDC add udf in OIGE
             // AppUI5.createField("APP_BU_TransNum", "BU TransNum", "OIGE", "db_Alpha", "", 30);

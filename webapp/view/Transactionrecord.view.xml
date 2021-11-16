@@ -78,6 +78,19 @@
 												</layoutData>
 											</Input>
 
+											<!--QPV 09-07-2021 Inventory Transaction Type -->
+											<Label text="Inventory Transaction Type" width="100%">
+												<layoutData>
+													<l:GridData span="L3 M2 S12"/>
+												</layoutData>
+											</Label>
+											<Select id="InventoryTransactionType" forceSelection="false" selectedKey="{/EditRecord/InventoryTransactionType}" items="{/InventoryTransactionType}">
+												<core:Item key="{Code}" text="{Code}-{Name}"/>
+												<layoutData>
+													<l:GridData span="L3 M4 S12"/>
+												</layoutData>
+											</Select>
+
 											<!--Account Code -->
 											<Label text="Customer/Vendor" width="100%">
 												<layoutData>
@@ -119,7 +132,7 @@
 													<l:GridData span="L3 M2 S12"/>
 												</layoutData>
 											</Label>
-											<DatePicker id="dpickerpostingdate" valueFormat="" displayFormat="yyyy-MM-dd" change="handleChange" editable="false">
+											<DatePicker id="dpickerpostingdate" valueFormat="yyyy-MM-dd" displayFormat="yyyy-MM-dd" change="handleChange" editable="false">
 											<!-- <DatePicker id="dpickerpostingdate" value="{/EditRecord/PostingDate}" valueFormat="yyyy-MM-dd" displayFormat="yyyy-MM-dd" change="handleChange"> -->
 												<layoutData>
 													<l:GridData span="L3 M4 S12"/>
@@ -192,16 +205,40 @@
 												<t:Column width="7rem">
 													<Label text="Quantity"/>
 													<t:template>
-														<Input value="{ path:'Quantity' , type: 'sap.ui.model.type.Float', formatOptions: {maxFractionDigits: 2, minFractionDigits: 2}}" type="Number" placeholder="0" textAlign="End" fieldWidth="80%" width="100%" enabled="true"/>
+														<Input value="{ path:'Quantity' , type: 'sap.ui.model.type.Float', formatOptions: {maxFractionDigits: 2, minFractionDigits: 2}}" type="number" placeholder="0" textAlign="End" fieldWidth="80%" width="100%" enabled="true"/>
 														<!--<Text text="{oMdlAP>DocDate}"/>-->
 													</t:template>
 												</t:Column>
 
-													<t:Column width="7rem">
+													<!-- <t:Column width="7rem">
 													<Label text="UOM"/>
 													<t:template>
 														<Input value="{Uom}"  textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
-														<!--<Text text="{oMdlAP>DocNum}"/>-->
+															
+														</t:template>
+													</t:Column> -->
+
+													<t:Column width="12rem">
+														<Label text="UOM"/>
+													<t:template>
+													<Input 
+													required="true"  
+													width="100%" 
+													type="Text"  
+													value="{UomCode}" 
+													textAlign="Left"
+													placeholder="UOM" 
+													showValueHelp="true" 
+													valueHelpOnly="true" 
+													valueHelpRequest="handleValueUom"/>
+														</t:template>
+												</t:Column>
+
+												<t:Column width="7rem" visible="false">
+													<Label text="UOMEntry"/>
+													<t:template>
+														<Input value="{UomEntry}"  textAlign="End" fieldWidth="80%" width="100%" visible="false"/>
+													
 													</t:template>
 												</t:Column>
 

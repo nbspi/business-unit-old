@@ -69,7 +69,7 @@
 
 	"AllTransactionTypes": [{
 			"key": "1",
-			"value": "1 - Intra Org - Transfer"
+			"value": "1 - Inter Org - Transfer"
 		}, {
 			"key": "4",
 			"value": "4 - RE - Electricity Transfer"

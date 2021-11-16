@@ -1,0 +1,19 @@
+<core:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:core="sap.ui.core">
+	<SelectDialog
+		noDataText="No Uom Found"
+		title="Select Uom"
+		search="handleSearchUoms"
+		confirm="handleValueCloseUom"
+		cancel="handleValueCloseUom"
+		showClearButton="true"
+		growing="true"
+		items="{/allUom}">
+		<StandardListItem
+			iconDensityAware="false"
+			iconInset="false"
+			title="{UomName}"
+			description="Code:{UomCode}"/>
+	</SelectDialog>
+</core:FragmentDefinition>

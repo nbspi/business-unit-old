@@ -47,6 +47,19 @@
 												</layoutData>
 											</Input>
 
+											<!--QPV 09-07-2021 Inventory Transaction Type -->
+											<!-- <Label text="Inventory Transaction Type" width="100%">
+												<layoutData>
+													<l:GridData span="L3 M2 S12"/>
+												</layoutData>
+											</Label>
+											<Select id="InventoryTransactionType" forceSelection="false" selectedKey="{/EditRecord/InventoryTransactionType}" items="{/InventoryTransactionType}">
+												<core:Item key="{Code}" text="{Code}-{Name}"/>
+												<layoutData>
+													<l:GridData span="L3 M4 S12"/>
+												</layoutData>
+											</Select> -->
+
 												<!--Account Code -->
 											<Label text="Customer/Vendor" width="100%">
 												<layoutData>
@@ -110,7 +123,7 @@
 													<l:GridData span="L3 M2 S12"/>
 												</layoutData>
 											</Label>
-											<DatePicker id="dpickerpostingdate" valueFormat=""  displayFormat="yyyy-MM-dd" change="handleChange" editable="false">
+											<DatePicker id="dpickerpostingdate" valueFormat="yyyy-MM-dd"  displayFormat="yyyy-MM-dd" change="handleChange" editable="true">
 											<!-- <DatePicker id="dpickerpostingdate" value="{/EditRecord/PostingDate}" valueFormat="yyyy-MM-dd" displayFormat="yyyy-MM-dd" change="handleChange" editable="false"> -->
 												<layoutData>
 													<l:GridData span="L3 M4 S12"/>
@@ -179,6 +192,55 @@
 													<l:GridData span="L3 M4 S12"/>
 												</layoutData>
 											</Select>
+
+
+											<Label text="Lot Number" width="100%">
+												<layoutData>
+													<l:GridData span="L3 M2 S12"/>
+												</layoutData>
+											</Label>
+											<Input width="100%" id="LotNumber" value="{/EditRecord/LotNumber}" >
+												<layoutData>
+													<l:GridData span="L3 M4 S12"/>
+												</layoutData>
+											</Input>
+											<Label text="Batch Number" width="100%">
+												<layoutData>
+													<l:GridData span="L3 M2 S12"/>
+												</layoutData>
+											</Label>
+											<Input width="100%" id="BatchNumber" value="{/EditRecord/BatchNumber}" >
+												<layoutData>
+													<l:GridData span="L3 M4 S12"/>
+												</layoutData>
+											</Input>
+											<Label text="Manufacturing Date" width="100%">
+												<layoutData>
+													<l:GridData span="L3 M2 S12"/>
+												</layoutData>
+											</Label>
+											<!-- <DatePicker id="dpickermanufacdate" valueFormat="" displayFormat="yyyy-MM-dd" change="handleChange" editable="false"> -->
+											<DatePicker id="dpickermanufacdate" value="{/EditRecord/ManufacturingDate}" valueFormat="yyyy-MM-dd" displayFormat="yyyy-MM-dd" change="handleChange">
+												<layoutData>
+													<l:GridData span="L3 M4 S12"/>
+												</layoutData>
+											</DatePicker>
+
+											<Label text="Expiry Date" width="100%">
+												<layoutData>
+													<l:GridData span="L3 M2 S12"/>
+												</layoutData>
+											</Label>
+											<!-- <DatePicker id="dpickerexpdate" valueFormat="" displayFormat="yyyy-MM-dd" change="handleChange" editable="false"> -->
+											<DatePicker id="dpickerexpdate" value="{/EditRecord/ExpDate}" valueFormat="yyyy-MM-dd" displayFormat="yyyy-MM-dd" change="handleChange">
+												<layoutData>
+													<l:GridData span="L3 M4 S12"/>
+												</layoutData>
+											</DatePicker>
+
+
+
+
 											<!--ATTACHMENT UPLOADING -->
 											<u:FileUploader id="fileUploader" name="myFileUpload" tooltip="Upload your file to the local server"
 											uploadComplete="onHandleUploadComplete"
@@ -215,17 +277,44 @@
 												<t:Column width="7rem">
 													<Label text="Quantity"/>
 													<t:template>
-														<Input  value="{ path:'Quantity' , type: 'sap.ui.model.type.Float', formatOptions: {maxFractionDigits: 2, minFractionDigits: 2}}" type="Number" placeholder="0" textAlign="End" fieldWidth="80%" width="100%" enabled="true"/>
+														<Input  value="{ path:'Quantity' , type: 'sap.ui.model.type.Float', formatOptions: {maxFractionDigits: 2, minFractionDigits: 2}}" type="number" placeholder="0" textAlign="End" fieldWidth="80%" width="100%" enabled="true"/>
 														<!--<Text text="{oMdlAP>DocDate}"/>-->
 													</t:template>
 												</t:Column>
-													<t:Column width="7rem">
+													<!-- <t:Column width="7rem">
 													<Label text="UOM"/>
 													<t:template>
 														<Input value="{Uom}"  textAlign="End" fieldWidth="80%" width="100%" enabled="{UomEnable}"/>
-														<!--<Text text="{oMdlAP>DocNum}"/>-->
+												
+													</t:template>
+												</t:Column> -->
+
+
+												<t:Column width="12rem">
+														<Label text="UOM"/>
+													<t:template>
+													<Input 
+													required="true"  
+													width="100%" 
+													type="Text"  
+													value="{UomCode}" 
+													textAlign="Left"
+													placeholder="UOM" 
+													showValueHelp="true" 
+													valueHelpOnly="true" 
+													valueHelpRequest="handleValueUom"/>
+														</t:template>
+												</t:Column>
+
+												<t:Column width="7rem" visible="false">
+													<Label text="UOMEntry"/>
+													<t:template>
+														<Input value="{UomEntry}"  textAlign="End" fieldWidth="80%" width="100%" visible="false"/>
+													
 													</t:template>
 												</t:Column>
+
+
 												<t:Column width="9rem">
 													<Label text="Cost to Produce"/>
 													<t:template>
