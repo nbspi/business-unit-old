@@ -50,6 +50,7 @@ sap.ui.define([
 
 			///Initialize model
 			this.oModel = new JSONModel("model/pending.json");
+			this.oModel.setSizeLimit(1000000);
 			this.getView().setModel(this.oModel);
 
 			//QPV 03-31-2021 BLANK JSONMODEL FOR ALL UOM FOR TEMPLATE 
@@ -994,7 +995,7 @@ sap.ui.define([
 			}).done(function (results) {
 				if (results) {
 					this.oModel.getData().InventoryTransactionType = results;
-         		    this.oModel.getData().InventoryTransactionType.setSizeLimit(9999999);
+         		    // this.oModel.getData().InventoryTransactionType.setSizeLimit(9999999);
 					this.oModel.refresh();
 				}
 			});
