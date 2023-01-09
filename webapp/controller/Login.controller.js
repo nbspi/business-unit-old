@@ -62,7 +62,7 @@ sap.ui.define([
             oLoginCredentials.UserName = username;//"manager";
             oLoginCredentials.Password = password;//"1234";
             $.ajax({
-                url: "https://sl-test.biotechfarms.net/b1s/v1/Login",
+                url: "https://18.142.200.63:50000/b1s/v1/Login",
                 data: JSON.stringify(oLoginCredentials),
                 type: "POST",
                 crossDomain: true,
@@ -102,11 +102,11 @@ sap.ui.define([
         fGetAllRecords: function(queryTag){
 			// var aReturnResult = [];
 			$.ajax({
-				url: "https://xs.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName=011122_PROD_BIOTECH&procName=spAppBusinessUnit&QUERYTAG="+ queryTag +"&value1=&value2=&value3=&value4=",
+				url: "https://18.142.200.63:4300/app_xsjs/ExecQuery.xsjs?dbName=PROD_BIOTECH&procName=spAppBusinessUnit&QUERYTAG="+ queryTag +"&value1=&value2=&value3=&value4=",
 				type: "GET",
 				dataType: "json",
 				beforeSend: function (xhr) {
-					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
+					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:Qwerty0987"));
 			  	},
 				error: function (xhr, status, error) {
                     var Message = xhr.responseJSON["error"].message.value;
