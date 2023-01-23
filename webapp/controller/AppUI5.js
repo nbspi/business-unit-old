@@ -129,14 +129,14 @@ sap.ui.define([
 					sap.m.MessageToast.show(error);
 				},
 				success: function (json) {
-					generatedCode = json[0][""];
+					generatedCode = json[0]["Code"];
 
 				},
 				context: this
 			}).done(function (results) {
 				if (results) {
 					if (docType === "GetCode"){
-						generatedCode = results[0][""];
+						generatedCode = results[0]["Code"];
 					}else{
 						generatedCode = results[0]["Code"];
 					}
