@@ -139,7 +139,7 @@ sap.ui.define([
 		},
 		onLogout: function (){
 			$.ajax({
-				url: "https://test-sapsldv10.biotechfarms.net//b1s/v1/Logout",
+				url: "https://test-sapsldv10.biotechfarms.net/b1s/v1/Logout",
 				type: "POST",
 				error: function (xhr, status, error) {
 				  var Message = xhr.responseJSON["error"].message.value;
