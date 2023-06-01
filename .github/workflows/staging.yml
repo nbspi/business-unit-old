@@ -14,18 +14,17 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [10.x]
+        node-version: [12.x]
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
-
-      - name: Use node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
-      - run: |
-          npm install
-          npm run build:ui --if-present
+      # - name: Use node.js ${{ matrix.node-version }}
+      #   uses: actions/setup-node@v3
+      #   with:
+      #     node-version: ${{ matrix.node-version }}
+      # - run: |
+      #     npm install
+      #     npm run build:ui --if-present
       - name: Get npm package version
         id: package-version
         uses: martinbeentjes/npm-get-version-action@v1.3.1
