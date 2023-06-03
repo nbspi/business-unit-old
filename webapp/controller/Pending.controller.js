@@ -223,9 +223,9 @@ sap.ui.define([
 			var aReturnResult = [];
 			var urltag = "";
 			if (value1 ===""){
-				urltag ="https://xsjs.biotechfarms.net/app-xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&QUERYTAG=getTransactions&VALUE1=&VALUE2=&VALUE3=&VALUE4=";
+				urltag ="https://xsjsv10.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&QUERYTAG=getTransactions&VALUE1=&VALUE2=&VALUE3=&VALUE4=";
 			}else{
-				urltag ="https://xsjs.biotechfarms.net/app-xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&QUERYTAG=getAllPendingTransaction&VALUE1="+ value1 +"&VALUE2="+ this.sUserCode +"&VALUE3=&VALUE4=";
+				urltag ="https://xsjsv10.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&QUERYTAG=getAllPendingTransaction&VALUE1="+ value1 +"&VALUE2="+ this.sUserCode +"&VALUE3=&VALUE4=";
 
 			}
 			$.ajax({
@@ -234,7 +234,7 @@ sap.ui.define([
 				async: false,
 				datatype:"json",
 				beforeSend: function (xhr) {
-					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:Qwerty0987$"));
+					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:Qwerty0987"));
 			  	},
 				error: function (xhr, status, error) {
 					aReturnResult = [];
@@ -284,12 +284,12 @@ sap.ui.define([
 		fgetHeader: function (dbName, procName, queryTag, value1, value2, value3, value4) {
 			//get all open AP base on parameters
 			$.ajax({
-				url: "https://xsjs.biotechfarms.net/app-xsjs/ExecQuery.xsjs?dbName=" + dbName + "&procName=spAppBusinessUnit&QUERYTAG=" + queryTag + "&VALUE1=" + value1 +
+				url: "https://xsjsv10.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName=" + dbName + "&procName=spAppBusinessUnit&QUERYTAG=" + queryTag + "&VALUE1=" + value1 +
 					"&VALUE2=" + value2 + "&VALUE3=" + value3 + "&VALUE4=",
 				type: "GET",
 				datatype:"json",
 				beforeSend: function(xhr){
-					xhr.setRequestHeader("Authorization","Basic " + btoa("SYSTEM:Qwerty0987$"));
+					xhr.setRequestHeader("Authorization","Basic " + btoa("SYSTEM:Qwerty0987"));
 				},
 				error: function (xhr, status, error) {
 					var Message = xhr.responseJSON["error"].message.value;
@@ -337,12 +337,12 @@ sap.ui.define([
 		///GETTING DETAILS BASED ON HEADER
 		fgetDetails: function (dbName, procName, queryTag, value1, value2, value3, value4) {
 			$.ajax({
-				url: "https://xsjs.biotechfarms.net/app-xsjs/ExecQuery.xsjs?dbName=" + dbName + "&procName=spAppBusinessUnit&QUERYTAG=" + queryTag + "&VALUE1=" + value1 +
+				url: "https://xsjsv10.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName=" + dbName + "&procName=spAppBusinessUnit&QUERYTAG=" + queryTag + "&VALUE1=" + value1 +
 					"&VALUE2=" + value2 + "&VALUE3=" + value3 + "&VALUE4=",
 				type: "GET",
 				datatype:"json",
 				beforeSend: function(xhr){
-					xhr.setRequestHeader("Authorization","Basic " + btoa("SYSTEM:Qwerty0987$"));
+					xhr.setRequestHeader("Authorization","Basic " + btoa("SYSTEM:Qwerty0987"));
 				},
 				error: function (xhr, status, error) {
 					var Message = xhr.responseJSON["error"].message.value;
@@ -385,11 +385,11 @@ sap.ui.define([
 			if (this.oModel.getData().allitems.length <= 1) {
 				//GET ALL ITEMS
 				$.ajax({
-					url: "https://xsjs.biotechfarms.net/app-xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getallitems&value1&value2&value3&value4",
+					url: "https://xsjsv10.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getallitems&value1&value2&value3&value4",
 					type: "GET",
 					datatype:"json",
 				beforeSend: function(xhr){
-					xhr.setRequestHeader("Authorization","Basic " + btoa("SYSTEM:Qwerty0987$"));
+					xhr.setRequestHeader("Authorization","Basic " + btoa("SYSTEM:Qwerty0987"));
 				},
 					error: function (xhr, status, error) {
 						var Message = xhr.responseJSON["error"].message.value;
@@ -506,7 +506,7 @@ sap.ui.define([
 			}
 
 			$.ajax({
-				url: "https://sl-eut.biotechfarms.net/b1s/v1/InventoryGenEntries",
+				url: "https://slv10.biotechfarms.net/b1s/v1/InventoryGenEntries",
 				type: "POST",
 				data: JSON.stringify(oGoodsReceipt),
 				xhrFields: {
@@ -575,7 +575,7 @@ sap.ui.define([
 
 
 			$.ajax({
-				url: "https://sl-eut.biotechfarms.net/b1s/v1/JournalEntries",
+				url: "https://slv10.biotechfarms.net/b1s/v1/JournalEntries",
 				type: "POST",
 				data: JSON.stringify(oJournalEnty),
 				xhrFields: {
@@ -713,7 +713,7 @@ sap.ui.define([
 				};
 			var sBodyRequest = this.fprepareUpdatePostedRequestBody(BatchHeader, getcode);
 			$.ajax({
-				url: "https://sl-eut.biotechfarms.net/b1s/v1/$batch",
+				url: "https://slv10.biotechfarms.net/b1s/v1/$batch",
 				type: "POST",
 				contentType: "multipart/mixed;boundary=a",
 				data: sBodyRequest,
@@ -755,12 +755,12 @@ sap.ui.define([
 			var sGeneratedTransNo = "";
 			var TransType = this.oModel.getData().EditRecord.TransType;
 			$.ajax({
-				url: "https://xsjs.biotechfarms.net/app-xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getTransactionNumber&value1&value2&value3&value4",
+				url: "https://xsjsv10.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getTransactionNumber&value1&value2&value3&value4",
 				type: "GET",
 				async: false,
 				datatype:"json",
 				beforeSend: function (xhr) {
-					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:Qwerty0987$"));
+					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:Qwerty0987"));
 			  	},
 				error: function (xhr, status, error) {
 					var Message = xhr.responseJSON["error"].message.value;
@@ -829,7 +829,7 @@ sap.ui.define([
 			var sBodyRequest = AppUI5.prepareBatchRequestBody(batchArray);
 		////BATCH POSTING FOR DRAFT
 			$.ajax({
-				url: "https://sl-eut.biotechfarms.net/b1s/v1/$batch",
+				url: "https://slv10.biotechfarms.net/b1s/v1/$batch",
 				type: "POST",
 				contentType: "multipart/mixed;boundary=a",
 				data: sBodyRequest,
@@ -885,7 +885,7 @@ sap.ui.define([
 				oGoodsIssue.DocumentLines.push(JSON.parse(JSON.stringify(oGoodsIssueHeader)));
 			}
 			$.ajax({
-				url: "https://sl-eut.biotechfarms.net/b1s/v1/InventoryGenExits",
+				url: "https://slv10.biotechfarms.net/b1s/v1/InventoryGenExits",
 				type: "POST",
 				data: JSON.stringify(oGoodsIssue),
 				xhrFields: {
@@ -944,7 +944,7 @@ sap.ui.define([
 			}
 
 			$.ajax({
-				url: "https://sl-eut.biotechfarms.net/b1s/v1/PurchaseInvoices",
+				url: "https://slv10.biotechfarms.net/b1s/v1/PurchaseInvoices",
 				type: "POST",
 				data: JSON.stringify(oInvoice),
 				xhrFields: {
@@ -979,11 +979,11 @@ sap.ui.define([
 		//QPV 09-07-2021
 		gGetInventoryTransactionType: function(){
 			$.ajax({
-				url: "https://xsjs.biotechfarms.net/app-xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getInventoryTransactionType&value1&value2&value3&value4",
+				url: "https://xsjsv10.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getInventoryTransactionType&value1&value2&value3&value4",
 				type: "GET",
 				datatype:"json",
 				beforeSend: function (xhr) {
-					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:Qwerty0987$"));
+					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:Qwerty0987"));
 			  	},
 				error: function (xhr, status, error) {
 					var Message = xhr.responseJSON["error"].message.value;
@@ -1029,11 +1029,11 @@ sap.ui.define([
 	var v1 = this.oModel.getData().EditRecord.DocumentLines[this.iSelectedRow].ItemNum;
 	//GET ALL UOM
 	$.ajax({
-		url: "https://xsjs.biotechfarms.net/app-xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getalluom&value1="+ v1 +"&value2&value3&value4",
+		url: "https://xsjsv10.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBusinessUnit&queryTag=getalluom&value1="+ v1 +"&value2&value3&value4",
 		type: "GET",
 		datatype:"json",
 	beforeSend: function(xhr){
-		xhr.setRequestHeader("Authorization","Basic " + btoa("SYSTEM:Qwerty0987$"));
+		xhr.setRequestHeader("Authorization","Basic " + btoa("SYSTEM:Qwerty0987"));
 	},
 		error: function (xhr, status, error) {
 		var Message = xhr.responseJSON["error"].message.value;
